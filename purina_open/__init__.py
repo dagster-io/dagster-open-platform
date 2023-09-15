@@ -6,7 +6,6 @@ warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
 from .assets import health_check, oss_analytics
 from .resources import bigquery_resource, snowflake_resource
-from .resources.dbt_resource import dbt_resource
 from .resources.stitch_resource import stitch_resource
 
 health_check_assets = load_assets_from_modules(
@@ -24,7 +23,6 @@ all_assets = [
 defs = Definitions(
     assets=all_assets,
     resources={
-        "dbt": dbt_resource,
         "stitch": stitch_resource,
         "bigquery": bigquery_resource,
         "snowflake": snowflake_resource,
