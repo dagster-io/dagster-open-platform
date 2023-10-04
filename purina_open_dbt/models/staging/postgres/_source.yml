@@ -1,0 +1,28 @@
+---
+version: 2
+sources:
+  - name: postgres_etl_high_freq
+    database: "{{env_var('DBT_STITCH_DATABASE', 'stitch') }}"
+    schema: "{{ env_var('DBT_STITCH_SCHEMA', 'cloud_prod_public') }}"
+    description: Stitch schema corresponding to tables which are synced at a
+      high frequency (~hourly)
+    tables:
+      - name: event_logs
+      - name: run_tags
+      - name: runs
+  - name: postgres_etl_low_freq
+    database: "{{ env_var('DBT_STITCH_DATABASE', 'stitch') }}"
+    schema: "{{ env_var('DBT_STITCH_SCHEMA', 'elementl_cloud_prod') }}"
+    description: Stitch schema corresponding to tables which are synced at a
+      low frequency (~daily)
+    tables:
+      - name: asset_keys
+      - name: customer_info
+      - name: deployments
+      - name: onboarding_checklist
+      - name: organizations
+      - name: permissions
+      - name: session_tokens
+      - name: users
+      - name: users_organizations
+      - name: users_permissions

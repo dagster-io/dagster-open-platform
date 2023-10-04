@@ -13,7 +13,10 @@ from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
 
 from ..partitions import oss_analytics_weekly_partition
-from ..utils.environment_helpers import get_database_for_environment, get_schema_for_environment
+from ..utils.environment_helpers import (
+    get_database_for_environment,
+    get_schema_for_environment,
+)
 
 NON_EMPTY_CHECK_NAME = "non_empty_etl"
 SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
@@ -29,7 +32,9 @@ SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
     # ],
 )
 def dagster_pypi_downloads(
-    context: AssetExecutionContext, bigquery: BigQueryResource, snowflake: SnowflakeResource
+    context: AssetExecutionContext,
+    bigquery: BigQueryResource,
+    snowflake: SnowflakeResource,
 ):
     """A table containing the number of PyPi downloads for each package in the Dagster ecosystem, aggregated at the weekly grain. This data is fetched from the public BigQuery dataset `bigquery-public-data.pypi.file_downloads`."""
     start_week = str(context.asset_partitions_time_window_for_output().start.date())

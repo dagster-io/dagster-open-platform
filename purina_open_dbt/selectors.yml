@@ -1,0 +1,9 @@
+selectors:
+  - name: non_cloud_analytics
+    description: Only selects newer refactored models
+    definition:
+      method: fqn
+      value: "*"
+      exclude:
+        - "cloud_analytics.*"
+

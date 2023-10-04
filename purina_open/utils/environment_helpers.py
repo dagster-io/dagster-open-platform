@@ -29,3 +29,12 @@ def get_schema_for_environment(default_schema: str) -> str:
     if env == "LOCAL":
         return os.getenv("SANDBOX_SCHEMA_NAME", default_schema)
     return default_schema
+
+
+def get_dbt_target():
+    env = get_environment()
+    if env == "BRANCH":
+        return "branch_deployment"
+    if env == "PROD":
+        return "prod"
+    return os.getenv("DBT_TARGET")

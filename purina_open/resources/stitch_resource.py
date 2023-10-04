@@ -106,7 +106,8 @@ class StitchResource(ConfigurableResource):
 
     def start_sync(self, source_id: str) -> str:
         job_name = cast(
-            str, self.make_request_json("POST", f"/v4/sources/{source_id}/sync")["job_name"]
+            str,
+            self.make_request_json("POST", f"/v4/sources/{source_id}/sync")["job_name"],
         )
         self._log.info(f"Sync initialized for source_id={source_id} with job name {job_name}")
         return job_name
@@ -233,5 +234,6 @@ def build_stitch_assets(
 
 
 stitch_resource = StitchResource(
-    stitch_client_id=EnvVar("STITCH_CLIENT_ID"), access_token=EnvVar("STITCH_ACCESS_TOKEN")
+    stitch_client_id=EnvVar("STITCH_CLIENT_ID"),
+    access_token=EnvVar("STITCH_ACCESS_TOKEN"),
 )

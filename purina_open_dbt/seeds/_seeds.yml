@@ -1,0 +1,10 @@
+version: 2
+
+seeds:
+  - name: permission_levels
+    description: |
+      Mapping between the name of a role and its levels, such that
+      ADMIN > EDITOR > VIEWER
+    columns:
+      - name: role_level
+      - name: role_name
