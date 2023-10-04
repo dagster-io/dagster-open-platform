@@ -4,4 +4,4 @@ target-dogfood/
 dbt_packages/
 logs/
 config/.user.yml
-user.yml
+.user.yml
