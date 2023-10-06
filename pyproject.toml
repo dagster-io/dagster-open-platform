@@ -3,4 +3,13 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.dagster]
-module_name = "purina_open"
+module_name = "dagster_open_platform"
+
+# Taken from root pyproject.toml
+[tool.black]
+line-length = 100
+required-version = "23.9.1"
+preview = true
+target-versions = ['py38', 'py39', 'py310', 'py311']
+
+

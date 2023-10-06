@@ -3,6 +3,7 @@ import os
 from dagster import EnvVar, file_relative_path
 from dagster_dbt import DbtCliResource
 from dagster_gcp import BigQueryResource
+from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
 from ..utils.environment_helpers import get_dbt_target
@@ -20,8 +21,10 @@ snowflake_resource = SnowflakeResource(
 )
 
 dbt_resource = DbtCliResource(
-    project_dir=file_relative_path(__file__, "../../purina_open_dbt"),
-    profiles_dir=file_relative_path(__file__, "../../purina_open_dbt"),
+    project_dir=file_relative_path(__file__, "../../dbt"),
+    profiles_dir=file_relative_path(__file__, "../../dbt"),
     target=get_dbt_target(),
 )
-DBT_MANIFEST_PATH = file_relative_path(__file__, "../../purina_open_dbt/target/manifest.json")
+
+slack_resource = SlackResource(token=EnvVar("SLACK_ANALYTICS_TOKEN"))
+DBT_MANIFEST_PATH = file_relative_path(__file__, "../../dbt/target/manifest.json")

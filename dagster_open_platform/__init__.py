@@ -4,8 +4,8 @@ from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
-from .assets import cloud_staging, health_check, oss_analytics
-from .resources import bigquery_resource, dbt_resource, snowflake_resource
+from .assets import health_check, oss_analytics, slack_analytics
+from .resources import bigquery_resource, slack_resource, snowflake_resource
 from .resources.stitch_resource import stitch_resource
 
 health_check_assets = load_assets_from_modules(
@@ -14,9 +14,12 @@ health_check_assets = load_assets_from_modules(
 )
 
 oss_analytics_assets = load_assets_from_modules([oss_analytics], group_name="oss_analytics")
-cloud_staging = load_assets_from_modules([cloud_staging], group_name="cloud_staging")
 
-all_assets = [*health_check_assets, *oss_analytics_assets, *cloud_staging]
+all_assets = [
+    *health_check_assets,
+    *oss_analytics_assets,
+    slack_analytics.slack_members,
+]
 
 defs = Definitions(
     assets=all_assets,
@@ -24,6 +27,7 @@ defs = Definitions(
         "stitch": stitch_resource,
         "bigquery": bigquery_resource,
         "snowflake": snowflake_resource,
-        "dbt": dbt_resource,
+        "slack": slack_resource,
     },
+    schedules=[slack_analytics.slack_daily_schedule],
 )

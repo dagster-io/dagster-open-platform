@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="purina_open",
-    packages=find_packages(exclude=["purina_open_tests"]),
+    name="dagster_open_platform",
+    packages=find_packages(exclude=["dagster_open_platform_tests"]),
     install_requires=[
         "dbt-snowflake",
         "dagster",
@@ -11,6 +11,7 @@ setup(
         "dagster-gcp",
         "dagster-dbt",
         "dagster-cloud",
+        "dagster-slack",
     ],
     extras_require={
         "dev": ["dagster-webserver", "pytest"],

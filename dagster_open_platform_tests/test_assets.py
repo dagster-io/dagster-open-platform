@@ -1,5 +1,5 @@
 from dagster import materialize
-from purina_open.assets.health_check import health_check_asset
+from dagster_open_platform.assets.health_check import health_check_asset
 
 
 def test_health_check_asset():

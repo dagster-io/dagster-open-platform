@@ -1,10 +1,11 @@
 from dagster import AssetExecutionContext
 from dagster_dbt import dbt_assets
-from purina_open.resources import (
+
+from ..resources import (
     DBT_MANIFEST_PATH,
     dbt_resource,
 )
-from purina_open.utils.dbt import PurinaDagsterDbtTranslator
+from ..utils.dbt import PurinaDagsterDbtTranslator
 
 
 @dbt_assets(
