@@ -7,18 +7,16 @@ from urllib.parse import urljoin
 import requests
 from dagster import (
     AssetKey,
-    AssetOut,
     AssetsDefinition,
     ConfigurableResource,
-    EnvVar,
     Failure,
-    Nothing,
-    Output,
+    MaterializeResult,
     RetryPolicy,
     _check as check,
     get_dagster_logger,
     multi_asset,
 )
+from dagster._core.definitions.asset_spec import AssetSpec
 from dagster._utils.cached_method import cached_method
 from pydantic import Field
 
@@ -106,8 +104,7 @@ class StitchResource(ConfigurableResource):
 
     def start_sync(self, source_id: str) -> str:
         job_name = cast(
-            str,
-            self.make_request_json("POST", f"/v4/sources/{source_id}/sync")["job_name"],
+            str, self.make_request_json("POST", f"/v4/sources/{source_id}/sync")["job_name"]
         )
         self._log.info(f"Sync initialized for source_id={source_id} with job name {job_name}")
         return job_name
@@ -174,6 +171,7 @@ def build_stitch_assets(
     op_tags: Optional[Mapping[str, Any]] = None,
     retry_policy: Optional[RetryPolicy] = None,
     table_to_metadata: Optional[Callable[[str], Mapping[str, Any]]] = None,
+    group_name: Optional[str] = None,
 ) -> List[AssetsDefinition]:
     asset_key_prefix = check.opt_sequence_param(asset_key_prefix, "asset_key_prefix", of_type=str)
 
@@ -183,14 +181,14 @@ def build_stitch_assets(
 
     @multi_asset(
         name=f"stitch_sync_{source_id}",
-        outs={
-            "_".join(key.path): AssetOut(
-                key=key,
-                dagster_type=Nothing,
+        specs=[
+            AssetSpec(
+                key=asset_key,
                 metadata=table_to_metadata(table) if table_to_metadata else None,
+                group_name=group_name if group_name else None,
             )
-            for table, key in tracked_asset_keys.items()
-        },
+            for table, asset_key in tracked_asset_keys.items()
+        ],
         compute_kind="stitch",
         op_tags=op_tags,
         retry_policy=retry_policy,
@@ -217,9 +215,8 @@ def build_stitch_assets(
 
         for table, asset_key in tracked_asset_keys.items():
             stream_data = next((s for s in streams if s["stream_name"] == table), None)
-            yield Output(
-                value=None,
-                output_name="_".join(asset_key.path),
+            yield MaterializeResult(
+                asset_key=asset_key,
                 metadata=(
                     {
                         "row_count": stream_data["metadata"]["row-count"],
@@ -231,9 +228,3 @@ def build_stitch_assets(
             )
 
     return [_assets]
-
-
-stitch_resource = StitchResource(
-    stitch_client_id=EnvVar("STITCH_CLIENT_ID"),
-    access_token=EnvVar("STITCH_ACCESS_TOKEN"),
-)

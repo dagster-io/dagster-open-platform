@@ -2,7 +2,11 @@
 
 This repository contains the Dagster Open Platform (DOP) project.
 
+{% note %}
+
 🏗️ **Note:** We are in the early days of moving our internal assets to this repository. Pardon the dust as we continue to build out this repository.
+
+{% endnote %}
 
 ## What is this?
 
