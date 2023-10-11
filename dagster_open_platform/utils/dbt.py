@@ -29,12 +29,12 @@ class PurinaDagsterDbtTranslator(DagsterDbtTranslator):
             sources = {
                 "postgres_etl_high_freq": [
                     "stitch",
-                    "cloud_prod_public",
+                    "dagster_cloud",
                     resource_name,
                 ],
                 "postgres_etl_low_freq": [
                     "stitch",
-                    "elementl_cloud_prod",
+                    "dagster_cloud",
                     resource_name,
                 ],
             }

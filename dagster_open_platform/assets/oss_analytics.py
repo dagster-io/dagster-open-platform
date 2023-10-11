@@ -1,11 +1,11 @@
 from dagster import (
-    # AssetCheckResult,
-    # AssetCheckSeverity,
-    # AssetCheckSpec,
+    AssetCheckResult,
+    AssetCheckSeverity,
+    AssetCheckSpec,
     AssetExecutionContext,
     AutoMaterializePolicy,
+    MaterializeResult,
     MetadataValue,
-    Output,
     asset,
 )
 from dagster_gcp import BigQueryResource
@@ -26,10 +26,10 @@ SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
     compute_kind="Snowflake",
     partitions_def=oss_analytics_weekly_partition,
     auto_materialize_policy=AutoMaterializePolicy.eager(),
-    # check_specs=[
-    #     AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset="dagster_pypi_downloads"),
-    #     AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset="dagster_pypi_downloads"),
-    # ],
+    check_specs=[
+        AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset="dagster_pypi_downloads"),
+        AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset="dagster_pypi_downloads"),
+    ],
 )
 def dagster_pypi_downloads(
     context: AssetExecutionContext,
@@ -103,19 +103,21 @@ def dagster_pypi_downloads(
 
     dagster_download_count = int(df[df["package"] == "dagster"]["num_downloads"].values[0])
 
-    yield Output(
-        value=None,
+    non_empty_check_result = AssetCheckResult(
+        check_name=NON_EMPTY_CHECK_NAME,
+        passed=(len(df) > 0),
+        metadata={"num_rows": MetadataValue.int(len(df))},
+        severity=AssetCheckSeverity.WARN,
+    )
+
+    same_rows_check_results = AssetCheckResult(
+        check_name=SAME_ROWS_CHECK_NAME, passed=(len(df) == rows_inserted)
+    )
+
+    return MaterializeResult(
         metadata={
             "top_downloads": MetadataValue.md(top_downloads.to_markdown()),
             "dagster_download_count": MetadataValue.int(dagster_download_count),
         },
-    )  # yielding an Output is currently required for asset checks
-
-    # yield AssetCheckResult(
-    #     check_name=NON_EMPTY_CHECK_NAME,
-    #     success=len(df) > 0,
-    #     metadata={"num_rows": MetadataValue.int(len(df))},
-    #     severity=AssetCheckSeverity.WARN,
-    # )
-
-    # yield AssetCheckResult(check_name=SAME_ROWS_CHECK_NAME, success=len(df) == rows_inserted)
+        check_results=[non_empty_check_result, same_rows_check_results],
+    )

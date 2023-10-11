@@ -2,11 +2,7 @@
 
 This repository contains the Dagster Open Platform (DOP) project.
 
-{% note %}
-
 🏗️ **Note:** We are in the early days of moving our internal assets to this repository. Pardon the dust as we continue to build out this repository.
-
-{% endnote %}
 
 ## What is this?
 
@@ -42,3 +38,7 @@ It follows our best practices for how to structure a Dagster project, how to con
 ```
 
 *Note:* This project **does not** include any confidential information about Dagster, environment variables, or configurations for our pipelines. We also excluded assets that contain sensitive business logic. Therefore, this project won't be able to run on your machine without some additional changes.
+
+## Asset Graph Preview
+
+![asset-graph](./asset-graph.svg)  
