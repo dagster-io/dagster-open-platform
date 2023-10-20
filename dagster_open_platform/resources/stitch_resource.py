@@ -145,7 +145,9 @@ class StitchResource(ConfigurableResource):
                     else (
                         "tap phase"
                         if tap_status is None
-                        else "target phase" if target_status is None else "complete"
+                        else "target phase"
+                        if target_status is None
+                        else "complete"
                     )
                 )
             else:
