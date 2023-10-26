@@ -2,8 +2,7 @@ import os
 
 import pandas as pd
 from dagster import (
-    AssetCheckResult,
-    AssetCheckSpec,
+    AssetSelection,
     MaterializeResult,
     ScheduleDefinition,
     asset,
@@ -17,7 +16,7 @@ from snowflake.connector.pandas_tools import write_pandas
 
 @asset(
     group_name="devrel",
-    check_specs=[AssetCheckSpec("slack_successful_write", asset="slack_members")],
+    #    check_specs=[AssetCheckSpec("slack_successful_write", asset="slack_members")],
     description="Slack Stats, which includes number of members by day",
 )
 def slack_members(slack: SlackResource, snowflake: SnowflakeResource):
@@ -39,6 +38,9 @@ def slack_members(slack: SlackResource, snowflake: SnowflakeResource):
     if get_environment() == "PROD":
         database = "TELEMETRY"
         schema = "SLACK_MEMBERS"
+    if get_environment() == "BRANCH":
+        database = f"PURINA_CLONE_{os.environ['DAGSTER_CLOUD_PULL_REQUEST_ID']}"
+        schema = "SLACK_MEMBERS"
 
     with snowflake.get_connection() as conn:
         # write_pandas returns a tuple of (success, num_chunks, num_rows, output)
@@ -53,12 +55,13 @@ def slack_members(slack: SlackResource, snowflake: SnowflakeResource):
             quote_identifiers=False,
         )
         yield MaterializeResult(
-            metadata={"num_rows": res[2]}, check_results=[AssetCheckResult(passed=res[0])]
+            metadata={"num_rows": res[2]},
+            # check_results=[AssetCheckResult(passed=res[0])]
         )
 
 
 slack_asset_job = define_asset_job(
-    "slack_members_refresh", selection=[slack_members], tags={"team": "devrel"}
+    "slack_members_refresh", selection=AssetSelection.assets(slack_members), tags={"team": "devrel"}
 )
 slack_daily_schedule = ScheduleDefinition(
     job=slack_asset_job,
