@@ -6,13 +6,20 @@ from dagster import (
     AutoMaterializePolicy,
     MaterializeResult,
     MetadataValue,
+    SourceAsset,
     asset,
 )
+from dagster_dbt import dbt_assets
 from dagster_gcp import BigQueryResource
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
 
 from ..partitions import oss_analytics_weekly_partition
+from ..resources import (
+    DBT_MANIFEST_PATH,
+    dbt_resource,
+)
+from ..utils.dbt import CustomDagsterDbtTranslator
 from ..utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
@@ -24,6 +31,7 @@ SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
 
 @asset(
     compute_kind="Snowflake",
+    group_name="oss_analytics",
     partitions_def=oss_analytics_weekly_partition,
     auto_materialize_policy=AutoMaterializePolicy.eager(),
     check_specs=[
@@ -121,3 +129,19 @@ def dagster_pypi_downloads(
         },
         check_results=[non_empty_check_result, same_rows_check_results],
     )
+
+
+@dbt_assets(
+    manifest=DBT_MANIFEST_PATH,
+    select="source:prod_telemetry+",
+    dagster_dbt_translator=CustomDagsterDbtTranslator(),
+)
+def oss_telemetry_dbt_assets(context: AssetExecutionContext):
+    yield from dbt_resource.cli(["build"], context=context).stream()
+
+
+oss_telemetry_events_raw = SourceAsset(
+    key=["purina", "prod_telemetry", "oss_telemetry_events_raw"],
+    description="OSS Telemetry events ingested from S3. The actual asset for this is currently in Purina until we can refactor the logic for it.",
+    group_name="oss_telemetry_staging",
+)

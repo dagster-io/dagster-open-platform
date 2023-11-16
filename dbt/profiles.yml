@@ -1,5 +1,5 @@
 ---
-purina_dbt:
+analytics:
   target: "{{ env_var('DBT_TARGET', 'personal') }}"
   outputs:
     prod:

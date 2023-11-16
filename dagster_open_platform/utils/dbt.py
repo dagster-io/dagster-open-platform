@@ -13,7 +13,7 @@ PURINA_DATABASE_NAME = (
 SNOWFLAKE_URL = f"https://app.snowflake.com/ax61354/{SNOWFLAKE_ACCOUNT_BASE}/#/data/databases/{PURINA_DATABASE_NAME}/schemas"
 
 
-class PurinaDagsterDbtTranslator(DagsterDbtTranslator):
+class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     @classmethod
     def get_asset_key(cls, dbt_resource_props: Mapping[str, Any]) -> AssetKey:
         resource_type = dbt_resource_props["resource_type"]
@@ -26,21 +26,9 @@ class PurinaDagsterDbtTranslator(DagsterDbtTranslator):
             return AssetKey([dbt_resource_props["database"], schema, resource_name])
 
         elif resource_type == "source":
-            sources = {
-                "postgres_etl_high_freq": [
-                    "stitch",
-                    "dagster_cloud",
-                    resource_name,
-                ],
-                "postgres_etl_low_freq": [
-                    "stitch",
-                    "dagster_cloud",
-                    resource_name,
-                ],
-            }
-
-            source_name = dbt_resource_props["source_name"]
-            return AssetKey(sources[source_name])
+            database_name = dbt_resource_props["database"].lower()
+            schema_name = dbt_resource_props["schema"].lower()
+            return AssetKey([database_name, schema_name, resource_name])
 
         else:
             raise ValueError(f"Unknown dbt resource_type: {resource_type}")

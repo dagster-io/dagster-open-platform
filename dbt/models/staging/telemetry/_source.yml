@@ -1,0 +1,7 @@
+version: 2
+sources:
+  - name: prod_telemetry
+    database: purina
+    schema: prod_telemetry
+    tables:
+      - name: oss_telemetry_events_raw

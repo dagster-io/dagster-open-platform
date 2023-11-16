@@ -10,7 +10,6 @@ SNOWFLAKE_URL = (
 )
 
 SHARED_CONFIG = {
-    "asset_key_prefix": ["stitch", "dagster_cloud"],
     "retry_policy": RetryPolicy(max_retries=2, delay=15),
     "table_to_metadata": lambda table: {
         "url": MetadataValue.url(f"{SNOWFLAKE_URL}/CLOUD_PROD_PUBLIC/table/{table.upper()}"),
@@ -18,6 +17,7 @@ SHARED_CONFIG = {
 }
 
 frequent_cloud_stitch_assets = build_stitch_assets(
+    asset_key_prefix=["stitch", "cloud_prod_public"],
     source_id=os.getenv("STITCH_CLOUD_INCREMENTAL_SYNC_SOURCE_ID", ""),
     destination_tables=["event_logs", "run_tags", "runs"],
     op_tags={"dagster/concurrency_key": "frequent_cloud_stitch_assets"},
@@ -26,6 +26,7 @@ frequent_cloud_stitch_assets = build_stitch_assets(
 )
 
 infrequent_cloud_stitch_assets = build_stitch_assets(
+    asset_key_prefix=["stitch", "elementl_cloud_prod"],
     source_id=os.getenv("STITCH_CLOUD_FULL_SYNC_SOURCE_ID", ""),
     destination_tables=[
         "asset_keys",

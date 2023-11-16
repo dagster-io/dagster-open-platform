@@ -12,12 +12,13 @@ from .resources import (
     snowflake_resource,
     stitch_resource,
 )
+from .schedules import scheduled_jobs, schedules
 
 health_check_assets = load_assets_from_modules(
     [health_check],
     group_name="health_check",
 )
-oss_analytics_assets = load_assets_from_modules([oss_analytics], group_name="oss_analytics")
+oss_analytics_assets = load_assets_from_modules([oss_analytics])
 cloud_staging_assets = load_assets_from_modules([cloud_staging])
 stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 
@@ -29,6 +30,10 @@ all_assets = [
     slack_analytics.slack_members,
 ]
 
+all_jobs = [*scheduled_jobs]
+
+all_schedules = [*schedules, slack_analytics.slack_daily_schedule]
+
 defs = Definitions(
     assets=all_assets,
     resources={
@@ -38,5 +43,6 @@ defs = Definitions(
         "snowflake": snowflake_resource,
         "stitch": stitch_resource,
     },
-    schedules=[slack_analytics.slack_daily_schedule],
+    jobs=all_jobs,
+    schedules=all_schedules,
 )

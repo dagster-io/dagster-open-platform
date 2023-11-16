@@ -1,9 +1,8 @@
----
-name: "purina_dbt"
+name: "analytics"
 version: "1.0.0"
 config-version: 2
 
-profile: "purina_dbt"
+profile: "analytics"
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
 macro-paths: ["macros"]
@@ -14,10 +13,25 @@ clean-targets:
   - "dbt_packages"
 
 models:
+  analytics:
     staging:
+      +schema: staging
+      +materialized: view
       postgres:
-        +schema: staging
-        +materialized: view
+        +meta:
+          dagster:
+            group: cloud_staging
+      telemetry:
+        +meta:
+          dagster:
+            group: oss_telemetry_staging
+    marts:
+      +materialized: table
+      telemetry:
+        +schema: telemetry
+        +meta:
+          dagster:
+            group: oss_telemetry
 
 tests:
   +meta:
