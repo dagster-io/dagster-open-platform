@@ -26,3 +26,4 @@ sources:
       - name: users
       - name: users_organizations
       - name: users_permissions
+      - name: reporting_deployment_settings
