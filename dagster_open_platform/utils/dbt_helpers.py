@@ -1,7 +1,7 @@
 import os
 from typing import Any, Mapping
 
-from dagster import AssetKey, MetadataValue
+from dagster import AssetKey, Config, MetadataValue
 from dagster_dbt import DagsterDbtTranslator
 
 SNOWFLAKE_ACCOUNT_BASE = os.getenv("SNOWFLAKE_ACCOUNT", ".").split(".")[0]
@@ -11,6 +11,10 @@ PURINA_DATABASE_NAME = (
     else "PURINA"
 )
 SNOWFLAKE_URL = f"https://app.snowflake.com/ax61354/{SNOWFLAKE_ACCOUNT_BASE}/#/data/databases/{PURINA_DATABASE_NAME}/schemas"
+
+
+class DbtConfig(Config):
+    full_refresh: bool = False
 
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):

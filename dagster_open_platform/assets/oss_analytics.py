@@ -9,17 +9,11 @@ from dagster import (
     SourceAsset,
     asset,
 )
-from dagster_dbt import dbt_assets
 from dagster_gcp import BigQueryResource
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
 
 from ..partitions import oss_analytics_weekly_partition
-from ..resources import (
-    DBT_MANIFEST_PATH,
-    dbt_resource,
-)
-from ..utils.dbt import CustomDagsterDbtTranslator
 from ..utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
@@ -129,15 +123,6 @@ def dagster_pypi_downloads(
         },
         check_results=[non_empty_check_result, same_rows_check_results],
     )
-
-
-@dbt_assets(
-    manifest=DBT_MANIFEST_PATH,
-    select="source:prod_telemetry+",
-    dagster_dbt_translator=CustomDagsterDbtTranslator(),
-)
-def oss_telemetry_dbt_assets(context: AssetExecutionContext):
-    yield from dbt_resource.cli(["build"], context=context).stream()
 
 
 oss_telemetry_events_raw = SourceAsset(

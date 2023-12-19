@@ -4,7 +4,7 @@ from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
-from .assets import cloud_staging, health_check, oss_analytics, slack_analytics, stitch_ingest
+from .assets import dbt, health_check, oss_analytics, slack_analytics, stitch_ingest
 from .resources import (
     bigquery_resource,
     dbt_resource,
@@ -19,11 +19,11 @@ health_check_assets = load_assets_from_modules(
     group_name="health_check",
 )
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
-cloud_staging_assets = load_assets_from_modules([cloud_staging])
+dbt_assets = load_assets_from_modules([dbt])
 stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 
 all_assets = [
-    *cloud_staging_assets,
+    *dbt_assets,
     *health_check_assets,
     *oss_analytics_assets,
     *stitch_ingest_assets,

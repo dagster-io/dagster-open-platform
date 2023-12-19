@@ -25,6 +25,25 @@ models:
         +meta:
           dagster:
             group: oss_telemetry_staging
+      salesforce:
+        +meta:
+          dagster:
+            group: salesforce_staging
+      stripe:
+        +meta:
+          dagster:
+            group: stripe_staging
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+      product:
+        +meta:
+          dagster:
+            group: cloud_intermediate
+      stripe:
+        +meta:
+          dagster:
+            group: stripe_intermediate
     marts:
       +materialized: table
       telemetry:
@@ -32,6 +51,26 @@ models:
         +meta:
           dagster:
             group: oss_telemetry
+      cloud_reporting:
+        +schema: cloud_reporting
+        +meta:
+          dagster:
+            group: cloud_reporting
+      core:
+        +schema: core
+        +meta:
+          dagster:
+            group: cloud_core
+      product:
+        +schema: product
+        +meta:
+          dagster:
+            group: cloud_product
+
+seeds:
+  +meta:
+    dagster:
+      group: cloud_staging
 
 tests:
   +meta:
