@@ -35,6 +35,14 @@ models:
               values:
                 - HYBRID
                 - SERVERLESS
+  - name: stg_postgres__event_logs
+    description: Dagster event logs
+    columns:
+      - name: event_log_id
+        description: |
+          Event Log Id.
+        tests:
+          - not_null
   - name: stg_postgres__organizations
     description: Dagster Organizations
     columns:
@@ -120,3 +128,7 @@ models:
         tests:
           - unique
           - not_null
+  - name: stg_postgres__reporting_deployment_settings
+    description: |
+      Insights deployment settings, e.g. which metadata keys to sync
+      to insights

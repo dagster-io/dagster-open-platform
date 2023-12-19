@@ -2,7 +2,7 @@
 version: 2
 sources:
   - name: postgres_etl_high_freq
-    database: "{{env_var('DBT_STITCH_DATABASE', 'stitch') }}"
+    database: "{{ env_var('DBT_STITCH_DATABASE', 'stitch') }}"
     schema: "{{ env_var('DBT_STITCH_SCHEMA', 'cloud_prod_public') }}"
     description: Stitch schema corresponding to tables which are synced at a
       high frequency (~hourly)
@@ -26,4 +26,10 @@ sources:
       - name: users
       - name: users_organizations
       - name: users_permissions
+
+  - name: postgres_etl_sling
+    database: purina
+    schema: postgres_mirror
+    tables:
+      - name: repository_locations_data
       - name: reporting_deployment_settings
