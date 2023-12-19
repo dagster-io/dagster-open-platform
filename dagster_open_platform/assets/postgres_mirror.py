@@ -4,12 +4,8 @@ from dagster import (
     AssetExecutionContext,
     AssetKey,
     AssetsDefinition,
-    AssetSelection,
-    RunRequest,
     StaticPartitionsDefinition,
     asset,
-    define_asset_job,
-    schedule,
 )
 
 from ..resources.sling_resource import (
@@ -46,20 +42,18 @@ def define_sync_repo_location_data_asset(
 ) -> AssetsDefinition:
     @asset(
         key=AssetKey([database, "postgres_mirror", "repository_locations_data"]),
-        partitions_def=REPO_LOCATION_DATA_CHUNKED,
         required_resource_keys={sling_resource_key},
+        group_name="postgres_mirror",
     )
     def sync_repo_location_data(
         context: AssetExecutionContext,
     ) -> None:
         sling: SlingResource = getattr(context.resources, sling_resource_key)
 
-        for partition_key in REPO_LOCATION_DATA_CHUNKED.get_partition_keys_in_range(
-            context.partition_key_range
-        ):
-            context.log.info("Syncing partition: %s", partition_key)
+        for i in range(REPO_LOCATION_DATA_NUM_CHUNKS):
+            context.log.info("Syncing partition: %s", i)
             for stdout_line in sling.sync_postgres_to_snowflake(
-                source_table=f"{SOURCE_STREAM} {partition_key}",
+                source_table=f"{SOURCE_STREAM} {i}",
                 dest_table="postgres_mirror.repository_locations_data",
                 primary_key=["id"],
                 mode=SlingMode.INCREMENTAL,
@@ -76,13 +70,6 @@ sync_repo_location_data = define_sync_repo_location_data_asset(
     "purina", "cloud_prod_read_replica_sling"
 )
 
-
-sync_repo_location_data_job = define_asset_job(
-    name="sync_repo_location_data_job",
-    selection=AssetSelection.assets(sync_repo_location_data),
-    tags={"job": "sync_repo_location_data_job"},
-)
-
 TABLES_TO_SYNC_FULL_REPLICA_REPORTING = ["reporting_deployment_settings"]
 
 
@@ -96,13 +83,3 @@ postgres_replica_reporting_assets = [
     )
     for table_name in TABLES_TO_SYNC_FULL_REPLICA_REPORTING
 ]
-
-
-@schedule(
-    name="sync_repo_location_data_schedule",
-    cron_schedule="0 0/2 * * *",
-    job_name="sync_repo_location_data_job",
-)
-def sync_repo_location_data_schedule():
-    for partition_id in range(REPO_LOCATION_DATA_NUM_CHUNKS):
-        yield RunRequest(partition_key=str(partition_id), run_key=str(partition_id))

@@ -220,7 +220,12 @@ def build_sync_postgres_to_snowflake_asset(
     if primary_key is not None and not isinstance(primary_key, list):
         primary_key = [primary_key]
 
-    @asset(required_resource_keys={sling_resource_key}, key=key, deps=deps)
+    @asset(
+        required_resource_keys={sling_resource_key},
+        key=key,
+        deps=deps,
+        group_name="postgres_mirror",
+    )
     def sync(context: AssetExecutionContext) -> None:
         sling: SlingResource = getattr(context.resources, sling_resource_key)
         for stdout_line in sling.sync_postgres_to_snowflake(
