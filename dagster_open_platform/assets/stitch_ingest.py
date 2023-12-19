@@ -25,13 +25,24 @@ frequent_cloud_stitch_assets = build_stitch_assets(
     **SHARED_CONFIG,
 )
 
+# Conventionally, tables that are replicated via full sync,
+# but need to be replicated at Insight's frequency, not the generic infrequent rate
+ingest_cloud_stitch_assets = build_stitch_assets(
+    asset_key_prefix=["stitch", "elementl_cloud_prod"],
+    source_id=os.getenv("STITCH_CLOUD_INSIGHTS_SYNC_SOURCE_ID", ""),
+    destination_tables=[
+        "deployments",
+    ],
+    group_name="cloud_full_syncs",
+    **SHARED_CONFIG,
+)
+
 infrequent_cloud_stitch_assets = build_stitch_assets(
     asset_key_prefix=["stitch", "elementl_cloud_prod"],
     source_id=os.getenv("STITCH_CLOUD_FULL_SYNC_SOURCE_ID", ""),
     destination_tables=[
         "asset_keys",
         "customer_info",
-        "deployments",
         "onboarding_checklist",
         "organizations",
         "permissions",
