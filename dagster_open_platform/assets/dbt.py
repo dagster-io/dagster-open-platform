@@ -29,7 +29,13 @@ def cloud_analytics_dbt_assets(context: AssetExecutionContext):
     partitions_def=insights_partition,
 )
 def dbt_insights_models(context: AssetExecutionContext, config: DbtConfig):
-    time_window = context.asset_partitions_time_window_for_output()
+    time_window = context.asset_partitions_time_window_for_output(
+        next(iter(context.selected_output_names))
+    )
+    # The `next(iter(context.selected_output_names))` is necessary because of dbt's sub-setting
+    # A Dagster run can be `dbt_insights_models_2 -> cloud_analytics_dbt_assets_2 -> dbt_insights_models`
+    # So the explicit step name is required for the execution to
+    # know which `dbt_insights_model` Op is running
 
     dbt_vars = {"min_date": time_window.start.isoformat(), "max_date": time_window.end.isoformat()}
     args = (
