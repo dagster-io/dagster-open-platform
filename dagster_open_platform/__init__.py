@@ -5,6 +5,7 @@ from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
 from .assets import (
+    aws_cost_reporting,
     dbt,
     health_check,
     oss_analytics,
@@ -33,6 +34,7 @@ stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 postgres_mirror_assets = load_assets_from_modules([postgres_mirror])
 
 all_assets = [
+    aws_cost_reporting.aws_cost_report,
     *dbt_assets,
     *health_check_assets,
     *oss_analytics_assets,
