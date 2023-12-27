@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="dagster_open_platform",
+    name="dagster-open-platform",
     packages=find_packages(exclude=["dagster_open_platform_tests"]),
     install_requires=[
         "dbt-snowflake",
