@@ -76,5 +76,25 @@ cloud_prod_read_replica_sling_resource = SlingResource(
     ),
 )
 
+cloud_prod_sling_resource = SlingResource(
+    postgres_config=SlingPostgresConfig(
+        host=EnvVar("CLOUD_PROD_POSTGRES_HOST"),
+        user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
+        database="dagster",
+        password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),
+        ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),
+        ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),
+    ),
+    snowflake_config=SlingSnowflakeConfig(
+        host=EnvVar("SNOWFLAKE_PURINA_ACCOUNT"),
+        user=EnvVar("SNOWFLAKE_PURINA_USER"),
+        password=EnvVar("SNOWFLAKE_PURINA_PASSWORD"),
+        database="purina",
+        warehouse="purina",
+        role="purina",
+    ),
+)
+
+
 github_resource = GithubResource(github_token=EnvVar("GITHUB_TOKEN"))
 scoutos_resource = ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY"))

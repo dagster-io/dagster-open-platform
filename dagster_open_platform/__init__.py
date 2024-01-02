@@ -6,6 +6,7 @@ warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
 from .assets import (
     aws_cost_reporting,
+    cloud_usage,
     dbt,
     health_check,
     oss_analytics,
@@ -18,6 +19,7 @@ from .resources import (
     bigquery_resource,
     cloud_prod_read_replica_sling_resource,
     cloud_prod_reporting_sling_resource,
+    cloud_prod_sling_resource,
     dbt_resource,
     github_resource,
     scoutos_resource,
@@ -46,6 +48,7 @@ all_assets = [
     slack_analytics.slack_members,
     *postgres_mirror_assets,
     *support_bot_assets,
+    *cloud_usage.prod_sync_usage_metrics,
 ]
 
 all_jobs = [*scheduled_jobs]
@@ -64,6 +67,7 @@ defs = Definitions(
         "cloud_prod_reporting_sling": cloud_prod_reporting_sling_resource,
         "github": github_resource,
         "scoutos": scoutos_resource,
+        "cloud_prod_sling": cloud_prod_sling_resource,
     },
     jobs=all_jobs,
     schedules=all_schedules,

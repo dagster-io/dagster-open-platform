@@ -257,6 +257,7 @@ def build_sync_snowflake_to_postgres_asset(
     deps: Optional[Iterable[CoercibleToAssetKey]] = None,
     preflight_check: Optional[Callable[[AssetExecutionContext], None]] = None,
     preflight_resource_keys: Optional[Set[str]] = None,
+    group_name: Optional[str] = None,
 ) -> AssetsDefinition:
     """Factory which builds an asset definition that syncs the given source table to the given
     destination table.
@@ -278,6 +279,8 @@ def build_sync_snowflake_to_postgres_asset(
         required_resource_keys={sling_resource_key} | (preflight_resource_keys or set()),
         key=key,
         deps=deps,
+        compute_kind="sling",
+        group_name=group_name,
     )
     def sync(context: AssetExecutionContext, config: ConfigClass) -> None:
         if preflight_check:
