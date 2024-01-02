@@ -12,12 +12,15 @@ from .assets import (
     postgres_mirror,
     slack_analytics,
     stitch_ingest,
+    support_bot,
 )
 from .resources import (
     bigquery_resource,
     cloud_prod_read_replica_sling_resource,
     cloud_prod_reporting_sling_resource,
     dbt_resource,
+    github_resource,
+    scoutos_resource,
     slack_resource,
     snowflake_resource,
     stitch_resource,
@@ -32,6 +35,7 @@ oss_analytics_assets = load_assets_from_modules([oss_analytics])
 dbt_assets = load_assets_from_modules([dbt])
 stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 postgres_mirror_assets = load_assets_from_modules([postgres_mirror])
+support_bot_assets = load_assets_from_modules([support_bot])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -41,6 +45,7 @@ all_assets = [
     *stitch_ingest_assets,
     slack_analytics.slack_members,
     *postgres_mirror_assets,
+    *support_bot_assets,
 ]
 
 all_jobs = [*scheduled_jobs]
@@ -57,6 +62,8 @@ defs = Definitions(
         "stitch": stitch_resource,
         "cloud_prod_read_replica_sling": cloud_prod_read_replica_sling_resource,
         "cloud_prod_reporting_sling": cloud_prod_reporting_sling_resource,
+        "github": github_resource,
+        "scoutos": scoutos_resource,
     },
     jobs=all_jobs,
     schedules=all_schedules,

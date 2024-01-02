@@ -7,6 +7,7 @@ from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
 from ..utils.environment_helpers import get_dbt_target
+from .scoutos_resource import GithubResource, ScoutosResource
 from .sling_resource import SlingPostgresConfig, SlingResource, SlingSnowflakeConfig
 from .stitch_resource import StitchResource
 
@@ -74,3 +75,6 @@ cloud_prod_read_replica_sling_resource = SlingResource(
         role="purina",
     ),
 )
+
+github_resource = GithubResource(github_token=EnvVar("GITHUB_TOKEN"))
+scoutos_resource = ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY"))

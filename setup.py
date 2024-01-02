@@ -17,6 +17,7 @@ setup(
             " git+https://github.com/wbond/oscrypto@d5f3437ed24257895ae1edd9e503cfb352e635a8"
         ),
         "sling",
+        "gql[requests]",
     ],
     extras_require={
         "dev": ["dagster-webserver", "pytest"],
