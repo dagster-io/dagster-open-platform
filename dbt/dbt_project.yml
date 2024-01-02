@@ -66,6 +66,11 @@ models:
         +meta:
           dagster:
             group: cloud_product
+      sales:
+        +schema: sales
+        +meta:
+          dagster:
+            group: sales
 
 seeds:
   +meta:

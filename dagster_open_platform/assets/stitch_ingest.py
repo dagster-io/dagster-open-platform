@@ -56,3 +56,13 @@ infrequent_cloud_stitch_assets = build_stitch_assets(
     group_name="cloud_full_syncs",
     **SHARED_CONFIG,
 )
+
+salesforce_stitch_assets = build_stitch_assets(
+    source_id=os.getenv("STITCH_SALESFORCE_SYNC_ID", ""),
+    destination_tables=[
+        "account",
+    ],
+    asset_key_prefix=["stitch", "salesforce_v2"],
+    op_tags={"dagster/concurrency_key": "salesforce_stitch_assets"},
+    group_name="salesforce_sync",
+)

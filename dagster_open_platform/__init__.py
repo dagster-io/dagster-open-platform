@@ -11,6 +11,7 @@ from .assets import (
     health_check,
     oss_analytics,
     postgres_mirror,
+    salesforce,
     slack_analytics,
     stitch_ingest,
     support_bot,
@@ -22,6 +23,7 @@ from .resources import (
     cloud_prod_sling_resource,
     dbt_resource,
     github_resource,
+    hightouch_resource,
     scoutos_resource,
     slack_resource,
     snowflake_resource,
@@ -49,6 +51,7 @@ all_assets = [
     *postgres_mirror_assets,
     *support_bot_assets,
     *cloud_usage.prod_sync_usage_metrics,
+    salesforce.hightouch_usage_metrics_daily,
 ]
 
 all_jobs = [*scheduled_jobs]
@@ -60,6 +63,7 @@ defs = Definitions(
     resources={
         "bigquery": bigquery_resource,
         "dbt": dbt_resource,
+        "hightouch": hightouch_resource,
         "slack": slack_resource,
         "snowflake": snowflake_resource,
         "stitch": stitch_resource,
