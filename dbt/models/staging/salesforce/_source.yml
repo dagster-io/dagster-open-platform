@@ -1,0 +1,7 @@
+version: 2
+sources:
+  - name: salesforce
+    database: stitch
+    schema: salesforce_v2
+    tables:
+      - name: account
