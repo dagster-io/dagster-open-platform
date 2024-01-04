@@ -33,9 +33,17 @@ models:
         +meta:
           dagster:
             group: stripe_staging
+      segment:
+        +meta:
+          dagster:
+            group: segment_staging
     intermediate:
       +schema: intermediate
       +materialized: view
+      marketing:
+        +meta:
+          dagster:
+            group: marketing_intermediate
       product:
         +meta:
           dagster:
@@ -66,6 +74,16 @@ models:
         +meta:
           dagster:
             group: cloud_product
+      marketing:
+        +schema: marketing
+        +meta:
+          dagster:
+            group: marketing
+      finance:
+        +schema: finance
+        +meta:
+          dagster:
+            group: finance
       sales:
         +schema: sales
         +meta:

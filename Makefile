@@ -8,3 +8,9 @@ manifest:
 dev:
 	make manifest
 	dagster dev
+
+lint:
+	sqlfluff lint --config .sqlfluff ./dbt/models
+
+fix:
+	sqlfluff fix --config .sqlfluff ./dbt/models
