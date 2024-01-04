@@ -1,5 +1,5 @@
 select
-    {{ dbt_utils.surrogate_key(['organization_id', 'entry_key']) }} as primary_id,
+    {{ dbt_utils.generate_surrogate_key(['organization_id', 'entry_key']) }} as primary_id,
     organization_id,
     entry_key,
     status,
