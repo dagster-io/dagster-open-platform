@@ -59,7 +59,8 @@ models:
           Whether the organization has SAML SSO enabled
       - name: plan_type
         description: |
-          The type of plan the organization is on
+          The type of plan the organization is on. TEAM_V2 is set to TEAM as
+          these are the same plans, but V2 has a cap.
         tests:
           - accepted_values:
               values: ['STANDARD', 'ENTERPRISE', 'TEAM', 'PARTNER', 'SOLO', 'OPPORTUNITY']
