@@ -101,4 +101,29 @@ tests:
       asset_check: True
 
 vars:
+  session_threshold_seconds: 1800
+  attribution_lookback_days: 30
   dev_num_days_to_include: 90
+  # These variables are used for incremental models
+  min_date: "2000-01-01"
+  max_date: "9999-12-31"
+  stripe_source:
+    stripe_database: FIVETRAN
+    stripe_schema: STRIPE_PROD
+    using_invoices: true
+    using_credit_notes: false
+    using_payment_method: true
+    using_subscriptions: true
+    stripe__subscription_history: true
+    using_livemode: true
+    using_invoice_line_sub_filter: false
+  stripe:
+    stripe__subscription_history: true
+    stripe_database: FIVETRAN
+    stripe_schema: STRIPE_PROD
+    stripe_timezone: "America/Los_Angeles"
+
+query-comment:
+  # must match the python implementation
+  comment: "snowflake_dagster_dbt_v1_opaque_id[[[{{ node.unique_id }}:{{ invocation_id }}]]]"
+  append: true
