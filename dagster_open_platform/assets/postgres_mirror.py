@@ -42,18 +42,20 @@ def define_sync_repo_location_data_asset(
 ) -> AssetsDefinition:
     @asset(
         key=AssetKey([database, "postgres_mirror", "repository_locations_data"]),
+        partitions_def=REPO_LOCATION_DATA_CHUNKED,
         required_resource_keys={sling_resource_key},
-        group_name="postgres_mirror",
     )
     def sync_repo_location_data(
         context: AssetExecutionContext,
     ) -> None:
         sling: SlingResource = getattr(context.resources, sling_resource_key)
 
-        for i in range(REPO_LOCATION_DATA_NUM_CHUNKS):
-            context.log.info("Syncing partition: %s", i)
+        for partition_key in REPO_LOCATION_DATA_CHUNKED.get_partition_keys_in_range(
+            context.partition_key_range
+        ):
+            context.log.info("Syncing partition: %s", partition_key)
             for stdout_line in sling.sync_postgres_to_snowflake(
-                source_table=f"{SOURCE_STREAM} {i}",
+                source_table=f"{SOURCE_STREAM} {partition_key}",
                 dest_table="postgres_mirror.repository_locations_data",
                 primary_key=["id"],
                 mode=SlingMode.INCREMENTAL,

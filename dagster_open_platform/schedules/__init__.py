@@ -9,6 +9,7 @@ from dagster import (
 from dagster_dbt import build_dbt_asset_selection
 
 from ..assets import dbt
+from ..assets.postgres_mirror import REPO_LOCATION_DATA_NUM_CHUNKS, sync_repo_location_data
 from ..partitions import insights_partition
 
 oss_telemetry_job = define_asset_job(
@@ -23,7 +24,9 @@ oss_telemetry_schedule = ScheduleDefinition(
 
 insights_selection = build_dbt_asset_selection(
     [dbt.cloud_analytics_dbt_assets], "tag:insights"
-).upstream()  # select all insights models, and fetch upstream, including ingestion
+).upstream() - AssetSelection.assets(
+    sync_repo_location_data
+)  # select all insights models, and fetch upstream, including ingestion
 
 insights_job = define_asset_job(
     name="insights_job", selection=insights_selection, partitions_def=insights_partition
@@ -66,6 +69,33 @@ def cloud_usage_metrics_schedule():
     yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
-scheduled_jobs = [oss_telemetry_job, insights_job, cloud_usage_metrics_job]
+sync_repo_location_data_job = define_asset_job(
+    name="sync_repo_location_data_job",
+    selection=AssetSelection.assets(sync_repo_location_data),
+    tags={"job": "sync_repo_location_data_job"},
+)
 
-schedules = [oss_telemetry_schedule, insights_schedule, cloud_usage_metrics_schedule]
+
+@schedule(
+    name="sync_repo_location_data_schedule",
+    cron_schedule="0 0/2 * * *",
+    job_name="sync_repo_location_data_job",
+)
+def sync_repo_location_data_schedule():
+    for partition_id in range(REPO_LOCATION_DATA_NUM_CHUNKS):
+        yield RunRequest(partition_key=str(partition_id), run_key=str(partition_id))
+
+
+scheduled_jobs = [
+    oss_telemetry_job,
+    insights_job,
+    cloud_usage_metrics_job,
+    sync_repo_location_data_job,
+]
+
+schedules = [
+    oss_telemetry_schedule,
+    insights_schedule,
+    cloud_usage_metrics_schedule,
+    sync_repo_location_data_schedule,
+]
