@@ -86,6 +86,25 @@ def sync_repo_location_data_schedule():
         yield RunRequest(partition_key=str(partition_id), run_key=str(partition_id))
 
 
+# Stitch syncs need to be run regularly and not as-needed because
+# our data volume is too large for an individual sync
+stitch_sync_frequent = ScheduleDefinition(
+    job=define_asset_job(
+        name="stitch_frequent_sync",
+        selection=AssetSelection.key_prefixes(["stitch", "cloud_prod_public"]),
+        tags={"team": "purina"},
+    ),
+    cron_schedule="*/10 * * * *",
+)
+stitch_sync_infrequent = ScheduleDefinition(
+    job=define_asset_job(
+        name="stitch_infrequent_sync",
+        selection=AssetSelection.key_prefixes(["stitch", "elementl_cloud_prod"]),
+        tags={"team": "purina"},
+    ),
+    cron_schedule="0 0/12 * * *",
+)
+
 scheduled_jobs = [
     oss_telemetry_job,
     insights_job,
@@ -98,4 +117,6 @@ schedules = [
     insights_schedule,
     cloud_usage_metrics_schedule,
     sync_repo_location_data_schedule,
+    stitch_sync_frequent,
+    stitch_sync_infrequent,
 ]

@@ -10,7 +10,7 @@ Dagster Open Platform is Dagster Lab's open-source data platform.
 
 This is a full-sized Dagster project that contains **real** assets that are used by the Dagster Labs team. These are assets used for our own analytics and operations. Therefore, if you're a high-growth startup or a budding data team, this should also serve as an amazing reference for what it means to run a data platform at a SaaS business.
 
-We are open-sourcing these pipelines as an educational reference for how we do data engineering, build software, and run our analytics.
+We are open-sourcing these assets to provide a reference for how Dagster is used in a real-world setting at the scale of a data platform in a production setting.
 
 ## How to use this project
 
@@ -38,3 +38,7 @@ It follows our best practices for how to structure a Dagster project, how to con
 ```
 
 *Note:* This project **does not** include any confidential information about Dagster, environment variables, or configurations for our pipelines. We also excluded assets that contain sensitive business logic. Therefore, this project won't be able to run on your machine without some additional changes.
+
+## Asset Graph Preview
+
+![asset-graph](./asset-graph.svg)  
