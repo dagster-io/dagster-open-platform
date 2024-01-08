@@ -94,7 +94,7 @@ stitch_sync_frequent = ScheduleDefinition(
         selection=AssetSelection.key_prefixes(["stitch", "cloud_prod_public"]),
         tags={"team": "purina"},
     ),
-    cron_schedule="*/10 * * * *",
+    cron_schedule="10,20,30,40,50 * * * *",
 )
 stitch_sync_infrequent = ScheduleDefinition(
     job=define_asset_job(
@@ -102,7 +102,7 @@ stitch_sync_infrequent = ScheduleDefinition(
         selection=AssetSelection.key_prefixes(["stitch", "elementl_cloud_prod"]),
         tags={"team": "purina"},
     ),
-    cron_schedule="0 0/12 * * *",
+    cron_schedule="0 11,23 * * *",
 )
 
 scheduled_jobs = [
