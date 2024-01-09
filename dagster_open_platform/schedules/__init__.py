@@ -44,16 +44,14 @@ assets_dependent_on_cloud_usage = [
     build_dbt_asset_selection([dbt.cloud_analytics_dbt_assets], "attributed_conversions"),
 ]
 
-cloud_usage_metrics_selection = None
-
-# This loops gets all upstream assets for the leaf node assets that depend
-# on cloud analytics and unions them together to get a selection
-for dependent_asset in assets_dependent_on_cloud_usage:
-    curr_selection = dependent_asset.upstream().required_multi_asset_neighbors()
-    if cloud_usage_metrics_selection is None:
-        cloud_usage_metrics_selection = curr_selection
-    else:
-        cloud_usage_metrics_selection = cloud_usage_metrics_selection | curr_selection
+cloud_usage_metrics_selection = (
+    build_dbt_asset_selection([dbt.cloud_analytics_dbt_assets], "fqn:*")
+    .upstream()
+    .downstream()
+    .required_multi_asset_neighbors()
+    - AssetSelection.groups("cloud_reporting")
+    - AssetSelection.key_prefixes(["purina", "postgres_mirror"])
+)
 
 cloud_usage_metrics_job = define_asset_job(
     name="cloud_usage_metrics_job", selection=cloud_usage_metrics_selection
