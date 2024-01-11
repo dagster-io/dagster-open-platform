@@ -31,10 +31,10 @@ def get_schema_for_environment(default_schema: str) -> str:
     return default_schema
 
 
-def get_dbt_target():
+def get_dbt_target() -> str:
     env = get_environment()
     if env == "BRANCH":
         return "branch_deployment"
     if env == "PROD":
         return "prod"
-    return os.getenv("DBT_TARGET")
+    return os.getenv("DBT_TARGET", "personal")
