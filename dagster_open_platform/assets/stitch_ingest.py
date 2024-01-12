@@ -16,9 +16,12 @@ SHARED_CONFIG = {
     },
 }
 
+# The os.getenv("STITCH_*_ID") values are required to materialize the assets, but not to define them
+# Not setting these values will cause the assets to fail to materialize
+
 frequent_cloud_stitch_assets = build_stitch_assets(
     asset_key_prefix=["stitch", "cloud_prod_public"],
-    source_id=os.getenv("STITCH_CLOUD_INCREMENTAL_SYNC_SOURCE_ID", ""),
+    source_id=os.getenv("STITCH_CLOUD_INCREMENTAL_SYNC_SOURCE_ID", "CLOUD_INCREMENTAL_SYNC"),
     destination_tables=["event_logs", "run_tags", "runs"],
     op_tags={"dagster/concurrency_key": "frequent_cloud_stitch_assets"},
     group_name="cloud_incremental",
@@ -29,7 +32,7 @@ frequent_cloud_stitch_assets = build_stitch_assets(
 # but need to be replicated at Insight's frequency, not the generic infrequent rate
 ingest_cloud_stitch_assets = build_stitch_assets(
     asset_key_prefix=["stitch", "elementl_cloud_prod"],
-    source_id=os.getenv("STITCH_CLOUD_INSIGHTS_SYNC_SOURCE_ID", ""),
+    source_id=os.getenv("STITCH_CLOUD_INSIGHTS_SYNC_SOURCE_ID", "CLOUD_INSIGHTS_SYNC"),
     destination_tables=[
         "deployments",
     ],
@@ -39,7 +42,7 @@ ingest_cloud_stitch_assets = build_stitch_assets(
 
 infrequent_cloud_stitch_assets = build_stitch_assets(
     asset_key_prefix=["stitch", "elementl_cloud_prod"],
-    source_id=os.getenv("STITCH_CLOUD_FULL_SYNC_SOURCE_ID", ""),
+    source_id=os.getenv("STITCH_CLOUD_FULL_SYNC_SOURCE_ID", "CLOUD_FULL_SYNC"),
     destination_tables=[
         "asset_keys",
         "customer_info",
@@ -58,7 +61,7 @@ infrequent_cloud_stitch_assets = build_stitch_assets(
 )
 
 salesforce_stitch_assets = build_stitch_assets(
-    source_id=os.getenv("STITCH_SALESFORCE_SYNC_ID", ""),
+    source_id=os.getenv("STITCH_SALESFORCE_SYNC_ID", "SALESFORCE_SYNC"),
     destination_tables=[
         "account",
     ],
