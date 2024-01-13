@@ -15,6 +15,7 @@ from ..partitions import insights_partition
 oss_telemetry_job = define_asset_job(
     name="oss_telemetry_job",
     selection=AssetSelection.groups("oss_telemetry_staging").downstream(),
+    tags={"team": "devrel"},
 )
 
 oss_telemetry_schedule = ScheduleDefinition(
@@ -29,7 +30,10 @@ insights_selection = build_dbt_asset_selection(
 )  # select all insights models, and fetch upstream, including ingestion
 
 insights_job = define_asset_job(
-    name="insights_job", selection=insights_selection, partitions_def=insights_partition
+    name="insights_job",
+    selection=insights_selection,
+    partitions_def=insights_partition,
+    tags={"team": "devrel"},
 )
 
 insights_schedule = build_schedule_from_partitioned_job(job=insights_job)
@@ -54,7 +58,7 @@ cloud_usage_metrics_selection = (
 )
 
 cloud_usage_metrics_job = define_asset_job(
-    name="cloud_usage_metrics_job", selection=cloud_usage_metrics_selection
+    name="cloud_usage_metrics_job", selection=cloud_usage_metrics_selection, tags={"team": "devrel"}
 )
 
 
@@ -90,7 +94,7 @@ stitch_sync_frequent = ScheduleDefinition(
     job=define_asset_job(
         name="stitch_frequent_sync",
         selection=AssetSelection.key_prefixes(["stitch", "cloud_prod_public"]),
-        tags={"team": "purina"},
+        tags={"team": "devrel"},
     ),
     cron_schedule="10,20,30,40,50 * * * *",
 )
@@ -98,7 +102,7 @@ stitch_sync_infrequent = ScheduleDefinition(
     job=define_asset_job(
         name="stitch_infrequent_sync",
         selection=AssetSelection.key_prefixes(["stitch", "elementl_cloud_prod"]),
-        tags={"team": "purina"},
+        tags={"team": "devrel"},
     ),
     cron_schedule="0 11,23 * * *",
 )
