@@ -1,6 +1,7 @@
 import json
 
 from dagster import AssetExecutionContext
+from dagster_cloud.dagster_insights import dbt_with_snowflake_insights
 from dagster_dbt import dbt_assets
 
 from ..partitions import insights_partition
@@ -19,7 +20,7 @@ INSIGHTS_SELECTOR = "+tag:insights,config.materialized:incremental"
     exclude=INSIGHTS_SELECTOR,
 )
 def cloud_analytics_dbt_assets(context: AssetExecutionContext):
-    yield from dbt_resource.cli(["build"], context=context).stream()
+    yield from dbt_with_snowflake_insights(context, dbt_resource.cli(["build"], context=context))
 
 
 @dbt_assets(
@@ -43,4 +44,4 @@ def dbt_insights_models(context: AssetExecutionContext, config: DbtConfig):
         if config.full_refresh
         else ["build", "--vars", json.dumps(dbt_vars)]
     )
-    yield from dbt_resource.cli(args, context=context).stream()
+    yield from dbt_with_snowflake_insights(context, dbt_resource.cli(args, context=context))
