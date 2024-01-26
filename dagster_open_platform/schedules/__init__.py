@@ -33,7 +33,7 @@ insights_job = define_asset_job(
     name="insights_job",
     selection=insights_selection,
     partitions_def=insights_partition,
-    tags={"team": "devrel"},
+    tags={"team": "insights"},
 )
 
 insights_schedule = build_schedule_from_partitioned_job(job=insights_job)
@@ -74,7 +74,10 @@ def cloud_usage_metrics_schedule():
 sync_repo_location_data_job = define_asset_job(
     name="sync_repo_location_data_job",
     selection=AssetSelection.assets(sync_repo_location_data),
-    tags={"job": "sync_repo_location_data_job"},
+    tags={
+        "job": "sync_repo_location_data_job",
+        "team": "insights",
+    },
 )
 
 
