@@ -1,6 +1,13 @@
 ---
 version: 2
 sources:
+  - name: purina_staging
+    database: "{{ 'dogfood_purina' if target.name == 'dogfood' else 'purina' }}"
+    schema: staging
+    tables:
+      - name: insights_metrics_submissions
+
+
   - name: postgres_etl_high_freq
     # Dogfood data is (experimentally) synced using Sling instead of Stitch, into the dogfood_purina.postgres_mirror schema
     database: "{{ 'dogfood_purina' if target.name == 'dogfood' else env_var('DBT_STITCH_DATABASE', 'stitch') }}"

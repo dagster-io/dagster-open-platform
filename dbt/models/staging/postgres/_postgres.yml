@@ -2,6 +2,7 @@
 version: 2
 
 models:
+  - name: stg_insights_metrics_submissions
   - name: stg_postgres__asset_keys
     description: "Asset keys"
     columns:
