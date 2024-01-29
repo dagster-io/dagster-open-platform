@@ -1,5 +1,6 @@
 from dagster import (
     AssetSelection,
+    Backoff,
     RetryPolicy,
     RunRequest,
     ScheduleDefinition,
@@ -79,7 +80,7 @@ sync_repo_location_data_job = define_asset_job(
         "job": "sync_repo_location_data_job",
         "team": "insights",
     },
-    op_retry_policy=RetryPolicy(max_retries=3, delay=60),
+    op_retry_policy=RetryPolicy(max_retries=5, delay=60, backoff=Backoff.LINEAR),
 )
 
 
