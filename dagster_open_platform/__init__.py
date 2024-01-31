@@ -1,6 +1,11 @@
 import warnings
 
-from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
+from dagster import (
+    Definitions,
+    ExperimentalWarning,
+    external_assets_from_specs,
+    load_assets_from_modules,
+)
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
@@ -52,6 +57,7 @@ all_assets = [
     *support_bot_assets,
     *cloud_usage.prod_sync_usage_metrics,
     salesforce.hightouch_usage_metrics_daily,
+    *external_assets_from_specs([*dbt.segment_asset_specs, *dbt.stripe_asset_specs]),
 ]
 
 all_jobs = [*scheduled_jobs]
