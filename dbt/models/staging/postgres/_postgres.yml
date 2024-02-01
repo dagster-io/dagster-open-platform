@@ -77,7 +77,7 @@ models:
           The type of permission granted, e.g. `VIEWER`, `ADMIN`
         tests:
           - accepted_values:
-              values: ['VIEWER', 'ADMIN', 'EDITOR', 'LAUNCHER']
+              values: ['VIEWER', 'ADMIN', 'EDITOR', 'LAUNCHER', 'AGENT']
   - name: stg_postgres__session_tokens
     description: Dagster session tokens
     columns:
