@@ -14,9 +14,9 @@ from ..resources.sling_resource import (
     build_sync_postgres_to_snowflake_asset,
 )
 
-# Split into 4 static partitions in order to avoid long-running queries that are canceled by
-# the read replica when it syncs w/ the primary
-REPO_LOCATION_DATA_NUM_CHUNKS = 5
+# Split into many static partitions in order to avoid long-running queries that are canceled by
+# the read replica when it syncs w/ the primary - smaller queries are less likely to be canceled
+REPO_LOCATION_DATA_NUM_CHUNKS = 10
 
 SOURCE_STREAM = (
     "select id, organization_id, deployment_id, create_timestamp, update_timestamp,"
