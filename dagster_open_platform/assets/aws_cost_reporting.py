@@ -1,7 +1,5 @@
 from dagster import (
     AssetExecutionContext,
-    AutoMaterializePolicy,
-    AutoMaterializeRule,
     MaterializeResult,
     asset,
 )
@@ -37,12 +35,16 @@ COPY INTO {QUALIFIED_TABLE_NAME}
 
 TRUNCATE_TABLE_QUERY = "TRUNCATE TABLE {QUALIFIED_TABLE_NAME};"
 
-materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
-    AutoMaterializeRule.materialize_on_cron("0 */4 * * *"),
-)
+# TODO: AWS cost metrics history was enabled, resulting in multiple files being created
+# in the target S3 bucket. Presently, this implementation will attempt to read all
+# files. Re-introduce auto materialization policy when fix is put in place.
+#
+# materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
+#     AutoMaterializeRule.materialize_on_cron("0 */4 * * *"),
+# )
 
 
-@asset(auto_materialize_policy=materialize_on_cron_policy)
+@asset
 def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource):
     """AWS updates the monthly cost report once an hour, overwriting the existing
     files for the current month.
