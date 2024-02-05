@@ -282,7 +282,7 @@ def build_sync_snowflake_to_postgres_asset(
         compute_kind="sling",
         group_name=group_name,
     )
-    def sync(context: AssetExecutionContext, config: ConfigClass) -> None:
+    def sync(context: AssetExecutionContext, config: ConfigClass) -> None:  # type: ignore
         if preflight_check:
             preflight_check(context)
 
