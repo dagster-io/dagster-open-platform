@@ -10,7 +10,7 @@ SNOWFLAKE_URL = (
 )
 
 SHARED_CONFIG = {
-    "retry_policy": RetryPolicy(max_retries=2, delay=15),
+    "retry_policy": RetryPolicy(max_retries=5, delay=15),
     "table_to_metadata": lambda table: {
         "url": MetadataValue.url(f"{SNOWFLAKE_URL}/CLOUD_PROD_PUBLIC/table/{table.upper()}"),
     },
