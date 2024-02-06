@@ -2,7 +2,7 @@ select
 
     organization_id,
     deployment_id,
-    split_part(opaque_id, ':', -1) as opaque_id,
+    opaque_id,
     metric_name,
     query_id,
     max_by(cost, last_updated) as cost,
