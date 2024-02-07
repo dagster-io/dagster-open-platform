@@ -6,7 +6,7 @@ analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
 
-      user: "purina"
+      user: "{{ env_var('SNOWFLAKE_DBT_USER', '') }}"
       password: "{{ env_var('SNOWFLAKE_DBT_PASSWORD', '') }}"
 
       role: "purina"

@@ -1,0 +1,15 @@
+version: 2
+models:
+  - name: stg_salesforce__accounts
+    columns:
+      - name: account_id
+        tests:
+          - unique
+          - not_null
+  - name: stg_salesforce__contracts
+    columns:
+      - name: contract_id
+        tests:
+          - unique
+          - not_null
+

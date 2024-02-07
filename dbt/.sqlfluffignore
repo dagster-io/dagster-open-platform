@@ -1,3 +1,5 @@
 stg_segment__web_identifies.sql
-orgs_activated.sql
+product_engagement.sql
 time_spine.sql
+reporting_step_data.sql
+reporting_step_metrics.sql

@@ -5,3 +5,6 @@ sources:
     schema: salesforce_v2
     tables:
       - name: account
+      - name: opportunity
+      - name: contact
+      - name: contract
