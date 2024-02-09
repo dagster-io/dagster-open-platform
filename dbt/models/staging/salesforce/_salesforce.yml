@@ -12,4 +12,9 @@ models:
         tests:
           - unique
           - not_null
-
+  - name: stg_salesforce__opportunities
+    columns:
+      - name: opportunity_id
+        tests:
+          - unique
+          - not_null
