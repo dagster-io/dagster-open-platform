@@ -66,4 +66,5 @@ salesforce_stitch_assets = build_stitch_assets(
     asset_key_prefix=["stitch", "salesforce_v2"],
     op_tags={"dagster/concurrency_key": "salesforce_stitch_assets"},
     group_name="salesforce_sync",
+    **SHARED_CONFIG,
 )
