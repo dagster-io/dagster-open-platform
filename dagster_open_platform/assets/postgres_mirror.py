@@ -14,7 +14,6 @@ from pydantic import Field
 from ..resources.sling_resource import (
     SlingMode,
     SlingResource,
-    build_sync_postgres_to_snowflake_asset,
 )
 
 # Split into many static partitions in order to avoid long-running queries that are canceled by
@@ -87,17 +86,3 @@ def define_sync_repo_location_data_asset(
 sync_repo_location_data = define_sync_repo_location_data_asset(
     "purina", "cloud_prod_read_replica_sling"
 )
-
-TABLES_TO_SYNC_FULL_REPLICA_REPORTING = ["reporting_deployment_settings"]
-
-
-postgres_replica_reporting_assets = [
-    build_sync_postgres_to_snowflake_asset(
-        key=AssetKey(["purina", "postgres_mirror", table_name]),
-        sling_resource_key="cloud_prod_reporting_sling",
-        source_table=table_name,
-        dest_table=f"postgres_mirror.{table_name}",
-        mode=SlingMode.FULL_REFRESH,
-    )
-    for table_name in TABLES_TO_SYNC_FULL_REPLICA_REPORTING
-]
