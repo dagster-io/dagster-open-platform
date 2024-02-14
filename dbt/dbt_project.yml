@@ -95,11 +95,6 @@ seeds:
     dagster:
       group: cloud_staging
 
-tests:
-  +meta:
-    dagster:
-      asset_check: True
-
 vars:
   session_threshold_seconds: 1800
   attribution_lookback_days: 30
