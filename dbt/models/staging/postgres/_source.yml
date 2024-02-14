@@ -5,6 +5,7 @@ sources:
     database: "{{ 'dogfood_purina' if target.name == 'dogfood' else 'purina' }}"
     schema: staging
     tables:
+      # misnomer - this is actually specifically snowflake cost submissions
       - name: insights_metrics_submissions
 
 
