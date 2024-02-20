@@ -2,7 +2,7 @@ import logging
 
 import responses
 from dagster import IntMetadataValue
-from dagster._core.definitions import build_assets_job
+from dagster._core.definitions import materialize
 from dagster_open_platform.resources.stitch_resource import StitchResource, build_stitch_assets
 
 from .utils import ExtractionStatus, sample_extractions_data, sample_streams_data
@@ -60,13 +60,10 @@ def test_build_assets(capsys, caplog) -> None:
             asset_key_prefix=["stitch"],
         )
 
-        stitch_job = build_assets_job(
-            "stitch_job",
+        res = materialize(
             stitch_assets,
-            resource_defs={"stitch": stitch_resource},
+            resources={"stitch": stitch_resource},
         )
-
-        res = stitch_job.execute_in_process()
 
     assert res.success
     assert f"Sync initialized for source_id={source_id} with job name my_new_job" in caplog.text
