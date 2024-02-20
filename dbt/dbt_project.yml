@@ -92,6 +92,11 @@ models:
         +meta:
           dagster:
             group: sales
+      hightouch:
+        +schema: hightouch
+        +meta:
+          dagster:
+            group: hightouch
 
 seeds:
   +post-hook:
