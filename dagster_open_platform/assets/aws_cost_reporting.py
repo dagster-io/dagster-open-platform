@@ -1,25 +1,27 @@
+from datetime import datetime
+
 from dagster import (
     AssetExecutionContext,
     AutoMaterializePolicy,
     AutoMaterializeRule,
     MaterializeResult,
-    asset,
     MonthlyPartitionsDefinition,
+    asset,
 )
-
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
 )
 from dagster_snowflake import SnowflakeResource
-from datetime import datetime
 
 # note: this is used as 2 different formats
 # YYYY-MM for sourcing the partition from s3
 # or YYYY-MM-DD for querying fromSnowflake where DD is "01"
 # PARTITION_MONTH = "<calling code sets the partition>"
-BASE_S3_LOCATION = ("@PURINA.PUBLIC.s3_elementl_cloud_cost_stage/CostStandardExport/"
-                    "/CostStandardExport/data/BILLING_PERIOD={PARTITION_MONTH}")
+BASE_S3_LOCATION = (
+    "@PURINA.PUBLIC.s3_elementl_cloud_cost_stage/CostStandardExport/"
+    "/CostStandardExport/data/BILLING_PERIOD={PARTITION_MONTH}"
+)
 
 # QUALIFIED_TABLE_NAME = "<calling code sets the table name>"
 CREATE_TABLE_QUERY = """
@@ -45,7 +47,8 @@ COPY INTO {QUALIFIED_TABLE_NAME}
 
 DELETE_PARTITION_QUERY = (
     "DELETE FROM {QUALIFIED_TABLE_NAME} "
-    "WHERE to_varchar(\"bill_billing_period_start_date\",'YYYY-MM-DD') = '{PARTITION_MONTH}';")
+    "WHERE to_varchar(\"bill_billing_period_start_date\",'YYYY-MM-DD') = '{PARTITION_MONTH}';"
+)
 
 aws_monthly_partition = MonthlyPartitionsDefinition(start_date="2020-12-01")
 
@@ -69,16 +72,12 @@ def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource
     partition_no_day = datetime.strptime(partition, "%Y-%m-%d").strftime("%Y-%m")
 
     create_table = CREATE_TABLE_QUERY.format(
-        QUALIFIED_TABLE_NAME=qualified_name,
-        BASE_S3_LOCATION=BASE_S3_LOCATION).format(
-        PARTITION_MONTH=partition_no_day
-    )
+        QUALIFIED_TABLE_NAME=qualified_name, BASE_S3_LOCATION=BASE_S3_LOCATION
+    ).format(PARTITION_MONTH=partition_no_day)
     context.log.info(f"SQL debug {create_table}")
     copy_table = COPY_DATA_QUERY.format(
-        QUALIFIED_TABLE_NAME=qualified_name,
-        BASE_S3_LOCATION=BASE_S3_LOCATION).format(
-        PARTITION_MONTH=partition_no_day
-    )
+        QUALIFIED_TABLE_NAME=qualified_name, BASE_S3_LOCATION=BASE_S3_LOCATION
+    ).format(PARTITION_MONTH=partition_no_day)
     context.log.info(f"SQL debug {copy_table}")
     delete_partition = DELETE_PARTITION_QUERY.format(
         QUALIFIED_TABLE_NAME=qualified_name,
