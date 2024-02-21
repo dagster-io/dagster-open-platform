@@ -23,7 +23,7 @@ def get_schema_for_environment(default_schema: str) -> str:
     the SANDBOX_SCHEMA_NAME environment variable, otherwise will use a schema name that you pass to it.
 
     SANDBOX_SCHEMA_NAME is an environment variable you'll need to define locally.
-    It is likely your first name. See the SANDBOX database in Snowflake for more details.
+    Your sandbox schema is likely your Snowflake user name. See the SANDBOX database in Snowflake for more details.
     """
     env = get_environment()
     if env == "LOCAL":
