@@ -50,7 +50,7 @@ DELETE_PARTITION_QUERY = (
     "WHERE to_varchar(\"bill_billing_period_start_date\",'YYYY-MM-DD') = '{PARTITION_MONTH}';"
 )
 
-aws_monthly_partition = MonthlyPartitionsDefinition(start_date="2020-12-01")
+aws_monthly_partition = MonthlyPartitionsDefinition(start_date="2020-12-01", end_offset=1)
 
 materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
     AutoMaterializeRule.materialize_on_cron("0 */4 * * *"),
@@ -87,6 +87,7 @@ def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource
 
     with snowflake.get_connection() as conn:
         conn.autocommit(False)
+
         cur = conn.cursor()
         try:
             cur.execute(create_table)
