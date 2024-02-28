@@ -40,6 +40,10 @@ models:
         +meta:
           dagster:
             group: segment_staging
+      thinkific:
+        +meta:
+          dagster:
+            group: thinkific_staging
     intermediate:
       +schema: intermediate
       +materialized: view
@@ -97,6 +101,11 @@ models:
         +meta:
           dagster:
             group: hightouch
+      education:
+        +schema: education
+        +meta:
+          dagster:
+            group: education
 
 seeds:
   +post-hook:

@@ -1,0 +1,11 @@
+version: 2
+sources:
+  - name: thinkific
+    description: Thinkific Education Courses
+    database: dlt
+    schema: thinkific
+    tables:
+      - name: courses
+      - name: course_reviews
+      - name: enrollments
+      - name: users
