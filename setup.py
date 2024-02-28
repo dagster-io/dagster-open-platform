@@ -19,6 +19,7 @@ setup(
         ),
         "sling",
         "gql[requests]",
+        "dlt[snowflake,duckdb]",
     ],
     extras_require={
         "dev": ["dagster-webserver", "pytest"],

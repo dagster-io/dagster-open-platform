@@ -15,6 +15,7 @@ from .assets import (
     slack_analytics,
     stitch_ingest,
     support_bot,
+    thinkific_ingest,
 )
 from .resources import (
     bigquery_resource,
@@ -40,6 +41,7 @@ dbt_assets = load_assets_from_modules([dbt])
 stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 postgres_mirror_assets = load_assets_from_modules([postgres_mirror])
 support_bot_assets = load_assets_from_modules([support_bot])
+thinkific_ingest_assets = load_assets_from_modules([thinkific_ingest])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -50,6 +52,7 @@ all_assets = [
     slack_analytics.slack_members,
     *postgres_mirror_assets,
     *support_bot_assets,
+    *thinkific_ingest_assets,
     *cloud_usage.prod_sync_usage_metrics,
     salesforce.hightouch_usage_metrics_daily,
 ]
