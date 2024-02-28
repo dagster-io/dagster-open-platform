@@ -1,4 +1,4 @@
-select
+select distinct
 
     id as deployment_id,
     organization_id,

@@ -1,4 +1,4 @@
-select
+select distinct
 
     id as customer_info_id,
     organization_id,
