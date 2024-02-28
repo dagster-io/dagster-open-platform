@@ -1,5 +1,5 @@
 dev_install:
-	pip install -e ".[dev]"
+	pip install uv && uv pip install -e ".[dev]"
 	cd dbt && dbt deps && cd ..
 
 manifest:
