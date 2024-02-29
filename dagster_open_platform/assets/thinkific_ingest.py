@@ -73,7 +73,7 @@ def thinkific(
             yield response.json().get("items")
             params["page"] = response.json().get("meta").get("pagination").get("next_page")
 
-    @dlt.resource
+    @dlt.resource(primary_key="id", write_disposition="merge")
     def courses():
         response = requests.get(
             url=THINKIFIC_BASE_URL + "courses",
@@ -82,7 +82,7 @@ def thinkific(
         response.raise_for_status()
         yield response.json().get("items")
 
-    @dlt.resource
+    @dlt.resource(primary_key="id", write_disposition="merge")
     def course_reviews():
         # Enhancement - figure out how to use `course_id` values from `courses`
         # resource. It's not clear how to have downstream dependencies on resources, and
@@ -97,14 +97,14 @@ def thinkific(
             ):
                 yield page
 
-    @dlt.resource
+    @dlt.resource(primary_key="id", write_disposition="merge")
     def enrollments():
         # Enhancement - update to do incremental loads, see:
         # https://dlthub.com/docs/examples/incremental_loading/
         for page in _paginate(THINKIFIC_BASE_URL + "enrollments"):
             yield page
 
-    @dlt.resource
+    @dlt.resource(primary_key="id", write_disposition="merge")
     def users():
         for page in _paginate(THINKIFIC_BASE_URL + "users"):
             yield page
@@ -159,7 +159,7 @@ def thinkific_pipeline(config: ThinkificPipelineConfig) -> MaterializeResult:
 
 if __name__ == "__main__":
     pipeline = dlt.pipeline(
-        pipeline_name="thinkific", destination="duckdb", dataset_name="thinkific_data"
+        pipeline_name="thinkific", destination="snowflake", dataset_name="thinkific"
     )
     load_info = pipeline.run(thinkific())
     print(load_info)
