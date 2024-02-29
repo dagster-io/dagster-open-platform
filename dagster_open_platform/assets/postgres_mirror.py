@@ -20,14 +20,20 @@ from ..resources.sling_resource import (
 # the read replica when it syncs w/ the primary - smaller queries are less likely to be canceled
 REPO_LOCATION_DATA_NUM_CHUNKS = 5
 
+# PostgresSQL's JSONB type does not support Infinity or NaN, so we need to replace them with 0
+# we don't actually care about these values, so this just makes the JSONB parseable
+CLEAN_LOAD_REPOSITORIES_RESPONSE_JSONB = (
+    """replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb"""
+)
+
 SOURCE_STREAM = (
     "select id, organization_id, deployment_id, create_timestamp, timestamp as update_timestamp,"
     " jsonb_path_query_array("
-    "load_repositories_response::jsonb,"
+    f"{CLEAN_LOAD_REPOSITORIES_RESPONSE_JSONB},"
     " '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].asset_key'"
     ") as asset_keys,"
     " jsonb_path_query_array("
-    "load_repositories_response::jsonb,"
+    f"{CLEAN_LOAD_REPOSITORIES_RESPONSE_JSONB},"
     " '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].group_name'"
     ") as group_names from repository_locations_data"
     " where timestamp > '{lookback_timestamp}'"
