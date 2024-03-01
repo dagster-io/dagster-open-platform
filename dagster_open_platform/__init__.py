@@ -14,6 +14,7 @@ from .assets import (
     salesforce,
     slack_analytics,
     stitch_ingest,
+    stripe_data_sync,
     support_bot,
     thinkific_ingest,
 )
@@ -42,6 +43,7 @@ stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 postgres_mirror_assets = load_assets_from_modules([postgres_mirror])
 support_bot_assets = load_assets_from_modules([support_bot])
 thinkific_ingest_assets = load_assets_from_modules([thinkific_ingest])
+stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -55,6 +57,7 @@ all_assets = [
     *thinkific_ingest_assets,
     *cloud_usage.prod_sync_usage_metrics,
     salesforce.hightouch_usage_metrics_daily,
+    *stripe_sync_assets,
 ]
 
 all_jobs = [*scheduled_jobs]
