@@ -1,4 +1,4 @@
-select
+select distinct
 
     id as permission_id,
     organization_id,
