@@ -43,7 +43,7 @@ models:
       thinkific:
         +meta:
           dagster:
-            group: thinkific_staging
+            group: education
     intermediate:
       +schema: intermediate
       +materialized: view

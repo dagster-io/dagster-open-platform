@@ -6,6 +6,18 @@ sources:
     schema: thinkific
     tables:
       - name: courses
+        meta:
+          dagster:
+            asset_key: ["thinkific_dlt_courses"]
       - name: course_reviews
+        meta:
+          dagster:
+            asset_key: ["thinkific_dlt_course_reviews"]
       - name: enrollments
+        meta:
+          dagster:
+            asset_key: ["thinkific_dlt_enrollments"]
       - name: users
+        meta:
+          dagster:
+            asset_key: ["thinkific_dlt_users"]

@@ -30,9 +30,18 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             return AssetKey([dbt_resource_props["database"], schema, resource_name])
 
         elif resource_type == "source":
-            database_name = dbt_resource_props["database"].lower()
-            schema_name = dbt_resource_props["schema"].lower()
-            return AssetKey([database_name, schema_name, resource_name])
+            # if metadata has been provided in the yaml use that, otherwise construct key
+            if (
+                "meta" in dbt_resource_props
+                and "dagster" in dbt_resource_props["meta"]
+                and "asset_key" in dbt_resource_props["meta"]["dagster"]
+            ):
+                return AssetKey(dbt_resource_props["meta"]["dagster"]["asset_key"])
+
+            else:
+                database_name = dbt_resource_props["database"].lower()
+                schema_name = dbt_resource_props["schema"].lower()
+                return AssetKey([database_name, schema_name, resource_name])
 
         else:
             raise ValueError(f"Unknown dbt resource_type: {resource_type}")

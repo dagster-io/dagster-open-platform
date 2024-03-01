@@ -33,8 +33,10 @@ DEPENDENCIES
 
 """
 
+import os
+
 import dlt
-from dagster import Config, MaterializeResult, asset
+from dagster import AssetSpec, Config, MaterializeResult, multi_asset
 from dlt.sources.helpers import requests
 from pydantic import Field
 
@@ -82,18 +84,11 @@ def thinkific(
         response.raise_for_status()
         yield response.json().get("items")
 
-    @dlt.resource(primary_key="id", write_disposition="merge")
-    def course_reviews():
-        # Enhancement - figure out how to use `course_id` values from `courses`
-        # resource. It's not clear how to have downstream dependencies on resources, and
-        # it's not clear if there's guarantee in order of resource runs.
-        courses = {
-            2364106: "Dagster Essentials",
-            2662892: "Dagster + dbt",
-        }
-        for course_id in courses.keys():
+    @dlt.transformer(primary_key="id", write_disposition="merge", data_from=courses)
+    def course_reviews(courses):
+        for course in courses:
             for page in _paginate(
-                THINKIFIC_BASE_URL + "course_reviews", params={"course_id": course_id}
+                THINKIFIC_BASE_URL + "course_reviews", params={"course_id": course["id"]}
             ):
                 yield page
 
@@ -120,8 +115,17 @@ class ThinkificPipelineConfig(Config):
     destination: str = Field("snowflake", description="dlt destination (eg. 'snowflake', 'duckdb')")
 
 
-@asset
-def thinkific_pipeline(config: ThinkificPipelineConfig) -> MaterializeResult:
+@multi_asset(
+    specs=[
+        AssetSpec("thinkific_dlt_courses"),
+        AssetSpec("thinkific_dlt_course_reviews"),
+        AssetSpec("thinkific_dlt_enrollments"),
+        AssetSpec("thinkific_dlt_users"),
+    ],
+    group_name="education",
+    compute_kind="dlt",
+)
+def thinkific_pipeline(config: ThinkificPipelineConfig):
     """Asset wrapper around Thinkific `dlt` pipeline.
 
     This is a very minimal wrapper around the thinkific ingestion job. Future
@@ -139,6 +143,8 @@ def thinkific_pipeline(config: ThinkificPipelineConfig) -> MaterializeResult:
     # Select a subset of load info metadata as not all items in the dictionary are
     # JSON-serializeable. Timestamps are also defined as 'pendulum.datetime.DateTime`,
     # so converting these to appropriate metadata values would be a good enhancement.
+    #
+    # Enhancement - add an asset check on the load info metadata
     metadata = {
         k: str(v)
         for k, v in load_info.asdict().items()
@@ -153,13 +159,23 @@ def thinkific_pipeline(config: ThinkificPipelineConfig) -> MaterializeResult:
         }
     }
 
-    # Enhancement - add an asset check on the load info metadata
-    return MaterializeResult(metadata=metadata)
+    for key in [
+        "thinkific_dlt_courses",
+        "thinkific_dlt_course_reviews",
+        "thinkific_dlt_enrollments",
+        "thinkific_dlt_users",
+    ]:
+        yield MaterializeResult(asset_key=key, metadata=metadata)
 
 
 if __name__ == "__main__":
-    pipeline = dlt.pipeline(
-        pipeline_name="thinkific", destination="snowflake", dataset_name="thinkific"
-    )
+    if os.getenv("ENVIRONMENT") == "local":
+        pipeline = dlt.pipeline(
+            pipeline_name="thinkific", destination="duckdb", dataset_name="data"
+        )
+    else:
+        pipeline = dlt.pipeline(
+            pipeline_name="thinkific", destination="snowflake", dataset_name="thinkific"
+        )
     load_info = pipeline.run(thinkific())
     print(load_info)
