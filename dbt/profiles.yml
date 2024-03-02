@@ -34,7 +34,7 @@ analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
       user: BUILDKITE_LINT
-      password: "{{ env_var('SNOWFLAKE_BUILDKITE_LINT_PASSWORD') }}"
+      password: "{{ env_var('SNOWFLAKE_BUILDKITE_LINT_PASSWORD', '') }}"
       database: purina
       warehouse: elementl
       schema: public
