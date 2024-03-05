@@ -30,4 +30,4 @@ select
     isdeleted as is_deleted
 
 from {{ source('salesforce', 'account') }}
-where not is_deleted and organization_id regexp '\\d+'
+where not is_deleted and (organization_id regexp '\\d+' or organization_id is null)
