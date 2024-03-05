@@ -1,4 +1,5 @@
 """Source assets representing stripe's data sync process."""
+
 from typing import Iterator
 
 from dagster import (
