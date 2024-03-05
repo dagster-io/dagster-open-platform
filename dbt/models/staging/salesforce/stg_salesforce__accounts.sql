@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 select
     id as account_id,
     organization_id__c as organization_id,
