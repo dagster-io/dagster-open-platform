@@ -44,6 +44,10 @@ models:
         +meta:
           dagster:
             group: education
+      slack:
+        +meta:
+          dagster:
+            group: slack_staging
     intermediate:
       +schema: intermediate
       +materialized: view

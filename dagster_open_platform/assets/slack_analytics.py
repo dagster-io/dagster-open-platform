@@ -15,11 +15,12 @@ from snowflake.connector.pandas_tools import write_pandas
 
 
 @asset(
-    group_name="devrel",
+    key_prefix=["slack", "dagster"],
+    group_name="slack",
     #    check_specs=[AssetCheckSpec("slack_successful_write", asset="slack_members")],
     description="Slack Stats, which includes number of members by day",
 )
-def slack_members(slack: SlackResource, snowflake: SnowflakeResource):
+def member_metrics(slack: SlackResource, snowflake: SnowflakeResource):
     client = slack.get_client()
     # The Dagster Slack resource doesn't support setting headers
     client.headers = {"cookie": os.getenv("SLACK_ANALYTICS_COOKIE")}
@@ -33,21 +34,15 @@ def slack_members(slack: SlackResource, snowflake: SnowflakeResource):
     slack_stats = pd.DataFrame(response)
     slack_stats["ds"] = pd.to_datetime(slack_stats["ds"])
 
-    database = None
-    schema = None
-    if get_environment() == "PROD":
-        database = "TELEMETRY"
-        schema = "SLACK_MEMBERS"
-    if get_environment() == "BRANCH":
-        database = f"PURINA_CLONE_{os.environ['DAGSTER_CLOUD_PULL_REQUEST_ID']}"
-        schema = "SLACK_MEMBERS"
+    database = "SLACK"
+    schema = "DAGSTER"
 
     with snowflake.get_connection() as conn:
         # write_pandas returns a tuple of (success, num_chunks, num_rows, output)
         res = write_pandas(
             conn=conn,
             df=slack_stats,
-            table_name="SLACK_MEMBERS",
+            table_name="MEMBER_METRICS",
             database=database,
             schema=schema,
             overwrite=True,
@@ -61,7 +56,7 @@ def slack_members(slack: SlackResource, snowflake: SnowflakeResource):
 
 
 slack_asset_job = define_asset_job(
-    "slack_members_refresh", selection=AssetSelection.assets(slack_members), tags={"team": "devrel"}
+    "slack_members_refresh", selection=AssetSelection.assets(member_metrics), tags={"team": "devrel"}
 )
 slack_daily_schedule = ScheduleDefinition(
     job=slack_asset_job,

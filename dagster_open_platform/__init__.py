@@ -51,7 +51,7 @@ all_assets = [
     *health_check_assets,
     *oss_analytics_assets,
     *stitch_ingest_assets,
-    slack_analytics.slack_members,
+    slack_analytics.member_metrics,
     *postgres_mirror_assets,
     *support_bot_assets,
     *thinkific_ingest_assets,

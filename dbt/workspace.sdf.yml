@@ -17,6 +17,7 @@ provider:
   - stitch
   - stripe_pipeline
   - purina
+  - slack
   type: snowflake
 
 ---
