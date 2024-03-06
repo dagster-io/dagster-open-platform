@@ -8,7 +8,6 @@ from dagster import (
     asset,
     define_asset_job,
 )
-from dagster_open_platform.utils.environment_helpers import get_environment
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
@@ -56,7 +55,9 @@ def member_metrics(slack: SlackResource, snowflake: SnowflakeResource):
 
 
 slack_asset_job = define_asset_job(
-    "slack_members_refresh", selection=AssetSelection.assets(member_metrics), tags={"team": "devrel"}
+    "slack_members_refresh",
+    selection=AssetSelection.assets(member_metrics),
+    tags={"team": "devrel"},
 )
 slack_daily_schedule = ScheduleDefinition(
     job=slack_asset_job,
