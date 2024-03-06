@@ -9,9 +9,9 @@ from .assets import (
     cloud_usage,
     dbt,
     health_check,
+    hightouch_syncs,
     oss_analytics,
     postgres_mirror,
-    salesforce,
     slack_analytics,
     stitch_ingest,
     stripe_data_sync,
@@ -56,7 +56,8 @@ all_assets = [
     *support_bot_assets,
     *thinkific_ingest_assets,
     *cloud_usage.prod_sync_usage_metrics,
-    salesforce.hightouch_usage_metrics_daily,
+    hightouch_syncs.hightouch_org_activity_monthly,
+    hightouch_syncs.hightouch_org_info,
     *stripe_sync_assets,
 ]
 
