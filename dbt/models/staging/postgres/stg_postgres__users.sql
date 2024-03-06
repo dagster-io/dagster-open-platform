@@ -1,4 +1,4 @@
-select distinct
+select
 
     id as user_id,
     email,

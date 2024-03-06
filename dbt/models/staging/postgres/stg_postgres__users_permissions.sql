@@ -1,4 +1,4 @@
-select distinct
+select
 
     id as user_permission_id,
     permission_id,

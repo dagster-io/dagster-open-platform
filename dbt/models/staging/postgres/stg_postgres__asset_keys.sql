@@ -1,4 +1,4 @@
-select distinct
+select
 
     id as asset_key_id,
 

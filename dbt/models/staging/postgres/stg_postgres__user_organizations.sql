@@ -1,4 +1,4 @@
-select distinct
+select
 
     id as user_organization_id,
     organization_id,
