@@ -18,3 +18,23 @@ models:
         tests:
           - unique
           - not_null
+  - name: stg_salesforce__users
+    columns:
+      - name: user_id
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - not_null
+      - name: user_role_id
+        tests:
+          - relationships:
+              to: ref('stg_salesforce__user_roles')
+              field: user_role_id
+  - name: stg_salesforce__user_roles
+    columns:
+      - name: user_role_id
+        tests:
+          - unique
+          - not_null

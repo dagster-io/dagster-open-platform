@@ -8,3 +8,5 @@ sources:
       - name: opportunity
       - name: contact
       - name: contract
+      - name: user
+      - name: userrole
