@@ -20,6 +20,7 @@ setup(
         "sling",
         "gql[requests]",
         "dlt[snowflake,duckdb]",
+        "pydantic>2",
         "pyyaml",
     ],
     extras_require={
