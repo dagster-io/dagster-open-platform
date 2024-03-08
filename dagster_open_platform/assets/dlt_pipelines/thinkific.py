@@ -7,7 +7,7 @@ EXAMPLE USAGE
 
         export $(xargs <.env)  # source environment variables in `.env`
 
-        python dagster_open_platform/assets/thinkific_ingest.py
+        python dagster_open_platform/assets/dlt/thinkific.py
 
 DEPENDENCIES
 
@@ -19,12 +19,12 @@ DEPENDENCIES
         THINKIFIC_SUBDOMAIN
 
         # Snowflake Connection
-        THINKIFIC__DESTINATION__SNOWFLAKE__CREDENTIALS__DATABASE
-        THINKIFIC__DESTINATION__SNOWFLAKE__CREDENTIALS__PASSWORD
-        THINKIFIC__DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME
-        THINKIFIC__DESTINATION__SNOWFLAKE__CREDENTIALS__HOST
-        THINKIFIC__DESTINATION__SNOWFLAKE__CREDENTIALS__WAREHOUSE
-        THINKIFIC__DESTINATION__SNOWFLAKE__CREDENTIALS__ROLE
+        DESTINATION__SNOWFLAKE__CREDENTIALS__DATABASE
+        DESTINATION__SNOWFLAKE__CREDENTIALS__PASSWORD
+        DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME
+        DESTINATION__SNOWFLAKE__CREDENTIALS__HOST
+        DESTINATION__SNOWFLAKE__CREDENTIALS__WAREHOUSE
+        DESTINATION__SNOWFLAKE__CREDENTIALS__ROLE
 
     For more information regarding configurations and connections, see:
 
@@ -36,9 +36,7 @@ DEPENDENCIES
 import os
 
 import dlt
-from dagster import AssetSpec, Config, MaterializeResult, multi_asset
 from dlt.sources.helpers import requests
-from pydantic import Field
 
 THINKIFIC_BASE_URL = "https://api.thinkific.com/api/public/v1/"
 
@@ -105,67 +103,6 @@ def thinkific(
             yield page
 
     return courses, course_reviews, enrollments, users
-
-
-class ThinkificPipelineConfig(Config):
-    pipeline_name: str = "thinkific"
-    dataset_name: str = "thinkific"
-    # Use `Literal["duckdb", "snowflake"] when support lands:
-    # https://github.com/dagster-io/dagster/issues/8932
-    destination: str = Field("snowflake", description="dlt destination (eg. 'snowflake', 'duckdb')")
-
-
-@multi_asset(
-    specs=[
-        AssetSpec("thinkific_dlt_courses"),
-        AssetSpec("thinkific_dlt_course_reviews"),
-        AssetSpec("thinkific_dlt_enrollments"),
-        AssetSpec("thinkific_dlt_users"),
-    ],
-    group_name="education",
-    compute_kind="dlt",
-)
-def thinkific_pipeline(config: ThinkificPipelineConfig):
-    """Asset wrapper around Thinkific `dlt` pipeline.
-
-    This is a very minimal wrapper around the thinkific ingestion job. Future
-    enhancements will include extraction of assets (dlt resources) from the pipeline,
-    and proper source to target lineage.
-    """
-    pipeline = dlt.pipeline(
-        pipeline_name=config.pipeline_name,
-        destination=config.destination,
-        dataset_name=config.dataset_name,
-    )
-
-    load_info = pipeline.run(thinkific())
-
-    # Select a subset of load info metadata as not all items in the dictionary are
-    # JSON-serializeable. Timestamps are also defined as 'pendulum.datetime.DateTime`,
-    # so converting these to appropriate metadata values would be a good enhancement.
-    #
-    # Enhancement - add an asset check on the load info metadata
-    metadata = {
-        k: str(v)
-        for k, v in load_info.asdict().items()
-        if k
-        in {
-            "first_run",
-            "started_at",
-            "finished_at",
-            "dataset_name",
-            "destination_name",
-            "destination_type",
-        }
-    }
-
-    for key in [
-        "thinkific_dlt_courses",
-        "thinkific_dlt_course_reviews",
-        "thinkific_dlt_enrollments",
-        "thinkific_dlt_users",
-    ]:
-        yield MaterializeResult(asset_key=key, metadata=metadata)
 
 
 if __name__ == "__main__":

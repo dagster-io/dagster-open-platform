@@ -8,6 +8,7 @@ from .assets import (
     aws_cost_reporting,
     cloud_usage,
     dbt,
+    dlt,
     health_check,
     hightouch_syncs,
     oss_analytics,
@@ -16,7 +17,6 @@ from .assets import (
     stitch_ingest,
     stripe_data_sync,
     support_bot,
-    thinkific_ingest,
 )
 from .resources import (
     bigquery_resource,
@@ -42,7 +42,7 @@ dbt_assets = load_assets_from_modules([dbt])
 stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 postgres_mirror_assets = load_assets_from_modules([postgres_mirror])
 support_bot_assets = load_assets_from_modules([support_bot])
-thinkific_ingest_assets = load_assets_from_modules([thinkific_ingest])
+dlt_assets = load_assets_from_modules([dlt])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 
 all_assets = [
@@ -54,7 +54,7 @@ all_assets = [
     slack_analytics.member_metrics,
     *postgres_mirror_assets,
     *support_bot_assets,
-    *thinkific_ingest_assets,
+    *dlt_assets,
     *cloud_usage.prod_sync_usage_metrics,
     hightouch_syncs.hightouch_org_activity_monthly,
     hightouch_syncs.hightouch_org_info,

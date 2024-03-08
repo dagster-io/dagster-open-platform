@@ -8,16 +8,16 @@ sources:
       - name: courses
         meta:
           dagster:
-            asset_key: ["thinkific_dlt_courses"]
+            asset_key: ["dlt_thinkific_courses"]
       - name: course_reviews
         meta:
           dagster:
-            asset_key: ["thinkific_dlt_course_reviews"]
+            asset_key: ["dlt_thinkific_course_reviews"]
       - name: enrollments
         meta:
           dagster:
-            asset_key: ["thinkific_dlt_enrollments"]
+            asset_key: ["dlt_thinkific_enrollments"]
       - name: users
         meta:
           dagster:
-            asset_key: ["thinkific_dlt_users"]
+            asset_key: ["dlt_thinkific_users"]
