@@ -13,10 +13,7 @@ setup(
         "dagster-gcp",
         "dagster-dbt",
         "dagster-cloud",
-        (
-            "oscrypto @"
-            " git+https://github.com/wbond/oscrypto@d5f3437ed24257895ae1edd9e503cfb352e635a8"
-        ),
+        "dagster-embedded-elt",
         "sling",
         "gql[requests]",
         "dlt[snowflake,duckdb]",

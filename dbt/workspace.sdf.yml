@@ -18,6 +18,7 @@ provider:
   - stripe_pipeline
   - purina
   - slack
+  - sling
   type: snowflake
 
 ---

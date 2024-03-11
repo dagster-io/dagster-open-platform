@@ -1,0 +1,65 @@
+source: CLOUD_PRODUCTION
+target: SLING_DB
+defaults: 
+  mode: incremental
+  object: {stream_table}
+  primary_key: [id]
+
+streams: 
+  public.asset_keys: 
+    update_key: last_materialization_timestamp
+    meta:
+      dagster: 
+        asset_key: sling.cloud_product.asset_keys
+  
+  public.customer_info: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.customer_info
+  
+  public.deployments: 
+    meta: 
+      dagster: 
+        asset_key: sling.cloud_product.deployments
+  
+  public.onboarding_checklist: 
+    primary_key: [entry_key organization_id]
+    meta: 
+        dagster:
+          asset_key: sling.cloud_product.onboarding_checklist
+  
+  public.organizations: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.organizations
+  
+  public.permissions: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.permissions
+  
+  public.serverless_agents: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.serverless_agents
+  
+  public.session_tokens: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.session_tokens
+  
+  public.users: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.users
+  
+  public.users_organizations: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.users_organizations
+  
+  public.users_permissions: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.users_permissions
+  

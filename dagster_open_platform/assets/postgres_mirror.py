@@ -12,8 +12,8 @@ from dagster import (
 from pydantic import Field
 
 from ..resources.sling_resource import (
+    CustomSlingResource,
     SlingMode,
-    SlingResource,
 )
 
 # Split into many static partitions in order to avoid long-running queries that are canceled by
@@ -64,7 +64,7 @@ def define_sync_repo_location_data_asset(
         context: AssetExecutionContext,
         config: SyncRepoLocationDataConfig,
     ) -> None:
-        sling: SlingResource = getattr(context.resources, sling_resource_key)
+        sling: CustomSlingResource = getattr(context.resources, sling_resource_key)
 
         for partition_key in REPO_LOCATION_DATA_CHUNKED.get_partition_keys_in_range(
             context.partition_key_range

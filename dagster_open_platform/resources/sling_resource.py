@@ -51,7 +51,7 @@ class SlingMode(enum.Enum):
     SNAPSHOT = "snapshot"
 
 
-class SlingResource(ConfigurableResource):
+class CustomSlingResource(ConfigurableResource):
     postgres_config: SlingPostgresConfig
     snowflake_config: SlingSnowflakeConfig
 
@@ -227,7 +227,7 @@ def build_sync_postgres_to_snowflake_asset(
         group_name="postgres_mirror",
     )
     def sync(context: AssetExecutionContext) -> None:
-        sling: SlingResource = getattr(context.resources, sling_resource_key)
+        sling: CustomSlingResource = getattr(context.resources, sling_resource_key)
         for stdout_line in sling.sync_postgres_to_snowflake(
             source_table=source_table,
             dest_table=dest_table,
@@ -291,7 +291,7 @@ def build_sync_snowflake_to_postgres_asset(
             f" update key {config.update_key} using mode {config.mode}"
         )
 
-        sling: SlingResource = getattr(context.resources, sling_resource_key)
+        sling: CustomSlingResource = getattr(context.resources, sling_resource_key)
         for stdout_line in sling.sync_snowflake_to_postgres(
             source_table=config.source,
             dest_table=config.dest,

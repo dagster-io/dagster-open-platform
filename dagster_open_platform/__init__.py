@@ -15,6 +15,7 @@ from .assets import (
     oss_analytics,
     postgres_mirror,
     slack_analytics,
+    sling_ingest,
     stitch_ingest,
     stripe_data_sync,
     support_bot,
@@ -25,6 +26,7 @@ from .resources import (
     cloud_prod_reporting_sling_resource,
     cloud_prod_sling_resource,
     dbt_resource,
+    embedded_elt_resource,
     github_resource,
     hightouch_resource,
     scoutos_resource,
@@ -45,6 +47,7 @@ postgres_mirror_assets = load_assets_from_modules([postgres_mirror])
 support_bot_assets = load_assets_from_modules([support_bot])
 dlt_assets = load_assets_from_modules([dlt])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
+sling_ingest_assets = load_assets_from_modules([sling_ingest])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -60,6 +63,7 @@ all_assets = [
     hightouch_syncs.hightouch_org_activity_monthly,
     hightouch_syncs.hightouch_org_info,
     *stripe_sync_assets,
+    *sling_ingest_assets,
     dagster_quickstart.dagster_quickstart_validation,
 ]
 
@@ -81,6 +85,7 @@ defs = Definitions(
         "github": github_resource,
         "scoutos": scoutos_resource,
         "cloud_prod_sling": cloud_prod_sling_resource,
+        "embedded_elt": embedded_elt_resource,
     },
     jobs=all_jobs,
     schedules=all_schedules,

@@ -113,6 +113,23 @@ stitch_sync_infrequent = ScheduleDefinition(
     cron_schedule="0 11,23 * * *",
 )
 
+cloud_product_sync_high_volume_schedule = ScheduleDefinition(
+    job=define_asset_job(
+        name="cloud_product_sync_high_volume",
+        selection=AssetSelection.key_prefixes(["sling", "cloud_product_high_volume"]),
+        tags={"team": "devrel"},
+    ),
+    cron_schedule="*/10 * * * *",
+)
+
+cloud_product_sync_low_volume_schedule = ScheduleDefinition(
+    job=define_asset_job(
+        name="cloud_product_sync_low_volume",
+        selection=AssetSelection.key_prefixes(["sling", "cloud_product_low_volume"]),
+        tags={"team": "devrel"},
+    ),
+    cron_schedule="0 */6 * * *",
+)
 
 education_selection = AssetSelection.groups("education")
 
@@ -140,4 +157,6 @@ schedules = [
     stitch_sync_frequent,
     stitch_sync_infrequent,
     education_schedule,
+    cloud_product_sync_high_volume_schedule,
+    cloud_product_sync_low_volume_schedule,
 ]
