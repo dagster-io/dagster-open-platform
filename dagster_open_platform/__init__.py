@@ -7,6 +7,7 @@ warnings.filterwarnings("ignore", category=ExperimentalWarning)
 from .assets import (
     aws_cost_reporting,
     cloud_usage,
+    dagster_quickstart,
     dbt,
     dlt,
     health_check,
@@ -59,6 +60,7 @@ all_assets = [
     hightouch_syncs.hightouch_org_activity_monthly,
     hightouch_syncs.hightouch_org_info,
     *stripe_sync_assets,
+    dagster_quickstart.dagster_quickstart_validation,
 ]
 
 all_jobs = [*scheduled_jobs]
@@ -82,4 +84,5 @@ defs = Definitions(
     },
     jobs=all_jobs,
     schedules=all_schedules,
+    sensors=[dagster_quickstart.dagster_quickstart_validation_sensor],
 )
