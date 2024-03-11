@@ -70,7 +70,7 @@ stitch_resource = StitchResource(
 
 slack_resource = SlackResource(token=EnvVar("SLACK_ANALYTICS_TOKEN"))
 
-cloud_prod_reporting_sling_resource = SlingResource(
+cloud_prod_reporting_sling_resource = CustomSlingResource(
     postgres_config=SlingPostgresConfig(
         host=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_HOST"),
         user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
@@ -89,7 +89,7 @@ cloud_prod_reporting_sling_resource = SlingResource(
     ),
 )
 
-cloud_prod_read_replica_sling_resource = SlingResource(
+cloud_prod_read_replica_sling_resource = CustomSlingResource(
     postgres_config=SlingPostgresConfig(
         host=EnvVar("CLOUD_PROD_READ_REPLICA_POSTGRES_HOST"),
         user=EnvVar("CLOUD_PROD_POSTGRES_USER"),

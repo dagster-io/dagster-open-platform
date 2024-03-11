@@ -11,15 +11,15 @@ streams:
   public.event_logs: 
     meta:
       dagster: 
-        asset_key: sling.cloud_product.event_logs
+        asset_key: sling.cloud_product_high_volume.event_logs
   
   public.runs: 
     meta:
       dagster:
-        asset_key: sling.cloud_product.runs
+        asset_key: sling.cloud_product_high_volume.runs
   
   public.run_tags: 
     meta:
       dagster:
-        asset_key: sling.cloud_product.run_tags
+        asset_key: sling.cloud_product_high_volume.run_tags
     
