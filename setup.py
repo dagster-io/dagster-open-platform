@@ -21,7 +21,7 @@ setup(
         "pyyaml",
     ],
     extras_require={
-        "dev": ["dagster-webserver", "pytest"],
+        "dev": ["dagster-webserver", "pytest", "click"],
         "tests": ["pytest", "responses"],
     },
 )
