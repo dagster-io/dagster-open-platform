@@ -2,7 +2,7 @@ source: CLOUD_PRODUCTION
 target: SLING_DB
 defaults: 
   mode: incremental
-  object: {stream_table}
+  object: '{stream_table}'
   primary_key: [id]
 
 streams: 
