@@ -62,4 +62,19 @@ streams:
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.users_permissions
+
+  public.teams: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_low_volume.teams
+  
+  public.teams_users: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_low_volume.teams_users
+  
+  public.teams_permissions: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_low_volume.teams_permissions
   

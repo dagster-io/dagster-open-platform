@@ -33,6 +33,9 @@ sources:
       - name: organizations
       - name: permissions
       - name: session_tokens
+      - name: teams
+      - name: teams_permissions
+      - name: teams_users
       - name: users
       - name: users_organizations
       - name: users_permissions
