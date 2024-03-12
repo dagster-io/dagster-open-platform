@@ -6,7 +6,7 @@ select
     user_id,
     course_name,
     course_id,
-    percentage_completed,
+    cast(percentage_completed as decimal(10, 4)) as percentage_completed,
     expired,
     is_free_trial,
     completed,
