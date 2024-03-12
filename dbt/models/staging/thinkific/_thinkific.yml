@@ -23,7 +23,7 @@ models:
       - name: user_id
         tests:
           - relationships:
-              to: ref('stg_thinkific__courses')
+              to: ref('stg_thinkific__users')
               field: user_id
   - name: stg_thinkific__enrollments
     columns:
