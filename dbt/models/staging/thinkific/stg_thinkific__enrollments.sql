@@ -1,5 +1,5 @@
 select
-    id,
+    id as enrollment_id,
     created_at,
     user_email,
     user_name,

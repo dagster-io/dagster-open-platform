@@ -1,5 +1,5 @@
 select
-    id,
+    id as user_id,
     created_at,
     first_name,
     last_name,

@@ -1,5 +1,5 @@
 select
-    id,
+    id as course_review_id,
     title,
     review_text,
     course_id,

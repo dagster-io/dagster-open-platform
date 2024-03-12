@@ -1,5 +1,5 @@
 select
-    id,
+    id as course_id,
     name,
     slug,
     product_id,
