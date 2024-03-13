@@ -13,68 +13,102 @@ streams:
         asset_key: sling.cloud_product_low_volume.asset_keys
   
   public.customer_info: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.customer_info
   
   public.deployments: 
+    update_key: update_timestamp
     meta: 
       dagster: 
         asset_key: sling.cloud_product_low_volume.deployments
   
   public.onboarding_checklist: 
     primary_key: [entry_key, organization_id]
+    update_key: update_timestamp
     meta: 
         dagster:
           asset_key: sling.cloud_product_low_volume.onboarding_checklist
   
   public.organizations: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.organizations
   
   public.permissions: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.permissions
   
   public.serverless_agents: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.serverless_agents
   
   public.session_tokens: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.session_tokens
   
   public.users: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.users
   
   public.users_organizations: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.users_organizations
   
   public.users_permissions: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.users_permissions
 
   public.teams: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.teams
   
   public.teams_users: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.teams_users
   
   public.teams_permissions: 
+    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product_low_volume.teams_permissions
   
+  public.repository_locations_data: 
+    sql: |
+      select
+        id, 
+        organization_id, 
+        deployment_id, 
+        create_timestamp, 
+        timestamp as update_timestamp,
+        jsonb_path_query_array(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].asset_key'
+        ) as asset_keys,
+        jsonb_path_query_array(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].group_name'
+        ) as group_names 
+      from repository_locations_data
+      where timestamp > current_timestamp - interval '1 day'
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_low_volume.repository_locations_data
