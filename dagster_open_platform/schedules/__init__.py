@@ -128,7 +128,7 @@ cloud_product_sync_low_volume_schedule = ScheduleDefinition(
         selection=AssetSelection.key_prefixes(["sling", "cloud_product_low_volume"]),
         tags={"team": "devrel"},
     ),
-    cron_schedule="0 */4 * * *",
+    cron_schedule="0 */2 * * *",
 )
 
 education_selection = AssetSelection.groups("education")
