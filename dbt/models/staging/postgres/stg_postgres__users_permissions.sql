@@ -6,4 +6,4 @@ select
     user_id,
     create_timestamp as created_at
 
-from {{ source("postgres_etl_low_freq", "users_permissions") }}
+from {{ source("cloud_product", "users_permissions") }}

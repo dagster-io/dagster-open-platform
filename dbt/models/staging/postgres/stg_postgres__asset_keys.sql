@@ -16,4 +16,4 @@ select
     wipe_timestamp as wiped_at
 
 
-from {{ source("postgres_etl_low_freq", "asset_keys") }}
+from {{ source("cloud_product", "asset_keys") }}

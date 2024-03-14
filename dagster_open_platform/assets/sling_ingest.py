@@ -6,26 +6,31 @@ from dagster_embedded_elt.sling.resources import (
     SlingResource,
 )
 
-
-class CustomSlingTranslator(DagsterSlingTranslator):
-    def get_group_name(self, stream_definition):
-        return "cloud_product_ingest"
-
-
 config_dir = "dagster_open_platform/configs/sling/cloud_product"
+
+
+class CustomSlingLowVolumeTranslator(DagsterSlingTranslator):
+    def get_group_name(self, stream_definition):
+        return "cloud_product_low_volume_ingest"
+
 
 cloud_production_low_volume_config = os.path.join(config_dir, "low_volume.yaml")
 
 
 @sling_assets(
     replication_config=cloud_production_low_volume_config,
-    dagster_sling_translator=CustomSlingTranslator(),
+    dagster_sling_translator=CustomSlingLowVolumeTranslator(),
 )
 def cloud_product_low_volume(context, embedded_elt: SlingResource):
     yield from embedded_elt.replicate(
         replication_config=cloud_production_low_volume_config,
-        dagster_sling_translator=CustomSlingTranslator(),
+        dagster_sling_translator=CustomSlingLowVolumeTranslator(),
     )
+
+
+class CustomSlingHighVolumeTranslator(DagsterSlingTranslator):
+    def get_group_name(self, stream_definition):
+        return "cloud_product_high_volume_ingest"
 
 
 cloud_production_high_volume_config = os.path.join(config_dir, "high_volume.yaml")
@@ -33,10 +38,10 @@ cloud_production_high_volume_config = os.path.join(config_dir, "high_volume.yaml
 
 @sling_assets(
     replication_config=cloud_production_high_volume_config,
-    dagster_sling_translator=CustomSlingTranslator(),
+    dagster_sling_translator=CustomSlingHighVolumeTranslator(),
 )
 def cloud_product_high_volume(context, embedded_elt: SlingResource):
     yield from embedded_elt.replicate(
         replication_config=cloud_production_high_volume_config,
-        dagster_sling_translator=CustomSlingTranslator(),
+        dagster_sling_translator=CustomSlingHighVolumeTranslator(),
     )

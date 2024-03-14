@@ -19,7 +19,7 @@ select
     create_timestamp as created_at,
     update_timestamp as updated_at
 
-from {{ source('postgres_etl_high_freq', 'runs') }}
+from {{ source('cloud_product', 'runs') }}
 where
     {{ limit_dates_for_dev(ref_date = 'create_timestamp') }}
 /* At least one duplicate run_id was identified, so we pick the latest

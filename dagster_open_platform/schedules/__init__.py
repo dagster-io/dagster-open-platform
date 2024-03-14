@@ -27,7 +27,7 @@ oss_telemetry_schedule = ScheduleDefinition(
 
 insights_selection = build_dbt_asset_selection(
     [dbt.cloud_analytics_dbt_assets], "tag:insights"
-).upstream() - AssetSelection.assets(
+).upstream().required_multi_asset_neighbors() - AssetSelection.assets(
     sync_repo_location_data
 )  # select all insights models, and fetch upstream, including ingestion
 
@@ -116,7 +116,7 @@ stitch_sync_infrequent = ScheduleDefinition(
 cloud_product_sync_high_volume_schedule = ScheduleDefinition(
     job=define_asset_job(
         name="cloud_product_sync_high_volume",
-        selection=AssetSelection.key_prefixes(["sling", "cloud_product_high_volume"]),
+        selection=AssetSelection.groups("cloud_product_high_volume_ingest"),
         tags={"team": "devrel"},
     ),
     cron_schedule="*/5 * * * *",
@@ -125,7 +125,7 @@ cloud_product_sync_high_volume_schedule = ScheduleDefinition(
 cloud_product_sync_low_volume_schedule = ScheduleDefinition(
     job=define_asset_job(
         name="cloud_product_sync_low_volume",
-        selection=AssetSelection.key_prefixes(["sling", "cloud_product_low_volume"]),
+        selection=AssetSelection.groups("cloud_product_low_volume_ingest"),
         tags={"team": "devrel"},
     ),
     cron_schedule="0 */2 * * *",

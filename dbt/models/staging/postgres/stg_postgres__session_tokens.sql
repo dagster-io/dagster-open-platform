@@ -7,4 +7,4 @@ select
     create_timestamp as created_at,
     update_timestamp as updated_at
 
-from {{ source('postgres_etl_low_freq', 'session_tokens') }}
+from {{ source("cloud_product", 'session_tokens') }}

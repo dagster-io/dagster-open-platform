@@ -8,4 +8,4 @@ select
     parse_json(serialized) as customer_metadata,
     create_timestamp as created_at
 
-from {{ source("postgres_etl_low_freq", "customer_info") }}
+from {{ source("cloud_product", "customer_info") }}

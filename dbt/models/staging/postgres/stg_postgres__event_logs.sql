@@ -10,7 +10,7 @@
 }}
 
 with base as (
-    select * from {{ source("postgres_etl_high_freq", "event_logs") }}
+    select * from {{ source("cloud_product", "event_logs") }}
 )
 
 select

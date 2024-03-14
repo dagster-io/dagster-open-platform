@@ -9,29 +9,22 @@ sources:
       - name: insights_metrics_submissions
 
 
-  - name: postgres_etl_high_freq
+  - name: cloud_product
     # Dogfood data is (experimentally) synced using Sling instead of Stitch, into the dogfood_purina.postgres_mirror schema
-    database: "{{ 'dogfood_purina' if target.name == 'dogfood' else env_var('DBT_STITCH_DATABASE', 'stitch') }}"
-    schema: "{{ 'postgres_mirror' if target.name == 'dogfood' else env_var('DBT_STITCH_SCHEMA', 'cloud_prod_public') }}"
-    description: Stitch schema corresponding to tables which are synced at a
-      high frequency (~hourly)
+    database: "{{ 'dogfood_purina' if target.name == 'dogfood' else env_var('DBT_STITCH_DATABASE', 'sling') }}"
+    schema: "{{ 'postgres_mirror' if target.name == 'dogfood' else env_var('DBT_STITCH_SCHEMA', 'cloud_product') }}"
+    description: Dagster cloud product postgres tables ingested by sling.
     tables:
       - name: event_logs
       - name: run_tags
       - name: runs
-  - name: postgres_etl_low_freq
-    # Dogfood data is (experimentally) synced using Sling instead of Stitch, into the dogfood_purina.postgres_mirror schema
-    database: "{{ 'dogfood_purina' if target.name == 'dogfood' else env_var('DBT_STITCH_DATABASE', 'stitch') }}"
-    schema: "{{ 'postgres_mirror' if target.name == 'dogfood' else env_var('DBT_STITCH_SCHEMA', 'elementl_cloud_prod') }}"
-    description: Stitch schema corresponding to tables which are synced at a
-      low frequency (~daily)
-    tables:
       - name: asset_keys
       - name: customer_info
       - name: deployments
       - name: onboarding_checklist
       - name: organizations
       - name: permissions
+      - name: serverless_agents
       - name: session_tokens
       - name: teams
       - name: teams_permissions
@@ -39,10 +32,5 @@ sources:
       - name: users
       - name: users_organizations
       - name: users_permissions
-
-  - name: postgres_etl_sling
-    database: "{{ 'dogfood_purina' if target.name == 'dogfood' else 'purina' }}"
-    schema: postgres_mirror
-    tables:
       - name: repository_locations_data
-      - name: reporting_deployment_settings
+

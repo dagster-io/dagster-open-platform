@@ -8,4 +8,4 @@ select
     key,
     value
 
-from {{ source('postgres_etl_high_freq', 'run_tags') }}
+from {{ source('cloud_product', 'run_tags') }}

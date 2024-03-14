@@ -12,4 +12,4 @@ select
     create_timestamp as created_at
 
 
-from {{ source("postgres_etl_low_freq", "permissions") }}
+from {{ source("cloud_product", "permissions") }}

@@ -4,4 +4,4 @@ select
     team_id,
     organization_id,
     create_timestamp
-from {{ source("postgres_etl_low_freq", "teams_users") }}
+from {{ source("cloud_product", "teams_users") }}

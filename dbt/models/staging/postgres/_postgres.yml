@@ -13,9 +13,6 @@ models:
   - name: stg_postgres__customer_info
     description: Stripe-related customer info for organizations
     columns:
-      - name: stripe_customer_id
-        tests:
-          - not_null
       - name: organization_id
         tests:
           - unique

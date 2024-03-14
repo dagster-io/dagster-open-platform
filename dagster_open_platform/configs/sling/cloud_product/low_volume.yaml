@@ -10,86 +10,81 @@ streams:
     update_key: last_materialization_timestamp
     meta:
       dagster: 
-        asset_key: sling.cloud_product_low_volume.asset_keys
+        asset_key: sling.cloud_product.asset_keys
   
   public.customer_info: 
-    update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.customer_info
+        asset_key: sling.cloud_product.customer_info
   
   public.deployments: 
     update_key: update_timestamp
     meta: 
       dagster: 
-        asset_key: sling.cloud_product_low_volume.deployments
+        asset_key: sling.cloud_product.deployments
   
   public.onboarding_checklist: 
     primary_key: [entry_key, organization_id]
     update_key: update_timestamp
     meta: 
         dagster:
-          asset_key: sling.cloud_product_low_volume.onboarding_checklist
+          asset_key: sling.cloud_product.onboarding_checklist
   
   public.organizations: 
     update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.organizations
+        asset_key: sling.cloud_product.organizations
   
   public.permissions: 
-    update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.permissions
+        asset_key: sling.cloud_product.permissions
   
   public.serverless_agents: 
     update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.serverless_agents
+        asset_key: sling.cloud_product.serverless_agents
   
   public.session_tokens: 
     update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.session_tokens
+        asset_key: sling.cloud_product.session_tokens
   
   public.users: 
-    update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.users
+        asset_key: sling.cloud_product.users
   
   public.users_organizations: 
     update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.users_organizations
+        asset_key: sling.cloud_product.users_organizations
   
   public.users_permissions: 
     update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.users_permissions
+        asset_key: sling.cloud_product.users_permissions
 
   public.teams: 
     update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.teams
+        asset_key: sling.cloud_product.teams
   
   public.teams_users: 
-    update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.teams_users
+        asset_key: sling.cloud_product.teams_users
   
   public.teams_permissions: 
-    update_key: update_timestamp
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.teams_permissions
+        asset_key: sling.cloud_product.teams_permissions
   
   public.repository_locations_data: 
     sql: |
@@ -111,4 +106,4 @@ streams:
       where timestamp > current_timestamp - interval '1 day'
     meta:
       dagster:
-        asset_key: sling.cloud_product_low_volume.repository_locations_data
+        asset_key: sling.cloud_product.repository_locations_data

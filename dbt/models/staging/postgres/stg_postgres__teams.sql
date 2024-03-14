@@ -7,4 +7,4 @@ select
     metadata,
     create_timestamp,
     update_timestamp
-from {{ source("postgres_etl_low_freq", "teams") }}
+from {{ source("cloud_product", "teams") }}

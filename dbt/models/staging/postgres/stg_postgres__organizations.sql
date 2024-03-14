@@ -19,4 +19,4 @@ select
     create_timestamp as created_at,
     update_timestamp as updated_at
 
-from {{ source("postgres_etl_low_freq", "organizations") }}
+from {{ source("cloud_product", "organizations") }}
