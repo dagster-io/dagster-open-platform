@@ -131,22 +131,11 @@ cloud_product_sync_low_volume_schedule = ScheduleDefinition(
     cron_schedule="0 */2 * * *",
 )
 
-education_selection = AssetSelection.groups("education")
-
-education_job = define_asset_job(
-    name="education_job",
-    selection=education_selection,
-    tags={"team": "devrel"},
-)
-
-education_schedule = ScheduleDefinition(job=education_job, cron_schedule="0 1 * * *")
-
 scheduled_jobs = [
     oss_telemetry_job,
     insights_job,
     cloud_usage_metrics_job,
     sync_repo_location_data_job,
-    education_job,
 ]
 
 schedules = [
@@ -156,7 +145,6 @@ schedules = [
     sync_repo_location_data_schedule,
     stitch_sync_frequent,
     stitch_sync_infrequent,
-    education_schedule,
     cloud_product_sync_high_volume_schedule,
     cloud_product_sync_low_volume_schedule,
 ]

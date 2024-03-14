@@ -90,6 +90,7 @@ defs = Definitions(
         "scoutos": scoutos_resource,
         "cloud_prod_sling": cloud_prod_sling_resource,
         "embedded_elt": embedded_elt_resource,
+        "dlt": dlt.dlt_resource,
     },
     jobs=all_jobs,
     schedules=all_schedules,

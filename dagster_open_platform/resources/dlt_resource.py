@@ -1,63 +1,32 @@
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping, Optional
+from typing import Callable, Iterable, Iterator, Optional, Union
 
-import dlt
 from dagster import (
+    AssetExecutionContext,
     AssetKey,
+    AssetMaterialization,
+    AssetsDefinition,
     AssetSpec,
+    AutoMaterializePolicy,
     ConfigurableResource,
     MaterializeResult,
-    ResourceDependency,
+    OpExecutionContext,
     multi_asset,
 )
-from dagster._annotations import experimental, public
+from dagster._annotations import public
 from dlt.extract.resource import DltResource
 from dlt.extract.source import DltSource
-from pydantic import Field
+from dlt.pipeline.pipeline import Pipeline
 
-DLT_INCLUDED_METADATA = {
-    "first_run",
-    "started_at",
-    "finished_at",
-    "dataset_name",
-    "destination_name",
-    "destination_type",
-}
-
-
-@experimental
-class ConfigurableDltResource(ConfigurableResource):
-    source: ResourceDependency[DltSource]
-    pipeline_name: str = Field(description="pipeline name parameter of `dlt.pipline()`")
-    dataset_name: str = Field(description="dataset name parameter of `dlt.pipeline()`")
-    destination: str = Field(
-        description="target destination parameter of `dlt.pipeline()` (eg. duckdb, snowflake)"
-    )
-
-    def _initialize_pipeline(self, **kwargs):
-        return dlt.pipeline(
-            pipeline_name=self.pipeline_name,
-            dataset_name=self.dataset_name,
-            destination=self.destination,
-            **kwargs,
-        )
-
-    def run(self, **pipeline_kwargs):
-        pipeline = self._initialize_pipeline(**pipeline_kwargs)
-        return pipeline.run(self.source)
+META_KEY_SOURCE = "dagster_dlt/source"
+META_KEY_PIPELINE = "dagster_dlt/pipeline"
 
 
 @dataclass
-class DagsterDltTranslator:
+class DltDagsterTranslator:
     @classmethod
     @public
-    def get_metadata(cls, asset_key: str, load_info: Mapping[str, Any]) -> Mapping[str, Any]:
-        # TODO - filter by `asset_key`
-        return {k: str(v) for k, v in load_info.items() if k in DLT_INCLUDED_METADATA}
-
-    @classmethod
-    @public
-    def get_asset_key(cls, resource_key: str, dataset_name: str) -> AssetKey:
+    def get_asset_key(cls, resource: DltResource) -> AssetKey:
         """Defines asset key for a given dlt resource key and dataset name.
 
         Args:
@@ -68,7 +37,7 @@ class DagsterDltTranslator:
             AssetKey of Dagster asset derived from dlt resource
 
         """
-        return AssetKey(f"dlt_{dataset_name}_{resource_key}")
+        return AssetKey(f"dlt_{resource.source_name}_{resource.name}")
 
     @classmethod
     @public
@@ -86,32 +55,79 @@ class DagsterDltTranslator:
         """
         return [AssetKey(f"{resource.source_name}_{resource.name}")]
 
+    @classmethod
+    @public
+    def get_auto_materialize_policy(cls, resource: DltResource) -> Optional[AutoMaterializePolicy]:
+        """Defines resource specific auto materialize policy.
 
-def build_dlt_assets(
-    dlt_pipeline_resource: ConfigurableDltResource,
+        Args:
+            resource (DltResource): dlt resource / transformer
+
+        Returns:
+            Optional[AutoMaterializePolicy]: The automaterialize policy for a resource
+
+        """
+        return None
+
+
+class DltDagsterResource(ConfigurableResource):
+    @public
+    def run(
+        self,
+        context: Union[OpExecutionContext, AssetExecutionContext],
+    ) -> Iterator[Union[AssetMaterialization, MaterializeResult]]:
+        metadata_by_key = context.assets_def.metadata_by_key
+        first_asset_metadata = next(iter(metadata_by_key.values()))
+
+        dlt_source = first_asset_metadata.get(META_KEY_SOURCE)
+        dlt_pipeline = first_asset_metadata.get(META_KEY_PIPELINE)
+
+        if not dlt_source or not dlt_pipeline:
+            raise Exception(
+                "%s and %s must be defined on AssetSpec metadata",
+                META_KEY_SOURCE,
+                META_KEY_PIPELINE,
+            )
+
+        dlt_pipeline.run(dlt_source)
+
+        for (asset_key,) in context.selected_asset_keys:
+            if isinstance(context, AssetExecutionContext):
+                yield MaterializeResult(asset_key=asset_key)
+
+            else:
+                yield AssetMaterialization(asset_key=asset_key)
+
+
+def dlt_assets(
+    *,
+    dlt_source: DltSource,
+    dlt_pipeline: Pipeline,
     name: Optional[str] = None,
     group_name: Optional[str] = None,
-    dagster_dlt_translator: DagsterDltTranslator = DagsterDltTranslator(),
-):
-    specs = [
-        AssetSpec(
-            key=dagster_dlt_translator.get_asset_key(key, dlt_pipeline_resource.dataset_name),
-            deps=dagster_dlt_translator.get_deps_asset_keys(value),
-        )
-        for key, value in dlt_pipeline_resource.source.resources.items()
-    ]
+    dlt_dagster_translator: DltDagsterTranslator = DltDagsterTranslator(),
+) -> Callable[..., AssetsDefinition]:
+    def inner(fn) -> AssetsDefinition:
+        specs = [
+            AssetSpec(
+                key=dlt_dagster_translator.get_asset_key(dlt_source_resource),
+                deps=dlt_dagster_translator.get_deps_asset_keys(dlt_source_resource),
+                auto_materialize_policy=dlt_dagster_translator.get_auto_materialize_policy(
+                    dlt_source_resource
+                ),
+                metadata={  # type: ignore - source / translator are included in metadata for use in `.run()`
+                    META_KEY_SOURCE: dlt_source,
+                    META_KEY_PIPELINE: dlt_pipeline,
+                },
+            )
+            for dlt_source_resource in dlt_source.resources.values()
+        ]
+        assets_definition = multi_asset(
+            specs=specs,
+            name=name,
+            group_name=group_name,
+            compute_kind="dlt",
+        )(fn)
+        return assets_definition
 
-    @multi_asset(
-        name=name,
-        specs=specs,
-        group_name=group_name,
-        compute_kind="dlt",
-    )
-    def _assets():
-        load_info = dlt_pipeline_resource.run()
-
-        for spec in specs:
-            metadata = dagster_dlt_translator.get_metadata(str(spec.key), load_info.asdict())
-            yield MaterializeResult(asset_key=spec.key, metadata=metadata)
-
-    return [_assets]
+    return inner
