@@ -20,6 +20,7 @@ from .assets import (
     stripe_data_sync,
     support_bot,
 )
+from .checks import salesforce_checks
 from .resources import (
     bigquery_resource,
     cloud_prod_read_replica_sling_resource,
@@ -67,12 +68,15 @@ all_assets = [
     dagster_quickstart.dagster_quickstart_validation,
 ]
 
+all_checks = [salesforce_checks.account_has_valid_org_id]
+
 all_jobs = [*scheduled_jobs]
 
 all_schedules = [*schedules, slack_analytics.slack_daily_schedule]
 
 defs = Definitions(
     assets=all_assets,
+    asset_checks=all_checks,
     resources={
         "bigquery": bigquery_resource,
         "dbt": dbt_resource,
