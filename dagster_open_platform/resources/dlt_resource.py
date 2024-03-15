@@ -91,7 +91,7 @@ class DltDagsterResource(ConfigurableResource):
 
         dlt_pipeline.run(dlt_source)
 
-        for (asset_key,) in context.selected_asset_keys:
+        for asset_key in context.selected_asset_keys:
             if isinstance(context, AssetExecutionContext):
                 yield MaterializeResult(asset_key=asset_key)
 
