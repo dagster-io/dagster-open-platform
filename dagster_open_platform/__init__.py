@@ -12,6 +12,7 @@ from .assets import (
     dlt,
     health_check,
     hightouch_syncs,
+    ingest_fivetran,
     oss_analytics,
     postgres_mirror,
     slack_analytics,
@@ -49,6 +50,7 @@ support_bot_assets = load_assets_from_modules([support_bot])
 dlt_assets = load_assets_from_modules([dlt])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 sling_ingest_assets = load_assets_from_modules([sling_ingest])
+ingest_fivetran_assets = load_assets_from_modules([ingest_fivetran])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -66,6 +68,7 @@ all_assets = [
     *stripe_sync_assets,
     *sling_ingest_assets,
     dagster_quickstart.dagster_quickstart_validation,
+    *ingest_fivetran_assets,
 ]
 
 all_checks = [salesforce_checks.account_has_valid_org_id]

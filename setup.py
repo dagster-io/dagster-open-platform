@@ -9,6 +9,7 @@ setup(
         "dagster-snowflake",
         "dagster-slack",
         "dagster-pandas",
+        "dagster-fivetran",
         "dagster-hightouch",
         "dagster-gcp",
         "dagster-dbt",

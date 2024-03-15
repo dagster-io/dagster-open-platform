@@ -1,12 +1,11 @@
 version: 2
 sources:
   - name: salesforce
-    database: stitch
-    schema: salesforce_v2
+    database: fivetran
+    schema: salesforce
     tables:
       - name: account
       - name: opportunity
-      - name: contact
       - name: contract
       - name: user
-      - name: userrole
+      - name: user_role
