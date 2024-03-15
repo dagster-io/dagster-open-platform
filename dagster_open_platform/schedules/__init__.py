@@ -25,10 +25,13 @@ oss_telemetry_schedule = ScheduleDefinition(
     cron_schedule="0 5 * * *",  # every day at 5am
 )
 
-insights_selection = build_dbt_asset_selection(
-    [dbt.cloud_analytics_dbt_assets], "tag:insights"
-).upstream().required_multi_asset_neighbors() - AssetSelection.assets(
-    sync_repo_location_data
+insights_selection = (
+    build_dbt_asset_selection([dbt.cloud_analytics_dbt_assets], "tag:insights")
+    .upstream()
+    .required_multi_asset_neighbors()
+    - AssetSelection.assets(sync_repo_location_data)
+    - AssetSelection.groups("cloud_product_high_volume_ingest")
+    - AssetSelection.groups("cloud_product_low_volume_ingest")
 )  # select all insights models, and fetch upstream, including ingestion
 
 insights_job = define_asset_job(
