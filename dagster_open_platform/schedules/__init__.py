@@ -57,6 +57,8 @@ cloud_usage_metrics_selection = (
     .required_multi_asset_neighbors()
     - AssetSelection.groups("cloud_reporting")
     - AssetSelection.key_prefixes(["purina", "postgres_mirror"])
+    - AssetSelection.groups("cloud_product_high_volume_ingest")
+    - AssetSelection.groups("cloud_product_low_volume_ingest")
 )
 
 cloud_usage_metrics_job = define_asset_job(
