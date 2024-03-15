@@ -59,7 +59,6 @@ streams:
         asset_key: sling.cloud_product.users
   
   public.users_organizations: 
-    update_key: update_timestamp
     meta:
       dagster:
         asset_key: sling.cloud_product.users_organizations
