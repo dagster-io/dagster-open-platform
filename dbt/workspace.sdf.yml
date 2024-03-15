@@ -19,6 +19,7 @@ provider:
   - purina
   - slack
   - sling
+  - fivetran
   type: snowflake
 
 ---
