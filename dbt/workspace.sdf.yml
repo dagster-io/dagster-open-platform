@@ -2,15 +2,47 @@ workspace:
   edition: '1.1'
   name: analytics
   includes:
+  - path: seeds/*
+    type: resource
   - path: target/compiled/sdf/models
     index: catalog-schema-table-name
   dialect: snowflake
-  default-catalog: sandbox
-  default-schema: nickroach
+  default-catalog: {{env_var('SNOWFLAKE_DATABASE')}}
+  default-schema: {{env_var('SNOWFLAKE_SCHEMA')}}
   default-profile: dbg
 
 ---
+table:
+  name: telemetry_example_map
+  location: seeds/telemetry_example_map.csv
+  file-format: csv
+  with-header: false
+
+---
+table:
+  name: referrer_mapping
+  location: seeds/referrer_mapping.csv
+  file-format: csv
+  with-header: true
+
+---
+table:
+  name: instance_type_priority
+  location: seeds/instance_type_priority.csv
+  file-format: csv
+  with-header: true
+
+---
+table:
+  name: permission_levels
+  location: seeds/permission_levels.csv
+  file-format: csv
+  with-header: true
+
+---
 provider:
+  name: snowflake_provider
+  type: snowflake
   sources:
   - dlt
   - segment
@@ -20,33 +52,4 @@ provider:
   - slack
   - sling
   - fivetran
-  type: snowflake
-
----
-table:
-  name: sandbox.nickroach.instance_type_priority
-  location: seeds/instance_type_priority.csv
-  file-format: csv
-  with-header: true
-
----
-table:
-  name: sandbox.nickroach.permission_levels
-  location: seeds/permission_levels.csv
-  file-format: csv
-  with-header: true
-
----
-table:
-  name: sandbox.nickroach.referrer_mapping
-  location: seeds/referrer_mapping.csv
-  file-format: csv
-  with-header: true
-
----
-table:
-  name: sandbox.nickroach.telemetry_example_map
-  location: seeds/telemetry_example_map.csv
-  file-format: csv
-  with-header: true
 
