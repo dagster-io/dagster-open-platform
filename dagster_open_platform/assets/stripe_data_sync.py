@@ -13,8 +13,8 @@ from dagster._core.definitions.data_time import DATA_TIME_METADATA_KEY
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
 
-STRIPE_SYNC_DATABASE = "STRIPE_PIPELINE"
-STRIPE_SYNC_SCHEMA = "STRIPE"
+STRIPE_SYNC_DATABASE = "stripe_pipeline"
+STRIPE_SYNC_SCHEMA = "stripe"
 
 # Read stripe's documentation to understand sync freshness guarantees.
 # https://docs.stripe.com/stripe-data/available-data
