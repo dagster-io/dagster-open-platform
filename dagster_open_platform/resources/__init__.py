@@ -37,7 +37,7 @@ embedded_elt_resource = SlingResource(
             password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),
             database="sandbox" if get_environment() != "PROD" else "sling",
             schema=get_schema_for_environment("cloud_product"),
-            warehouse="purina",
+            warehouse="sling",
             role="purina" if get_environment() != "PROD" else "sling",
         ),
     ]
