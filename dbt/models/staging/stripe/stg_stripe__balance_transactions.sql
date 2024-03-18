@@ -7,10 +7,9 @@ select
     description,
     fee / 100.0 as fee_amount_dollars,
     net,
-    source,
+    source_id as source,
     status,
     type,
-    created as created_at,
-    updated as updated_at
+    created as created_at
 
-from {{ source('stripe', 'balance_transactions') }}
+from {{ source('stripe_pipeline', 'balance_transactions') }}

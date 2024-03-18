@@ -2,10 +2,9 @@ select
 
     id as invoice_id,
 
-    charge as charge_id,
-    customer as customer_id,
-    subscription as subscription_id,
-    payment as payment_id,
+    charge_id,
+    customer_id,
+    subscription_id,
 
     amount_due / 100.0 as amount_due_dollars,
     amount_paid / 100.0 as amount_paid_dollars,
@@ -18,22 +17,22 @@ select
     customer_name,
     customer_email,
     attempt_count,
-    billing as billing_type,
+    -- billing as billing_type,
     billing_reason,
     collection_method,
     currency,
     description as invoice_memo,
-    discount,
+    -- discount,
     due_date as due_at,
     number,
-    closed as is_closed,
+    -- closed as is_closed,
     paid as is_paid,
     period_start,
     period_end,
     status,
 
-    created as invoice_created_at,
-    coalesce(status_transitions:finalized_at::timestamp, finalized_at) as finalized_at
+    date as invoice_created_at
+    -- coalesce(status_transitions:finalized_at::timestamp, finalized_at) as finalized_at
 
 
-from {{ source('stripe', 'invoices') }}
+from {{ source('stripe_pipeline', 'invoices') }}

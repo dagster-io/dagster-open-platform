@@ -17,6 +17,11 @@ table:
   location: seeds/telemetry_example_map.csv
   file-format: csv
   with-header: false
+  dialect: snowflake
+  table-type: external
+  source-locations:
+  - path: workspace.sdf.yml
+
 
 ---
 table:
@@ -24,6 +29,10 @@ table:
   location: seeds/referrer_mapping.csv
   file-format: csv
   with-header: true
+  dialect: snowflake
+  table-type: external
+  source-locations:
+  - path: workspace.sdf.yml
 
 ---
 table:
@@ -31,6 +40,10 @@ table:
   location: seeds/instance_type_priority.csv
   file-format: csv
   with-header: true
+  dialect: snowflake
+  table-type: external
+  source-locations:
+  - path: workspace.sdf.yml
 
 ---
 table:
@@ -38,6 +51,10 @@ table:
   location: seeds/permission_levels.csv
   file-format: csv
   with-header: true
+  dialect: snowflake
+  table-type: external
+  source-locations:
+  - path: workspace.sdf.yml
 
 ---
 provider:

@@ -1,29 +1,9 @@
 version: 2
 sources:
-  - name: stripe
-    description: Stripe Sync via Stitch
-    database: stitch
-    schema: stripe_prod_v3
-    tables:
-      - name: balance_transactions
-      - name: charges
-      - name: coupons
-      - name: customers
-      - name: events
-      - name: invoice_items
-      - name: invoice_line_items
-      - name: invoices
-      - name: payment_intents
-      - name: payouts
-      - name: payout_transactions
-      - name: plans
-      - name: products
-      - name: subscription_items
-      - name: subscriptions
   - name: stripe_pipeline
+    description: Stripe Sync via Stitch
     database: stripe_pipeline
     schema: stripe
-    description: Stripe Pipeline Sync (Stripe to Snowflake)
     tables:
       - name: balance_transactions
       - name: charges
