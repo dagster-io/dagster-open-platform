@@ -14,7 +14,6 @@ from .assets import (
     hightouch_syncs,
     ingest_fivetran,
     oss_analytics,
-    postgres_mirror,
     slack_analytics,
     sling_ingest,
     stitch_ingest,
@@ -45,7 +44,6 @@ health_check_assets = load_assets_from_modules(
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
 dbt_assets = load_assets_from_modules([dbt])
 stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
-postgres_mirror_assets = load_assets_from_modules([postgres_mirror])
 support_bot_assets = load_assets_from_modules([support_bot])
 dlt_assets = load_assets_from_modules([dlt])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
@@ -59,7 +57,6 @@ all_assets = [
     *oss_analytics_assets,
     *stitch_ingest_assets,
     slack_analytics.member_metrics,
-    *postgres_mirror_assets,
     *support_bot_assets,
     *dlt_assets,
     *cloud_usage.prod_sync_usage_metrics,

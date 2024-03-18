@@ -1,7 +1,5 @@
 from dagster import (
     AssetSelection,
-    Backoff,
-    RetryPolicy,
     RunRequest,
     ScheduleDefinition,
     build_schedule_from_partitioned_job,
@@ -11,7 +9,6 @@ from dagster import (
 from dagster_dbt import build_dbt_asset_selection
 
 from ..assets import dbt
-from ..assets.postgres_mirror import REPO_LOCATION_DATA_NUM_CHUNKS, sync_repo_location_data
 from ..partitions import insights_partition
 
 oss_telemetry_job = define_asset_job(
@@ -29,7 +26,6 @@ insights_selection = (
     build_dbt_asset_selection([dbt.cloud_analytics_dbt_assets], "tag:insights")
     .upstream()
     .required_multi_asset_neighbors()
-    - AssetSelection.assets(sync_repo_location_data)
     - AssetSelection.groups("cloud_product_high_volume_ingest")
     - AssetSelection.groups("cloud_product_low_volume_ingest")
 )  # select all insights models, and fetch upstream, including ingestion
@@ -78,27 +74,6 @@ def cloud_usage_metrics_schedule():
     yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
-sync_repo_location_data_job = define_asset_job(
-    name="sync_repo_location_data_job",
-    selection=AssetSelection.assets(sync_repo_location_data),
-    tags={
-        "job": "sync_repo_location_data_job",
-        "team": "insights",
-    },
-    op_retry_policy=RetryPolicy(max_retries=5, delay=60, backoff=Backoff.LINEAR),
-)
-
-
-@schedule(
-    name="sync_repo_location_data_schedule",
-    cron_schedule="0 0/2 * * *",
-    job_name="sync_repo_location_data_job",
-)
-def sync_repo_location_data_schedule():
-    for partition_id in range(REPO_LOCATION_DATA_NUM_CHUNKS):
-        yield RunRequest(partition_key=str(partition_id), run_key=str(partition_id))
-
-
 # Stitch syncs need to be run regularly and not as-needed because
 # our data volume is too large for an individual sync
 stitch_sync_frequent = ScheduleDefinition(
@@ -140,14 +115,12 @@ scheduled_jobs = [
     oss_telemetry_job,
     insights_job,
     cloud_usage_metrics_job,
-    sync_repo_location_data_job,
 ]
 
 schedules = [
     oss_telemetry_schedule,
     insights_schedule,
     cloud_usage_metrics_schedule,
-    sync_repo_location_data_schedule,
     stitch_sync_frequent,
     stitch_sync_infrequent,
     cloud_product_sync_high_volume_schedule,
