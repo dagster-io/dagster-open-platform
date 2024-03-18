@@ -6,10 +6,10 @@ from dagster import (
     AssetKey,
     AssetSpec,
     FreshnessPolicy,
+    MetadataValue,
     ObserveResult,
     multi_observable_source_asset,
 )
-from dagster._core.definitions.data_time import DATA_TIME_METADATA_KEY
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
 
@@ -67,6 +67,6 @@ def stripe_data_sync_assets(context, snowflake: SnowflakeResource) -> Iterator[O
             yield ObserveResult(
                 asset_key=table_names_to_asset_keys[table_name],
                 metadata={
-                    DATA_TIME_METADATA_KEY: last_updated.timestamp(),
+                    "dagster/last_updated_timestamp": MetadataValue.timestamp(last_updated),
                 },
             )
