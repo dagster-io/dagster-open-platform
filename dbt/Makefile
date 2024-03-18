@@ -21,5 +21,5 @@ update-sdf:
 
 check-lineage:
 	dbt compile
-	sdf dbt refresh
+	sdf dbt refresh --no-save
 	sdf compile
