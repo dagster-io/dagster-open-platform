@@ -42,5 +42,6 @@ prod_sync_usage_metrics = [
                 [cloud_analytics_dbt_assets], "usage_metrics_daily_jobs_aggregated"
             )
         ],
+        allow_alter_table=False,
     )
 ]

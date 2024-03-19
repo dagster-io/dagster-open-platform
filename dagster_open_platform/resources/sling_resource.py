@@ -120,6 +120,7 @@ class CustomSlingResource(ConfigurableResource):
         mode: SlingMode = SlingMode.FULL_REFRESH,
         primary_key: Optional[List[str]] = None,
         update_key: Optional[str] = None,
+        allow_alter_table: bool = True,
     ) -> Generator[str, None, None]:
         """Runs a Sling sync from the given source table to the given destination table. Generates
         output lines from the Sling CLI.
@@ -150,6 +151,16 @@ class CustomSlingResource(ConfigurableResource):
                 "target": {
                     "conn": target_conn,
                     "object": dest_table,
+                    **(
+                        {
+                            "options": {
+                                "add_new_columns": False,
+                                "adjust_column_type": False,
+                            }
+                        }
+                        if allow_alter_table
+                        else {}
+                    ),
                 },
                 "mode": mode.value,
             }
@@ -189,6 +200,7 @@ class CustomSlingResource(ConfigurableResource):
         mode: SlingMode = SlingMode.FULL_REFRESH,
         primary_key: Optional[List[str]] = None,
         update_key: Optional[str] = None,
+        allow_alter_table: bool = True,
     ) -> Generator[str, None, None]:
         """Runs a Sling sync from the given Snowflake table to the given Postgres table. Generates
         output lines from the Sling CLI.
@@ -201,6 +213,7 @@ class CustomSlingResource(ConfigurableResource):
             mode=mode,
             primary_key=primary_key,
             update_key=update_key,
+            allow_alter_table=allow_alter_table,
         )
 
 
@@ -258,6 +271,7 @@ def build_sync_snowflake_to_postgres_asset(
     preflight_check: Optional[Callable[[AssetExecutionContext], None]] = None,
     preflight_resource_keys: Optional[Set[str]] = None,
     group_name: Optional[str] = None,
+    allow_alter_table: bool = True,
 ) -> AssetsDefinition:
     """Factory which builds an asset definition that syncs the given source table to the given
     destination table.
@@ -298,6 +312,7 @@ def build_sync_snowflake_to_postgres_asset(
             primary_key=config.primary_key,
             update_key=config.update_key,
             mode=config.mode,
+            allow_alter_table=allow_alter_table,
         ):
             print(stdout_line)
             cleaned_line = re.sub(r"\[[0-9;]+[a-zA-Z]", " ", stdout_line)
