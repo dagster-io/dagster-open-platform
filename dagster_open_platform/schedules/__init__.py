@@ -74,25 +74,6 @@ def cloud_usage_metrics_schedule():
     yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
-# Stitch syncs need to be run regularly and not as-needed because
-# our data volume is too large for an individual sync
-stitch_sync_frequent = ScheduleDefinition(
-    job=define_asset_job(
-        name="stitch_frequent_sync",
-        selection=AssetSelection.key_prefixes(["stitch", "cloud_prod_public"]),
-        tags={"team": "devrel"},
-    ),
-    cron_schedule="10,20,30,40,50 * * * *",
-)
-stitch_sync_infrequent = ScheduleDefinition(
-    job=define_asset_job(
-        name="stitch_infrequent_sync",
-        selection=AssetSelection.key_prefixes(["stitch", "elementl_cloud_prod"]),
-        tags={"team": "devrel"},
-    ),
-    cron_schedule="0 11,23 * * *",
-)
-
 cloud_product_sync_high_volume_schedule = ScheduleDefinition(
     job=define_asset_job(
         name="cloud_product_sync_high_volume",
@@ -121,8 +102,6 @@ schedules = [
     oss_telemetry_schedule,
     insights_schedule,
     cloud_usage_metrics_schedule,
-    stitch_sync_frequent,
-    stitch_sync_infrequent,
     cloud_product_sync_high_volume_schedule,
     cloud_product_sync_low_volume_schedule,
 ]

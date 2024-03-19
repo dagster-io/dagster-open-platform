@@ -1,7 +1,7 @@
 version: 2
 sources:
   - name: stripe_pipeline
-    description: Stripe Sync via Stitch
+    description: Stripe Sync via Stripe Data Pipeline
     database: stripe_pipeline
     schema: stripe
     tables:

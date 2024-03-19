@@ -16,7 +16,6 @@ from .assets import (
     oss_analytics,
     slack_analytics,
     sling_ingest,
-    stitch_ingest,
     stripe_data_sync,
     support_bot,
 )
@@ -33,7 +32,6 @@ from .resources import (
     scoutos_resource,
     slack_resource,
     snowflake_resource,
-    stitch_resource,
 )
 from .schedules import scheduled_jobs, schedules
 
@@ -43,7 +41,6 @@ health_check_assets = load_assets_from_modules(
 )
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
 dbt_assets = load_assets_from_modules([dbt])
-stitch_ingest_assets = load_assets_from_modules([stitch_ingest])
 support_bot_assets = load_assets_from_modules([support_bot])
 dlt_assets = load_assets_from_modules([dlt])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
@@ -55,7 +52,6 @@ all_assets = [
     *dbt_assets,
     *health_check_assets,
     *oss_analytics_assets,
-    *stitch_ingest_assets,
     slack_analytics.member_metrics,
     *support_bot_assets,
     *dlt_assets,
@@ -83,7 +79,6 @@ defs = Definitions(
         "hightouch": hightouch_resource,
         "slack": slack_resource,
         "snowflake": snowflake_resource,
-        "stitch": stitch_resource,
         "cloud_prod_read_replica_sling": cloud_prod_read_replica_sling_resource,
         "cloud_prod_reporting_sling": cloud_prod_reporting_sling_resource,
         "github": github_resource,

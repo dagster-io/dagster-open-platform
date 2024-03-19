@@ -14,7 +14,6 @@ from ..utils.environment_helpers import get_dbt_target, get_environment, get_sch
 from .hightouch_resource import ConfigurableHightouchResource
 from .scoutos_resource import GithubResource, ScoutosResource
 from .sling_resource import CustomSlingResource, SlingPostgresConfig, SlingSnowflakeConfig
-from .stitch_resource import StitchResource
 
 embedded_elt_resource = SlingResource(
     connections=[
@@ -61,11 +60,6 @@ dbt_resource = DbtCliResource(
     project_dir=file_relative_path(__file__, "../../dbt"),
     profiles_dir=file_relative_path(__file__, "../../dbt"),
     target=get_dbt_target(),
-)
-
-stitch_resource = StitchResource(
-    stitch_client_id=EnvVar("STITCH_CLIENT_ID"),
-    access_token=EnvVar("STITCH_ACCESS_TOKEN"),
 )
 
 slack_resource = SlackResource(token=EnvVar("SLACK_ANALYTICS_TOKEN"))
