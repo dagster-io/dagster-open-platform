@@ -7,9 +7,9 @@ def account_has_valid_org_id(snowflake: SnowflakeResource) -> AssetCheckResult:
     with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("""
-            select organization_id__c as org_id
+            select organization_id_c as org_id
             from fivetran.salesforce.account
-            where organization_id__c not regexp '\\\\d+' and not isdeleted           
+            where organization_id_c not regexp '\\\\d+' and not isdeleted           
         """)
         result = cur.fetch_pandas_all()
     return AssetCheckResult(
