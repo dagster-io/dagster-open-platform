@@ -4,6 +4,8 @@ select
     email,
     name as user_name,
     title as user_title,
+    first_name,
+    last_name,
     experience,
     email like '%@elementl%' or email like '%@dagster.%' as is_elementl_user,
     create_timestamp as created_at,
