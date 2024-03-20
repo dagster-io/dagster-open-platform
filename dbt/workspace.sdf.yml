@@ -16,7 +16,7 @@ table:
   name: telemetry_example_map
   location: seeds/telemetry_example_map.csv
   file-format: csv
-  with-header: false
+  with-header: true
   dialect: snowflake
   table-type: external
   source-locations:
