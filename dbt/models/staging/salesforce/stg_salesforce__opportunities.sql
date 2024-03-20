@@ -25,7 +25,7 @@ select
     competitor_c as competitor,
     manual_forecast_category_c as manual_forecast_category,
     arr_c as arr,
-    new_arr_c as new_arr,
+    arr_new_c as new_arr,
     prior_term_arr_c as prior_term_arr,
     sal_date_c as sal_date,
     account_source_c as account_source,
