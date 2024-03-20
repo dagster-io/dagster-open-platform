@@ -8,7 +8,7 @@ from dagster import (
 )
 from dagster_dbt import build_dbt_asset_selection
 
-from ..assets import dbt
+from ..assets import dbt, monitor_purina_clones
 from ..partitions import insights_partition
 
 oss_telemetry_job = define_asset_job(
@@ -92,10 +92,18 @@ cloud_product_sync_low_volume_schedule = ScheduleDefinition(
     cron_schedule="0 */2 * * *",
 )
 
+purina_clone_cleanup_schedule = ScheduleDefinition(
+    job=define_asset_job(
+        name="purina_clone_cleanup_job",
+        selection=[monitor_purina_clones.purina_clone_cleanup],
+        tags={"team": "devrel"},
+    ),
+    cron_schedule="0 3 * * *",
+)
+
 scheduled_jobs = [
     oss_telemetry_job,
     insights_job,
-    cloud_usage_metrics_job,
 ]
 
 schedules = [
@@ -104,4 +112,5 @@ schedules = [
     cloud_usage_metrics_schedule,
     cloud_product_sync_high_volume_schedule,
     cloud_product_sync_low_volume_schedule,
+    purina_clone_cleanup_schedule,
 ]
