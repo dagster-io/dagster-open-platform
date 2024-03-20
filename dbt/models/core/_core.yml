@@ -1,0 +1,22 @@
+---
+version: 2
+
+models:
+  - name: dim_organizations
+    description: Dagster Organizations Core Table. This table contains
+      one row for each organization.
+    columns:
+      - name: organization_id
+        tests:
+          - unique
+          - not_null
+  - name: user_organizations
+    description: Dagster User Organizations Core Table. This table
+      contains one row for each user/organization pair, along with
+      calculated values related to organizations such as their last
+      login date.
+    columns:
+      - name: organization_id
+        tests:
+          - not_null
+

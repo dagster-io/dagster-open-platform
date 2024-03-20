@@ -1,4 +1,5 @@
 from dagster import (
+    AssetKey,
     AssetSelection,
     RunRequest,
     ScheduleDefinition,
@@ -10,10 +11,19 @@ from dagster_dbt import build_dbt_asset_selection
 
 from ..assets import dbt, monitor_purina_clones
 from ..partitions import insights_partition
+from ..utils.environment_helpers import get_environment, get_schema_for_environment
 
 oss_telemetry_job = define_asset_job(
     name="oss_telemetry_job",
-    selection=AssetSelection.groups("oss_telemetry_staging").downstream(),
+    selection=AssetSelection.keys(
+        AssetKey(
+            [
+                "sandbox" if get_environment() == "LOCAL" else "purina",
+                get_schema_for_environment("staging").lower(),
+                "stg_telemetry__events",
+            ]
+        )
+    ).downstream(),
     tags={"team": "devrel"},
 )
 
@@ -42,7 +52,6 @@ insights_schedule = build_schedule_from_partitioned_job(job=insights_job)
 
 assets_dependent_on_cloud_usage = [
     AssetSelection.keys(["postgres", "usage_metrics_daily_jobs_aggregated"]),
-    AssetSelection.keys(["hightouch_usage_metrics_daily"]),
     build_dbt_asset_selection(
         [dbt.cloud_analytics_dbt_assets], "org_asset_materializations_by_month"
     ),

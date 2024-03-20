@@ -1,0 +1,120 @@
+---
+version: 2
+sources:
+  - name: purina_staging
+    database: "{{ 'dogfood_purina' if target.name == 'dogfood' else 'purina' }}"
+    schema: staging
+    tables:
+      # misnomer - this is actually specifically snowflake cost submissions
+      - name: insights_metrics_submissions
+
+
+  - name: cloud_product
+    database: "{{ 'dogfood_purina' if target.name == 'dogfood' else 'sling' }}"
+    schema: "{{ 'postgres_mirror' if target.name == 'dogfood' else 'cloud_product' }}"
+    description: Dagster cloud product postgres tables ingested by sling.
+    tables:
+      - name: event_logs
+      - name: run_tags
+      - name: runs
+      - name: asset_keys
+      - name: customer_info
+      - name: deployments
+      - name: onboarding_checklist
+      - name: organizations
+      - name: permissions
+      - name: serverless_agents
+      - name: session_tokens
+      - name: teams
+      - name: teams_permissions
+      - name: teams_users
+      - name: users
+      - name: users_organizations
+      - name: users_permissions
+      - name: repository_locations_data
+
+  - name: salesforce
+    database: fivetran
+    schema: salesforce
+    tables:
+      - name: account
+      - name: opportunity
+      - name: contract
+      - name: user
+      - name: user_role
+
+  - name: segment_web
+    database: segment
+    schema: dagster_io
+    tables:
+      - name: pages
+      - name: identifies
+
+  - name: segment_app
+    database: segment
+    schema: dagster_cloud
+    tables:
+      - name: accounts
+      - name: identifies
+      - name: pages
+      - name: tracks
+      - name: users
+
+  - name: slack
+    database: slack
+    schema: dagster
+    tables:
+      - name: member_metrics
+
+  - name: stripe_pipeline
+    description: Stripe Sync via Stripe Data Pipeline
+    database: stripe_pipeline
+    schema: stripe
+    tables:
+      - name: balance_transactions
+      - name: charges
+      - name: coupons
+      - name: customers
+      - name: events
+      - name: invoice_items
+      - name: invoice_line_items
+      - name: invoices
+      - name: payment_intents
+      - name: payouts
+      - name: payout_transactions
+      - name: plans
+      - name: products
+      - name: subscription_items
+      - name: subscriptions
+      - name: subscriptions_metadata
+      - name: subscription_schedules
+      - name: subscription_schedule_phases
+
+  - name: prod_telemetry
+    database: purina
+    schema: prod_telemetry
+    tables:
+      - name: oss_telemetry_events_raw
+
+  - name: thinkific
+    description: Thinkific Education Courses
+    database: dlt
+    schema: thinkific
+    tables:
+      - name: courses
+        meta:
+          dagster:
+            asset_key: ["dlt_thinkific_courses"]
+      - name: course_reviews
+        meta:
+          dagster:
+            asset_key: ["dlt_thinkific_course_reviews"]
+      - name: enrollments
+        meta:
+          dagster:
+            asset_key: ["dlt_thinkific_enrollments"]
+      - name: users
+        meta:
+          dagster:
+            asset_key: ["dlt_thinkific_users"]
+

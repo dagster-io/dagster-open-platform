@@ -20,96 +20,68 @@ models:
     staging:
       +schema: staging
       +materialized: view
-      postgres:
-        +meta:
-          dagster:
-            group: cloud_staging
-      telemetry:
-        +meta:
-          dagster:
-            group: oss_telemetry_staging
-      salesforce:
-        +meta:
-          dagster:
-            group: salesforce_staging
-      stripe:
-        +meta:
-          dagster:
-            group: stripe_staging
-      segment:
-        +meta:
-          dagster:
-            group: segment_staging
-      thinkific:
-        +meta:
-          dagster:
-            group: education
-      slack:
-        +meta:
-          dagster:
-            group: slack_staging
+      +meta:
+        dagster:
+          group: staging
     intermediate:
-      +schema: intermediate
       +materialized: view
-      marketing:
-        +meta:
-          dagster:
-            group: marketing_intermediate
-      product:
-        +meta:
-          dagster:
-            group: cloud_intermediate
-      stripe:
-        +meta:
-          dagster:
-            group: stripe_intermediate
-    marts:
+      +meta:
+        dagster:
+          group: intermediate
+    telemetry:
       +materialized: table
-      telemetry:
-        +schema: telemetry
-        +meta:
-          dagster:
-            group: oss_telemetry
-      cloud_reporting:
-        +schema: cloud_reporting
-        +meta:
-          dagster:
-            group: cloud_reporting
-      core:
-        +schema: core
-        +meta:
-          dagster:
-            group: cloud_core
-      product:
-        +schema: product
-        +meta:
-          dagster:
-            group: cloud_product
-      marketing:
-        +schema: marketing
-        +meta:
-          dagster:
-            group: marketing
-      finance:
-        +schema: finance
-        +meta:
-          dagster:
-            group: finance
-      sales:
-        +schema: sales
-        +meta:
-          dagster:
-            group: sales
-      hightouch:
-        +schema: hightouch
-        +meta:
-          dagster:
-            group: hightouch
-      education:
-        +schema: education
-        +meta:
-          dagster:
-            group: education
+      +schema: telemetry
+      +meta:
+        dagster:
+          group: telemetry
+    cloud_reporting:
+      +materialized: table
+      +schema: cloud_reporting
+      +meta:
+        dagster:
+          group: cloud_reporting
+    core:
+      +materialized: table
+      +schema: core
+      +meta:
+        dagster:
+          group: core
+    product:
+      +materialized: table
+      +schema: product
+      +meta:
+        dagster:
+          group: product
+    marketing:
+      +materialized: table
+      +schema: marketing
+      +meta:
+        dagster:
+          group: marketing
+    finance:
+      +materialized: table
+      +schema: finance
+      +meta:
+        dagster:
+          group: finance
+    sales:
+      +materialized: table
+      +schema: sales
+      +meta:
+        dagster:
+          group: sales
+    hightouch:
+      +materialized: table
+      +schema: hightouch
+      +meta:
+        dagster:
+          group: hightouch
+    education:
+      +materialized: table
+      +schema: education
+      +meta:
+        dagster:
+          group: education
 
 seeds:
   +post-hook:

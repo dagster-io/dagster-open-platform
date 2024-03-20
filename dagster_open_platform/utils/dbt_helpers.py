@@ -4,6 +4,8 @@ from typing import Any, Mapping
 from dagster import AssetKey, Config, MetadataValue
 from dagster_dbt import DagsterDbtTranslator
 
+from .environment_helpers import get_environment
+
 SNOWFLAKE_ACCOUNT_BASE = os.getenv("SNOWFLAKE_ACCOUNT", ".").split(".")[0]
 PURINA_DATABASE_NAME = (
     f"PURINA_CLONE_{os.environ['DAGSTER_CLOUD_PULL_REQUEST_ID']}"
@@ -20,14 +22,20 @@ class DbtConfig(Config):
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     @classmethod
     def get_asset_key(cls, dbt_resource_props: Mapping[str, Any]) -> AssetKey:
+        environment = get_environment()
         resource_type = dbt_resource_props["resource_type"]
         resource_name = dbt_resource_props["name"]
 
         if resource_type in ("model", "seed"):
+            resource_database = dbt_resource_props["database"]
             schema = (
-                dbt_resource_props["schema"] if dbt_resource_props["schema"] else "unknown_schema"
+                str(cls.get_group_name(dbt_resource_props))
+                if environment != "LOCAL"
+                else os.getenv("SNOWFLAKE_USER", "")
             )
-            return AssetKey([dbt_resource_props["database"], schema, resource_name])
+            resource_name = dbt_resource_props["name"]
+
+            return AssetKey([resource_database, schema, resource_name])
 
         elif resource_type == "source":
             # if metadata has been provided in the yaml use that, otherwise construct key

@@ -1,7 +1,0 @@
-version: 2
-sources:
-  - name: slack
-    database: slack
-    schema: dagster
-    tables:
-      - name: member_metrics
