@@ -20,7 +20,7 @@ from dagster_open_platform.resources.dlt_resource import (
 )
 from dlt.extract.resource import DltResource
 
-from .dlt_pipelines.duckdb_with_transformer import pipeline
+from .dlt_test_sources.duckdb_with_transformer import pipeline
 
 EXAMPLE_PIPELINE_DUCKDB = "example_pipeline.duckdb"
 

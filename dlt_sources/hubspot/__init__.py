@@ -21,8 +21,7 @@ Example:
 
 LOCAL USAGE
 
-    cd dagster_open_platform/assets/dlt_pipelines/
-
+    cd dlt_sources/
     python -m hubspot.__init__
 
 """

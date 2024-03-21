@@ -31,9 +31,8 @@ from dagster_open_platform.resources.dlt_resource import (
 )
 from dlt import pipeline
 from dlt.extract.resource import DltResource
-
-from .dlt_pipelines.hubspot import hubspot
-from .dlt_pipelines.thinkific import thinkific
+from dlt_sources.hubspot import hubspot
+from dlt_sources.thinkific import thinkific
 
 dlt_resource = DltDagsterResource()
 
