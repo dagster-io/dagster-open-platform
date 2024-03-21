@@ -24,6 +24,7 @@ models:
         dagster:
           group: staging
     intermediate:
+      +schema: intermediate
       +materialized: view
       +meta:
         dagster:
