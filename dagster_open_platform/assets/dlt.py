@@ -31,6 +31,7 @@ from dagster_open_platform.resources.dlt_resource import (
 )
 from dlt import pipeline
 from dlt.extract.resource import DltResource
+from dlt_sources.github import github_reactions
 from dlt_sources.hubspot import hubspot
 from dlt_sources.thinkific import thinkific
 
@@ -82,4 +83,21 @@ class HubspotDltDagsterTranslator(DltDagsterTranslator):
     dlt_dagster_translator=HubspotDltDagsterTranslator(),
 )
 def hubspot_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
+    yield from dlt.run(context=context)
+
+
+# NOTE: currently have `max_items` set to prevent excessive credit usage
+@dlt_assets(
+    dlt_source=github_reactions(
+        "dagster-io", "dagster", items_per_page=100, max_items=250
+    ).with_resources("issues"),
+    dlt_pipeline=pipeline(
+        pipeline_name="github_issues",
+        dataset_name="github",
+        destination="snowflake",
+    ),
+    name="github",
+    group_name="github",
+)
+def github_reactions_dagster_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
     yield from dlt.run(context=context)
