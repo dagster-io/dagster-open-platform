@@ -1,10 +1,8 @@
 import os
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 from dagster import AssetKey, Config, MetadataValue
 from dagster_dbt import DagsterDbtTranslator
-
-from .environment_helpers import get_environment
 
 SNOWFLAKE_ACCOUNT_BASE = os.getenv("SNOWFLAKE_ACCOUNT", ".").split(".")[0]
 PURINA_DATABASE_NAME = (
@@ -21,38 +19,20 @@ class DbtConfig(Config):
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     @classmethod
+    def get_group_name(cls, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
+        # Same logic that sets the custom schema in macros/get_custom_schema.sql
+        asset_path = dbt_resource_props["fqn"][1:-1]
+        if asset_path:
+            return "_".join(asset_path)
+        return "default"
+
+    @classmethod
     def get_asset_key(cls, dbt_resource_props: Mapping[str, Any]) -> AssetKey:
-        environment = get_environment()
-        resource_type = dbt_resource_props["resource_type"]
+        resource_database = dbt_resource_props["database"]
+        resource_schema = dbt_resource_props["schema"]
         resource_name = dbt_resource_props["name"]
 
-        if resource_type in ("model", "seed"):
-            resource_database = dbt_resource_props["database"]
-            schema = (
-                str(cls.get_group_name(dbt_resource_props))
-                if environment != "LOCAL"
-                else os.getenv("SNOWFLAKE_USER", "")
-            )
-            resource_name = dbt_resource_props["name"]
-
-            return AssetKey([resource_database, schema, resource_name])
-
-        elif resource_type == "source":
-            # if metadata has been provided in the yaml use that, otherwise construct key
-            if (
-                "meta" in dbt_resource_props
-                and "dagster" in dbt_resource_props["meta"]
-                and "asset_key" in dbt_resource_props["meta"]["dagster"]
-            ):
-                return AssetKey(dbt_resource_props["meta"]["dagster"]["asset_key"])
-
-            else:
-                database_name = dbt_resource_props["database"].lower()
-                schema_name = dbt_resource_props["schema"].lower()
-                return AssetKey([database_name, schema_name, resource_name])
-
-        else:
-            raise ValueError(f"Unknown dbt resource_type: {resource_type}")
+        return AssetKey([resource_database, resource_schema, resource_name])
 
     @classmethod
     def get_metadata(cls, dbt_node_info: Mapping[str, Any]) -> Mapping[str, Any]:

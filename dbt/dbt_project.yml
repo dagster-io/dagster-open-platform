@@ -18,79 +18,31 @@ models:
 
   analytics:
     staging:
-      +schema: staging
       +materialized: view
-      +meta:
-        dagster:
-          group: staging
     intermediate:
-      +schema: intermediate
       +materialized: view
-      +meta:
-        dagster:
-          group: intermediate
     telemetry:
       +materialized: table
-      +schema: telemetry
-      +meta:
-        dagster:
-          group: telemetry
     cloud_reporting:
       +materialized: table
-      +schema: cloud_reporting
-      +meta:
-        dagster:
-          group: cloud_reporting
     core:
       +materialized: table
-      +schema: core
-      +meta:
-        dagster:
-          group: core
     product:
       +materialized: table
-      +schema: product
-      +meta:
-        dagster:
-          group: product
     marketing:
       +materialized: table
-      +schema: marketing
-      +meta:
-        dagster:
-          group: marketing
     finance:
       +materialized: table
-      +schema: finance
-      +meta:
-        dagster:
-          group: finance
     sales:
       +materialized: table
-      +schema: sales
-      +meta:
-        dagster:
-          group: sales
     hightouch:
       +materialized: table
-      +schema: hightouch
-      +meta:
-        dagster:
-          group: hightouch
     education:
       +materialized: table
-      +schema: education
-      +meta:
-        dagster:
-          group: education
 
 seeds:
   +post-hook:
     - "{{ dagster.log_columns_in_relation() }}"
-
-  +meta:
-    dagster:
-      group: cloud_staging
 
 vars:
   session_threshold_seconds: 1800
