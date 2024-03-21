@@ -158,7 +158,7 @@ class CustomSlingResource(ConfigurableResource):
                                 "adjust_column_type": False,
                             }
                         }
-                        if allow_alter_table
+                        if not allow_alter_table
                         else {}
                     ),
                 },
