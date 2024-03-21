@@ -11,6 +11,7 @@ setup(
         "dagster-pandas",
         "dagster-fivetran",
         "dagster-hightouch",
+        "dagster-insights",
         "dagster-gcp",
         "dagster-dbt",
         "dagster-cloud",

@@ -9,7 +9,7 @@ from dagster import (
     SourceAsset,
     asset,
 )
-from dagster_gcp import BigQueryResource
+from dagster_cloud.dagster_insights import InsightsBigQueryResource
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
 
@@ -35,9 +35,9 @@ SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
 )
 def dagster_pypi_downloads(
     context: AssetExecutionContext,
-    bigquery: BigQueryResource,
+    bigquery: InsightsBigQueryResource,
     snowflake: SnowflakeResource,
-):
+) -> MaterializeResult:
     """A table containing the number of PyPi downloads for each package in the Dagster ecosystem, aggregated at the weekly grain. This data is fetched from the public BigQuery dataset `bigquery-public-data.pypi.file_downloads`."""
     start_week = str(context.asset_partitions_time_window_for_output().start.date())
     end_week = str(context.asset_partitions_time_window_for_output().end.date())

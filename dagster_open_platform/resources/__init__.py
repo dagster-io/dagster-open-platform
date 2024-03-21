@@ -1,12 +1,12 @@
 import os
 
 from dagster import EnvVar, file_relative_path
+from dagster_cloud.dagster_insights import InsightsBigQueryResource
 from dagster_dbt import DbtCliResource
 from dagster_embedded_elt.sling.resources import (
     SlingConnectionResource,
     SlingResource,
 )
-from dagster_gcp import BigQueryResource
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
@@ -44,7 +44,7 @@ embedded_elt_resource = SlingResource(
 
 DBT_MANIFEST_PATH = file_relative_path(__file__, "../../dbt/target/manifest.json")
 
-bigquery_resource = BigQueryResource(
+bigquery_resource = InsightsBigQueryResource(
     gcp_credentials=EnvVar("GCP_CREDENTIALS"),
 )
 
