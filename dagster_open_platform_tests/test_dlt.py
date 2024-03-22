@@ -118,3 +118,30 @@ def test_get_materialize_policy(_teardown):
             isinstance(rule, MaterializeOnCronRule) and rule.cron_schedule == "0 1 * * *"
             for rule in item.rules
         )
+
+
+def test_example_pipeline_has_required_metadata_keys(_teardown):
+    required_metadata_keys = {
+        "destination_type",
+        "destination_name",
+        "dataset_name",
+        "first_run",
+        "started_at",
+        "finished_at",
+        "jobs",
+    }
+
+    @dlt_assets(dlt_source=DLT_SOURCE, dlt_pipeline=DLT_PIPELINE)
+    def example_pipeline_assets(
+        context: AssetExecutionContext, dlt_pipeline_resource: DltDagsterResource
+    ):
+        for asset in dlt_pipeline_resource.run(context=context):
+            assert asset.metadata
+            assert all(key in asset.metadata.keys() for key in required_metadata_keys)
+            yield asset
+
+    res = materialize(
+        [example_pipeline_assets],
+        resources={"dlt_pipeline_resource": DltDagsterResource()},
+    )
+    assert res.success
