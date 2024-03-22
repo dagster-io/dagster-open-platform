@@ -1,5 +1,4 @@
 from dagster import (
-    AssetKey,
     AssetSelection,
     RunRequest,
     ScheduleDefinition,
@@ -11,19 +10,10 @@ from dagster_dbt import build_dbt_asset_selection
 
 from ..assets import dbt, monitor_purina_clones
 from ..partitions import insights_partition
-from ..utils.environment_helpers import get_environment, get_schema_for_environment
 
 oss_telemetry_job = define_asset_job(
     name="oss_telemetry_job",
-    selection=AssetSelection.keys(
-        AssetKey(
-            [
-                "sandbox" if get_environment() == "LOCAL" else "purina",
-                get_schema_for_environment("staging").lower(),
-                "stg_telemetry__events",
-            ]
-        )
-    ).downstream(),
+    selection=AssetSelection.groups("telemetry").downstream(),
     tags={"team": "devrel"},
 )
 

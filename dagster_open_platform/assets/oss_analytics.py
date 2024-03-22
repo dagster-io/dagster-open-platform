@@ -128,5 +128,5 @@ def dagster_pypi_downloads(
 oss_telemetry_events_raw = SourceAsset(
     key=["purina", "prod_telemetry", "oss_telemetry_events_raw"],
     description="OSS Telemetry events ingested from S3. The actual asset for this is currently in Purina until we can refactor the logic for it.",
-    group_name="oss_telemetry_staging",
+    group_name="telemetry",
 )
