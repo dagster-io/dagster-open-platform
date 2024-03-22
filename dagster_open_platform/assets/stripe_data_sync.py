@@ -8,13 +8,18 @@ from dagster import (
     FreshnessPolicy,
     MetadataValue,
     ObserveResult,
+    ScheduleDefinition,
+    define_asset_job,
     multi_observable_source_asset,
 )
+from dagster._core.definitions.asset_selection import AssetSelection
+from dagster._core.definitions.schedule_definition import DefaultScheduleStatus
+from dagster._core.execution.context.compute import AssetExecutionContext
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
 
-STRIPE_SYNC_DATABASE = "stripe_pipeline"
-STRIPE_SYNC_SCHEMA = "stripe"
+STRIPE_SYNC_DATABASE = "STRIPE_PIPELINE"
+STRIPE_SYNC_SCHEMA = "STRIPE"
 
 # Read stripe's documentation to understand sync freshness guarantees.
 # https://docs.stripe.com/stripe-data/available-data
@@ -23,23 +28,26 @@ stripe_sync_freshness_policy = FreshnessPolicy(
 )
 
 table_names = [
-    "charges",
-    "customers",
-    "disputes",
-    "events",
-    "invoices",
-    "invoice_items",
-    "payments",
-    "payouts",
-    "refunds",
-    "subscriptions",
-    "subscription_items",
-    "tax_rates",
+    "CHARGES",
+    "CUSTOMERS",
+    "DISPUTES",
+    "EVENTS",
+    "INVOICES",
+    "INVOICE_ITEMS",
+    "PAYMENTS",
+    "PAYOUTS",
+    "REFUNDS",
+    "SUBSCRIPTIONS",
+    "SUBSCRIPTION_ITEMS",
+    "TAX_RATES",
 ]
 table_names_to_asset_keys = {
-    table_name: AssetKey([STRIPE_SYNC_DATABASE, STRIPE_SYNC_SCHEMA, table_name])
+    table_name: AssetKey(
+        [STRIPE_SYNC_DATABASE.lower(), STRIPE_SYNC_SCHEMA.lower(), table_name.lower()]
+    )
     for table_name in table_names
 }
+asset_keys_to_table_names = {v: k for k, v in table_names_to_asset_keys.items()}
 
 asset_specs = [
     AssetSpec(
@@ -51,17 +59,20 @@ asset_specs = [
 ]
 
 
-@multi_observable_source_asset(specs=asset_specs)
-def stripe_data_sync_assets(context, snowflake: SnowflakeResource) -> Iterator[ObserveResult]:
+@multi_observable_source_asset(specs=asset_specs, can_subset=True)
+def stripe_data_sync_assets(
+    context: AssetExecutionContext, snowflake: SnowflakeResource
+) -> Iterator[ObserveResult]:
     """Assets representing stripe's data sync process."""
+    subsetted_table_names = [
+        asset_keys_to_table_names[asset_key] for asset_key in context.selected_asset_keys
+    ]
     with snowflake.get_connection() as conn:
-        cur = conn.cursor()
-        cur.execute(f"USE DATABASE {STRIPE_SYNC_DATABASE}")
-
         freshness_results = fetch_last_updated_timestamps(
             snowflake_connection=conn,
             schema=STRIPE_SYNC_SCHEMA,
-            tables=table_names,
+            tables=subsetted_table_names,
+            database=STRIPE_SYNC_DATABASE,
         )
         for table_name, last_updated in freshness_results.items():
             yield ObserveResult(
@@ -70,3 +81,13 @@ def stripe_data_sync_assets(context, snowflake: SnowflakeResource) -> Iterator[O
                     "dagster/last_updated_timestamp": MetadataValue.timestamp(last_updated),
                 },
             )
+
+
+stripe_data_sync_schedule = ScheduleDefinition(
+    cron_schedule="0 0 * * *",
+    job=define_asset_job(
+        name="stripe_data_sync_observe_job",
+        selection=AssetSelection.keys(*asset_keys_to_table_names.keys()),
+    ),
+    default_status=DefaultScheduleStatus.RUNNING,
+)

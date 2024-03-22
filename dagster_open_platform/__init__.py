@@ -70,7 +70,11 @@ all_checks = [salesforce_checks.account_has_valid_org_id]
 
 all_jobs = [*scheduled_jobs]
 
-all_schedules = [*schedules, slack_analytics.slack_daily_schedule]
+all_schedules = [
+    *schedules,
+    slack_analytics.slack_daily_schedule,
+    stripe_data_sync.stripe_data_sync_schedule,
+]
 
 defs = Definitions(
     assets=all_assets,
