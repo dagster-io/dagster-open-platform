@@ -5,7 +5,7 @@ setup(
     packages=find_packages(exclude=["dagster_open_platform_tests"]),
     install_requires=[
         "dbt-snowflake~=1.7",
-        "dagster<1.6.12",
+        "dagster",
         "dagster-snowflake",
         "dagster-slack",
         "dagster-pandas",
