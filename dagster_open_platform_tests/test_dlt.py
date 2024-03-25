@@ -143,3 +143,20 @@ def test_example_pipeline_has_required_metadata_keys(_teardown):
         resources={"dlt_pipeline_resource": DltDagsterResource()},
     )
     assert res.success
+
+
+def test_example_pipeline_subselection(_teardown):
+    @dlt_assets(dlt_source=DLT_SOURCE, dlt_pipeline=DLT_PIPELINE)
+    def example_pipeline_assets(
+        context: AssetExecutionContext, dlt_pipeline_resource: DltDagsterResource
+    ):
+        yield from dlt_pipeline_resource.run(context=context)
+
+    res = materialize(
+        [example_pipeline_assets],
+        resources={"dlt_pipeline_resource": DltDagsterResource()},
+        selection=[AssetKey(["dlt_pipeline_repos"])],
+    )
+    assert res.success
+    materialization_events = res.get_asset_materialization_events()
+    assert len(materialization_events) == 1

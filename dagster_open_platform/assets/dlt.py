@@ -1,18 +1,21 @@
 """Thinkific & Hubspot ingestion with `dlt`.
 
-PREREQUISITES
+The `dlt` pipeline and source secrets can be extracted "auto-magically" from
+environment variables, as defined below:
 
-    Ensure environment variables have been set:
+    THINKIFIC_API_KEY
+    THINKIFIC_SUBDOMAIN
+    SOURCES__HUBSPOT__API_KEY
+    DESTINATION__SNOWFLAKE__CREDENTIALS__DATABASE
+    DESTINATION__SNOWFLAKE__CREDENTIALS__PASSWORD
+    DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME
+    DESTINATION__SNOWFLAKE__CREDENTIALS__HOST
+    DESTINATION__SNOWFLAKE__CREDENTIALS__WAREHOUSE
+    DESTINATION__SNOWFLAKE__CREDENTIALS__ROLE
 
-        THINKIFIC_API_KEY
-        THINKIFIC_SUBDOMAIN
-        SOURCES__HUBSPOT__API_KEY
-        DESTINATION__SNOWFLAKE__CREDENTIALS__DATABASE
-        DESTINATION__SNOWFLAKE__CREDENTIALS__PASSWORD
-        DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME
-        DESTINATION__SNOWFLAKE__CREDENTIALS__HOST
-        DESTINATION__SNOWFLAKE__CREDENTIALS__WAREHOUSE
-        DESTINATION__SNOWFLAKE__CREDENTIALS__ROLE
+see: https://dlthub.com/docs/tutorial/grouping-resources#handle-secrets
+
+Or passed to the pipeline or source itself using the function parameters.
 
 """
 

@@ -137,12 +137,23 @@ class DltDagsterResource(ConfigurableResource):
     def run(
         self,
         context: Union[OpExecutionContext, AssetExecutionContext],
+        **kwargs,
     ) -> Iterator[Union[AssetMaterialization, MaterializeResult]]:
+        """Runs dlt pipeline.
+
+        Args:
+            context (Union[OpExecutionContext, AssetExecutionContext]) execution context
+            **kwargs (dict[str, Any]) keyword args passed to pipeline `run` method
+
+        Returns:
+            Iterator[Union[AssetMaterialization, MaterializeResult]] materialization in asset or op
+
+        """
         metadata_by_key = context.assets_def.metadata_by_key
         first_asset_metadata = next(iter(metadata_by_key.values()))
 
-        dlt_source = first_asset_metadata.get(META_KEY_SOURCE)
-        dlt_pipeline = first_asset_metadata.get(META_KEY_PIPELINE)
+        dlt_source: DltSource | None = first_asset_metadata.get(META_KEY_SOURCE)
+        dlt_pipeline: Pipeline | None = first_asset_metadata.get(META_KEY_PIPELINE)
 
         if not dlt_source or not dlt_pipeline:
             raise Exception(
@@ -151,14 +162,29 @@ class DltDagsterResource(ConfigurableResource):
                 META_KEY_PIPELINE,
             )
 
-        load_info = dlt_pipeline.run(dlt_source)
-
-        # Enhancement: ensure `zip` arrays align; support sub-selections [?]
-        for asset_key, dlt_source_resource in zip(
+        # Mapping of asset keys to dlt resources
+        asset_key_dlt_source_resource_mapping = zip(
             context.selected_asset_keys, dlt_source.resources.values()
-        ):
-            metadata = self.extract_resource_metadata(dlt_source_resource, load_info)
+        )
 
+        # Filter sources by asset key sub-selection
+        if context.is_subset:
+            asset_key_dlt_source_resource_mapping = [
+                (asset_key, dlt_source_resource)
+                for (asset_key, dlt_source_resource) in asset_key_dlt_source_resource_mapping
+                if asset_key in context.selected_asset_keys
+            ]
+            dlt_source = dlt_source.with_resources(
+                *[
+                    dlt_source_resource.name
+                    for (_, dlt_source_resource) in asset_key_dlt_source_resource_mapping
+                ]
+            )
+
+        load_info = dlt_pipeline.run(dlt_source, **kwargs)
+
+        for asset_key, dlt_source_resource in asset_key_dlt_source_resource_mapping:
+            metadata = self.extract_resource_metadata(dlt_source_resource, load_info)
             if isinstance(context, AssetExecutionContext):
                 yield MaterializeResult(asset_key=asset_key, metadata=metadata)
 
@@ -190,10 +216,7 @@ def dlt_assets(
             for dlt_source_resource in dlt_source.resources.values()
         ]
         assets_definition = multi_asset(
-            specs=specs,
-            name=name,
-            group_name=group_name,
-            compute_kind="dlt",
+            specs=specs, name=name, group_name=group_name, compute_kind="dlt", can_subset=True
         )(fn)
         return assets_definition
 
