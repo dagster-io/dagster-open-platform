@@ -25,9 +25,8 @@ META_KEY_PIPELINE = "dagster_dlt/pipeline"
 
 @dataclass
 class DltDagsterTranslator:
-    @classmethod
     @public
-    def get_asset_key(cls, resource: DltResource) -> AssetKey:
+    def get_asset_key(self, resource: DltResource) -> AssetKey:
         """Defines asset key for a given dlt resource key and dataset name.
 
         Args:
@@ -40,9 +39,8 @@ class DltDagsterTranslator:
         """
         return AssetKey(f"dlt_{resource.source_name}_{resource.name}")
 
-    @classmethod
     @public
-    def get_deps_asset_keys(cls, resource: DltResource) -> Iterable[AssetKey]:
+    def get_deps_asset_keys(self, resource: DltResource) -> Iterable[AssetKey]:
         """Defines upstream asset dependencies given a dlt resource.
 
         Defaults to a concatenation of `resource.source_name` and `resource.name`.
@@ -56,9 +54,8 @@ class DltDagsterTranslator:
         """
         return [AssetKey(f"{resource.source_name}_{resource.name}")]
 
-    @classmethod
     @public
-    def get_auto_materialize_policy(cls, resource: DltResource) -> Optional[AutoMaterializePolicy]:
+    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
         """Defines resource specific auto materialize policy.
 
         Args:

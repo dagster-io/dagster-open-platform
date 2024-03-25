@@ -75,8 +75,7 @@ def test_example_pipeline(_teardown):
 
 def test_multi_asset_names_do_not_conflict(_teardown):
     class CustomDagsterDltTranslator(DltDagsterTranslator):
-        @classmethod
-        def get_asset_key(cls, resource: DltResource) -> AssetKey:
+        def get_asset_key(self, resource: DltResource) -> AssetKey:
             return AssetKey("custom_" + resource.name)
 
     @dlt_assets(dlt_source=DLT_SOURCE, dlt_pipeline=DLT_PIPELINE, name="multi_asset_name1")
@@ -97,9 +96,8 @@ def test_multi_asset_names_do_not_conflict(_teardown):
 
 def test_get_materialize_policy(_teardown):
     class CustomDagsterDltTranslator(DltDagsterTranslator):
-        @classmethod
         def get_auto_materialize_policy(
-            cls, resource: DltResource
+            self, resource: DltResource
         ) -> Optional[AutoMaterializePolicy]:
             return AutoMaterializePolicy.eager().with_rules(
                 AutoMaterializeRule.materialize_on_cron("0 1 * * *")

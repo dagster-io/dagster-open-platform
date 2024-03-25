@@ -39,9 +39,7 @@ dlt_resource = DltDagsterResource()
 
 
 class ThinkificDltDagsterTranslator(DltDagsterTranslator):
-    @classmethod
-    @public
-    def get_auto_materialize_policy(cls, resource: DltResource) -> Optional[AutoMaterializePolicy]:
+    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
         return AutoMaterializePolicy.eager().with_rules(
             AutoMaterializeRule.materialize_on_cron("0 1 * * *")
         )
@@ -63,9 +61,8 @@ def thinkific_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
 
 
 class HubspotDltDagsterTranslator(DltDagsterTranslator):
-    @classmethod
     @public
-    def get_auto_materialize_policy(cls, resource: DltResource) -> Optional[AutoMaterializePolicy]:
+    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
         return AutoMaterializePolicy.eager().with_rules(
             AutoMaterializeRule.materialize_on_cron("0 0 * * *")
         )
