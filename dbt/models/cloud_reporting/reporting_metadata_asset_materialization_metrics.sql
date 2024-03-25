@@ -1,6 +1,5 @@
 {{
   config(
-    snowflake_warehouse="L_WAREHOUSE",
     materialized='incremental',
     unique_key='unique_key',
     incremental_strategy='merge',
