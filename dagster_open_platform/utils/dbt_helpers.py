@@ -18,24 +18,21 @@ class DbtConfig(Config):
 
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
-    @classmethod
-    def get_group_name(cls, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
+    def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
         # Same logic that sets the custom schema in macros/get_custom_schema.sql
         asset_path = dbt_resource_props["fqn"][1:-1]
         if asset_path:
             return "_".join(asset_path)
         return "default"
 
-    @classmethod
-    def get_asset_key(cls, dbt_resource_props: Mapping[str, Any]) -> AssetKey:
+    def get_asset_key(self, dbt_resource_props: Mapping[str, Any]) -> AssetKey:
         resource_database = dbt_resource_props["database"]
         resource_schema = dbt_resource_props["schema"]
         resource_name = dbt_resource_props["name"]
 
         return AssetKey([resource_database, resource_schema, resource_name])
 
-    @classmethod
-    def get_metadata(cls, dbt_node_info: Mapping[str, Any]) -> Mapping[str, Any]:
+    def get_metadata(self, dbt_node_info: Mapping[str, Any]) -> Mapping[str, Any]:
         if dbt_node_info["resource_type"] != "model":
             return {}
 
