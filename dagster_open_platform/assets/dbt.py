@@ -1,6 +1,6 @@
 import json
 
-from dagster import AssetExecutionContext
+from dagster import AssetExecutionContext, BackfillPolicy
 from dagster_cloud.dagster_insights import dbt_with_snowflake_insights
 from dagster_dbt import dbt_assets
 
@@ -18,6 +18,7 @@ INSIGHTS_SELECTOR = "+tag:insights,config.materialized:incremental"
     manifest=DBT_MANIFEST_PATH,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
     exclude=INSIGHTS_SELECTOR,
+    backfill_policy=BackfillPolicy.single_run(),
 )
 def cloud_analytics_dbt_assets(context: AssetExecutionContext):
     yield from dbt_with_snowflake_insights(context, dbt_resource.cli(["build"], context=context))
@@ -28,6 +29,7 @@ def cloud_analytics_dbt_assets(context: AssetExecutionContext):
     select=INSIGHTS_SELECTOR,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
     partitions_def=insights_partition,
+    backfill_policy=BackfillPolicy.single_run(),
 )
 def dbt_insights_models(context: AssetExecutionContext, config: DbtConfig):
     time_window = context.asset_partitions_time_window_for_output(
