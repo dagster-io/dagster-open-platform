@@ -1,4 +1,4 @@
-from typing import Iterator, List, Optional, Tuple
+from typing import Iterator, List, Mapping, Optional, Sequence, Tuple
 
 from dlt.common.typing import DictStrAny, StrAny
 from dlt.common.utils import chunks
@@ -36,40 +36,45 @@ def get_rest_pages(access_token: Optional[str], query: str) -> Iterator[List[Str
 
 def get_reactions_data(
     node_type: str,
-    owner: str,
-    name: str,
+    repos: Mapping[str, Sequence[str]],
     access_token: str,
     items_per_page: int,
     max_items: Optional[int],
 ) -> Iterator[Iterator[StrAny]]:
-    variables = {
-        "owner": owner,
-        "name": name,
-        "issues_per_page": items_per_page,
-        "first_reactions": 100,
-        "first_comments": 100,
-        "node_type": node_type,
-    }
-    for page_items in _get_graphql_pages(
-        access_token, ISSUES_QUERY % node_type, variables, node_type, max_items
-    ):
-        # use reactionGroups to query for reactions to comments that have any reactions. reduces cost by 10-50x
-        reacted_comment_ids = {}
-        for item in page_items:
-            for comment in item["comments"]["nodes"]:
-                if any(group["createdAt"] for group in comment["reactionGroups"]):
-                    # print(f"for comment {comment['id']}: has reaction")
-                    reacted_comment_ids[comment["id"]] = comment
-                # if "reactionGroups" in comment:
-                comment.pop("reactionGroups", None)
+    for owner, repo_list in repos.items():
+        for name in repo_list:
+            variables = {
+                "owner": owner,
+                "name": name,
+                "issues_per_page": items_per_page,
+                "first_reactions": 100,
+                "first_comments": 100,
+                "node_type": node_type,
+            }
+            for page_items in _get_graphql_pages(
+                access_token, ISSUES_QUERY % node_type, variables, node_type, max_items
+            ):
+                # use reactionGroups to query for reactions to comments that have any reactions. reduces cost by 10-50x
+                reacted_comment_ids = {}
+                for item in page_items:
+                    item["repository_owner"] = owner
+                    item["repository_name"] = name
+                    for comment in item["comments"]["nodes"]:
+                        if any(group["createdAt"] for group in comment["reactionGroups"]):
+                            # print(f"for comment {comment['id']}: has reaction")
+                            reacted_comment_ids[comment["id"]] = comment
+                        # if "reactionGroups" in comment:
+                        comment.pop("reactionGroups", None)
 
-        # get comment reactions by querying comment nodes separately
-        comment_reactions = _get_comment_reaction(list(reacted_comment_ids.keys()), access_token)
-        # attach the reaction nodes where they should be
-        for comment in comment_reactions.values():
-            comment_id = comment["id"]
-            reacted_comment_ids[comment_id]["reactions"] = comment["reactions"]
-        yield map(_extract_nested_nodes, page_items)
+                # get comment reactions by querying comment nodes separately
+                comment_reactions = _get_comment_reaction(
+                    list(reacted_comment_ids.keys()), access_token
+                )
+                # attach the reaction nodes where they should be
+                for comment in comment_reactions.values():
+                    comment_id = comment["id"]
+                    reacted_comment_ids[comment_id]["reactions"] = comment["reactions"]
+                yield map(_extract_nested_nodes, page_items)
 
 
 def _extract_top_connection(data: StrAny, node_type: str) -> StrAny:

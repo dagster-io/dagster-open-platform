@@ -89,7 +89,9 @@ def hubspot_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
 # NOTE: currently have `max_items` set to prevent excessive credit usage
 @dlt_assets(
     dlt_source=github_reactions(
-        "dagster-io", "dagster", items_per_page=100, max_items=250
+        {"dagster-io": ["dagster"], "apache": ["airflow"], "PrefectHQ": ["prefect"]},
+        items_per_page=100,
+        max_items=250,
     ).with_resources("issues"),
     dlt_pipeline=pipeline(
         pipeline_name="github_issues",

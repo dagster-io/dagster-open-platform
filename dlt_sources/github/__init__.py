@@ -1,7 +1,7 @@
 """Source that load github issues, pull requests and reactions for a specific repository via customizable graphql query. Loads events incrementally."""
 
 import urllib.parse
-from typing import Iterator, Optional, Sequence
+from typing import Iterator, Mapping, Optional, Sequence
 
 import dlt
 from dlt.common.typing import TDataItems
@@ -12,8 +12,7 @@ from .helpers import get_reactions_data, get_rest_pages
 
 @dlt.source
 def github_reactions(
-    owner: str,
-    name: str,
+    repos: Mapping[str, Sequence[str]],
     access_token: str = dlt.secrets.value,
     items_per_page: int = 100,
     max_items: Optional[int] = None,
@@ -27,8 +26,7 @@ def github_reactions(
     repository nodes easily.
 
     Args:
-        owner (str): The repository owner
-        name (str): The repository name
+        repos [str, list[str]]: A mapping from repository owner to repository name.
         access_token (str): The classic access token. Will be injected from secrets if not provided.
         items_per_page (int, optional): How many issues/pull requests to get in single page. Defaults to 100.
         max_items (int, optional): How many issues/pull requests to get in total. None means All.
@@ -41,26 +39,26 @@ def github_reactions(
         dlt.resource(
             get_reactions_data(
                 "issues",
-                owner,
-                name,
+                repos,
                 access_token,
                 items_per_page,
                 max_items,
             ),
             name="issues",
-            write_disposition="replace",
+            write_disposition="merge",
+            primary_key=["repository_name", "repository_owner", "number"],
         ),
         dlt.resource(
             get_reactions_data(
                 "pullRequests",
-                owner,
-                name,
+                repos,
                 access_token,
                 items_per_page,
                 max_items,
             ),
             name="pull_requests",
-            write_disposition="replace",
+            write_disposition="merge",
+            primary_key=["repository_name", "repository_owner", "number"],
         ),
     )
 
