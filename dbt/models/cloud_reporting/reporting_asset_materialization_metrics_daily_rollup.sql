@@ -42,8 +42,7 @@ asset_metrics_rollup as (
         array_agg(amm.metric_value / amm.metric_multi_asset_divisor)
             as metric_values,
         max(amm.last_rebuilt) as last_rebuilt,
-        array_agg(amm.run_id)
-            as run_ids
+        null as run_ids
 
     from
         asset_materialization_metrics as amm
@@ -56,7 +55,7 @@ asset_metrics_rollup as (
     {% endif %}
 
     group by
-        all
+        1, 2, 3, 4, 5, 6, 7, 8
 )
 
 select

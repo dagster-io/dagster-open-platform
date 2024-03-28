@@ -44,9 +44,7 @@ reporting_bigquery_asset_cost_metrics as (
         sum(bigquery_cost_metadata.bytes_billed) as metric_value,
         max(base_asset_metrics._incremented_at) as last_rebuilt,
         1 as metric_multi_asset_divisor,
-        max(run_ended_at) as run_ended_at,
-        base_asset_metrics.run_id
-
+        max(run_ended_at) as run_ended_at
     from bigquery_cost_metadata
     inner join base_asset_metrics
         on (
@@ -78,9 +76,7 @@ reporting_bigquery_job_cost_metrics as (
         sum(bigquery_cost_metadata.bytes_billed) as metric_value,
         max(reporting_step_data.last_rebuilt) as last_rebuilt,
         1 as metric_multi_asset_divisor,
-        max(run_ended_at) as run_ended_at,
-        reporting_step_data.run_id
-
+        max(run_ended_at) as run_ended_at
     from bigquery_cost_metadata
     inner join reporting_step_data
         on (

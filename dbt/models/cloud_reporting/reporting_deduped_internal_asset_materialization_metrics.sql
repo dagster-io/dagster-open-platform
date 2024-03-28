@@ -61,31 +61,29 @@ raw_internal_asset_materialization_events as (
 select
 
     {{ dbt_utils.generate_surrogate_key([
-        'ame.organization_id',
-        'ame.deployment_id',
-        'ame.step_data_id',
-        'ame.asset_key',
-        'ame.metric_name',
-        'ame.partition'
+        'organization_id',
+        'deployment_id',
+        'step_data_id',
+        'asset_key',
+        'metric_name',
+        'partition'
     ]) }} as unique_key,
-    ame.organization_id,
-    ame.deployment_id,
-    ame.step_data_id,
-    ame.asset_key,
-    ame.asset_group,
-    ame.metric_name,
-    ame.partition,
-    sum(ame.metric_value) as metric_value,
-    max(ame.last_rebuilt) as last_rebuilt,
-    max(ame.metric_multi_asset_divisor) as metric_multi_asset_divisor,
-    ame.run_ended_at,
-    step_data.run_id
+    organization_id,
+    deployment_id,
+    step_data_id,
+    asset_key,
+    asset_group,
+    metric_name,
+    partition,
+    sum(metric_value) as metric_value,
+    max(last_rebuilt) as last_rebuilt,
+    max(metric_multi_asset_divisor) as metric_multi_asset_divisor,
+    run_ended_at
 
-from raw_internal_asset_materialization_events as ame
-left join step_data on ame.step_data_id = step_data.id
+from raw_internal_asset_materialization_events
 
 {% if is_incremental() %}
-    where ame.run_ended_at >= '{{ var('min_date') }}' and ame.run_ended_at < '{{ var('max_date') }}'
+    where run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
 {% endif %}
 
 group by all

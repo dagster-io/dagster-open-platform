@@ -41,7 +41,7 @@ select
         as metric_value_p99,
     array_agg(rrm.metric_value_sum) as metric_values,
     max(rrm.last_rebuilt) as last_rebuilt,
-    array_agg(rrm.run_id) as run_ids
+    null as run_ids
 
 
 from
@@ -54,4 +54,4 @@ where rrm.rollup_date > '2023-06-01'
 {% endif %}
 
 group by
-    all
+    1, 2, 3, 4, 5, 6, 7, 8
