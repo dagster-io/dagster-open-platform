@@ -20,6 +20,7 @@ instance_metrics as (
         reporting_date,
         instance_id,
         min(instance_priority) as instance_priority,
+        max(dagster_version_raw) as dagster_version_raw,
         max(dagster_version_parsed) as dagster_version_parsed,
         {% for action_condition, action_name in actions_dict.items() %}
             sum(case when {{ action_condition }} then 1 else 0 end)
@@ -40,6 +41,7 @@ select
     instance_id,
     instance_priority,
     instance_type,
+    dagster_version_raw,
     dagster_version_parsed,
     {% for action_condition, action_name in actions_dict.items() %}
         {{ action_name }}_count,

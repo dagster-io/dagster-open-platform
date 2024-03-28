@@ -16,6 +16,7 @@ instance_metrics as (
         date_trunc(week, reporting_date) as reporting_week,
         instance_id,
         min(instance_priority) as instance_priority,
+        max(dagster_version_raw) as dagster_version_raw,
         max(dagster_version_parsed) as dagster_version_parsed,
         {% for metric in metrics_list %}
             sum({{ metric }}_count) as {{ metric }}_count,
@@ -30,6 +31,7 @@ select
     instance_id,
     instance_priority,
     instance_type,
+    dagster_version_raw,
     dagster_version_parsed,
     {% for metric in metrics_list %}
         {{ metric }}_count,
