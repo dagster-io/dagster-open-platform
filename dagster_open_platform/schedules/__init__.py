@@ -1,15 +1,41 @@
+from datetime import timedelta
+
 from dagster import (
     AssetSelection,
     RunRequest,
     ScheduleDefinition,
+    ScheduleEvaluationContext,
     build_schedule_from_partitioned_job,
     define_asset_job,
     schedule,
 )
+from dagster._core.storage.tags import (
+    ASSET_PARTITION_RANGE_END_TAG,
+    ASSET_PARTITION_RANGE_START_TAG,
+)
 from dagster_dbt import build_dbt_asset_selection
 
-from ..assets import dbt, monitor_purina_clones
+from ..assets import dbt, monitor_purina_clones, support_bot
 from ..partitions import insights_partition
+
+support_bot_job = define_asset_job(
+    name="support_bot_job",
+    selection=AssetSelection.assets(support_bot.github_issues),
+    tags={"team": "devrel"},
+)
+
+
+@schedule(job=support_bot_job, cron_schedule="@daily")
+def support_bot_schedule(context: ScheduleEvaluationContext) -> RunRequest:
+    return RunRequest(
+        tags={
+            ASSET_PARTITION_RANGE_START_TAG: (
+                context.scheduled_execution_time - timedelta(days=30)
+            ).strftime("%Y-%m-%d"),
+            ASSET_PARTITION_RANGE_END_TAG: context.scheduled_execution_time.strftime("%Y-%m-%d"),
+        }
+    )
+
 
 oss_telemetry_job = define_asset_job(
     name="oss_telemetry_job",
@@ -100,10 +126,7 @@ purina_clone_cleanup_schedule = ScheduleDefinition(
     cron_schedule="0 3 * * *",
 )
 
-scheduled_jobs = [
-    oss_telemetry_job,
-    insights_job,
-]
+scheduled_jobs = [oss_telemetry_job, insights_job, support_bot_job]
 
 schedules = [
     oss_telemetry_schedule,
@@ -112,4 +135,5 @@ schedules = [
     cloud_product_sync_high_volume_schedule,
     cloud_product_sync_low_volume_schedule,
     purina_clone_cleanup_schedule,
+    support_bot_schedule,
 ]

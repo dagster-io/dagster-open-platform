@@ -2,10 +2,9 @@ import os
 
 from dagster import (
     AssetExecutionContext,
-    AutoMaterializePolicy,
-    AutoMaterializeRule,
+    BackfillPolicy,
+    DailyPartitionsDefinition,
     MaterializeResult,
-    MonthlyPartitionsDefinition,
     asset,
 )
 
@@ -20,10 +19,7 @@ def extract_comments(issue_or_disccusion: dict) -> str:
 
 
 START_TIME = "2023-01-01"
-monthly_partition = MonthlyPartitionsDefinition(start_date=START_TIME)
-materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
-    AutoMaterializeRule.materialize_on_cron("0 4 * * *"),
-)
+daily_partition = DailyPartitionsDefinition(start_date=START_TIME)
 
 
 def parse_discussion(d: dict) -> dict:
@@ -69,9 +65,9 @@ def parse_issue(i: dict) -> dict:
 @asset(
     compute_kind="github",
     group_name="support_bot",
-    partitions_def=monthly_partition,
-    auto_materialize_policy=materialize_on_cron_policy,
+    partitions_def=daily_partition,
     op_tags={"team": "devrel"},
+    backfill_policy=BackfillPolicy.single_run(),
 )
 def github_issues(
     context: AssetExecutionContext, github: GithubResource, scoutos: ScoutosResource
@@ -107,6 +103,4 @@ def github_issues(
     context.log.debug(resp)
     resp = scoutos.write_files(collection, parsed_discussions)
     context.log.debug(resp)
-    return MaterializeResult(
-        metadata={"issues": len(parsed_issues), "discussions": len(parsed_discussions)}
-    )
+    return MaterializeResult()
