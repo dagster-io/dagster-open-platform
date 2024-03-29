@@ -20,24 +20,24 @@ embedded_elt_resource = SlingResource(
         SlingConnectionResource(
             name="CLOUD_PRODUCTION",
             type="postgres",
-            host=EnvVar("CLOUD_PROD_READ_REPLICA_POSTGRES_HOST"),
-            user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
-            database="dagster",
-            password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),
-            ssl_mode="require",
-            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),
-            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),
+            host=EnvVar("CLOUD_PROD_READ_REPLICA_POSTGRES_HOST"),  # type: ignore
+            user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
+            database="dagster",  # type: ignore
+            password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
+            ssl_mode="require",  # type: ignore
+            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
+            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
         SlingConnectionResource(
             name="SLING_DB",
             type="snowflake",
-            host=EnvVar("SNOWFLAKE_ACCOUNT"),
-            user=EnvVar("SNOWFLAKE_SLING_USER"),
-            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),
-            database="sandbox" if get_environment() != "PROD" else "sling",
-            schema=get_schema_for_environment("cloud_product"),
-            warehouse="sling",
-            role="purina" if get_environment() != "PROD" else "sling",
+            host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
+            user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
+            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
+            schema=get_schema_for_environment("cloud_product"),  # type: ignore
+            warehouse="sling",  # type: ignore
+            role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
     ]
 )
