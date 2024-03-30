@@ -28,19 +28,20 @@ stripe_sync_freshness_policy = FreshnessPolicy(
 )
 
 table_names = [
-    "CHARGES",
-    "CUSTOMERS",
-    "DISPUTES",
-    "EVENTS",
-    "INVOICES",
-    "INVOICE_ITEMS",
-    "PAYMENTS",
-    "PAYOUTS",
-    "REFUNDS",
-    "SUBSCRIPTIONS",
-    "SUBSCRIPTION_ITEMS",
-    "TAX_RATES",
+    "balance_transactions",
+    "charges",
+    "coupons",
+    "customers",
+    "invoice_line_items",
+    "invoices",
+    "plans",
+    "subscription_items",
+    "subscription_schedule_phases",
+    "subscription_schedules",
+    "subscriptions",
+    "subscriptions_metadata",
 ]
+
 table_names_to_asset_keys = {
     table_name: AssetKey(
         [STRIPE_SYNC_DATABASE.lower(), STRIPE_SYNC_SCHEMA.lower(), table_name.lower()]
