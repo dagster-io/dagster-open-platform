@@ -10,7 +10,6 @@ from .assets import (
     dagster_quickstart,
     dbt,
     dlt,
-    health_check,
     hightouch_syncs,
     ingest_fivetran,
     monitor_purina_clones,
@@ -36,10 +35,6 @@ from .resources import (
 )
 from .schedules import scheduled_jobs, schedules
 
-health_check_assets = load_assets_from_modules(
-    [health_check],
-    group_name="health_check",
-)
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
 dbt_assets = load_assets_from_modules([dbt])
 support_bot_assets = load_assets_from_modules([support_bot])
@@ -51,7 +46,6 @@ ingest_fivetran_assets = load_assets_from_modules([ingest_fivetran])
 all_assets = [
     aws_cost_reporting.aws_cost_report,
     *dbt_assets,
-    *health_check_assets,
     *oss_analytics_assets,
     slack_analytics.member_metrics,
     *support_bot_assets,
