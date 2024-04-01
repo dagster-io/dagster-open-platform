@@ -50,7 +50,6 @@ reporting_bigquery_asset_cost_metrics as (
             'base_asset_metrics.deployment_id',
             'base_asset_metrics.step_data_id',
             'base_asset_metrics.asset_key',
-            'base_asset_metrics.asset_group',
             'base_asset_metrics.partition',
             'bigquery_cost_metadata.label',
             "'bigquery'",

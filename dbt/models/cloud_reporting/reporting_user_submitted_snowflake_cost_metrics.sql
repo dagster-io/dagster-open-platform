@@ -54,7 +54,6 @@ snowflake_asset_cost_metrics as (
             'base_asset_metrics.deployment_id',
             'base_asset_metrics.step_data_id',
             'base_asset_metrics.asset_key',
-            'base_asset_metrics.asset_group',
             'base_asset_metrics.partition',
             'snowflake_cost_submissions.metric_name',
         ]) }} as unique_key,

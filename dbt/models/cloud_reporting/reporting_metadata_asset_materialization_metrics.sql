@@ -18,7 +18,6 @@ select
         'deployment_id',
         'step_data_id',
         'asset_key',
-        'asset_group',
         'partition',
         'label',
     ]) }} as unique_key,

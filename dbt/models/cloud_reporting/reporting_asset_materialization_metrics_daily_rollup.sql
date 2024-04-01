@@ -22,7 +22,8 @@ asset_metrics_rollup as (
         rsd.repository_name,
         rsd.code_location_name,
         amm.asset_key,
-        amm.asset_group,
+        -- make sure we don't ever have 2 different asset groups for the same asset key
+        max_by(amm.asset_group, amm.last_rebuilt) as asset_group,
         amm.metric_name,
         date_trunc('day', rsd.step_end_timestamp) as rollup_date,
         avg(amm.metric_value / amm.metric_multi_asset_divisor) as metric_value_avg,
@@ -66,7 +67,6 @@ select
         'repository_name',
         'code_location_name',
         'asset_key',
-        'asset_group',
         'metric_name',
         'rollup_date'
     ]) }} as unique_key
