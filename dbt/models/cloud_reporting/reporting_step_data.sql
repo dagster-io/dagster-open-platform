@@ -22,7 +22,8 @@ select
     start_time as step_start_timestamp,
     end_time as step_end_timestamp,
     _incremented_at as last_rebuilt,
-    run_ended_at
+    run_ended_at,
+    run_started_at
 
 from {{ ref("fct_steps") }}
 where

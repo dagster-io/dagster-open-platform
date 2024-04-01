@@ -6,20 +6,40 @@
     on_schema_change='append_new_columns',
   )
 }}
+--Disable sqlfluff rule for unused CTEs, since we
+--use them in the incremental case
+--noqa: disable=L045
 
-with snowflake_cost_observation_metadata as (
-    select *
-    from {{ ref('snowflake_cost_observation_metadata') }}
-),
-
-base_asset_metrics as (
+with base_asset_metrics as (
     select *
     from {{ ref('int_base_asset_metrics') }}
+    {% if is_incremental() %}
+    where run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
+    {% endif %}
 ),
 
 reporting_step_data as (
     select *
     from {{ ref('reporting_step_data') }}
+    {% if is_incremental() %}
+    where run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
+    {% endif %}
+),
+
+metadata_range_start as (
+    select min(run_started_at) as min_date from reporting_step_data
+),
+
+metadata_range_end as (
+    select max(run_ended_at) as max_date from reporting_step_data
+),
+
+snowflake_cost_observation_metadata as (
+    select *
+    from {{ ref('snowflake_cost_observation_metadata') }}
+    {% if is_incremental() %}
+    where created_at >= (select min_date from metadata_range_start) and created_at <= (select max_date from metadata_range_end)
+    {% endif %}
 ),
 
 snowflake_cost_submissions as (

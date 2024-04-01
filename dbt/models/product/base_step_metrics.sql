@@ -55,6 +55,7 @@ runless_observations as (
     select
         run_id,
         created_at as run_ended_at,
+        created_at as run_started_at,
         organization_id,
         deployment_id,
         count(*) as runless_asset_observations
@@ -77,6 +78,7 @@ runless_materializations as (
     select
         run_id,
         created_at as run_ended_at,
+        created_at as run_started_at,
         organization_id,
         deployment_id,
         count(*) as runless_asset_materializations
@@ -163,6 +165,11 @@ metrics_joined as (
             runless_observations.run_ended_at,
             runless_materializations.run_ended_at
         ) as run_ended_at,
+        coalesce(
+            steps.run_started_at,
+            runless_observations.run_started_at,
+            runless_materializations.run_started_at
+        ) as run_started_at,
 
         zeroifnull(observations.asset_observations)::number as asset_observations,
         zeroifnull(runless_observations.runless_asset_observations)::number
@@ -210,6 +217,7 @@ select
     _incremented_at,
     step_key,
     run_ended_at,
+    run_started_at,
 
     asset_observations + runless_asset_observations as observations,
     asset_materializations + runless_asset_materializations as materializations,
