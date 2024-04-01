@@ -16,23 +16,4 @@ Learning Dagster is not a journey that ends once your first assets are made. The
 
 It follows our best practices for how to structure a Dagster project, how to connect with external systems, and how to use Dagster in a production setting.
 
-```bash
-.
-├── README.md
-├── dagster_open_platform
-│   ├── __init__.py
-│   ├── assets
-│   ├── jobs
-│   ├── partitions
-│   ├── resources
-│   ├── schedules
-│   ├── sensors
-│   └── utils
-├── dagster_open_platform_tests
-├── pyproject.toml
-├── setup.cfg
-├── setup.py
-└── tox.ini
-```
-
 *Note:* This project **does not** include any confidential information about Dagster, environment variables, or configurations for our pipelines. We also excluded assets that contain sensitive business logic. Therefore, this project won't be able to run on your machine without some additional changes.

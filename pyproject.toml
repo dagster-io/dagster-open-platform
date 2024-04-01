@@ -2,5 +2,95 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "dagster-open-platform"
+version = "0.0.1"
+dependencies = [
+    "dbt-snowflake~=1.7",
+    "dagster",
+    "dagster-snowflake",
+    "dagster-slack",
+    "dagster-pandas",
+    "dagster-fivetran",
+    "dagster-hightouch",
+    "dagster-insights",
+    "dagster-gcp",
+    "dagster-dbt",
+    "dagster-cloud",
+    "dagster-embedded-elt",
+    "sling",
+    "gql[requests]",
+    "dlt[snowflake,duckdb]",
+    "pydantic>2",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = [
+    "click",
+    "dagster-webserver",
+    "pytest",
+    "sqlfluff",
+    "sqlfluff-templater-dbt",
+]
+
+tests = [
+    "pytest",
+    "responses"
+]
+
+[tool.setuptools.packages.find]
+exclude = ["dagster_open_platform_tests"]
+
+# ########################
+# ##### DAGSTER
+# ########################
+
 [tool.dagster]
 module_name = "dagster_open_platform"
+
+# ########################
+# ##### SQLFLUFF
+# ########################
+
+[tool.sqlfluff.core]
+templater = "dbt"
+dialect = "snowflake"
+exclude_rules = [
+    "aliasing.unique.column",
+    "ambiguous.column_count",
+    "structure.column_order",
+    "structure.using",
+    "references.consistent",
+    "references.qualification",
+]
+max_line_length = 100
+nocolor = true
+# Warn on the use of keywords as identifiers
+warnings = "RF04"
+
+[tool.sqlfluff.templater.dbt]
+project_dir = "./dbt"
+profiles_dir = "./dbt"
+
+[tool.sqlfluff.templater.jinja]
+apply_dbt_builtins = true
+load_macros_from_path = "./dbt/macros"
+
+[tool.sqlfluff.indentation]
+tab_space_size = 4
+
+[tool.sqlfluff.rules.capitalisation.keywords]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.identifiers]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.functions]
+extended_capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.literals]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.types]
+extended_capitalisation_policy = "lower"

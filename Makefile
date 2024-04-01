@@ -19,7 +19,7 @@ dev:
 	dagster dev
 
 lint:
-	sqlfluff lint --config .sqlfluff ./dbt/models
+	sqlfluff lint ./dbt/models --disable-progress-bar --processes 4
 
 fix:
-	sqlfluff fix --config .sqlfluff ./dbt/models
+	sqlfluff fix ./dbt/models --disable-progress-bar --processes 4
