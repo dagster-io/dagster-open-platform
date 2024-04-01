@@ -8,11 +8,12 @@ from dagster import (
     MonthlyPartitionsDefinition,
     asset,
 )
+from dagster_snowflake import SnowflakeResource
+
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
 )
-from dagster_snowflake import SnowflakeResource
 
 # note: this is used as 2 different formats
 # YYYY-MM for sourcing the partition from s3
