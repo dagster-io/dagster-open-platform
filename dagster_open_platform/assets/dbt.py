@@ -35,6 +35,16 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
         resource_database = dbt_resource_props["database"]
         resource_schema = dbt_resource_props["schema"]
         resource_name = dbt_resource_props["name"]
+        resource_type = dbt_resource_props["resource_type"]
+
+        # if metadata has been provided in the yaml use that, otherwise construct key
+        if (
+            resource_type == "source"
+            and "meta" in dbt_resource_props
+            and "dagster" in dbt_resource_props["meta"]
+            and "asset_key" in dbt_resource_props["meta"]["dagster"]
+        ):
+            return AssetKey(dbt_resource_props["meta"]["dagster"]["asset_key"])
 
         return AssetKey([resource_database, resource_schema, resource_name])
 
