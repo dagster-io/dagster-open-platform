@@ -71,18 +71,13 @@ class DbtConfig(Config):
     backfill_policy=BackfillPolicy.single_run(),
 )
 def dbt_insights_models(context: AssetExecutionContext, config: DbtConfig):
-    time_window = context.asset_partitions_time_window_for_output(
-        next(iter(context.selected_output_names))
-    )
-    # The `next(iter(context.selected_output_names))` is necessary because of dbt's sub-setting
-    # A Dagster run can be `dbt_insights_models_2 -> cloud_analytics_dbt_assets_2 -> dbt_insights_models`
-    # So the explicit step name is required for the execution to
-    # know which `dbt_insights_model` Op is running
+    dbt_vars = {
+        "min_date": context.partition_time_window.start.isoformat(),
+        "max_date": context.partition_time_window.end.isoformat(),
+    }
+    args = ["build", "--vars", json.dumps(dbt_vars)]
 
-    dbt_vars = {"min_date": time_window.start.isoformat(), "max_date": time_window.end.isoformat()}
-    args = (
-        ["build", "--full-refresh"]
-        if config.full_refresh
-        else ["build", "--vars", json.dumps(dbt_vars)]
-    )
+    if config.full_refresh:
+        args = ["build", "--full-refresh"]
+
     yield from dbt_with_snowflake_insights(context, dbt_resource.cli(args, context=context))
