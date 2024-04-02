@@ -28,18 +28,18 @@ stripe_sync_freshness_policy = FreshnessPolicy(
 )
 
 table_names = [
-    "balance_transactions",
-    "charges",
-    "coupons",
-    "customers",
-    "invoice_line_items",
-    "invoices",
-    "plans",
-    "subscription_items",
-    "subscription_schedule_phases",
-    "subscription_schedules",
-    "subscriptions",
-    "subscriptions_metadata",
+    "BALANCE_TRANSACTIONS",
+    "CHARGES",
+    "COUPONS",
+    "CUSTOMERS",
+    "INVOICE_LINE_ITEMS",
+    "INVOICES",
+    "PLANS",
+    "SUBSCRIPTION_ITEMS",
+    "SUBSCRIPTION_SCHEDULE_PHASES",
+    "SUBSCRIPTION_SCHEDULES",
+    "SUBSCRIPTIONS",
+    "SUBSCRIPTIONS_METADATA",
 ]
 
 table_names_to_asset_keys = {
@@ -66,7 +66,7 @@ def stripe_data_sync_assets(
 ) -> Iterator[ObserveResult]:
     """Assets representing stripe's data sync process."""
     subsetted_table_names = [
-        asset_keys_to_table_names[asset_key].upper() for asset_key in context.selected_asset_keys
+        asset_keys_to_table_names[asset_key] for asset_key in context.selected_asset_keys
     ]
     with snowflake.get_connection() as conn:
         freshness_results = fetch_last_updated_timestamps(
