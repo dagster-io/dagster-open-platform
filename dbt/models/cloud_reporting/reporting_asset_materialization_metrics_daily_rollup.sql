@@ -56,7 +56,7 @@ asset_metrics_rollup as (
     {% endif %}
 
     group by
-        1, 2, 3, 4, 5, 6, 7, 8
+        all
 )
 
 select

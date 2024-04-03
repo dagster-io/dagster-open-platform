@@ -54,4 +54,4 @@ where rrm.rollup_date > '2023-06-01'
 {% endif %}
 
 group by
-    1, 2, 3, 4, 5, 6, 7, 8
+    all
