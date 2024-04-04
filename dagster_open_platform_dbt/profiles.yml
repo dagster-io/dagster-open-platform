@@ -1,5 +1,5 @@
 ---
-analytics:
+dagster_open_platform:
   target: "{{ env_var('DBT_TARGET', 'personal') }}"
   outputs:
     prod:

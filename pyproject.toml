@@ -70,12 +70,12 @@ nocolor = true
 warnings = "RF04"
 
 [tool.sqlfluff.templater.dbt]
-project_dir = "./dbt"
-profiles_dir = "./dbt"
+project_dir = "./dagster_open_platform_dbt"
+profiles_dir = "./dagster_open_platform_dbt"
 
 [tool.sqlfluff.templater.jinja]
 apply_dbt_builtins = true
-load_macros_from_path = "./dbt/macros"
+load_macros_from_path = "./dagster_open_platform_dbt/macros"
 
 [tool.sqlfluff.indentation]
 tab_space_size = 4

@@ -6,20 +6,20 @@ test_install: uv_install
 
 dev_install: uv_install
 	uv pip install -e ".[dev]"
-	cd dbt && dbt deps && cd ..
+	cd dagster_open_platform_dbt && dbt deps && cd ..
 
 test: test_install
 	pytest dagster_open_platform_tests
 
 manifest:
-	cd dbt && dbt parse && cd ..
+	cd dagster_open_platform_dbt && dbt parse && cd ..
 
 dev:
 	make manifest
 	dagster dev
 
 lint:
-	sqlfluff lint ./dbt/models --disable-progress-bar --processes 4
+	sqlfluff lint ./dagster_open_platform_dbt/models --disable-progress-bar --processes 4
 
 fix:
-	sqlfluff fix ./dbt/models --disable-progress-bar --processes 4
+	sqlfluff fix ./dagster_open_platform_dbt/models --disable-progress-bar --processes 4

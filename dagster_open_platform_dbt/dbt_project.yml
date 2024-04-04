@@ -1,8 +1,8 @@
-name: "analytics"
+name: "dagster_open_platform"
 version: "1.0.0"
 config-version: 2
 
-profile: "analytics"
+profile: "dagster_open_platform"
 test-paths: ["tests"]
 macro-paths: ["macros"]
 target-path: "target"
@@ -14,7 +14,7 @@ models:
   +post-hook:
     - "{{ dagster.log_columns_in_relation() }}"
 
-  analytics:
+  dagster_open_platform:
     staging:
       +materialized: view
     intermediate:

@@ -42,7 +42,9 @@ embedded_elt_resource = SlingResource(
     ]
 )
 
-DBT_MANIFEST_PATH = file_relative_path(__file__, "../../dbt/target/manifest.json")
+DBT_MANIFEST_PATH = file_relative_path(
+    __file__, "../../dagster_open_platform_dbt/target/manifest.json"
+)
 
 bigquery_resource = InsightsBigQueryResource(
     gcp_credentials=EnvVar("GCP_CREDENTIALS"),
@@ -57,8 +59,8 @@ snowflake_resource = SnowflakeResource(
 )
 
 dbt_resource = DbtCliResource(
-    project_dir=file_relative_path(__file__, "../../dbt"),
-    profiles_dir=file_relative_path(__file__, "../../dbt"),
+    project_dir=file_relative_path(__file__, "../../dagster_open_platform_dbt"),
+    profiles_dir=file_relative_path(__file__, "../../dagster_open_platform_dbt"),
     target=get_dbt_target(),
 )
 

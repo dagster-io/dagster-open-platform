@@ -1,6 +1,6 @@
 workspace:
   edition: '1.1'
-  name: analytics
+  name: dagster_open_platform
   includes:
   - path: seeds/*
     type: resource
@@ -68,4 +68,3 @@ provider:
   - slack
   - sling
   - fivetran
-
