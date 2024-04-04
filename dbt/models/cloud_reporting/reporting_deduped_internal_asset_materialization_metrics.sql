@@ -81,9 +81,9 @@ select
     run_ended_at
 
 from raw_internal_asset_materialization_events
-
+where {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
 {% if is_incremental() %}
-    where run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
+    and run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
 {% endif %}
 
 group by all

@@ -81,6 +81,7 @@ snowflake_asset_cost_metrics as (
         )
     where
         snowflake_cost_submissions.opaque_id is not null
+        and {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
     group by all
 ),
 
@@ -116,6 +117,7 @@ snowflake_job_cost_metrics as (
     where
         snowflake_cost_submissions.opaque_id is not null
         and snowflake_cost_observation_metadata.asset_key like '["__snowflake_query_metadata_%'
+        and {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
     group by all
 )
 

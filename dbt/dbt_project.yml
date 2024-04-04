@@ -47,6 +47,7 @@ vars:
   session_threshold_seconds: 1800
   attribution_lookback_days: 30
   dev_num_days_to_include: 90
+  insights_num_days_to_include: 130
   # These variables are used for incremental models
   min_date: "2000-01-01"
   max_date: "9999-12-31"

@@ -74,6 +74,7 @@ reporting_bigquery_asset_cost_metrics as (
         )
     where
         bigquery_cost_metadata.bytes_billed is not null
+        and {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
     group by all
 ),
 
@@ -106,6 +107,7 @@ reporting_bigquery_job_cost_metrics as (
     where
         bigquery_cost_metadata.bytes_billed is not null
         and bigquery_cost_metadata.asset_key like '["__bigquery_query_metadata_%'
+        and {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
     group by all
 )
 

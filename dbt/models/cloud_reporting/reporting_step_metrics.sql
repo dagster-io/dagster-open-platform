@@ -46,6 +46,7 @@ step_metrics as (
         step_data_id in (
             select id from step_data
         )
+        and {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
 
         {% if is_incremental() %}
             and run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'

@@ -34,10 +34,9 @@ select
     max(run_ended_at) as run_ended_at
 
 from metadata_metrics
-
-
+where {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
 {% if is_incremental() %}
-    where run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
+    and run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
 {% endif %}
 
 group by 1, 2, 3, 4, 5, 6, 7, 8
