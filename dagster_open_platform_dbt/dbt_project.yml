@@ -12,7 +12,7 @@ clean-targets:
 
 models:
   +post-hook:
-    - "{{ dagster.log_columns_in_relation() }}"
+    - "{{ dagster.log_column_level_metadata() }}"
 
   dagster_open_platform:
     staging:
@@ -41,7 +41,7 @@ models:
 
 seeds:
   +post-hook:
-    - "{{ dagster.log_columns_in_relation() }}"
+    - "{{ dagster.log_column_level_metadata() }}"
 
 vars:
   session_threshold_seconds: 1800
