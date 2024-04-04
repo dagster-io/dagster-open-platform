@@ -67,7 +67,8 @@ snowflake_asset_cost_metrics as (
         sum(snowflake_cost_submissions.snowflake_cost) as metric_value,
         max(base_asset_metrics._incremented_at) as last_rebuilt,
         1 as metric_multi_asset_divisor,
-        max(run_ended_at) as run_ended_at
+        max(run_ended_at) as run_ended_at,
+        base_asset_metrics.run_id
 
 
     from snowflake_cost_submissions
@@ -103,7 +104,8 @@ snowflake_job_cost_metrics as (
         sum(snowflake_cost_submissions.snowflake_cost) as metric_value,
         max(reporting_step_data.last_rebuilt) as last_rebuilt,
         1 as metric_multi_asset_divisor,
-        max(run_ended_at) as run_ended_at
+        max(run_ended_at) as run_ended_at,
+        reporting_step_data.run_id
 
 
     from snowflake_cost_submissions

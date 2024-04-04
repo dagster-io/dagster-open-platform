@@ -48,7 +48,8 @@ raw_internal_asset_materialization_events as (
         concat('__dagster_', lower(metric_name)) as metric_name,
         metric_value,
         _incremented_at as last_rebuilt,
-        run_ended_at
+        run_ended_at,
+        run_id
 
     from pivot
     where step_data_id in (
@@ -78,7 +79,8 @@ select
     sum(metric_value) as metric_value,
     max(last_rebuilt) as last_rebuilt,
     max(metric_multi_asset_divisor) as metric_multi_asset_divisor,
-    run_ended_at
+    run_ended_at,
+    run_id
 
 from raw_internal_asset_materialization_events
 where {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}

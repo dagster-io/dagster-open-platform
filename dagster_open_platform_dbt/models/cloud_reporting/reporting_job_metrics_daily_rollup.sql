@@ -41,7 +41,7 @@ select
         as metric_value_p99,
     array_agg(rrm.metric_value_sum) as metric_values,
     max(rrm.last_rebuilt) as last_rebuilt,
-    null as run_ids
+    array_agg(rrm.run_id) as run_ids
 
 
 from

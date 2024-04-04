@@ -31,7 +31,8 @@ select
     sum(metadata_value) as metric_value,
     max(_incremented_at) as last_rebuilt,
     1 as metric_multi_asset_divisor,
-    max(run_ended_at) as run_ended_at
+    max(run_ended_at) as run_ended_at,
+    run_id
 
 from metadata_metrics
 where {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
@@ -39,4 +40,4 @@ where {{ limit_dates_for_insights(ref_date = 'run_ended_at') }}
     and run_ended_at >= '{{ var('min_date') }}' and run_ended_at < '{{ var('max_date') }}'
 {% endif %}
 
-group by 1, 2, 3, 4, 5, 6, 7, 8
+group by 1, 2, 3, 4, 5, 6, 7, 8, 13
