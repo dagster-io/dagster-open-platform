@@ -47,7 +47,9 @@ exclude = ["dagster_open_platform_tests"]
 # ########################
 
 [tool.dagster]
-module_name = "dagster_open_platform"
+module_name = "dagster_open_platform.definitions"
+code_location_name = "dagster_open_platform"
+
 
 # ########################
 # ##### SQLFLUFF

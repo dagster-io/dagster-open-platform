@@ -1,6 +1,4 @@
 import os
-import sys
-from pathlib import Path
 from typing import Optional
 
 import dlt
@@ -15,20 +13,14 @@ from dagster import (
 )
 from dagster._core.definitions.auto_materialize_rule import MaterializeOnCronRule
 from dagster._core.definitions.materialize import materialize
-from dlt.extract.resource import DltResource
-
-from .dlt_test_sources.duckdb_with_transformer import pipeline
-
-# Import from the dagster_open_platform without having to execute __init__.py
-# This should be removed once we figure out a way to structure __init__ without invoking
-sys.path.append(
-    os.fspath(Path(__file__).joinpath("..", "..", "dagster_open_platform", "resources").resolve())
-)
-from dlt_resource import (  # type: ignore
+from dagster_open_platform.resources.dlt_resource import (
     DltDagsterResource,
     DltDagsterTranslator,
     dlt_assets,
 )
+from dlt.extract.resource import DltResource
+
+from .dlt_test_sources.duckdb_with_transformer import pipeline
 
 EXAMPLE_PIPELINE_DUCKDB = "example_pipeline.duckdb"
 
