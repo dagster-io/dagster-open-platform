@@ -21,10 +21,12 @@ Or passed to the pipeline or source itself using the function parameters.
 
 from typing import Optional
 
+import yaml
 from dagster import (
     AssetExecutionContext,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    file_relative_path,
 )
 from dagster._annotations import public
 from dlt import pipeline
@@ -87,10 +89,14 @@ def hubspot_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
     yield from dlt.run(context=context)
 
 
-# NOTE: currently have `max_items` set to prevent excessive credit usage
+dlt_configuration_path = file_relative_path(__file__, "../../dlt_sources/dlt_configuration.yaml")
+dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
+
+
+# NOTE: currently have `max_items` set to prevent excessive API usage
 @dlt_assets(
     dlt_source=github_reactions(
-        {"dagster-io": ["dagster"], "apache": ["airflow"], "PrefectHQ": ["prefect"]},
+        dlt_configuration["sources"]["github"]["repositories"],
         items_per_page=100,
         max_items=250,
     ).with_resources("issues"),
