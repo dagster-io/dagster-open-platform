@@ -21,11 +21,8 @@ cloud_production_low_volume_config = os.path.join(config_dir, "low_volume.yaml")
     replication_config=cloud_production_low_volume_config,
     dagster_sling_translator=CustomSlingLowVolumeTranslator(),
 )
-def cloud_product_low_volume(embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(  # type: ignore
-        replication_config=cloud_production_low_volume_config,
-        dagster_sling_translator=CustomSlingLowVolumeTranslator(),
-    )
+def cloud_product_low_volume(context, embedded_elt: SlingResource):
+    yield from embedded_elt.replicate(context=context)
 
 
 class CustomSlingHighVolumeTranslator(DagsterSlingTranslator):
@@ -40,8 +37,5 @@ cloud_production_high_volume_config = os.path.join(config_dir, "high_volume.yaml
     replication_config=cloud_production_high_volume_config,
     dagster_sling_translator=CustomSlingHighVolumeTranslator(),
 )
-def cloud_product_high_volume(embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(  # type: ignore
-        replication_config=cloud_production_high_volume_config,
-        dagster_sling_translator=CustomSlingHighVolumeTranslator(),
-    )
+def cloud_product_high_volume(context, embedded_elt: SlingResource):
+    yield from embedded_elt.replicate(context=context)
