@@ -23,3 +23,9 @@ lint:
 
 fix:
 	sqlfluff fix ./dagster_open_platform_dbt/models --disable-progress-bar --processes 4
+
+install_ruff:
+	$(MAKE) -C ../.. install_ruff
+
+ruff:
+	$(MAKE) -C ../.. ruff
