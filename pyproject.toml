@@ -32,6 +32,7 @@ dev = [
     "pytest",
     "sqlfluff",
     "sqlfluff-templater-dbt",
+    "sprocketship"
 ]
 
 tests = [
