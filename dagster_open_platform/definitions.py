@@ -53,6 +53,7 @@ all_assets = [
     *cloud_usage.prod_sync_usage_metrics,
     hightouch_syncs.hightouch_org_activity_monthly,
     hightouch_syncs.hightouch_org_info,
+    hightouch_syncs.hightouch_null_contact_names,
     monitor_purina_clones.inactive_snowflake_clones,
     *stripe_sync_assets,
     *sling_ingest_assets,
