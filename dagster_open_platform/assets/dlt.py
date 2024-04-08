@@ -29,17 +29,16 @@ from dagster import (
     file_relative_path,
 )
 from dagster._annotations import public
-from dlt import pipeline
-from dlt.extract.resource import DltResource
-from dlt_sources.github import github_reactions
-from dlt_sources.hubspot import hubspot
-from dlt_sources.thinkific import thinkific
-
 from dagster_open_platform.resources.dlt_resource import (
     DltDagsterResource,
     DltDagsterTranslator,
     dlt_assets,
 )
+from dlt import pipeline
+from dlt.extract.resource import DltResource
+from dlt_sources.github import github_reactions
+from dlt_sources.hubspot import hubspot
+from dlt_sources.thinkific import thinkific
 
 dlt_resource = DltDagsterResource()
 
