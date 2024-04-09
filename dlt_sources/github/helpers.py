@@ -3,9 +3,17 @@ from typing import Iterator, List, Mapping, Optional, Sequence, Tuple
 from dlt.common.typing import DictStrAny, StrAny
 from dlt.common.utils import chunks
 from dlt.sources.helpers import requests
+from dlt.sources.helpers.requests.retry import DEFAULT_RETRY_STATUS, Client
 
 from .queries import COMMENT_REACTIONS_QUERY, ISSUES_QUERY, RATE_LIMIT
 from .settings import GRAPHQL_API_BASE_URL, REST_API_BASE_URL
+
+session = Client(
+    raise_for_status=False,
+    request_max_attempts=12,
+    request_backoff_factor=2,
+    status_codes=DEFAULT_RETRY_STATUS + (403,),
+).session
 
 
 def _get_auth_header(access_token: Optional[str]) -> StrAny:
@@ -18,7 +26,7 @@ def _get_auth_header(access_token: Optional[str]) -> StrAny:
 
 def get_rest_pages(access_token: Optional[str], query: str) -> Iterator[List[StrAny]]:
     def _request(page_url: str) -> requests.Response:
-        r = requests.get(page_url, headers=_get_auth_header(access_token))
+        r = session.get(page_url, headers=_get_auth_header(access_token))
         print(f"got page {page_url}, requests left: " + r.headers["x-ratelimit-remaining"])
         return r
 
@@ -103,7 +111,11 @@ def _run_graphql_query(
     access_token: str, query: str, variables: DictStrAny
 ) -> Tuple[StrAny, StrAny]:
     def _request() -> requests.Response:
-        r = requests.post(
+        # TODO -
+        # In processing pipe pull_requests: extraction of resource pull_requests in generator
+        # get_reactions_data caused an exception: 403 Client Error: Forbidden for url:
+        # https://api.github.com/graphql
+        r = session.post(
             GRAPHQL_API_BASE_URL,
             json={"query": query, "variables": variables},
             headers=_get_auth_header(access_token),
@@ -128,7 +140,7 @@ def _get_graphql_pages(
         data_items = _extract_top_connection(data, node_type)["nodes"]
         items_count += len(data_items)
         print(
-            f'Got {len(data_items)}/{items_count} {node_type}s, query cost {rate_limit["cost"]}, remaining credits: {rate_limit["remaining"]}'
+            f'Got {len(data_items)}/{items_count} {node_type}, query cost {rate_limit["cost"]}, remaining credits: {rate_limit["remaining"]}'
         )
         if data_items:
             yield data_items
