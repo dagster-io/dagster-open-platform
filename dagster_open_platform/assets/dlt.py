@@ -29,9 +29,9 @@ from dagster import (
     file_relative_path,
 )
 from dagster._annotations import public
-from dagster_open_platform.resources.dlt_resource import (
-    DltDagsterResource,
-    DltDagsterTranslator,
+from dagster_embedded_elt.dlt import (
+    DagsterDltResource,
+    DagsterDltTranslator,
     dlt_assets,
 )
 from dlt import pipeline
@@ -40,10 +40,10 @@ from dlt_sources.github import github_reactions
 from dlt_sources.hubspot import hubspot
 from dlt_sources.thinkific import thinkific
 
-dlt_resource = DltDagsterResource()
+dlt_resource = DagsterDltResource()
 
 
-class ThinkificDltDagsterTranslator(DltDagsterTranslator):
+class ThinkificDagsterDltTranslator(DagsterDltTranslator):
     def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
         return AutoMaterializePolicy.eager().with_rules(
             AutoMaterializeRule.materialize_on_cron("0 1 * * *")
@@ -59,13 +59,13 @@ class ThinkificDltDagsterTranslator(DltDagsterTranslator):
     ),
     name="thinkific",
     group_name="education",
-    dlt_dagster_translator=ThinkificDltDagsterTranslator(),
+    dlt_dagster_translator=ThinkificDagsterDltTranslator(),
 )
-def thinkific_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
+def thinkific_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
 
 
-class HubspotDltDagsterTranslator(DltDagsterTranslator):
+class HubspotDagsterDltTranslator(DagsterDltTranslator):
     @public
     def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
         return AutoMaterializePolicy.eager().with_rules(
@@ -82,9 +82,9 @@ class HubspotDltDagsterTranslator(DltDagsterTranslator):
     ),
     name="hubspot",
     group_name="hubspot",
-    dlt_dagster_translator=HubspotDltDagsterTranslator(),
+    dlt_dagster_translator=HubspotDagsterDltTranslator(),
 )
-def hubspot_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
+def hubspot_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
 
 
@@ -107,5 +107,5 @@ dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
     name="github",
     group_name="github",
 )
-def github_reactions_dagster_assets(context: AssetExecutionContext, dlt: DltDagsterResource):
+def github_reactions_dagster_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
