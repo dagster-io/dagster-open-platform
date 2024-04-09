@@ -23,6 +23,10 @@ reporting_user_submitted_snowflake_cost_metrics as (
     select * from {{ ref('reporting_user_submitted_snowflake_cost_metrics') }}
 ),
 
+reporting_metadata_metrics as (
+    select * from {{ ref('reporting_metadata_asset_materialization_metrics') }}
+),
+
 aggregated_step_metrics as (
     select
         rsd.organization_id,
@@ -113,6 +117,36 @@ aggregated_bigquery_cost_metrics as (
         1, 2, 3, 4, 5, 6, 7, 8
 ),
 
+aggregated_metadata_metrics as (
+    select
+        rsd.organization_id,
+        rsd.deployment_id,
+        rsd.repository_name,
+        rsd.code_location_name,
+        rsd.pipeline_name,
+        rsd.run_id,
+        rmm.metric_name,
+        date_trunc('day', rsd.step_end_timestamp) as rollup_date,
+        to_number(sum(rmm.metric_value), 38, 12) as metric_value_sum,
+        max(rmm.last_rebuilt) as last_rebuilt,
+        max(rsd.run_ended_at) as run_ended_at
+    from
+        reporting_metadata_metrics as rmm
+    left join step_data as rsd
+        on rmm.step_data_id = rsd.id
+
+    where
+        date_trunc('day', rsd.step_end_timestamp) > '2023-06-01'
+        and rsd.run_ended_at is not null
+
+    {% if is_incremental() %}
+        and rsd.run_ended_at  >= '{{ var('min_date') }}' and rsd.run_ended_at  < '{{ var('max_date') }}'
+    {% endif %}
+
+    group by
+        1, 2, 3, 4, 5, 6, 7, 8
+),
+
 run_duration_metrics as (
     select
         runs.organization_id,
@@ -157,4 +191,6 @@ from (
     select * from aggregated_snowflake_cost_metrics
     union
     select * from aggregated_bigquery_cost_metrics
+    union
+    select * from aggregated_metadata_metrics
 )
