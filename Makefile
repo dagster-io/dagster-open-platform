@@ -29,3 +29,6 @@ install_ruff:
 
 ruff:
 	$(MAKE) -C ../.. ruff
+
+update_to_latest_dagster:
+	pip freeze | grep '^dagster' | cut -d '=' -f 1 | tr '\n' ' ' | xargs uv pip install --upgrade
