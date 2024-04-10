@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from dagster_embedded_elt.sling.asset_decorator import sling_assets
 from dagster_embedded_elt.sling.dagster_sling_translator import DagsterSlingTranslator
@@ -6,7 +6,7 @@ from dagster_embedded_elt.sling.resources import (
     SlingResource,
 )
 
-config_dir = "dagster_open_platform/configs/sling/cloud_product"
+config_dir = Path(__file__).parent.parent / "configs" / "sling" / "cloud_product"
 
 
 class CustomSlingLowVolumeTranslator(DagsterSlingTranslator):
@@ -14,7 +14,7 @@ class CustomSlingLowVolumeTranslator(DagsterSlingTranslator):
         return "cloud_product_low_volume_ingest"
 
 
-cloud_production_low_volume_config = os.path.join(config_dir, "low_volume.yaml")
+cloud_production_low_volume_config = config_dir / "low_volume.yaml"
 
 
 @sling_assets(
@@ -30,7 +30,7 @@ class CustomSlingHighVolumeTranslator(DagsterSlingTranslator):
         return "cloud_product_high_volume_ingest"
 
 
-cloud_production_high_volume_config = os.path.join(config_dir, "high_volume.yaml")
+cloud_production_high_volume_config = config_dir / "high_volume.yaml"
 
 
 @sling_assets(
