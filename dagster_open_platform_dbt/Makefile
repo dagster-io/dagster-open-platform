@@ -19,7 +19,17 @@ install-sdf:
 update-sdf:
 	curl -LSfs https://cdn.sdf.com/releases/download/install.sh | bash -s -- --update
 
+auth-sdf:
+	sdf auth login snowflake \
+		--account-id=${SNOWFLAKE_ACCOUNT} \
+		--username=${SNOWFLAKE_USER} \
+		--password=${SNOWFLAKE_PASSWORD} \
+		--warehouse=${SNOWFLAKE_WAREHOUSE} \
+		--role=${SNOWFLAKE_ROLE}
+
 check-lineage:
+	make auth-sdf
+	dbt deps
 	dbt compile
 	sdf dbt refresh --no-save
 	sdf compile
