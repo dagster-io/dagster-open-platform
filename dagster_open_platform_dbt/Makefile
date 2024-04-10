@@ -27,8 +27,7 @@ auth-sdf:
 		--warehouse=${SNOWFLAKE_WAREHOUSE} \
 		--role=${SNOWFLAKE_ROLE}
 
-check-lineage:
-	make auth-sdf
+check-lineage: auth-sdf
 	dbt deps
 	dbt compile
 	sdf dbt refresh --no-save
