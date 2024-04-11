@@ -98,7 +98,11 @@ streams:
         jsonb_path_query_array(
           replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
           '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].group_name'
-        ) as group_names 
+        ) as group_names,
+        jsonb_path_query(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.dagster_library_versions'
+        ) as dagster_library_versions
       from repository_locations_data
       where timestamp > current_timestamp - interval '1 day'
     meta:
