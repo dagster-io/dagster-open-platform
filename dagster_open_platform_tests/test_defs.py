@@ -1,12 +1,14 @@
 import os
 from pathlib import Path
 
+import pytest
 from dagster._core.test_utils import environ
 
 FIVETRAN_API_SECRET_ENV_VAR = "FIVETRAN_API_SECRET"
 FIVETRAN_API_KEY_ENV_VAR = "FIVETRAN_API_KEY"
 
 
+@pytest.mark.env_bk
 def test_dop_code_location():
     """Ensure that the code location can be loaded without error."""
     PLACEHOLDER_ENV_VAR_VALUE = "x"
