@@ -18,7 +18,8 @@ base_agg as (
         sum(step_duration_mins) as step_duration_mins,
         sum(steps) as steps,
         sum(asset_check_only_steps) as asset_check_only_steps,
-        sum(asset_checks) as asset_checks
+        sum(asset_checks) as asset_checks,
+        sum(freshness_checks) as freshness_checks
 
     from base
     group by all
@@ -56,6 +57,7 @@ combined as (
         coalesce(sum(base_agg.steps), 0) as steps,
         coalesce(sum(base_agg.asset_checks), 0) as asset_checks,
         coalesce(sum(base_agg.asset_check_only_steps), 0) as asset_check_only_steps,
+        coalesce(sum(base_agg.freshness_checks), 0) as freshness_checks,
         coalesce(sum(run_metrics.run_duration_mins), 0) as run_duration_mins,
         coalesce(sum(run_metrics.runs), 0) as runs,
 

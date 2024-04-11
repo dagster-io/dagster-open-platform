@@ -115,6 +115,23 @@ asset_check_warnings as (
     group by all
 ),
 
+freshness_checks as (
+    select
+        run_id,
+        step_key,
+        count(*) as freshness_checks
+    from event_logs
+    where
+        dagster_event_type = 'ASSET_CHECK_EVALUATION'
+        and is_null_value(
+            parse_json(
+                event_data
+            ):dagster_event:event_specific_data:metadata:"dagster/freshness_params"
+        ) is not null
+    group by all
+),
+
+
 -- We compute the total execution time that is specifically
 -- allocated to specific assets. This is often less than the
 -- total execution time, since often compute is not attributed to a
@@ -192,7 +209,8 @@ metrics_joined as (
         zeroifnull(step_failures.step_failures)::number as step_failures,
 
         zeroifnull(asset_check_errors.asset_check_errors)::number as asset_check_errors,
-        zeroifnull(asset_check_warnings.asset_check_warnings)::number as asset_check_warnings
+        zeroifnull(asset_check_warnings.asset_check_warnings)::number as asset_check_warnings,
+        zeroifnull(freshness_checks.freshness_checks)::number as freshness_checks
 
     from steps
     left join step_retries using (run_id, step_key)
@@ -205,6 +223,7 @@ metrics_joined as (
     left join check_steps using (run_id, step_key)
     left join asset_check_errors using (run_id, step_key)
     left join asset_check_warnings using (run_id, step_key)
+    left join freshness_checks using (run_id, step_key)
 )
 
 select
@@ -238,6 +257,7 @@ select
 
     asset_check_errors,
     asset_check_warnings,
+    freshness_checks,
 
     case
         when materializations = 0 and asset_checks > 0 then 1
