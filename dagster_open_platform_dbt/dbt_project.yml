@@ -13,6 +13,10 @@ clean-targets:
 models:
   +post-hook:
     - "{{ dagster.log_column_level_metadata() }}"
+  +tags: ["model"]
+  +meta:
+    dagster:
+      owners: ["nickroach@dagsterlabs.com", "team:data"]
 
   dagster_open_platform:
     staging:
@@ -24,6 +28,9 @@ models:
     cloud_reporting:
       +materialized: table
       +snowflake_warehouse: insights
+      +meta:
+        dagster:
+          owners: ["ben@dagsterlabs.com", "team:dagster-plus"]
     core:
       +materialized: table
     product:
@@ -40,6 +47,7 @@ models:
       +materialized: table
 
 seeds:
+  +tags: seed
   +post-hook:
     - "{{ dagster.log_column_level_metadata() }}"
 
