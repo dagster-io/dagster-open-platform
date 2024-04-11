@@ -48,14 +48,25 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
         return AssetKey([resource_database, resource_schema, resource_name])
 
-    def get_metadata(self, dbt_node_info: Mapping[str, Any]) -> Mapping[str, Any]:
-        if dbt_node_info["resource_type"] != "model":
-            return {}
+    def get_metadata(self, dbt_resource_props: Mapping[str, Any]) -> Mapping[str, Any]:
+        url_metadata = {}
+        if dbt_resource_props["resource_type"] == "model":
+            url_metadata = {
+                "url": MetadataValue.url(
+                    "/".join(
+                        [
+                            SNOWFLAKE_URL,
+                            dbt_resource_props["schema"].upper(),
+                            "table",
+                            dbt_resource_props["name"].upper(),
+                        ]
+                    )
+                )
+            }
 
         return {
-            "url": MetadataValue.url(
-                f"{SNOWFLAKE_URL}/{dbt_node_info['schema'].upper()}/table/{dbt_node_info['name'].upper()}"
-            )
+            **super().get_metadata(dbt_resource_props),
+            **url_metadata,
         }
 
 
