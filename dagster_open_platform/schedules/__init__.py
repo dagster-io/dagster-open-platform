@@ -13,10 +13,11 @@ from dagster._core.storage.tags import (
     ASSET_PARTITION_RANGE_END_TAG,
     ASSET_PARTITION_RANGE_START_TAG,
 )
-from dagster_dbt import build_dbt_asset_selection
+from dagster_dbt import DbtManifestAssetSelection
 
 from ..assets import dbt, monitor_purina_clones, support_bot
 from ..partitions import insights_partition
+from ..resources import dagster_open_platform_dbt_project
 
 support_bot_job = define_asset_job(
     name="support_bot_job",
@@ -48,17 +49,21 @@ oss_telemetry_schedule = ScheduleDefinition(
     cron_schedule="0 5 * * *",  # every day at 5am
 )
 
-insights_selection = (
-    build_dbt_asset_selection([dbt.cloud_analytics_dbt_assets], "tag:insights")
-    .upstream()
-    .required_multi_asset_neighbors()
-    - AssetSelection.groups("cloud_product_high_volume_ingest")
-    - AssetSelection.groups("cloud_product_low_volume_ingest")
-)  # select all insights models, and fetch upstream, including ingestion
 
 insights_job = define_asset_job(
     name="insights_job",
-    selection=insights_selection,
+    selection=(
+        # select all insights models, and fetch upstream, including ingestion
+        DbtManifestAssetSelection.build(
+            manifest=dagster_open_platform_dbt_project.manifest_path,
+            dagster_dbt_translator=dbt.CustomDagsterDbtTranslator(),
+            select="tag:insights",
+        )
+        .upstream()
+        .required_multi_asset_neighbors()
+        - AssetSelection.groups("cloud_product_high_volume_ingest")
+        - AssetSelection.groups("cloud_product_low_volume_ingest")
+    ),
     partitions_def=insights_partition,
     tags={"team": "insights"},
 )
@@ -66,27 +71,22 @@ insights_job = define_asset_job(
 insights_schedule = build_schedule_from_partitioned_job(job=insights_job)
 
 
-assets_dependent_on_cloud_usage = [
-    AssetSelection.keys(["postgres", "usage_metrics_daily_jobs_aggregated"]),
-    build_dbt_asset_selection(
-        [dbt.cloud_analytics_dbt_assets], "org_asset_materializations_by_month"
-    ),
-    build_dbt_asset_selection([dbt.cloud_analytics_dbt_assets], "attributed_conversions"),
-]
-
-cloud_usage_metrics_selection = (
-    build_dbt_asset_selection([dbt.cloud_analytics_dbt_assets], "fqn:*")
-    .upstream()
-    .downstream()
-    .required_multi_asset_neighbors()
-    - AssetSelection.groups("cloud_reporting")
-    - AssetSelection.key_prefixes(["purina", "postgres_mirror"])
-    - AssetSelection.groups("cloud_product_high_volume_ingest")
-    - AssetSelection.groups("cloud_product_low_volume_ingest")
-)
-
 cloud_usage_metrics_job = define_asset_job(
-    name="cloud_usage_metrics_job", selection=cloud_usage_metrics_selection, tags={"team": "devrel"}
+    name="cloud_usage_metrics_job",
+    selection=(
+        DbtManifestAssetSelection.build(
+            manifest=dagster_open_platform_dbt_project.manifest_path,
+            dagster_dbt_translator=dbt.CustomDagsterDbtTranslator(),
+        )
+        .upstream()
+        .downstream()
+        .required_multi_asset_neighbors()
+        - AssetSelection.groups("cloud_reporting")
+        - AssetSelection.key_prefixes(["purina", "postgres_mirror"])
+        - AssetSelection.groups("cloud_product_high_volume_ingest")
+        - AssetSelection.groups("cloud_product_low_volume_ingest")
+    ),
+    tags={"team": "devrel"},
 )
 
 
