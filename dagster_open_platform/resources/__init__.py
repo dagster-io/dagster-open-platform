@@ -1,8 +1,9 @@
 import os
+from pathlib import Path
 
-from dagster import EnvVar, file_relative_path
+from dagster import EnvVar
 from dagster_cloud.dagster_insights import InsightsBigQueryResource
-from dagster_dbt import DbtCliResource
+from dagster_dbt import DbtCliResource, DbtProject
 from dagster_embedded_elt.sling.resources import (
     SlingConnectionResource,
     SlingResource,
@@ -42,9 +43,6 @@ embedded_elt_resource = SlingResource(
     ]
 )
 
-DBT_MANIFEST_PATH = file_relative_path(
-    __file__, "../../dagster_open_platform_dbt/target/manifest.json"
-)
 
 bigquery_resource = InsightsBigQueryResource(
     gcp_credentials=EnvVar("GCP_CREDENTIALS"),
@@ -58,11 +56,12 @@ snowflake_resource = SnowflakeResource(
     warehouse=os.getenv("SNOWFLAKE_WAREHOUSE", "PURINA"),
 )
 
-dbt_resource = DbtCliResource(
-    project_dir=file_relative_path(__file__, "../../dagster_open_platform_dbt"),
-    profiles_dir=file_relative_path(__file__, "../../dagster_open_platform_dbt"),
+dagster_open_platform_dbt_project = DbtProject(
+    project_dir=Path(__file__).joinpath("..", "..", "..", "dagster_open_platform_dbt").resolve(),
     target=get_dbt_target(),
 )
+
+dbt_resource = DbtCliResource(project_dir=dagster_open_platform_dbt_project)
 
 slack_resource = SlackResource(token=EnvVar("SLACK_ANALYTICS_TOKEN"))
 

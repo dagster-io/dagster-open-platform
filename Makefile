@@ -1,7 +1,7 @@
 uv_install:
 	pip install uv
 
-test_install: 
+test_install:
 	uv pip install -e ".[tests]"
 
 dev_install: uv_install
@@ -15,7 +15,6 @@ manifest:
 	cd dagster_open_platform_dbt && dbt parse && cd ..
 
 dev:
-	make manifest
 	dagster dev
 
 lint:

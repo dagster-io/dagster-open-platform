@@ -4,12 +4,11 @@ from typing import Any, Mapping, Optional
 
 from dagster import AssetExecutionContext, AssetKey, BackfillPolicy, Config, MetadataValue
 from dagster_cloud.dagster_insights import dbt_with_snowflake_insights
-from dagster_dbt import DagsterDbtTranslator, dbt_assets
+from dagster_dbt import DagsterDbtTranslator, DbtCliResource, dbt_assets
 
 from ..partitions import insights_partition
 from ..resources import (
-    DBT_MANIFEST_PATH,
-    dbt_resource,
+    dagster_open_platform_dbt_project,
 )
 
 SNOWFLAKE_ACCOUNT_BASE, *_ = os.getenv("SNOWFLAKE_ACCOUNT", ".").split(".")
@@ -71,13 +70,13 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
 
 @dbt_assets(
-    manifest=DBT_MANIFEST_PATH,
+    manifest=dagster_open_platform_dbt_project.manifest_path,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
     exclude=INSIGHTS_SELECTOR,
     backfill_policy=BackfillPolicy.single_run(),
 )
-def cloud_analytics_dbt_assets(context: AssetExecutionContext):
-    yield from dbt_with_snowflake_insights(context, dbt_resource.cli(["build"], context=context))
+def cloud_analytics_dbt_assets(context: AssetExecutionContext, dbt: DbtCliResource):
+    yield from dbt_with_snowflake_insights(context, dbt.cli(["build"], context=context))
 
 
 class DbtConfig(Config):
@@ -85,13 +84,13 @@ class DbtConfig(Config):
 
 
 @dbt_assets(
-    manifest=DBT_MANIFEST_PATH,
+    manifest=dagster_open_platform_dbt_project.manifest_path,
     select=INSIGHTS_SELECTOR,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
     partitions_def=insights_partition,
     backfill_policy=BackfillPolicy.single_run(),
 )
-def dbt_insights_models(context: AssetExecutionContext, config: DbtConfig):
+def dbt_insights_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
     dbt_vars = {
         "min_date": context.partition_time_window.start.isoformat(),
         "max_date": context.partition_time_window.end.isoformat(),
@@ -101,4 +100,4 @@ def dbt_insights_models(context: AssetExecutionContext, config: DbtConfig):
     if config.full_refresh:
         args = ["build", "--full-refresh"]
 
-    yield from dbt_with_snowflake_insights(context, dbt_resource.cli(args, context=context))
+    yield from dbt_with_snowflake_insights(context, dbt.cli(args, context=context))
