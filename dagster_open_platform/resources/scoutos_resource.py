@@ -20,15 +20,16 @@ class ScoutosResource(ConfigurableResource):
 
     api_key: str
 
-    def write_files(self, collection: str, files: list[dict]) -> Dict[str, Any]:
-        request_url = f"https://api.scoutos.com/v1/collections/{collection}/files"
+    def write_documents(self, collection_id: str, documents: list[dict]) -> Dict[str, Any]:
+        """Writes documents to the ScoutOS API."""
+        request_url = f"https://api.scoutos.com/v1/collections/{collection_id}/files"
         headers_list = {
             "Accept": "*/*",
             "User-Agent": "Thunder Client (https://www.thunderclient.com)",
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
         }
-        payload = json.dumps({"files": files})
+        payload = json.dumps({"files": documents})
         response = requests.request("POST", request_url, data=payload, headers=headers_list)
         return response.json()
 
