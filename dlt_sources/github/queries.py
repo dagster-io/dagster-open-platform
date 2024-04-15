@@ -86,3 +86,45 @@ node_%s: node(id:"%s") {
     }
   }
 """
+
+STARGAZERS_QUERY = """
+query($owner: String!, $name: String!, $per_page: Int!, $page_after: String) {
+  repository(owner: $owner, name: $name){
+    stargazers(first: $per_page, after: $page_after){
+      pageInfo {
+        hasNextPage,
+        endCursor
+      }
+      edges {
+        starredAt
+        node {
+          id,
+          name,
+          login
+        }
+      }
+    }
+  }
+}
+"""
+
+FORKS_QUERY = """
+query($owner: String!, $name: String!, $per_page: Int!, $page_after: String) {
+  repository(owner: $owner, name: $name) {
+    forks(first: $per_page, after: $page_after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        id,
+        createdAt,
+        owner {
+          id,
+          login
+        }
+      }
+    }
+  }
+}
+"""

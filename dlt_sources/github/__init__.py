@@ -7,7 +7,7 @@ import dlt
 from dlt.common.typing import TDataItems
 from dlt.sources import DltResource
 
-from .helpers import get_reactions_data, get_rest_pages
+from .helpers import get_forks_data, get_reactions_data, get_rest_pages, get_stargazers_data
 
 
 @dlt.source
@@ -59,6 +59,28 @@ def github_reactions(
             name="pull_requests",
             write_disposition="merge",
             primary_key=["repository_name", "repository_owner", "number"],
+        ),
+        dlt.resource(
+            get_stargazers_data(
+                repos,
+                access_token,
+                items_per_page,
+                max_items,
+            ),
+            name="stargazers",
+            write_disposition="merge",
+            primary_key=["repository_name", "repository_owner", "id"],
+        ),
+        dlt.resource(
+            get_forks_data(
+                repos,
+                access_token,
+                items_per_page,
+                max_items,
+            ),
+            name="forks",
+            write_disposition="merge",
+            primary_key=["repository_name", "repository_owner", "id"],
         ),
     )
 
