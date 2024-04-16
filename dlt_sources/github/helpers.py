@@ -108,7 +108,6 @@ def get_stargazers_data(
             for page_items in _get_graphql_pages(
                 access_token, STARGAZERS_QUERY, variables, "stargazers", max_items, "edges"
             ):
-                print(page_items)
                 for item in page_items:
                     item["repository_owner"] = owner
                     item["repository_name"] = name
@@ -135,7 +134,6 @@ def get_forks_data(
             for page_items in _get_graphql_pages(
                 access_token, FORKS_QUERY, variables, "forks", max_items, "nodes"
             ):
-                print(page_items)
                 for item in page_items:
                     item["repository_owner"] = owner
                     item["repository_name"] = name
