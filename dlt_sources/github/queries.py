@@ -90,7 +90,7 @@ node_%s: node(id:"%s") {
 STARGAZERS_QUERY = """
 query($owner: String!, $name: String!, $per_page: Int!, $page_after: String) {
   repository(owner: $owner, name: $name){
-    stargazers(first: $per_page, after: $page_after){
+    stargazers(first: $per_page, after: $page_after, orderBy: {field: STARRED_AT, direction: DESC}){
       pageInfo {
         hasNextPage,
         endCursor
@@ -111,7 +111,7 @@ query($owner: String!, $name: String!, $per_page: Int!, $page_after: String) {
 FORKS_QUERY = """
 query($owner: String!, $name: String!, $per_page: Int!, $page_after: String) {
   repository(owner: $owner, name: $name) {
-    forks(first: $per_page, after: $page_after) {
+    forks(first: $per_page, after: $page_after, orderBy: {field: CREATED_AT, direction: DESC}) {
       pageInfo {
         hasNextPage
         endCursor
