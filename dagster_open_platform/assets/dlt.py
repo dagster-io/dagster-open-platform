@@ -92,12 +92,19 @@ dlt_configuration_path = file_relative_path(__file__, "../../dlt_sources/dlt_con
 dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
 
 
-# NOTE: currently have `max_items` set to prevent excessive API usage
+class GithubDagsterDltTranslator(DagsterDltTranslator):
+    @public
+    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
+        return AutoMaterializePolicy.eager().with_rules(
+            AutoMaterializeRule.materialize_on_cron("0 0 * * *")
+        )
+
+
 @dlt_assets(
     dlt_source=github_reactions(
         dlt_configuration["sources"]["github"]["repositories"],
         items_per_page=100,
-        max_items=250,
+        max_items=500,
     ).with_resources("issues"),
     dlt_pipeline=pipeline(
         pipeline_name="github_issues",
@@ -106,6 +113,7 @@ dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
     ),
     name="github",
     group_name="github",
+    dlt_dagster_translator=GithubDagsterDltTranslator(),
 )
 def github_reactions_dagster_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
