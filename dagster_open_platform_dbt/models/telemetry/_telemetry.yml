@@ -1,7 +1,0 @@
-models:
-  - name: events
-    description: Cleaned telemetry events
-  - name: instance_events_daily
-    instance_events_daily: Daily metric table describing telemetry events for a given instance
-  - name: instance_events_weekly
-    instance_events_weekly: Weekly metric table describing telemetry events for a given instance
