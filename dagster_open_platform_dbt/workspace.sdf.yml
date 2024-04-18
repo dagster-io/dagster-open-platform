@@ -1,70 +1,23 @@
 workspace:
-  edition: '1.1'
+  edition: '1.2'
+  defaults:
+    catalog: {{env_var('SNOWFLAKE_DATABASE')}}
+    schema: {{env_var('SNOWFLAKE_SCHEMA')}}
+    dialect: snowflake
+    preprocessor: jinja
   name: dagster_open_platform
   includes:
-  - path: seeds/*
-    type: resource
   - path: target/compiled/sdf/models
     index: catalog-schema-table-name
-  dialect: snowflake
-  default-catalog: {{env_var('SNOWFLAKE_DATABASE')}}
-  default-schema: {{env_var('SNOWFLAKE_SCHEMA')}}
-  default-profile: dbg
-
----
-table:
-  name: telemetry_example_map
-  location: seeds/telemetry_example_map.csv
-  file-format: csv
-  with-header: true
-  dialect: snowflake
-  table-type: external
-  source-locations:
-  - path: workspace.sdf.yml
-
-
----
-table:
-  name: referrer_mapping
-  location: seeds/referrer_mapping.csv
-  file-format: csv
-  with-header: true
-  dialect: snowflake
-  table-type: external
-  source-locations:
-  - path: workspace.sdf.yml
-
----
-table:
-  name: instance_type_priority
-  location: seeds/instance_type_priority.csv
-  file-format: csv
-  with-header: true
-  dialect: snowflake
-  table-type: external
-  source-locations:
-  - path: workspace.sdf.yml
-
----
-table:
-  name: permission_levels
-  location: seeds/permission_levels.csv
-  file-format: csv
-  with-header: true
-  dialect: snowflake
-  table-type: external
-  source-locations:
-  - path: workspace.sdf.yml
-
----
-provider:
-  name: snowflake_provider
-  type: snowflake
-  sources:
-  - dlt
-  - segment
-  - stripe_pipeline
-  - purina
-  - slack
-  - sling
-  - fivetran
+  providers:
+    - type: snowflake
+      credential: default
+      namespaces: 
+        - target: dlt.*.*
+        - target: segment.*.*
+        - target: stripe_pipeline.*.*
+        - target: purina.*.*
+        - target: slack.*.*
+        - target: sling.*.*
+        - target: fivetran.*.*
+        - target: sandbox.*.*
