@@ -5,7 +5,6 @@ from dagster import (
     RunRequest,
     ScheduleDefinition,
     ScheduleEvaluationContext,
-    build_schedule_from_partitioned_job,
     define_asset_job,
     schedule,
 )
@@ -68,7 +67,11 @@ insights_job = define_asset_job(
     tags={"team": "insights"},
 )
 
-insights_schedule = build_schedule_from_partitioned_job(job=insights_job)
+
+insights_schedule = ScheduleDefinition(
+    job=insights_job,
+    cron_schedule="0 */3 * * *",
+)
 
 
 cloud_usage_metrics_job = define_asset_job(
