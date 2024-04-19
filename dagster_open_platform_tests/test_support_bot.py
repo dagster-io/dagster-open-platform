@@ -9,9 +9,11 @@ def test_parse_discussion():
         "answer": {"bodyText": "This is a sample answer."},
         "category": {"name": "General"},
         "createdAt": "2023-06-01T00:00:00Z",
+        "closed": "true",
         "url": "https://example.com/discussion/1234",
         "labels": {"nodes": [{"name": "label1"}, {"name": "label2"}]},
         "reactions": {"totalCount": 5},
+        "stateReason": "SOME_REASON",
     }
 
     parsed_discussion = parse_discussion(discussion)
@@ -24,8 +26,10 @@ def test_parse_discussion():
         "title": "Sample Discussion",
         "category": "General",
         "created_at": "2023-06-01T00:00:00Z",
+        "closed": "true",
         "url": "https://example.com/discussion/1234",
         "labels": "label1,label2",
+        "state_reason": "SOME_REASON",
         "votes": 5,
     }
 
@@ -42,6 +46,7 @@ def test_parse_issue():
         "url": "https://example.com/issue/5678",
         "labels": {"nodes": [{"name": "bug"}, {"name": "enhancement"}]},
         "reactions": {"totalCount": 3},
+        "stateReason": "SOME_REASON",
     }
 
     parsed_issue = parse_issue(issue)
@@ -55,6 +60,7 @@ def test_parse_issue():
         "created_at": "2023-06-01T00:00:00Z",
         "closed_at": "2023-06-02T00:00:00Z",
         "state": "CLOSED",
+        "state_reason": "SOME_REASON",
         "url": "https://example.com/issue/5678",
         "labels": "bug,enhancement",
         "votes": 3,
