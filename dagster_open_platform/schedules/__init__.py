@@ -68,10 +68,10 @@ insights_job = define_asset_job(
 )
 
 
-insights_schedule = ScheduleDefinition(
-    job=insights_job,
-    cron_schedule="0 */3 * * *",
-)
+@schedule(cron_schedule="0 */3 * * *", job=insights_job)
+def insights_schedule():
+    most_recent_partition = insights_partition.get_last_partition_key()
+    yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
 cloud_usage_metrics_job = define_asset_job(
