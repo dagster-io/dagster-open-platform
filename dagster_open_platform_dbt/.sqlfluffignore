@@ -3,3 +3,8 @@ product_engagement.sql
 time_spine.sql
 reporting_step_data.sql
 reporting_step_metrics.sql
+reporting_asset_materialization_metrics_daily_rollup.sql
+reporting_deduped_internal_asset_materialization_metrics.sql
+reporting_metadata_asset_materialization_metrics.sql
+reporting_job_metrics_daily_rollup.sql
+reporting_run_metrics.sql
