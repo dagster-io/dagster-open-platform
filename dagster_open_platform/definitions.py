@@ -61,7 +61,7 @@ all_assets = [
     *ingest_fivetran_assets,
 ]
 
-all_checks = [salesforce_checks.account_has_valid_org_id]
+all_checks = [salesforce_checks.account_has_valid_org_id, sling_ingest.event_logs_freshness_checks]
 
 all_jobs = [*scheduled_jobs]
 
@@ -69,6 +69,11 @@ all_schedules = [
     *schedules,
     slack_analytics.slack_daily_schedule,
     stripe_data_sync.stripe_data_sync_schedule,
+]
+
+all_sensors = [
+    sling_ingest.freshness_checks_sensor,
+    dagster_quickstart.dagster_quickstart_validation_sensor,
 ]
 
 defs = Definitions(
@@ -90,5 +95,5 @@ defs = Definitions(
     },
     jobs=all_jobs,
     schedules=all_schedules,
-    sensors=[dagster_quickstart.dagster_quickstart_validation_sensor],
+    sensors=all_sensors,
 )
