@@ -1,5 +1,5 @@
-source: CLOUD_PRODUCTION
-target: SLING_DB
+source: MAIN_CLOUD_PRODUCTION
+target: MAIN_SLING_DB
 defaults: 
   mode: incremental
   object: '{stream_table}'

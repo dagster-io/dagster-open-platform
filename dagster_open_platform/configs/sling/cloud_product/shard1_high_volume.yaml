@@ -1,0 +1,29 @@
+source: CLOUD_PRODUCTION_SHARD1
+target: SLING_DB_SHARD1
+defaults: 
+  mode: incremental
+  object: '{stream_table}'
+  update_key: id
+  source_options:
+    limit: 500000
+
+streams: 
+  public.event_logs: 
+    sql: >
+      SELECT * FROM public.event_logs where {incremental_where_cond} and dagster_event_type is not null
+    meta:
+      dagster: 
+        asset_key: sling.cloud_product_shard1.event_logs
+  
+  public.runs: 
+    primary_key: [id]
+    update_key: update_timestamp
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.runs
+  
+  public.run_tags: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.run_tags
+    

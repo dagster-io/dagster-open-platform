@@ -1,0 +1,39 @@
+source: CLOUD_PRODUCTION_SHARD1
+target: SLING_DB_SHARD1
+defaults: 
+  mode: incremental
+  object: '{stream_table}'
+  primary_key: [id]
+
+streams: 
+  public.asset_keys: 
+    update_key: last_materialization_timestamp
+    meta:
+      dagster: 
+        asset_key: sling.cloud_product_shard1.asset_keys
+
+  public.repository_locations_data: 
+    sql: |
+      select
+        id, 
+        organization_id, 
+        deployment_id, 
+        create_timestamp, 
+        timestamp as update_timestamp,
+        jsonb_path_query_array(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].asset_key'
+        ) as asset_keys,
+        jsonb_path_query_array(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].group_name'
+        ) as group_names,
+        jsonb_path_query(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.dagster_library_versions'
+        )::jsonb as dagster_library_versions
+      from repository_locations_data
+      where timestamp > current_timestamp - interval '1 day'
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.repository_locations_data

@@ -1,5 +1,5 @@
-source: CLOUD_PRODUCTION
-target: SLING_DB
+source: CLOUD_PRODUCTION_MAIN
+target: SLING_DB_MAIN
 defaults: 
   mode: incremental
   object: '{stream_table}'
@@ -8,7 +8,9 @@ defaults:
     limit: 500000
 
 streams: 
-  public.event_logs: 
+  public.event_logs:
+    sql: >
+      SELECT * FROM public.event_logs where {incremental_where_cond} and dagster_event_type is not null
     meta:
       dagster: 
         asset_key: sling.cloud_product.event_logs

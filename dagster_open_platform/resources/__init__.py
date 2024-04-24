@@ -19,7 +19,7 @@ from .sling_resource import CustomSlingResource, SlingPostgresConfig, SlingSnowf
 embedded_elt_resource = SlingResource(
     connections=[
         SlingConnectionResource(
-            name="CLOUD_PRODUCTION",
+            name="CLOUD_PRODUCTION_MAIN",
             type="postgres",
             host=EnvVar("CLOUD_PROD_READ_REPLICA_POSTGRES_HOST"),  # type: ignore
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
@@ -30,13 +30,35 @@ embedded_elt_resource = SlingResource(
             ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
         SlingConnectionResource(
-            name="SLING_DB",
+            name="SLING_DB_MAIN",
             type="snowflake",
             host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
             password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
             database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
             schema=get_schema_for_environment("cloud_product"),  # type: ignore
+            warehouse="sling",  # type: ignore
+            role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
+        ),
+        SlingConnectionResource(
+            name="CLOUD_PRODUCTION_SHARD1",
+            type="postgres",
+            host=EnvVar("CLOUD_PROD_SHARD1_READ_REPLICA_POSTGRES_HOST"),  # type: ignore
+            user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
+            database="shard1",  # type: ignore
+            password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
+            ssl_mode="require",  # type: ignore
+            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
+            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
+        ),
+        SlingConnectionResource(
+            name="SLING_DB_SHARD1",
+            type="snowflake",
+            host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
+            user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
+            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
+            schema=get_schema_for_environment("cloud_product_shard1"),  # type: ignore
             warehouse="sling",  # type: ignore
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
