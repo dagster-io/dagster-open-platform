@@ -62,3 +62,25 @@ def hightouch_null_contact_names(hightouch: ConfigurableHightouchResource) -> Ma
             "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
         }
     )
+
+
+cloud_users = get_asset_key_for_model([cloud_analytics_dbt_assets], "cloud_users")
+
+
+@asset(
+    deps=[cloud_users],
+    compute_kind="hightouch",
+    group_name="sales",
+)
+def hightouch_cloud_users(hightouch: ConfigurableHightouchResource) -> MaterializeResult:
+    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_CLOUD_USERS_SYNC_ID", ""))
+    return MaterializeResult(
+        metadata={
+            "sync_details": result.sync_details,
+            "sync_run_details": result.sync_run_details,
+            "destination_details": result.destination_details,
+            "query_size": result.sync_run_details.get("querySize"),
+            "completion_ratio": result.sync_run_details.get("completionRatio"),
+            "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
+        }
+    )
