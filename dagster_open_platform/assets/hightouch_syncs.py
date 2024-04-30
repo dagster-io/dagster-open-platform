@@ -44,7 +44,7 @@ def hightouch_org_info(hightouch: ConfigurableHightouchResource) -> MaterializeR
 
 @asset(
     deps=[
-        AssetKey(["fivetran", "salesforce", "contact"]),
+        get_asset_key_for_model([cloud_analytics_dbt_assets], "contacts"),
         AssetKey(["sling", "cloud_product", "users"]),
     ],
     compute_kind="hightouch",
