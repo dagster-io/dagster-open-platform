@@ -39,7 +39,7 @@ def support_bot_schedule(context: ScheduleEvaluationContext) -> RunRequest:
 
 oss_telemetry_job = define_asset_job(
     name="oss_telemetry_job",
-    selection=AssetSelection.groups("telemetry").downstream(),
+    selection=AssetSelection.groups("staging_telemetry").downstream(),
     tags={"team": "devrel"},
 )
 

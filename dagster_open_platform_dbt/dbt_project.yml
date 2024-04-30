@@ -21,10 +21,12 @@ models:
   dagster_open_platform:
     staging:
       +materialized: view
+    model:
+      +materialized: table
+    metrics:
+      +materialized: table
     intermediate:
       +materialized: view
-    telemetry:
-      +materialized: table
     cloud_reporting:
       +materialized: table
       +snowflake_warehouse: insights
