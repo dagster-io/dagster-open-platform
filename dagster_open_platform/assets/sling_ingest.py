@@ -38,7 +38,7 @@ def cloud_product_main_low_volume(context, embedded_elt: SlingResource):
     dagster_sling_translator=CustomSlingTranslatorMain(),
 )
 def cloud_product_main_high_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.repli
+    yield from embedded_elt.replicate(context=context)
 
 
 cloud_product_main_source_assets = [

@@ -103,10 +103,19 @@ def cloud_usage_metrics_schedule():
     yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
+high_volume_assets = AssetSelection.keys(
+    ["sling", "cloud_product", "event_logs"],
+    ["sling", "cloud_product", "runs"],
+    ["sling", "cloud_product", "run_tags"],
+    ["sling", "cloud_product_shard1", "event_logs"],
+    ["sling", "cloud_product_shard1", "runs"],
+    ["sling", "cloud_product_shard1", "run_tags"],
+)
+
 cloud_product_sync_high_volume_schedule = ScheduleDefinition(
     job=define_asset_job(
         name="cloud_product_sync_high_volume",
-        selection=AssetSelection.groups("cloud_product_high_volume_ingest"),
+        selection=high_volume_assets,
         tags={"team": "devrel"},
         op_retry_policy=RetryPolicy(
             max_retries=3,
@@ -119,7 +128,8 @@ cloud_product_sync_high_volume_schedule = ScheduleDefinition(
 cloud_product_sync_low_volume_schedule = ScheduleDefinition(
     job=define_asset_job(
         name="cloud_product_sync_low_volume",
-        selection=AssetSelection.groups("cloud_product_low_volume_ingest"),
+        selection=AssetSelection.groups("cloud_product_main", "cloud_product_shard1")
+        - high_volume_assets,
         tags={"team": "devrel"},
     ),
     cron_schedule="0 */2 * * *",
