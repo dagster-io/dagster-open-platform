@@ -60,7 +60,7 @@ asset_specs = [
 ]
 
 
-@multi_observable_source_asset(specs=asset_specs, can_subset=True)
+@multi_observable_source_asset(specs=asset_specs, can_subset=True, group_name="stripe_pipeline")
 def stripe_data_sync_assets(
     context: AssetExecutionContext, snowflake: SnowflakeResource
 ) -> Iterator[ObserveResult]:
