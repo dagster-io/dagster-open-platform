@@ -26,6 +26,7 @@ from dagster import (
     AssetExecutionContext,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    SourceAsset,
     file_relative_path,
 )
 from dagster._annotations import public
@@ -58,11 +59,16 @@ class ThinkificDagsterDltTranslator(DagsterDltTranslator):
         destination="snowflake",
     ),
     name="thinkific",
-    group_name="education",
+    group_name="thinkific",
     dlt_dagster_translator=ThinkificDagsterDltTranslator(),
 )
 def thinkific_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
+
+
+thinkific_source_assets = [
+    SourceAsset(key, group_name="thinkific") for key in thinkific_assets.dependency_keys
+]
 
 
 class HubspotDagsterDltTranslator(DagsterDltTranslator):
@@ -87,6 +93,10 @@ class HubspotDagsterDltTranslator(DagsterDltTranslator):
 def hubspot_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
 
+
+hubspot_source_assets = [
+    SourceAsset(key, group_name="hubspot") for key in hubspot_assets.dependency_keys
+]
 
 dlt_configuration_path = file_relative_path(__file__, "../../dlt_sources/dlt_configuration.yaml")
 dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
@@ -117,3 +127,8 @@ class GithubDagsterDltTranslator(DagsterDltTranslator):
 )
 def github_reactions_dagster_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
+
+
+github_source_assets = [
+    SourceAsset(key, group_name="github") for key in github_reactions_dagster_assets.dependency_keys
+]
