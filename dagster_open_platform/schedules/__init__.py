@@ -87,6 +87,7 @@ cloud_usage_metrics_job = define_asset_job(
         .required_multi_asset_neighbors()
         - AssetSelection.groups("cloud_reporting")
         - AssetSelection.key_prefixes(["purina", "postgres_mirror"])
+        - AssetSelection.keys(["purina", "oss_analytics", "dagster_pypi_downloads"])
         - AssetSelection.groups("cloud_product_main")
         - AssetSelection.groups("cloud_product_shard1")
     ),

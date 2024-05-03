@@ -22,15 +22,18 @@ from ..utils.environment_helpers import (
 NON_EMPTY_CHECK_NAME = "non_empty_etl"
 SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
 
+dagster_pypi_downloads_asset_key = ["purina", "oss_analytics", "dagster_pypi_downloads"]
+
 
 @asset(
     compute_kind="Snowflake",
+    key=dagster_pypi_downloads_asset_key,
     group_name="oss_analytics",
     partitions_def=oss_analytics_weekly_partition,
     auto_materialize_policy=AutoMaterializePolicy.eager(),
     check_specs=[
-        AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset="dagster_pypi_downloads"),
-        AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset="dagster_pypi_downloads"),
+        AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
+        AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
     ],
 )
 def dagster_pypi_downloads(
