@@ -3,6 +3,7 @@ from pathlib import Path
 
 from dagster import (
     AssetKey,
+    AssetsDefinition,
     SourceAsset,
     build_last_update_freshness_checks,
     build_sensor_for_freshness_checks,
@@ -90,14 +91,20 @@ cloud_product_shard1_source_assets = [
 ]
 
 
-event_logs_freshness_checks = build_last_update_freshness_checks(
+freshness_checks = build_last_update_freshness_checks(
     assets=[
         AssetKey(["sling", "cloud_product", "event_logs"]),
         AssetKey(["sling", "cloud_product_shard1", "event_logs"]),
     ],
     lower_bound_delta=timedelta(minutes=15),
 )
+# NOTE: this instance check is present while we're switching from returning an AssetsDefinition to
+# a sequence of AssetDefinition objects. It can be removed once the lastest release contains this
+# change.
+event_logs_freshness_checks = (
+    [freshness_checks] if isinstance(freshness_checks, AssetsDefinition) else freshness_checks
+)
 
 freshness_checks_sensor = build_sensor_for_freshness_checks(
-    freshness_checks=[event_logs_freshness_checks]
+    freshness_checks=event_logs_freshness_checks  # type: ignore
 )
