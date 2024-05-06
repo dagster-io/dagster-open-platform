@@ -1,6 +1,6 @@
 import os
 
-from dagster import AssetKey, MaterializeResult, asset
+from dagster import MaterializeResult, asset
 from dagster_dbt import get_asset_key_for_model
 
 from ..resources import ConfigurableHightouchResource
@@ -45,7 +45,7 @@ def hightouch_org_info(hightouch: ConfigurableHightouchResource) -> MaterializeR
 @asset(
     deps=[
         get_asset_key_for_model([cloud_analytics_dbt_assets], "salesforce_contacts"),
-        AssetKey(["sling", "cloud_product", "users"]),
+        get_asset_key_for_model([cloud_analytics_dbt_assets], "stg_cloud_product__users"),
     ],
     compute_kind="hightouch",
     group_name="sales",
