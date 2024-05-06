@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "dagster-open-platform"
 version = "0.0.1"
 dependencies = [
-    "dbt-snowflake~=1.7",
+    "dbt-core<1.7.14",
+    "dbt-snowflake<1.7.14",
     "dagster",
     "dagster-snowflake",
     "dagster-slack",
@@ -30,7 +31,7 @@ dev = [
     "click",
     "dagster-webserver",
     "pytest",
-    "sqlfluff",
+    "sqlfluff>=3",
     "sqlfluff-templater-dbt",
     "sprocketship"
 ]
