@@ -9,6 +9,7 @@ def set_env_variable():
     os.environ["THINKIFIC_API_KEY"] = "xxx"
     os.environ["SOURCES__HUBSPOT__API_KEY"] = "xxx"
     os.environ["SOURCES__GITHUB__ACCESS_TOKEN"] = "xxx"
+    os.environ["SOURCES__BUILDKITE__BUILDKITE_API_TOKEN"] = "xxx"
 
 
 def test_configuration_yaml_loads():

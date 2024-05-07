@@ -37,6 +37,7 @@ from dagster_embedded_elt.dlt import (
 )
 from dlt import pipeline
 from dlt.extract.resource import DltResource
+from dlt_sources.buildkite import pipelines
 from dlt_sources.github import github_reactions
 from dlt_sources.hubspot import hubspot
 from dlt_sources.thinkific import thinkific
@@ -131,4 +132,35 @@ def github_reactions_dagster_assets(context: AssetExecutionContext, dlt: Dagster
 
 github_source_assets = [
     SourceAsset(key, group_name="github") for key in github_reactions_dagster_assets.dependency_keys
+]
+
+
+class BuildkiteDltTranslator(DagsterDltTranslator):
+    @public
+    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
+        return AutoMaterializePolicy.eager().with_rules(
+            AutoMaterializeRule.materialize_on_cron("0 0 * * *")
+        )
+
+
+@dlt_assets(
+    dlt_source=pipelines(
+        org_slug="dagster",
+        pipeline_slug="internal",
+    ),
+    dlt_pipeline=pipeline(
+        pipeline_name="buildkite_pipelines",
+        dataset_name="buildkite",
+        destination="snowflake",
+    ),
+    name="buildkite",
+    group_name="buildkite",
+    dlt_dagster_translator=BuildkiteDltTranslator(),
+)
+def buildkite_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
+    yield from dlt.run(context=context)
+
+
+buildkite_source_assets = [
+    SourceAsset(key, group_name="buildkite") for key in buildkite_assets.dependency_keys
 ]

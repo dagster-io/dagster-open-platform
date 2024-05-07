@@ -33,6 +33,7 @@ def test_dop_code_location():
             "THINKIFIC_API_KEY": PLACEHOLDER_ENV_VAR_VALUE,
             "SOURCES__HUBSPOT__API_KEY": PLACEHOLDER_ENV_VAR_VALUE,
             "SOURCES__GITHUB__ACCESS_TOKEN": PLACEHOLDER_ENV_VAR_VALUE,
+            "SOURCES__BUILDKITE__BUILDKITE_API_TOKEN": PLACEHOLDER_ENV_VAR_VALUE,
         }
     ):
         from dagster_open_platform.definitions import defs
