@@ -11,15 +11,13 @@ from dlt import pipeline
 from dlt_sources.buildkite import pipelines
 
 if __name__ == "__main__":
-    dlt_pipeline = pipeline(
+    pipeline(
         pipeline_name="buildkite_pipelines",
         dataset_name="buildkite",
         destination="snowflake",
-    )
-
-    dlt_pipeline.run(
+    ).run(
         pipelines(
             org_slug="dagster",
-            pipeline_slug="internal",
+            pipeline_slugs=["internal", "dagster"],
         )
     )

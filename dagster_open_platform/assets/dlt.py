@@ -1,7 +1,6 @@
 """Thinkific & Hubspot ingestion with `dlt`.
 
-The `dlt` pipeline and source secrets can be extracted "auto-magically" from
-environment variables, as defined below:
+The `dlt` pipeline and source secrets can be extracted "auto-magically" from environment variables, as defined below:
 
     THINKIFIC_API_KEY
     THINKIFIC_SUBDOMAIN
@@ -146,10 +145,10 @@ class BuildkiteDltTranslator(DagsterDltTranslator):
 @dlt_assets(
     dlt_source=pipelines(
         org_slug="dagster",
-        pipeline_slug="internal",
+        pipeline_slugs=["internal", "dagster"],
     ),
     dlt_pipeline=pipeline(
-        pipeline_name="buildkite_pipelines",
+        pipeline_name="buildkite_pipelines_internal",
         dataset_name="buildkite",
         destination="snowflake",
     ),
