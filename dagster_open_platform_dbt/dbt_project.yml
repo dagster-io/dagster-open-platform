@@ -47,6 +47,8 @@ models:
       +materialized: table
     education:
       +materialized: table
+    infrastructure:
+      +materialized: table
 
 seeds:
   +tags: seed
