@@ -15,6 +15,7 @@ from .assets import (
     monitor_purina_clones,
     oss_analytics,
     slack_analytics,
+    sling_egress,
     sling_ingest,
     source_segment,
     stripe_data_sync,
@@ -44,6 +45,7 @@ stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 sling_ingest_assets = load_assets_from_modules([sling_ingest])
 ingest_fivetran_assets = load_assets_from_modules([ingest_fivetran])
 source_segment_assets = load_assets_from_modules([source_segment])
+sling_egress_assets = load_assets_from_modules([sling_egress])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -63,6 +65,7 @@ all_assets = [
     dagster_quickstart.dagster_quickstart_validation,
     *ingest_fivetran_assets,
     *source_segment_assets,
+    *sling_egress_assets,
 ]
 
 all_checks = [salesforce_checks.account_has_valid_org_id, *sling_ingest.event_logs_freshness_checks]

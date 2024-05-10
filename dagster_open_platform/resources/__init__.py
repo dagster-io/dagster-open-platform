@@ -17,6 +17,7 @@ from .scoutos_resource import GithubResource, ScoutosResource
 from .sling_resource import CustomSlingResource, SlingPostgresConfig, SlingSnowflakeConfig
 
 embedded_elt_resource = SlingResource(
+    # Ignores are necessary due to known issue with pyright + permissiveconfigs
     connections=[
         SlingConnectionResource(
             name="CLOUD_PRODUCTION_MAIN",
@@ -61,6 +62,27 @@ embedded_elt_resource = SlingResource(
             schema=get_schema_for_environment("cloud_product_shard1"),  # type: ignore
             warehouse="sling",  # type: ignore
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
+        ),
+        SlingConnectionResource(
+            name="SLING_DB_MAIN",
+            type="snowflake",
+            host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
+            user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
+            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            database="sandbox" if get_environment() != "PROD" else "purina",  # type: ignore
+            schema=get_schema_for_environment("public"),  # type: ignore
+            warehouse="sling",  # type: ignore
+            role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
+        ),
+        SlingConnectionResource(
+            name="REPORTING_DB",
+            type="postgres",
+            host=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_HOST"),  # type: ignore
+            user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
+            database="dagster",  # type: ignore
+            password=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_PASSWORD"),  # type: ignore
+            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
+            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
     ]
 )

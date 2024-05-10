@@ -1,0 +1,13 @@
+source: PURINA
+target: REPORTING_DB
+defaults: 
+  mode: full-refresh
+  object: '{stream_table}'
+  primary_key: [organization_id]
+
+streams: 
+  
+  purina.cloud_reporting.reporting_contract_info:
+    meta:
+      dagster:
+        asset_key: public.salesforce_contract_info
