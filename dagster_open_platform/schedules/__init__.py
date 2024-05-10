@@ -26,6 +26,9 @@ support_bot_job = define_asset_job(
 )
 
 
+######################################################
+##              ASK AI Support BOT                  ##
+######################################################
 @schedule(job=support_bot_job, cron_schedule="@daily")
 def support_bot_schedule(context: ScheduleEvaluationContext) -> RunRequest:
     return RunRequest(
@@ -38,18 +41,9 @@ def support_bot_schedule(context: ScheduleEvaluationContext) -> RunRequest:
     )
 
 
-oss_telemetry_job = define_asset_job(
-    name="oss_telemetry_job",
-    selection=AssetSelection.groups("staging_telemetry").downstream(),
-    tags={"team": "devrel"},
-)
-
-oss_telemetry_schedule = ScheduleDefinition(
-    job=oss_telemetry_job,
-    cron_schedule="0 5 * * *",  # every day at 5am
-)
-
-
+######################################################
+##              INSIGHTS                            ##
+######################################################
 insights_job = define_asset_job(
     name="insights_job",
     selection=(
@@ -65,7 +59,7 @@ insights_job = define_asset_job(
         - AssetSelection.groups("cloud_product_shard1")
     ),
     partitions_def=insights_partition,
-    tags={"team": "insights"},
+    tags={"team": "insights", "dbt_pipeline": "insights"},
 )
 
 
@@ -75,8 +69,11 @@ def insights_schedule():
     yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
-cloud_usage_metrics_job = define_asset_job(
-    name="cloud_usage_metrics_job",
+######################################################
+##              Main DBT Pipeline                   ##
+######################################################
+dbt_analytics_core_job = define_asset_job(
+    name="dbt_analytics_core_job",
     selection=(
         DbtManifestAssetSelection.build(
             manifest=dagster_open_platform_dbt_project.manifest_path,
@@ -87,23 +84,28 @@ cloud_usage_metrics_job = define_asset_job(
         .required_multi_asset_neighbors()
         - AssetSelection.groups("cloud_reporting")
         - AssetSelection.key_prefixes(["purina", "postgres_mirror"])
-        - AssetSelection.keys(["purina", "oss_analytics", "dagster_pypi_downloads"])
         - AssetSelection.groups("cloud_product_main")
         - AssetSelection.groups("cloud_product_shard1")
+        - AssetSelection.groups(
+            "oss_analytics"
+        )  # The source asset for this is on a weekly partition
     ),
-    tags={"team": "devrel"},
+    tags={"team": "devrel", "dbt_pipeline": "analytics_core"},
 )
 
 
 # Cloud usage metrics isn't partitioned, but it uses a partitioned asset
 # that is managed by Insights. It doesn't matter which partition runs
 # but does need to specify the most recent partition of Insights will be run
-@schedule(cron_schedule="0 3 * * *", job=cloud_usage_metrics_job)
-def cloud_usage_metrics_schedule():
+@schedule(cron_schedule="0 3 * * *", job=dbt_analytics_core_job)
+def dbt_analytics_core_schedule():
     most_recent_partition = insights_partition.get_last_partition_key()
     yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
+######################################################
+##              Sling Ingestion Pipelines           ##
+######################################################
 high_volume_assets = AssetSelection.keys(
     ["sling", "cloud_product", "event_logs"],
     ["sling", "cloud_product", "runs"],
@@ -145,12 +147,11 @@ purina_clone_cleanup_schedule = ScheduleDefinition(
     cron_schedule="0 3 * * *",
 )
 
-scheduled_jobs = [oss_telemetry_job, insights_job, support_bot_job]
+scheduled_jobs = [insights_job, support_bot_job]
 
 schedules = [
-    oss_telemetry_schedule,
     insights_schedule,
-    cloud_usage_metrics_schedule,
+    dbt_analytics_core_schedule,
     cloud_product_sync_high_volume_schedule,
     cloud_product_sync_low_volume_schedule,
     purina_clone_cleanup_schedule,

@@ -4,9 +4,9 @@ from dagster import MaterializeResult, asset
 from dagster_dbt import get_asset_key_for_model
 
 from ..resources import ConfigurableHightouchResource
-from .dbt import cloud_analytics_dbt_assets
+from .dbt import dbt_non_partitioned_models
 
-org_activity_monthly = get_asset_key_for_model([cloud_analytics_dbt_assets], "org_activity_monthly")
+org_activity_monthly = get_asset_key_for_model([dbt_non_partitioned_models], "org_activity_monthly")
 
 
 @asset(deps=[org_activity_monthly], compute_kind="hightouch", group_name="sales")
@@ -24,7 +24,7 @@ def hightouch_org_activity_monthly(hightouch: ConfigurableHightouchResource) -> 
     )
 
 
-org_info = get_asset_key_for_model([cloud_analytics_dbt_assets], "org_info")
+org_info = get_asset_key_for_model([dbt_non_partitioned_models], "org_info")
 
 
 @asset(deps=[org_info], compute_kind="hightouch", group_name="sales")
@@ -44,8 +44,8 @@ def hightouch_org_info(hightouch: ConfigurableHightouchResource) -> MaterializeR
 
 @asset(
     deps=[
-        get_asset_key_for_model([cloud_analytics_dbt_assets], "salesforce_contacts"),
-        get_asset_key_for_model([cloud_analytics_dbt_assets], "stg_cloud_product__users"),
+        get_asset_key_for_model([dbt_non_partitioned_models], "salesforce_contacts"),
+        get_asset_key_for_model([dbt_non_partitioned_models], "stg_cloud_product__users"),
     ],
     compute_kind="hightouch",
     group_name="sales",
@@ -64,7 +64,7 @@ def hightouch_null_contact_names(hightouch: ConfigurableHightouchResource) -> Ma
     )
 
 
-cloud_users = get_asset_key_for_model([cloud_analytics_dbt_assets], "cloud_users")
+cloud_users = get_asset_key_for_model([dbt_non_partitioned_models], "cloud_users")
 
 
 @asset(

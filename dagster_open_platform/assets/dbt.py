@@ -19,7 +19,7 @@ PURINA_DATABASE_NAME = (
 )
 SNOWFLAKE_URL = f"https://app.snowflake.com/ax61354/{SNOWFLAKE_ACCOUNT_BASE}/#/data/databases/{PURINA_DATABASE_NAME}/schemas"
 
-INSIGHTS_SELECTOR = "+tag:insights,config.materialized:incremental"
+INCREMENTAL_SELECTOR = "config.materialized:incremental"
 
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
@@ -72,10 +72,10 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
-    exclude=INSIGHTS_SELECTOR,
+    exclude=INCREMENTAL_SELECTOR,
     backfill_policy=BackfillPolicy.single_run(),
 )
-def cloud_analytics_dbt_assets(context: AssetExecutionContext, dbt: DbtCliResource):
+def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource):
     yield from dbt_with_snowflake_insights(context, dbt.cli(["build"], context=context))
 
 
@@ -85,12 +85,12 @@ class DbtConfig(Config):
 
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
-    select=INSIGHTS_SELECTOR,
+    select=INCREMENTAL_SELECTOR,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
     partitions_def=insights_partition,
     backfill_policy=BackfillPolicy.single_run(),
 )
-def dbt_insights_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
+def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
     dbt_vars = {
         "min_date": context.partition_time_window.start.isoformat(),
         "max_date": context.partition_time_window.end.isoformat(),

@@ -1,11 +1,11 @@
 from dagster import AssetKey
 from dagster_dbt import get_asset_key_for_model
+from dagster_open_platform.assets.dbt import dbt_non_partitioned_models
 
 from ..resources.sling_resource import (
     SlingMode,
     build_sync_snowflake_to_postgres_asset,
 )
-from .dbt import cloud_analytics_dbt_assets
 
 # Excludes surrogate_key column
 USAGE_METRICS_SELECT_QUERY_TEMPLATE = """
@@ -39,7 +39,7 @@ prod_sync_usage_metrics = [
         mode=SlingMode.TRUNCATE,
         deps=[
             get_asset_key_for_model(
-                [cloud_analytics_dbt_assets], "usage_metrics_daily_jobs_aggregated"
+                [dbt_non_partitioned_models], "usage_metrics_daily_jobs_aggregated"
             )
         ],
         allow_alter_table=False,

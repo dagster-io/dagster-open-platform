@@ -1,9 +1,17 @@
 selectors:
-  - name: non_cloud_analytics
-    description: Only selects newer refactored models
+  - name: incremental 
+    description: "Select all downstream nodes of 'insights' tag that are incrementally materialized, excluding snapshots"
+    definition:
+        method: config.materialized
+        value: incremental
+        exclude:
+          - method: resource_type
+            value: snapshot
+  - name: non_incremental
+    description: "Select all models that are not incrementally materialized"
     definition:
       method: fqn
-      value: "*"
+      value: '*'
       exclude:
-        - "cloud_analytics.*"
-
+        - method: config.materialized
+          value: incremental
