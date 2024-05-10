@@ -137,7 +137,9 @@ cloud_product_sync_low_volume_schedule = ScheduleDefinition(
     ),
     cron_schedule="0 */2 * * *",
 )
-
+######################################################
+##              Purina Cleanup                      ##
+######################################################
 purina_clone_cleanup_schedule = ScheduleDefinition(
     job=define_asset_job(
         name="purina_clone_cleanup_job",
@@ -147,7 +149,20 @@ purina_clone_cleanup_schedule = ScheduleDefinition(
     cron_schedule="0 3 * * *",
 )
 
+######################################################
+##              OSS Telemetry Ingest + dbt          ##
+######################################################
+oss_analytics_schedule = ScheduleDefinition(
+    job=define_asset_job(
+        name="oss_analytics_job",
+        selection=["purina/oss_analytics/dagster_pypi_downloads*"],
+        tags={"team": "devrel"},
+    ),
+    cron_schedule="0 * * * *",
+)
+
 scheduled_jobs = [insights_job, support_bot_job]
+
 
 schedules = [
     insights_schedule,
@@ -156,4 +171,5 @@ schedules = [
     cloud_product_sync_low_volume_schedule,
     purina_clone_cleanup_schedule,
     support_bot_schedule,
+    oss_analytics_schedule,
 ]
