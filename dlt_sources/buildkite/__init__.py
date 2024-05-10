@@ -4,7 +4,7 @@ import dlt
 from dlt.extract.incremental import Incremental
 from dlt.sources.helpers import requests
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename=__file__, level=logging.INFO)
 
 
 @dlt.source
