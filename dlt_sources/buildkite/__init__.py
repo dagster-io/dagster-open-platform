@@ -1,10 +1,6 @@
-import logging
-
 import dlt
 from dlt.extract.incremental import Incremental
 from dlt.sources.helpers import requests
-
-logging.basicConfig(filename=__file__, level=logging.INFO)
 
 
 @dlt.source
@@ -31,7 +27,6 @@ def pipelines(
         for pipeline_slug in pipeline_slugs:
             page = 1
             while True:
-                logging.info("querying page: %s", page)
                 params = {
                     "page": str(page),
                     "per_page": str(per_page),
