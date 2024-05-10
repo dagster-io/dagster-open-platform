@@ -1,4 +1,4 @@
-source: PURINA
+source: PURINA_CLOUD_REPORTING
 target: REPORTING_DB
 defaults: 
   mode: full-refresh

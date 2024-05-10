@@ -64,13 +64,13 @@ embedded_elt_resource = SlingResource(
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
         SlingConnectionResource(
-            name="SLING_DB_MAIN",
+            name="PURINA_CLOUD_REPORTING",
             type="snowflake",
             host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
             password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
             database="sandbox" if get_environment() != "PROD" else "purina",  # type: ignore
-            schema=get_schema_for_environment("public"),  # type: ignore
+            schema=get_schema_for_environment("cloud_reporting"),  # type: ignore
             warehouse="sling",  # type: ignore
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
