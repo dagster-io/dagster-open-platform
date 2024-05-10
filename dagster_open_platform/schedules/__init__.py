@@ -14,6 +14,7 @@ from dagster._core.storage.tags import (
     ASSET_PARTITION_RANGE_START_TAG,
 )
 from dagster_dbt import DbtManifestAssetSelection
+from dagster_open_platform.assets.oss_analytics import dagster_pypi_downloads
 
 from ..assets import dbt, monitor_purina_clones, support_bot
 from ..partitions import insights_partition
@@ -155,7 +156,7 @@ purina_clone_cleanup_schedule = ScheduleDefinition(
 oss_analytics_schedule = ScheduleDefinition(
     job=define_asset_job(
         name="oss_analytics_job",
-        selection=["purina/oss_analytics/dagster_pypi_downloads*"],
+        selection=(AssetSelection.assets(dagster_pypi_downloads).downstream(include_self=False)),
         tags={"team": "devrel"},
     ),
     cron_schedule="0 * * * *",
