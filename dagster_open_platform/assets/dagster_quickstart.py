@@ -6,7 +6,6 @@ from dagster import (
     AssetExecutionContext,
     Failure,
     RunRequest,
-    SensorEvaluationContext,
     asset,
     define_asset_job,
     sensor,
@@ -68,17 +67,12 @@ dagster_quickstart_validation_job = define_asset_job(
 
 
 @sensor(job=dagster_quickstart_validation_job, minimum_interval_seconds=10 * 60)
-def dagster_quickstart_validation_sensor(context: SensorEvaluationContext):
+def dagster_quickstart_validation_sensor():
     """Polls if a change has been made to dagster-io/dagster-quickstart or a new release has shipped."""
     response = requests.get("https://api.github.com/repos/dagster-io/dagster/releases/latest")
     latest_dagster_release_name = response.json().get("name")
-
     current_git_commit_sha = _get_most_recent_sha(DAGSTER_QUICKSTART_REPO)
 
-    cursor = f"{current_git_commit_sha} {latest_dagster_release_name}"
-
-    if cursor != context.cursor:
-        yield RunRequest(
-            run_key=f"dagster_quickstart_validation_{current_git_commit_sha}",
-        )
-        context.update_cursor(cursor)
+    # Only a distinct `run_key` will trigger a run, so we do not need to manually check if the
+    # cursor has changed (eg. cursor != context.cursor).
+    yield RunRequest(run_key=f"{current_git_commit_sha} {latest_dagster_release_name}")
