@@ -70,7 +70,7 @@ embedded_elt_resource = SlingResource(
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
             password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
             database="sandbox" if get_environment() != "PROD" else "purina",  # type: ignore
-            schema=get_schema_for_environment("cloud_reporting"),  # type: ignore
+            schema=get_schema_for_environment("sales"),  # type: ignore
             warehouse="sling",  # type: ignore
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
@@ -81,6 +81,7 @@ embedded_elt_resource = SlingResource(
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
             database="dagster",  # type: ignore
             password=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_PASSWORD"),  # type: ignore
+            ssl_mode="require",  # type: ignore
             ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
             ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),

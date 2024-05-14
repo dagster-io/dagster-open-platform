@@ -7,7 +7,7 @@ defaults:
 
 streams: 
   
-  purina.cloud_reporting.reporting_contract_info:
+  purina.sales.reporting_contract_info:
     meta:
       dagster:
         asset_key: public.salesforce_contract_info
