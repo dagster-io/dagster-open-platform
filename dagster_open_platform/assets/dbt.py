@@ -20,10 +20,13 @@ PURINA_DATABASE_NAME = (
 SNOWFLAKE_URL = f"https://app.snowflake.com/ax61354/{SNOWFLAKE_ACCOUNT_BASE}/#/data/databases/{PURINA_DATABASE_NAME}/schemas"
 
 INCREMENTAL_SELECTOR = "config.materialized:incremental"
+SNAPSHOT_SELECTOR = "resource_type:snapshot"
 
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
+        if dbt_resource_props["resource_type"] == "snapshot":
+            return "snapshots"
         # Same logic that sets the custom schema in macros/get_custom_schema.sql
         asset_path = dbt_resource_props["fqn"][1:-1]
         if asset_path:
@@ -72,7 +75,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
-    exclude=INCREMENTAL_SELECTOR,
+    exclude=INCREMENTAL_SELECTOR + " " + SNAPSHOT_SELECTOR,
     backfill_policy=BackfillPolicy.single_run(),
 )
 def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource):
@@ -101,3 +104,13 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
         args = ["build", "--full-refresh"]
 
     yield from dbt_with_snowflake_insights(context, dbt.cli(args, context=context))
+
+
+@dbt_assets(
+    manifest=dagster_open_platform_dbt_project.manifest_path,
+    select=SNAPSHOT_SELECTOR,
+    dagster_dbt_translator=CustomDagsterDbtTranslator(),
+    backfill_policy=BackfillPolicy.single_run(),
+)
+def dbt_snapshot_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
+    yield from dbt_with_snowflake_insights(context, dbt.cli(["snapshot"], context=context))

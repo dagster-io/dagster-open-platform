@@ -104,6 +104,16 @@ def dbt_analytics_core_schedule():
     yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
 
 
+dbt_analytics_snapshot_schedule = ScheduleDefinition(
+    job=define_asset_job(
+        name="dbt_analytics_snapshot_job",
+        selection=(AssetSelection.assets(dbt.dbt_snapshot_models)),
+        tags={"team": "devrel"},
+    ),
+    cron_schedule="0 * * * *",
+)
+
+
 ######################################################
 ##              Sling Ingestion Pipelines           ##
 ######################################################
@@ -173,4 +183,5 @@ schedules = [
     purina_clone_cleanup_schedule,
     support_bot_schedule,
     oss_analytics_schedule,
+    dbt_analytics_snapshot_schedule,
 ]
