@@ -81,7 +81,7 @@ embedded_elt_resource = SlingResource(
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
             database="dagster",  # type: ignore
             password=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_PASSWORD"),  # type: ignore
-            ssl_mode="require",  # type: ignore
+            sslmode="require",  # type: ignore
             ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
             ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
