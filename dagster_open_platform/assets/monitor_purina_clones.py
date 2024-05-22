@@ -42,8 +42,9 @@ def inactive_snowflake_clones(snowflake: SnowflakeResource) -> MaterializeResult
         dbs_to_drop = result["DATABASE_NAME"].to_list()
         if dbs_to_drop:
             for db in dbs_to_drop:
+                pr_id = db.split("_")[-1]  # Get the pull request ID from the database name
                 log.info(f"Dropping {db}")
-                cur.execute(f"drop database {db};")
+                cur.execute(f"CALL UTIL_DB.PUBLIC.CLEANUP_PURINA_CLONE('{pr_id}')")
                 log.info(f"{db} dropped.")
         else:
             log.info("No databases to drop.")
