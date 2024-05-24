@@ -79,7 +79,12 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     backfill_policy=BackfillPolicy.single_run(),
 )
 def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource):
-    yield from dbt_with_snowflake_insights(context, dbt.cli(["build"], context=context))
+    cli_invocation = dbt.cli(["build"], context=context)
+    yield from dbt_with_snowflake_insights(
+        context=context,
+        dbt_cli_invocation=cli_invocation,
+        dagster_events=cli_invocation.stream().fetch_row_counts(),
+    )
 
 
 class DbtConfig(Config):
@@ -103,7 +108,12 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
     if config.full_refresh:
         args = ["build", "--full-refresh"]
 
-    yield from dbt_with_snowflake_insights(context, dbt.cli(args, context=context))
+    cli_invocation = dbt.cli(args, context=context)
+    yield from dbt_with_snowflake_insights(
+        context=context,
+        dbt_cli_invocation=cli_invocation,
+        dagster_events=cli_invocation.stream().fetch_row_counts(),
+    )
 
 
 @dbt_assets(
