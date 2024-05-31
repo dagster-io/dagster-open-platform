@@ -28,11 +28,13 @@ streams:
         asset_key: sling.cloud_product_shard1.run_tags
     
   public.asset_materializations:
+    update_key: event_id
     meta:
       dagster: 
         asset_key: sling.cloud_product_shard1.asset_materializations
     
   public.asset_observations:
+    update_key: event_id
     meta:
       dagster: 
         asset_key: sling.cloud_product_shard1.asset_observations

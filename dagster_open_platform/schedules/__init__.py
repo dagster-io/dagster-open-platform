@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from dagster import (
     AssetSelection,
-    RetryPolicy,
     RunRequest,
     ScheduleDefinition,
     ScheduleEvaluationContext,
@@ -138,10 +137,6 @@ cloud_product_sync_high_volume_schedule = ScheduleDefinition(
         name="cloud_product_sync_high_volume",
         selection=high_volume_assets,
         tags={"team": "devrel"},
-        op_retry_policy=RetryPolicy(
-            max_retries=3,
-            delay=20,
-        ),
     ),
     cron_schedule="*/5 * * * *",
 )
