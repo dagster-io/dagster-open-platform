@@ -131,7 +131,6 @@ high_volume_assets = AssetSelection.keys(
     ["sling", "cloud_product_shard1", "asset_materializations"],
     ["sling", "cloud_product_shard1", "asset_observations"],
     ["sling", "cloud_product_shard1", "asset_partitions"],
-    ["sling", "cloud_product_shard1", "alert_policies"],
 )
 
 cloud_product_sync_high_volume_schedule = ScheduleDefinition(
