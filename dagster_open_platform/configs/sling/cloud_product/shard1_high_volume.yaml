@@ -27,3 +27,18 @@ streams:
       dagster:
         asset_key: sling.cloud_product_shard1.run_tags
     
+  public.asset_materializations:
+    meta:
+      dagster: 
+        asset_key: sling.cloud_product_shard1.asset_materializations
+    
+  public.asset_observations:
+    meta:
+      dagster: 
+        asset_key: sling.cloud_product_shard1.asset_observations
+    
+  public.asset_partitions:
+    meta:
+      dagster: 
+        asset_key: sling.cloud_product_shard1.asset_partitions
+    
