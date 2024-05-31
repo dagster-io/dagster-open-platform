@@ -75,6 +75,10 @@ def member_metrics(
 
         # Merge the temporary table with the target table
         columns = slack_stats.columns
+        columns = [
+            col for col in columns if col != "ENTERPRISE_ID"
+        ]  # This is an empty column which causes type issues
+
         update_set_clause = ", ".join([f"target.{col} = source.{col}" for col in columns])
         insert_columns = ", ".join(columns)
         insert_values = ", ".join([f"source.{col}" for col in columns])
