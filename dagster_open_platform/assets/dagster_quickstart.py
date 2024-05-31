@@ -66,7 +66,13 @@ dagster_quickstart_validation_job = define_asset_job(
 )
 
 
-@sensor(job=dagster_quickstart_validation_job, minimum_interval_seconds=10 * 60)
+THREE_HOURS_IN_SECONDS = 3 * 60 * 60
+
+
+@sensor(
+    job=dagster_quickstart_validation_job,
+    minimum_interval_seconds=THREE_HOURS_IN_SECONDS,
+)
 def dagster_quickstart_validation_sensor():
     """Polls if a change has been made to dagster-io/dagster-quickstart or a new release has shipped."""
     response = requests.get("https://api.github.com/repos/dagster-io/dagster/releases/latest")
