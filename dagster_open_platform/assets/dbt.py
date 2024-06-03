@@ -4,7 +4,12 @@ from typing import Any, Mapping, Optional
 
 from dagster import AssetExecutionContext, AssetKey, BackfillPolicy, Config, MetadataValue
 from dagster_cloud.dagster_insights import dbt_with_snowflake_insights
-from dagster_dbt import DagsterDbtTranslator, DbtCliResource, dbt_assets
+from dagster_dbt import (
+    DagsterDbtTranslator,
+    DagsterDbtTranslatorSettings,
+    DbtCliResource,
+    dbt_assets,
+)
 
 from ..partitions import insights_partition
 from ..resources import (
@@ -74,9 +79,12 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
-    dagster_dbt_translator=CustomDagsterDbtTranslator(),
+    dagster_dbt_translator=CustomDagsterDbtTranslator(
+        settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+    ),
     exclude=INCREMENTAL_SELECTOR + " " + SNAPSHOT_SELECTOR,
     backfill_policy=BackfillPolicy.single_run(),
+    project=dagster_open_platform_dbt_project,
 )
 def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource):
     cli_invocation = dbt.cli(["build"], context=context)
@@ -94,9 +102,12 @@ class DbtConfig(Config):
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
     select=INCREMENTAL_SELECTOR,
-    dagster_dbt_translator=CustomDagsterDbtTranslator(),
+    dagster_dbt_translator=CustomDagsterDbtTranslator(
+        settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+    ),
     partitions_def=insights_partition,
     backfill_policy=BackfillPolicy.single_run(),
+    project=dagster_open_platform_dbt_project,
 )
 def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
     dbt_vars = {
@@ -119,8 +130,11 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
     select=SNAPSHOT_SELECTOR,
-    dagster_dbt_translator=CustomDagsterDbtTranslator(),
+    dagster_dbt_translator=CustomDagsterDbtTranslator(
+        settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+    ),
     backfill_policy=BackfillPolicy.single_run(),
+    project=dagster_open_platform_dbt_project,
 )
 def dbt_snapshot_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
     yield from dbt_with_snowflake_insights(context, dbt.cli(["snapshot"], context=context))

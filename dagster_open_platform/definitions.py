@@ -1,6 +1,8 @@
 import warnings
+from pathlib import Path
 
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
+from dagster._core.definitions.metadata import with_source_code_references
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
@@ -36,6 +38,7 @@ from .resources import (
     snowflake_resource,
 )
 from .schedules import scheduled_jobs, schedules
+from .utils.source_code import link_to_git_if_cloud
 
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
 dbt_assets = load_assets_from_modules([dbt])
@@ -84,7 +87,12 @@ all_sensors = [
 ]
 
 defs = Definitions(
-    assets=all_assets,
+    assets=link_to_git_if_cloud(
+        with_source_code_references(all_assets),
+        repository_root_absolute_path=Path(__file__)
+        .parent.parent.parent.parent.resolve()
+        .absolute(),
+    ),
     asset_checks=all_checks,
     resources={
         "bigquery": bigquery_resource,
