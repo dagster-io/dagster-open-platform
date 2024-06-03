@@ -2,7 +2,9 @@ from datetime import timedelta
 
 from dagster import (
     AssetSelection,
+    DagsterRunStatus,
     RunRequest,
+    RunsFilter,
     ScheduleDefinition,
     ScheduleEvaluationContext,
     define_asset_job,
@@ -114,6 +116,62 @@ dbt_analytics_snapshot_schedule = ScheduleDefinition(
 
 
 ######################################################
+##              Sling Ingestion Pipelines           ##
+######################################################
+high_volume_assets = AssetSelection.keys(
+    ["sling", "cloud_product", "event_logs"],
+    ["sling", "cloud_product", "runs"],
+    ["sling", "cloud_product", "run_tags"],
+    ["sling", "cloud_product_shard1", "event_logs"],
+    ["sling", "cloud_product_shard1", "runs"],
+    ["sling", "cloud_product_shard1", "run_tags"],
+    ["sling", "cloud_product", "asset_materializations"],
+    ["sling", "cloud_product", "asset_observations"],
+    ["sling", "cloud_product", "asset_partitions"],
+    ["sling", "cloud_product", "alert_policies"],
+    ["sling", "cloud_product_shard1", "asset_materializations"],
+    ["sling", "cloud_product_shard1", "asset_observations"],
+    ["sling", "cloud_product_shard1", "asset_partitions"],
+)
+
+cloud_product_sync_high_volume_job = define_asset_job(
+    name="cloud_product_sync_high_volume",
+    selection=high_volume_assets,
+    tags={"team": "devrel"},
+)
+
+
+@schedule(job=cloud_product_sync_high_volume_job, cron_schedule="*/5 * * * *")
+def cloud_product_sync_high_volume_schedule(context):
+    run_records = context.instance.get_run_records(
+        RunsFilter(job_name="cloud_product_sync_high_volume", statuses=[DagsterRunStatus.STARTED])
+    )
+    if len(run_records) == 0:
+        return RunRequest()
+    else:
+        return None
+
+
+cloud_product_sync_low_volume_job = define_asset_job(
+    name="cloud_product_sync_low_volume",
+    selection=AssetSelection.groups("cloud_product_main", "cloud_product_shard1")
+    - high_volume_assets,
+    tags={"team": "devrel"},
+)
+
+
+@schedule(job=cloud_product_sync_low_volume_job, cron_schedule="0 */2 * * *")
+def cloud_product_sync_low_volume_schedule(context):
+    run_records = context.instance.get_run_records(
+        RunsFilter(job_name="cloud_product_sync_low_volume", statuses=[DagsterRunStatus.STARTED])
+    )
+    if len(run_records) == 0:
+        return RunRequest()
+    else:
+        return None
+
+
+######################################################
 ##              Purina Cleanup                      ##
 ######################################################
 purina_clone_cleanup_schedule = ScheduleDefinition(
@@ -143,6 +201,8 @@ scheduled_jobs = [insights_job, support_bot_job]
 schedules = [
     insights_schedule,
     dbt_analytics_core_schedule,
+    cloud_product_sync_high_volume_schedule,
+    cloud_product_sync_low_volume_schedule,
     purina_clone_cleanup_schedule,
     support_bot_schedule,
     oss_analytics_schedule,

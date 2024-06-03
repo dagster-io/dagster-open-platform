@@ -4,8 +4,6 @@ from pathlib import Path
 from dagster import (
     AssetKey,
     AssetsDefinition,
-    AutoMaterializePolicy,
-    AutoMaterializeRule,
     SourceAsset,
     build_last_update_freshness_checks,
     build_sensor_for_freshness_checks,
@@ -26,26 +24,6 @@ class CustomSlingTranslatorMain(DagsterSlingTranslator):
     def get_deps_asset_key(self, stream_definition):
         stream_asset_key = super().get_deps_asset_key(stream_definition)[0]
         return AssetKey(["main", *stream_asset_key[0]])
-
-    def get_auto_materialize_policy(self, stream_definition):
-        high_volume_asset_keys = [
-            "event_logs",
-            "runs",
-            "run_tags",
-            "asset_materializations",
-            "asset_observations",
-            "asset_partitions",
-            "alert_policies",
-        ]
-        stream_asset_key = super().get_deps_asset_key(stream_definition)[0][0][-1]
-
-        if stream_asset_key in high_volume_asset_keys:
-            return AutoMaterializePolicy.eager().with_rules(
-                AutoMaterializeRule.materialize_on_cron("*/5 * * * *"),
-            )
-        return AutoMaterializePolicy.eager().with_rules(
-            AutoMaterializeRule.materialize_on_cron("0 */2 * * *"),
-        )
 
 
 @sling_assets(
@@ -83,26 +61,6 @@ class CustomSlingTranslatorShard1(DagsterSlingTranslator):
     def get_deps_asset_key(self, stream_definition):
         stream_asset_key = super().get_deps_asset_key(stream_definition)[0]
         return AssetKey(["shard1", *stream_asset_key[0]])
-
-    def get_auto_materialize_policy(self, stream_definition):
-        high_volume_asset_keys = [
-            "event_logs",
-            "runs",
-            "run_tags",
-            "asset_materializations",
-            "asset_observations",
-            "asset_partitions",
-            "alert_policies",
-        ]
-        stream_asset_key = super().get_deps_asset_key(stream_definition)[0][0][-1]
-
-        if stream_asset_key in high_volume_asset_keys:
-            return AutoMaterializePolicy.eager().with_rules(
-                AutoMaterializeRule.materialize_on_cron("*/5 * * * *"),
-            )
-        return AutoMaterializePolicy.eager().with_rules(
-            AutoMaterializeRule.materialize_on_cron("0 */2 * * *"),
-        )
 
 
 @sling_assets(
