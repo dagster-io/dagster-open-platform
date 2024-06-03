@@ -84,13 +84,20 @@ dbt_analytics_core_job = define_asset_job(
         .upstream()
         .downstream()
         .required_multi_asset_neighbors()
-        - AssetSelection.groups("cloud_reporting")
-        - AssetSelection.key_prefixes(["purina", "postgres_mirror"])
-        - AssetSelection.groups("cloud_product_main")
-        - AssetSelection.groups("cloud_product_shard1")
         - AssetSelection.groups(
-            "oss_analytics"
-        )  # The source asset for this is on a weekly partition
+            # insights groups
+            "cloud_reporting",
+            # postgres ingestion groups
+            "cloud_product_main",
+            "cloud_product_shard1",
+            # The source asset for this is on a weekly partition
+            "oss_analytics",
+            # dlt ingestion groups
+            "thinkific",
+            "buildkite",
+            "github",
+            "hubspot",
+        )
     ),
     tags={"team": "devrel", "dbt_pipeline": "analytics_core"},
 )
