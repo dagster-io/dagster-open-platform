@@ -37,7 +37,7 @@ class CustomSlingTranslatorMain(DagsterSlingTranslator):
             "asset_partitions",
             "alert_policies",
         ]
-        stream_asset_key = super().get_deps_asset_key(stream_definition)[0][-1]
+        stream_asset_key = super().get_deps_asset_key(stream_definition)[0][0][-1]
 
         if stream_asset_key in high_volume_asset_keys:
             return AutoMaterializePolicy.eager().with_rules(
@@ -94,7 +94,7 @@ class CustomSlingTranslatorShard1(DagsterSlingTranslator):
             "asset_partitions",
             "alert_policies",
         ]
-        stream_asset_key = super().get_deps_asset_key(stream_definition)[0][-1]
+        stream_asset_key = super().get_deps_asset_key(stream_definition)[0][0][-1]
 
         if stream_asset_key in high_volume_asset_keys:
             return AutoMaterializePolicy.eager().with_rules(
