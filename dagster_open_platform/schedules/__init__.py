@@ -140,16 +140,20 @@ cloud_product_sync_high_volume_job = define_asset_job(
     tags={"team": "devrel"},
 )
 
+in_progress_statuses = [
+    DagsterRunStatus.NOT_STARTED,
+    DagsterRunStatus.STARTED,
+    DagsterRunStatus.STARTING,
+    DagsterRunStatus.QUEUED,
+]
+
 
 @schedule(job=cloud_product_sync_high_volume_job, cron_schedule="*/5 * * * *")
 def cloud_product_sync_high_volume_schedule(context):
     run_records = context.instance.get_run_records(
-        RunsFilter(job_name="cloud_product_sync_high_volume", statuses=[DagsterRunStatus.STARTED])
+        RunsFilter(job_name="cloud_product_sync_high_volume", statuses=in_progress_statuses)
     )
-    if len(run_records) == 0:
-        return RunRequest()
-    else:
-        return None
+    return RunRequest() if len(run_records) == 0 else None
 
 
 cloud_product_sync_low_volume_job = define_asset_job(
@@ -163,12 +167,9 @@ cloud_product_sync_low_volume_job = define_asset_job(
 @schedule(job=cloud_product_sync_low_volume_job, cron_schedule="0 */2 * * *")
 def cloud_product_sync_low_volume_schedule(context):
     run_records = context.instance.get_run_records(
-        RunsFilter(job_name="cloud_product_sync_low_volume", statuses=[DagsterRunStatus.STARTED])
+        RunsFilter(job_name="cloud_product_sync_low_volume", statuses=in_progress_statuses)
     )
-    if len(run_records) == 0:
-        return RunRequest()
-    else:
-        return None
+    return RunRequest() if len(run_records) == 0 else None
 
 
 ######################################################
