@@ -12,9 +12,7 @@ from dagster_dbt import (
 )
 
 from ..partitions import insights_partition
-from ..resources import (
-    dagster_open_platform_dbt_project,
-)
+from ..resources import dagster_open_platform_dbt_project
 
 SNOWFLAKE_ACCOUNT_BASE, *_ = os.getenv("SNOWFLAKE_ACCOUNT", ".").split(".")
 PURINA_DATABASE_NAME = (

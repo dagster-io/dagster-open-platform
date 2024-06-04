@@ -29,11 +29,7 @@ from dagster import (
     file_relative_path,
 )
 from dagster._annotations import public
-from dagster_embedded_elt.dlt import (
-    DagsterDltResource,
-    DagsterDltTranslator,
-    dlt_assets,
-)
+from dagster_embedded_elt.dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
 from dlt import pipeline
 from dlt.extract.resource import DltResource
 from dlt_sources.buildkite import pipelines

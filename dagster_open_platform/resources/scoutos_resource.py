@@ -3,16 +3,10 @@ from typing import Any, Dict, List
 
 import gql
 import requests
-from dagster import (
-    ConfigurableResource,
-    get_dagster_logger,
-)
+from dagster import ConfigurableResource, get_dagster_logger
 from gql.transport.requests import RequestsHTTPTransport
 
-from ..utils.github_gql_queries import (
-    GITHUB_DISCUSSIONS_QUERY,
-    GITHUB_ISSUES_QUERY,
-)
+from ..utils.github_gql_queries import GITHUB_DISCUSSIONS_QUERY, GITHUB_ISSUES_QUERY
 
 
 class ScoutosResource(ConfigurableResource):

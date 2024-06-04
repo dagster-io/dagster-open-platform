@@ -1,7 +1,4 @@
-from dagster import (
-    TimeWindowPartitionsDefinition,
-    WeeklyPartitionsDefinition,
-)
+from dagster import TimeWindowPartitionsDefinition, WeeklyPartitionsDefinition
 from dagster._utils.partitions import DEFAULT_HOURLY_FORMAT_WITHOUT_TIMEZONE
 
 # split up every 3 hrs

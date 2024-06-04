@@ -1,11 +1,5 @@
-from dagster import (
-    AssetKey,
-    EnvVar,
-)
-from dagster_fivetran import (
-    FivetranResource,
-    load_assets_from_fivetran_instance,
-)
+from dagster import AssetKey, EnvVar
+from dagster_fivetran import FivetranResource, load_assets_from_fivetran_instance
 
 fivetran_instance = FivetranResource(
     api_key=EnvVar("FIVETRAN_API_KEY"),

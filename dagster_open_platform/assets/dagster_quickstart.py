@@ -2,14 +2,7 @@ import subprocess
 import tempfile
 
 import requests
-from dagster import (
-    AssetExecutionContext,
-    Failure,
-    RunRequest,
-    asset,
-    define_asset_job,
-    sensor,
-)
+from dagster import AssetExecutionContext, Failure, RunRequest, asset, define_asset_job, sensor
 
 DAGSTER_QUICKSTART_REPO = "dagster-io/dagster-quickstart"
 

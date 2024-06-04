@@ -14,10 +14,7 @@ from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
 
 from ..partitions import oss_analytics_weekly_partition
-from ..utils.environment_helpers import (
-    get_database_for_environment,
-    get_schema_for_environment,
-)
+from ..utils.environment_helpers import get_database_for_environment, get_schema_for_environment
 
 NON_EMPTY_CHECK_NAME = "non_empty_etl"
 SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"

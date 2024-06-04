@@ -4,10 +4,7 @@ from pathlib import Path
 from dagster import EnvVar
 from dagster_cloud.dagster_insights import InsightsBigQueryResource
 from dagster_dbt import DbtCliResource, DbtProject
-from dagster_embedded_elt.sling.resources import (
-    SlingConnectionResource,
-    SlingResource,
-)
+from dagster_embedded_elt.sling.resources import SlingConnectionResource, SlingResource
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
