@@ -71,7 +71,11 @@ all_assets = [
     *sling_egress_assets,
 ]
 
-all_checks = [salesforce_checks.account_has_valid_org_id, *sling_ingest.event_logs_freshness_checks]
+all_checks = [
+    salesforce_checks.account_has_valid_org_id,
+    *sling_ingest.event_logs_freshness_checks,
+    *dbt.usage_metrics_daily_freshness_checks,
+]
 
 all_jobs = [*scheduled_jobs]
 

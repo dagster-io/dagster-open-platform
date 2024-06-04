@@ -1,8 +1,12 @@
+import datetime
 import json
 import os
 from typing import Any, Mapping, Optional
 
 from dagster import AssetExecutionContext, AssetKey, BackfillPolicy, Config, MetadataValue
+from dagster._core.definitions.asset_check_factories.freshness_checks.last_update import (
+    build_last_update_freshness_checks,
+)
 from dagster_cloud.dagster_insights import dbt_with_snowflake_insights
 from dagster_dbt import (
     DagsterDbtTranslator,
@@ -10,6 +14,7 @@ from dagster_dbt import (
     DbtCliResource,
     dbt_assets,
 )
+from dagster_dbt.asset_utils import get_asset_key_for_model
 
 from ..partitions import insights_partition
 from ..resources import dagster_open_platform_dbt_project
@@ -136,3 +141,13 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
 )
 def dbt_snapshot_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
     yield from dbt_with_snowflake_insights(context, dbt.cli(["snapshot"], context=context))
+
+
+# Usage metrics daily gets materialized each day. Give at least 12 hours berth time for any easy problems to be resolved.
+usage_metrics_daily_freshness_checks = build_last_update_freshness_checks(
+    assets=[
+        get_asset_key_for_model([dbt_non_partitioned_models], "usage_metrics_daily"),
+        get_asset_key_for_model([dbt_partitioned_models], "usage_metrics_daily_jobs_aggregated"),
+    ],
+    lower_bound_delta=datetime.timedelta(hours=36),
+)
