@@ -29,7 +29,7 @@ models:
       +materialized: view
     cloud_reporting:
       +materialized: table
-      +snowflake_warehouse: insights
+      +snowflake_warehouse: l_warehouse
       +meta:
         dagster:
           owners: ["ben@dagsterlabs.com", "team:dagster-plus"]
