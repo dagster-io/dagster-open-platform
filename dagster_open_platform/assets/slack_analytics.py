@@ -6,6 +6,8 @@ from dagster import (
     AssetCheckResult,
     AssetCheckSpec,
     AssetSelection,
+    AutoMaterializePolicy,
+    AutoMaterializeRule,
     MaterializeResult,
     ScheduleDefinition,
     asset,
@@ -25,6 +27,9 @@ from snowflake.connector.pandas_tools import write_pandas
     group_name="slack",
     check_specs=[AssetCheckSpec("unique_ds_check", asset=["slack", "dagster", "member_metrics"])],
     description="Slack Stats, which includes number of members by day",
+    auto_materialize_policy=AutoMaterializePolicy.eager().with_rules(
+        AutoMaterializeRule.materialize_on_cron("0 0 * * *")
+    ),
 )
 def member_metrics(
     slack: SlackResource, snowflake: SnowflakeResource
