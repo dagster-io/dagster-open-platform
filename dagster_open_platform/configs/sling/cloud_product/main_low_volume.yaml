@@ -83,6 +83,16 @@ streams:
       dagster:
         asset_key: sling.cloud_product.teams_permissions
   
+  public.jobs: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.jobs
+  
+  public.instigators: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.instigators
+  
   public.repository_locations_data: 
     sql: |
       select

@@ -11,6 +11,16 @@ streams:
     meta:
       dagster: 
         asset_key: sling.cloud_product_shard1.asset_keys
+  
+  public.jobs: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.jobs
+  
+  public.instigators: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.instigators
 
   public.repository_locations_data: 
     sql: |
