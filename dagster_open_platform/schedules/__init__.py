@@ -97,7 +97,10 @@ dbt_analytics_core_job = define_asset_job(
             "buildkite",
             "github",
             "hubspot",
+            # slack ingestion
             "slack",
+            # fivetran ingestion
+            "fivetran_salesforce",
         )
     ),
     tags={"team": "devrel", "dbt_pipeline": "analytics_core"},

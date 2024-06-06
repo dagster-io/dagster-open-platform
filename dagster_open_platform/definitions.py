@@ -46,7 +46,6 @@ support_bot_assets = load_assets_from_modules([support_bot])
 dlt_assets = load_assets_from_modules([dlt])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 sling_ingest_assets = load_assets_from_modules([sling_ingest])
-ingest_fivetran_assets = load_assets_from_modules([ingest_fivetran])
 source_segment_assets = load_assets_from_modules([source_segment])
 sling_egress_assets = load_assets_from_modules([sling_egress])
 
@@ -66,7 +65,7 @@ all_assets = [
     *stripe_sync_assets,
     *sling_ingest_assets,
     dagster_quickstart.dagster_quickstart_validation,
-    *ingest_fivetran_assets,
+    *ingest_fivetran.fivetran_assets,
     *source_segment_assets,
     *sling_egress_assets,
 ]
