@@ -12,12 +12,12 @@ workspace:
   providers:
     - type: snowflake
       credential: default
-      namespaces: 
-        - target: dlt.*.*
-        - target: segment.*.*
-        - target: stripe_pipeline.*.*
-        - target: purina.*.*
-        - target: slack.*.*
-        - target: sling.*.*
-        - target: fivetran.*.*
-        - target: sandbox.*.*
+      sources: 
+        - pattern: dlt.*.*
+        - pattern: segment.*.*
+        - pattern: stripe_pipeline.*.*
+        - pattern: purina.*.*
+        - pattern: slack.*.*
+        - pattern: sling.*.*
+        - pattern: fivetran.*.*
+        - pattern: sandbox.*.*
