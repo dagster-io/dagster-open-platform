@@ -2,13 +2,13 @@
 
 USAGE
 
-    python -m dlt_sources.local_buildkite
+    python -m dagster_open_platform.dlt.sources.local_buildkite
 
 """
 
-from dlt import pipeline
+from dagster_open_platform.dlt.sources.buildkite import pipelines
 
-from dlt_sources.buildkite import pipelines
+from dlt import pipeline
 
 if __name__ == "__main__":
     pipeline(

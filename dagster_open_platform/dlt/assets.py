@@ -10,10 +10,10 @@ from dagster import (
 )
 from dagster._annotations import public
 from dagster_embedded_elt.dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
-from dlt_sources.buildkite import pipelines
-from dlt_sources.github import github_reactions
-from dlt_sources.hubspot import hubspot
-from dlt_sources.thinkific import thinkific
+from dagster_open_platform.dlt.sources.buildkite import pipelines
+from dagster_open_platform.dlt.sources.github import github_reactions
+from dagster_open_platform.dlt.sources.hubspot import hubspot
+from dagster_open_platform.dlt.sources.thinkific import thinkific
 
 from dlt import pipeline
 from dlt.extract.resource import DltResource
@@ -75,7 +75,7 @@ hubspot_source_assets = [
     SourceAsset(key, group_name="hubspot") for key in hubspot_assets.dependency_keys
 ]
 
-dlt_configuration_path = file_relative_path(__file__, "../../dlt_sources/dlt_configuration.yaml")
+dlt_configuration_path = file_relative_path(__file__, "./sources/configuration.yaml")
 dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
 
 

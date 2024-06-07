@@ -1,0 +1,9 @@
+sources:
+  github:
+    repositories:
+      dagster-io:
+        - dagster
+      apache:
+        - airflow
+      PrefectHQ:
+        - prefect

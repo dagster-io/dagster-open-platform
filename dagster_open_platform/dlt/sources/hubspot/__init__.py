@@ -15,15 +15,6 @@ additional information from the Web Analytics Events endpoint.
 
 The source also supports enabling Web Analytics Events for each endpoint by setting the corresponding enable flag to True.
 
-Example:
-    # To retrieve data from all endpoints, use the following code:
-    resources = hubspot(api_key="your_api_key")
-
-LOCAL USAGE
-
-    cd dlt_sources/
-    python -m hubspot.__init__
-
 """
 
 from typing import Any, Dict, Iterator, List, Literal, Optional, Sequence

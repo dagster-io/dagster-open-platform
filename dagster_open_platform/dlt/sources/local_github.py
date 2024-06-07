@@ -2,7 +2,7 @@
 
 USAGE
 
-    python -m dlt_sources.local_github
+    python -m dagster_open_platform.dlt.sources.local_github
 
 
 """
@@ -10,13 +10,13 @@ USAGE
 import os
 
 import yaml
-from dlt import pipeline
+from dagster_open_platform.dlt.sources.github import github_reactions
 
-from dlt_sources.github import github_reactions
+from dlt import pipeline
 
 if __name__ == "__main__":
     cwd = os.path.dirname(os.path.abspath(__file__))
-    dlt_configuration_path = os.path.join(cwd, "dlt_configuration.yaml")
+    dlt_configuration_path = os.path.join(cwd, "configuration.yaml")
     dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
 
     dlt_source = github_reactions(
