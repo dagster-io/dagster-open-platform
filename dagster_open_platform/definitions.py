@@ -1,6 +1,7 @@
 import warnings
 from pathlib import Path
 
+import dagster_open_platform.dlt.definitions as dlt_definitions
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 from dagster._core.definitions.metadata import with_source_code_references
 
@@ -11,7 +12,6 @@ from .assets import (
     cloud_usage,
     dagster_quickstart,
     dbt,
-    dlt,
     hightouch_syncs,
     ingest_fivetran,
     monitor_purina_clones,
@@ -43,7 +43,6 @@ from .utils.source_code import link_to_git_if_cloud
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
 dbt_assets = load_assets_from_modules([dbt])
 support_bot_assets = load_assets_from_modules([support_bot])
-dlt_assets = load_assets_from_modules([dlt])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 sling_ingest_assets = load_assets_from_modules([sling_ingest])
 source_segment_assets = load_assets_from_modules([source_segment])
@@ -55,7 +54,6 @@ all_assets = [
     *oss_analytics_assets,
     slack_analytics.member_metrics,
     *support_bot_assets,
-    *dlt_assets,
     *cloud_usage.prod_sync_usage_metrics,
     hightouch_syncs.hightouch_org_activity_monthly,
     hightouch_syncs.hightouch_org_info,
@@ -90,29 +88,31 @@ all_sensors = [
     dagster_quickstart.dagster_quickstart_validation_sensor,
 ]
 
-defs = Definitions(
-    assets=link_to_git_if_cloud(
-        with_source_code_references(all_assets),
-        repository_root_absolute_path=Path(__file__)
-        .parent.parent.parent.parent.resolve()
-        .absolute(),
+defs = Definitions.merge(
+    dlt_definitions.defs,
+    Definitions(
+        assets=link_to_git_if_cloud(
+            with_source_code_references(all_assets),
+            repository_root_absolute_path=Path(__file__)
+            .parent.parent.parent.parent.resolve()
+            .absolute(),
+        ),
+        asset_checks=all_checks,
+        resources={
+            "bigquery": bigquery_resource,
+            "dbt": dbt_resource,
+            "hightouch": hightouch_resource,
+            "slack": slack_resource,
+            "snowflake": snowflake_resource,
+            "cloud_prod_read_replica_sling": cloud_prod_read_replica_sling_resource,
+            "cloud_prod_reporting_sling": cloud_prod_reporting_sling_resource,
+            "github": github_resource,
+            "scoutos": scoutos_resource,
+            "cloud_prod_sling": cloud_prod_sling_resource,
+            "embedded_elt": embedded_elt_resource,
+        },
+        jobs=all_jobs,
+        schedules=all_schedules,
+        sensors=all_sensors,
     ),
-    asset_checks=all_checks,
-    resources={
-        "bigquery": bigquery_resource,
-        "dbt": dbt_resource,
-        "hightouch": hightouch_resource,
-        "slack": slack_resource,
-        "snowflake": snowflake_resource,
-        "cloud_prod_read_replica_sling": cloud_prod_read_replica_sling_resource,
-        "cloud_prod_reporting_sling": cloud_prod_reporting_sling_resource,
-        "github": github_resource,
-        "scoutos": scoutos_resource,
-        "cloud_prod_sling": cloud_prod_sling_resource,
-        "embedded_elt": embedded_elt_resource,
-        "dlt": dlt.dlt_resource,
-    },
-    jobs=all_jobs,
-    schedules=all_schedules,
-    sensors=all_sensors,
 )

@@ -1,23 +1,3 @@
-"""Thinkific & Hubspot ingestion with `dlt`.
-
-The `dlt` pipeline and source secrets can be extracted "auto-magically" from environment variables, as defined below:
-
-    THINKIFIC_API_KEY
-    THINKIFIC_SUBDOMAIN
-    SOURCES__HUBSPOT__API_KEY
-    DESTINATION__SNOWFLAKE__CREDENTIALS__DATABASE
-    DESTINATION__SNOWFLAKE__CREDENTIALS__PASSWORD
-    DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME
-    DESTINATION__SNOWFLAKE__CREDENTIALS__HOST
-    DESTINATION__SNOWFLAKE__CREDENTIALS__WAREHOUSE
-    DESTINATION__SNOWFLAKE__CREDENTIALS__ROLE
-
-see: https://dlthub.com/docs/tutorial/grouping-resources#handle-secrets
-
-Or passed to the pipeline or source itself using the function parameters.
-
-"""
-
 from typing import Optional
 
 import yaml
@@ -30,14 +10,13 @@ from dagster import (
 )
 from dagster._annotations import public
 from dagster_embedded_elt.dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
-from dlt import pipeline
-from dlt.extract.resource import DltResource
 from dlt_sources.buildkite import pipelines
 from dlt_sources.github import github_reactions
 from dlt_sources.hubspot import hubspot
 from dlt_sources.thinkific import thinkific
 
-dlt_resource = DagsterDltResource()
+from dlt import pipeline
+from dlt.extract.resource import DltResource
 
 
 class ThinkificDagsterDltTranslator(DagsterDltTranslator):
