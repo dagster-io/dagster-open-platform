@@ -2,6 +2,7 @@ import warnings
 from pathlib import Path
 
 import dagster_open_platform.dlt.definitions as dlt_definitions
+import dagster_open_platform.fivetran.definitions as fivetran_definitions
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 from dagster._core.definitions.metadata import with_source_code_references
 
@@ -13,7 +14,6 @@ from .assets import (
     dagster_quickstart,
     dbt,
     hightouch_syncs,
-    ingest_fivetran,
     monitor_purina_clones,
     oss_analytics,
     slack_analytics,
@@ -63,7 +63,6 @@ all_assets = [
     *stripe_sync_assets,
     *sling_ingest_assets,
     dagster_quickstart.dagster_quickstart_validation,
-    *ingest_fivetran.fivetran_assets,
     *source_segment_assets,
     *sling_egress_assets,
 ]
@@ -90,6 +89,7 @@ all_sensors = [
 
 defs = Definitions.merge(
     dlt_definitions.defs,
+    fivetran_definitions.defs,
     Definitions(
         assets=link_to_git_if_cloud(
             with_source_code_references(all_assets),
