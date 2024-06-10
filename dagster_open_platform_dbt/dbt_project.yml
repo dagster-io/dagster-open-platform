@@ -45,10 +45,6 @@ models:
       +materialized: table
     hightouch:
       +materialized: table
-    education:
-      +materialized: table
-    infrastructure:
-      +materialized: table
 
 seeds:
   +tags: seed
