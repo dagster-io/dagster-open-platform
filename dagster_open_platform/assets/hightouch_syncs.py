@@ -2,9 +2,8 @@ import os
 
 from dagster import MaterializeResult, asset
 from dagster_dbt import get_asset_key_for_model
-
-from ..resources import ConfigurableHightouchResource
-from .dbt import dbt_non_partitioned_models
+from dagster_open_platform.dbt.assets import dbt_non_partitioned_models
+from dagster_open_platform.resources import ConfigurableHightouchResource
 
 org_activity_monthly = get_asset_key_for_model([dbt_non_partitioned_models], "org_activity_monthly")
 

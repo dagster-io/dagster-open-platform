@@ -1,6 +1,7 @@
 import warnings
 from pathlib import Path
 
+import dagster_open_platform.dbt.definitions as dbt_definitions
 import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
@@ -13,7 +14,6 @@ from .assets import (
     aws_cost_reporting,
     cloud_usage,
     dagster_quickstart,
-    dbt,
     hightouch_syncs,
     monitor_purina_clones,
     oss_analytics,
@@ -26,7 +26,6 @@ from .checks import salesforce_checks
 from .resources import (
     bigquery_resource,
     cloud_prod_sling_resource,
-    dbt_resource,
     github_resource,
     hightouch_resource,
     scoutos_resource,
@@ -37,14 +36,12 @@ from .schedules import scheduled_jobs, schedules
 from .utils.source_code import link_to_git_if_cloud
 
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
-dbt_assets = load_assets_from_modules([dbt])
 support_bot_assets = load_assets_from_modules([support_bot])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 source_segment_assets = load_assets_from_modules([source_segment])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
-    *dbt_assets,
     *oss_analytics_assets,
     slack_analytics.member_metrics,
     *support_bot_assets,
@@ -61,7 +58,7 @@ all_assets = [
 
 all_checks = [
     salesforce_checks.account_has_valid_org_id,
-    *dbt.usage_metrics_daily_freshness_checks,
+    *stripe_data_sync.stripe_pipeline_freshness_checks,
 ]
 
 all_jobs = [*scheduled_jobs]
@@ -77,6 +74,7 @@ all_sensors = [
 ]
 
 defs = Definitions.merge(
+    dbt_definitions.defs,
     dlt_definitions.defs,
     fivetran_definitions.defs,
     sling_definitions.defs,
@@ -90,7 +88,6 @@ defs = Definitions.merge(
         asset_checks=all_checks,
         resources={
             "bigquery": bigquery_resource,
-            "dbt": dbt_resource,
             "hightouch": hightouch_resource,
             "slack": slack_resource,
             "snowflake": snowflake_resource,

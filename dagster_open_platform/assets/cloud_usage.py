@@ -1,6 +1,6 @@
 from dagster import AssetKey
 from dagster_dbt import get_asset_key_for_model
-from dagster_open_platform.assets.dbt import dbt_non_partitioned_models
+from dagster_open_platform.dbt.assets import dbt_non_partitioned_models
 
 from ..resources.sling_resource import SlingMode, build_sync_snowflake_to_postgres_asset
 

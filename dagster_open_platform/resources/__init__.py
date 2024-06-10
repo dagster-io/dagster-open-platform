@@ -1,13 +1,10 @@
 import os
-from pathlib import Path
 
 from dagster import EnvVar
 from dagster_cloud.dagster_insights import InsightsBigQueryResource
-from dagster_dbt import DbtCliResource, DbtProject
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
-from ..utils.environment_helpers import get_dbt_target
 from .hightouch_resource import ConfigurableHightouchResource
 from .scoutos_resource import GithubResource, ScoutosResource
 from .sling_resource import CustomSlingResource, SlingPostgresConfig, SlingSnowflakeConfig
@@ -24,12 +21,6 @@ snowflake_resource = SnowflakeResource(
     warehouse=os.getenv("SNOWFLAKE_WAREHOUSE", "PURINA"),
 )
 
-dagster_open_platform_dbt_project = DbtProject(
-    project_dir=Path(__file__).joinpath("..", "..", "..", "dagster_open_platform_dbt").resolve(),
-    target=get_dbt_target(),
-)
-
-dbt_resource = DbtCliResource(project_dir=dagster_open_platform_dbt_project)
 
 slack_resource = SlackResource(token=EnvVar("SLACK_ANALYTICS_TOKEN"))
 
