@@ -3,6 +3,7 @@ from pathlib import Path
 
 import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
+import dagster_open_platform.sling.definitions as sling_definitions
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 from dagster._core.definitions.metadata import with_source_code_references
 
@@ -17,8 +18,6 @@ from .assets import (
     monitor_purina_clones,
     oss_analytics,
     slack_analytics,
-    sling_egress,
-    sling_ingest,
     source_segment,
     stripe_data_sync,
     support_bot,
@@ -26,11 +25,8 @@ from .assets import (
 from .checks import salesforce_checks
 from .resources import (
     bigquery_resource,
-    cloud_prod_read_replica_sling_resource,
-    cloud_prod_reporting_sling_resource,
     cloud_prod_sling_resource,
     dbt_resource,
-    embedded_elt_resource,
     github_resource,
     hightouch_resource,
     scoutos_resource,
@@ -44,9 +40,7 @@ oss_analytics_assets = load_assets_from_modules([oss_analytics])
 dbt_assets = load_assets_from_modules([dbt])
 support_bot_assets = load_assets_from_modules([support_bot])
 stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
-sling_ingest_assets = load_assets_from_modules([sling_ingest])
 source_segment_assets = load_assets_from_modules([source_segment])
-sling_egress_assets = load_assets_from_modules([sling_egress])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -61,17 +55,13 @@ all_assets = [
     hightouch_syncs.hightouch_cloud_users,
     monitor_purina_clones.inactive_snowflake_clones,
     *stripe_sync_assets,
-    *sling_ingest_assets,
     dagster_quickstart.dagster_quickstart_validation,
     *source_segment_assets,
-    *sling_egress_assets,
 ]
 
 all_checks = [
     salesforce_checks.account_has_valid_org_id,
-    *sling_ingest.event_logs_freshness_checks,
     *dbt.usage_metrics_daily_freshness_checks,
-    *stripe_data_sync.stripe_pipeline_freshness_checks,
 ]
 
 all_jobs = [*scheduled_jobs]
@@ -83,13 +73,13 @@ all_schedules = [
 ]
 
 all_sensors = [
-    sling_ingest.freshness_checks_sensor,
     dagster_quickstart.dagster_quickstart_validation_sensor,
 ]
 
 defs = Definitions.merge(
     dlt_definitions.defs,
     fivetran_definitions.defs,
+    sling_definitions.defs,
     Definitions(
         assets=link_to_git_if_cloud(
             with_source_code_references(all_assets),
@@ -104,12 +94,9 @@ defs = Definitions.merge(
             "hightouch": hightouch_resource,
             "slack": slack_resource,
             "snowflake": snowflake_resource,
-            "cloud_prod_read_replica_sling": cloud_prod_read_replica_sling_resource,
-            "cloud_prod_reporting_sling": cloud_prod_reporting_sling_resource,
             "github": github_resource,
             "scoutos": scoutos_resource,
             "cloud_prod_sling": cloud_prod_sling_resource,
-            "embedded_elt": embedded_elt_resource,
         },
         jobs=all_jobs,
         schedules=all_schedules,

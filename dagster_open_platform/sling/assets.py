@@ -1,18 +1,15 @@
-from datetime import timedelta
 from pathlib import Path
 
-from dagster import (
-    AssetKey,
-    AssetsDefinition,
-    SourceAsset,
-    build_last_update_freshness_checks,
-    build_sensor_for_freshness_checks,
-)
+from dagster import AssetKey, SourceAsset
 from dagster_embedded_elt.sling.asset_decorator import sling_assets
 from dagster_embedded_elt.sling.dagster_sling_translator import DagsterSlingTranslator
 from dagster_embedded_elt.sling.resources import SlingResource
+from dagster_open_platform.utils.environment_helpers import (
+    get_environment,
+    get_schema_for_environment,
+)
 
-config_dir = Path(__file__).parent.parent / "configs" / "sling" / "cloud_product"
+cloud_product_config_dir = Path(__file__).parent / "configs" / "cloud_product"
 
 
 class CustomSlingTranslatorMain(DagsterSlingTranslator):
@@ -25,7 +22,7 @@ class CustomSlingTranslatorMain(DagsterSlingTranslator):
 
 
 @sling_assets(
-    replication_config=config_dir / "main_low_volume.yaml",
+    replication_config=cloud_product_config_dir / "main_low_volume.yaml",
     dagster_sling_translator=CustomSlingTranslatorMain(),
 )
 def cloud_product_main_low_volume(context, embedded_elt: SlingResource):
@@ -33,7 +30,7 @@ def cloud_product_main_low_volume(context, embedded_elt: SlingResource):
 
 
 @sling_assets(
-    replication_config=config_dir / "main_high_volume.yaml",
+    replication_config=cloud_product_config_dir / "main_high_volume.yaml",
     dagster_sling_translator=CustomSlingTranslatorMain(),
 )
 def cloud_product_main_high_volume(context, embedded_elt: SlingResource):
@@ -62,7 +59,7 @@ class CustomSlingTranslatorShard1(DagsterSlingTranslator):
 
 
 @sling_assets(
-    replication_config=config_dir / "shard1_low_volume.yaml",
+    replication_config=cloud_product_config_dir / "shard1_low_volume.yaml",
     dagster_sling_translator=CustomSlingTranslatorShard1(),
 )
 def cloud_product_shard1_low_volume(context, embedded_elt: SlingResource):
@@ -70,7 +67,7 @@ def cloud_product_shard1_low_volume(context, embedded_elt: SlingResource):
 
 
 @sling_assets(
-    replication_config=config_dir / "shard1_high_volume.yaml",
+    replication_config=cloud_product_config_dir / "shard1_high_volume.yaml",
     dagster_sling_translator=CustomSlingTranslatorShard1(),
 )
 def cloud_product_shard1_high_volume(context, embedded_elt: SlingResource):
@@ -89,20 +86,24 @@ cloud_product_shard1_source_assets = [
 ]
 
 
-freshness_checks = build_last_update_freshness_checks(
-    assets=[
-        AssetKey(["sling", "cloud_product", "event_logs"]),
-        AssetKey(["sling", "cloud_product_shard1", "event_logs"]),
-    ],
-    lower_bound_delta=timedelta(minutes=15),
-)
-# NOTE: this instance check is present while we're switching from returning an AssetsDefinition to
-# a sequence of AssetDefinition objects. It can be removed once the lastest release contains this
-# change.
-event_logs_freshness_checks = (
-    [freshness_checks] if isinstance(freshness_checks, AssetsDefinition) else freshness_checks
-)
+reporting_db_config_dir = Path(__file__).parent / "configs" / "reporting_db"
 
-freshness_checks_sensor = build_sensor_for_freshness_checks(
-    freshness_checks=event_logs_freshness_checks  # type: ignore
+
+class CustomSlingTranslator(DagsterSlingTranslator):
+    def get_group_name(self, stream_definition):
+        return "sling_egress"
+
+    def get_deps_asset_key(self, stream_definition):
+        stream_asset_key = super().get_deps_asset_key(stream_definition)[0]
+        db, schema, table = stream_asset_key[0]
+        db = "sandbox" if get_environment() == "LOCAL" else "purina"
+        schema = get_schema_for_environment(schema)
+        return AssetKey([db, schema, table])
+
+
+@sling_assets(
+    replication_config=reporting_db_config_dir / "salesforce_contract_info.yaml",
+    dagster_sling_translator=CustomSlingTranslator(),
 )
+def salesforce_contract_info(context, embedded_elt: SlingResource):
+    yield from embedded_elt.replicate(context=context)
