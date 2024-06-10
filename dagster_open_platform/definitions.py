@@ -4,6 +4,7 @@ from pathlib import Path
 import dagster_open_platform.dbt.definitions as dbt_definitions
 import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
+import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 from dagster._core.definitions.metadata import with_source_code_references
@@ -14,7 +15,6 @@ from .assets import (
     aws_cost_reporting,
     cloud_usage,
     dagster_quickstart,
-    hightouch_syncs,
     monitor_purina_clones,
     oss_analytics,
     slack_analytics,
@@ -27,7 +27,6 @@ from .resources import (
     bigquery_resource,
     cloud_prod_sling_resource,
     github_resource,
-    hightouch_resource,
     scoutos_resource,
     slack_resource,
     snowflake_resource,
@@ -46,10 +45,6 @@ all_assets = [
     slack_analytics.member_metrics,
     *support_bot_assets,
     *cloud_usage.prod_sync_usage_metrics,
-    hightouch_syncs.hightouch_org_activity_monthly,
-    hightouch_syncs.hightouch_org_info,
-    hightouch_syncs.hightouch_null_contact_names,
-    hightouch_syncs.hightouch_cloud_users,
     monitor_purina_clones.inactive_snowflake_clones,
     *stripe_sync_assets,
     dagster_quickstart.dagster_quickstart_validation,
@@ -78,6 +73,7 @@ defs = Definitions.merge(
     dlt_definitions.defs,
     fivetran_definitions.defs,
     sling_definitions.defs,
+    hightouch_definitions.defs,
     Definitions(
         assets=link_to_git_if_cloud(
             with_source_code_references(all_assets),
@@ -88,7 +84,6 @@ defs = Definitions.merge(
         asset_checks=all_checks,
         resources={
             "bigquery": bigquery_resource,
-            "hightouch": hightouch_resource,
             "slack": slack_resource,
             "snowflake": snowflake_resource,
             "github": github_resource,

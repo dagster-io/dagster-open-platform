@@ -5,7 +5,6 @@ from dagster_cloud.dagster_insights import InsightsBigQueryResource
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
-from .hightouch_resource import ConfigurableHightouchResource
 from .scoutos_resource import GithubResource, ScoutosResource
 from .sling_resource import CustomSlingResource, SlingPostgresConfig, SlingSnowflakeConfig
 
@@ -46,4 +45,3 @@ cloud_prod_sling_resource = CustomSlingResource(
 
 github_resource = GithubResource(github_token=EnvVar("GITHUB_TOKEN"))
 scoutos_resource = ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY"))
-hightouch_resource = ConfigurableHightouchResource(api_key=EnvVar("HIGHTOUCH_API_KEY"))
