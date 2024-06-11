@@ -44,26 +44,11 @@ dbt_analytics_core_job = define_asset_job(
             manifest=dagster_open_platform_dbt_project.manifest_path,
             dagster_dbt_translator=CustomDagsterDbtTranslator(),
         )
-        .upstream()
         .downstream()
         .required_multi_asset_neighbors()
         - AssetSelection.groups(
             # insights groups
             "cloud_reporting",
-            # postgres ingestion groups
-            "cloud_product_main",
-            "cloud_product_shard1",
-            # The source asset for this is on a weekly partition
-            "oss_analytics",
-            # dlt ingestion groups
-            "thinkific",
-            "buildkite",
-            "github",
-            "hubspot",
-            # slack ingestion
-            "slack",
-            # fivetran ingestion
-            "fivetran_salesforce",
         )
     ),
     tags={"team": "devrel", "dbt_pipeline": "analytics_core"},
