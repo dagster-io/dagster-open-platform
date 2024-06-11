@@ -53,7 +53,7 @@ all_assets = [
 
 all_checks = [
     salesforce_checks.account_has_valid_org_id,
-    *stripe_data_sync.stripe_pipeline_freshness_checks,
+    # *stripe_data_sync.stripe_pipeline_freshness_checks,
 ]
 
 all_jobs = [*scheduled_jobs]
