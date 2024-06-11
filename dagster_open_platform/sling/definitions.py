@@ -1,6 +1,5 @@
 from dagster import Definitions, load_assets_from_modules
 from dagster_open_platform.sling import assets
-from dagster_open_platform.sling.checks import freshness_checks, freshness_checks_sensor
 from dagster_open_platform.sling.resources import embedded_elt_resource
 from dagster_open_platform.sling.schedules import (
     cloud_product_sync_high_volume_schedule,
@@ -13,6 +12,6 @@ defs = Definitions(
         "embedded_elt": embedded_elt_resource,
     },
     schedules=[cloud_product_sync_high_volume_schedule, cloud_product_sync_low_volume_schedule],
-    asset_checks=[*freshness_checks],
-    sensors=[freshness_checks_sensor],
+    # asset_checks=[*freshness_checks],
+    # sensors=[freshness_checks_sensor],
 )
