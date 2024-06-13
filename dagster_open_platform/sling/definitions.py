@@ -6,8 +6,10 @@ from dagster_open_platform.sling.schedules import (
     cloud_product_sync_low_volume_schedule,
 )
 
+from ..utils.source_code import add_code_references_and_link_to_git
+
 defs = Definitions(
-    assets=load_assets_from_modules([assets]),
+    assets=add_code_references_and_link_to_git(load_assets_from_modules([assets])),
     resources={
         "embedded_elt": embedded_elt_resource,
     },

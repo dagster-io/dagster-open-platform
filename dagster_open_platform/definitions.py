@@ -1,5 +1,4 @@
 import warnings
-from pathlib import Path
 
 import dagster_open_platform.dbt.definitions as dbt_definitions
 import dagster_open_platform.dlt.definitions as dlt_definitions
@@ -7,7 +6,6 @@ import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
-from dagster._core.definitions.metadata import with_source_code_references
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
@@ -32,7 +30,7 @@ from .resources import (
     snowflake_resource,
 )
 from .schedules import scheduled_jobs, schedules
-from .utils.source_code import link_to_git_if_cloud
+from .utils.source_code import add_code_references_and_link_to_git
 
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
 support_bot_assets = load_assets_from_modules([support_bot])
@@ -75,12 +73,7 @@ defs = Definitions.merge(
     sling_definitions.defs,
     hightouch_definitions.defs,
     Definitions(
-        assets=link_to_git_if_cloud(
-            with_source_code_references(all_assets),
-            repository_root_absolute_path=Path(__file__)
-            .parent.parent.parent.parent.resolve()
-            .absolute(),
-        ),
+        assets=add_code_references_and_link_to_git(all_assets),
         asset_checks=all_checks,
         resources={
             "bigquery": bigquery_resource,

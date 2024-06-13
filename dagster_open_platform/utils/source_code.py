@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Optional, Sequence, Union
 
 from dagster import DagsterInvariantViolationError
 from dagster._annotations import experimental
-from dagster._core.definitions.metadata import link_to_source_control
+from dagster._core.definitions.metadata import link_to_source_control, with_source_code_references
 from dagster._core.types.loadable_target_origin import LoadableTargetOrigin
 
 if TYPE_CHECKING:
@@ -101,4 +101,15 @@ def link_to_git_if_cloud(
         source_control_url=source_control_url,
         source_control_branch=source_control_branch,
         repository_root_absolute_path=repository_root_absolute_path,
+    )
+
+
+def add_code_references_and_link_to_git(
+    assets: Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]],
+) -> Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]]:
+    return link_to_git_if_cloud(
+        with_source_code_references(assets),
+        repository_root_absolute_path=Path(__file__)
+        .parent.parent.parent.parent.parent.resolve()
+        .absolute(),
     )
