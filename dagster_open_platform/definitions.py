@@ -5,6 +5,7 @@ import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
+import dagster_open_platform.stripe as stripe_definitions
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
@@ -17,7 +18,6 @@ from .assets import (
     oss_analytics,
     slack_analytics,
     source_segment,
-    stripe_data_sync,
     support_bot,
 )
 from .checks import salesforce_checks
@@ -34,7 +34,6 @@ from .utils.source_code import add_code_references_and_link_to_git
 
 oss_analytics_assets = load_assets_from_modules([oss_analytics])
 support_bot_assets = load_assets_from_modules([support_bot])
-stripe_sync_assets = load_assets_from_modules([stripe_data_sync])
 source_segment_assets = load_assets_from_modules([source_segment])
 
 all_assets = [
@@ -44,7 +43,6 @@ all_assets = [
     *support_bot_assets,
     *cloud_usage.prod_sync_usage_metrics,
     monitor_purina_clones.inactive_snowflake_clones,
-    *stripe_sync_assets,
     dagster_quickstart.dagster_quickstart_validation,
     *source_segment_assets,
 ]
@@ -59,7 +57,6 @@ all_jobs = [*scheduled_jobs]
 all_schedules = [
     *schedules,
     slack_analytics.slack_daily_schedule,
-    stripe_data_sync.stripe_data_sync_schedule,
 ]
 
 all_sensors = [
@@ -72,6 +69,7 @@ defs = Definitions.merge(
     fivetran_definitions.defs,
     sling_definitions.defs,
     hightouch_definitions.defs,
+    stripe_definitions.defs,
     Definitions(
         assets=add_code_references_and_link_to_git(all_assets),
         asset_checks=all_checks,

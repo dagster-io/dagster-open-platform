@@ -6,6 +6,7 @@ from typing import Iterator
 from dagster import (
     AssetKey,
     AssetSpec,
+    Definitions,
     MetadataValue,
     ObserveResult,
     ScheduleDefinition,
@@ -18,6 +19,9 @@ from dagster._core.definitions.schedule_definition import DefaultScheduleStatus
 from dagster._core.execution.context.compute import AssetExecutionContext
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
+
+from ..resources import snowflake_resource
+from ..utils.source_code import add_code_references_and_link_to_git
 
 STRIPE_SYNC_DATABASE = "STRIPE_PIPELINE"
 STRIPE_SYNC_SCHEMA = "STRIPE"
@@ -64,13 +68,13 @@ asset_specs = [
 
 @multi_observable_source_asset(specs=asset_specs, can_subset=True, group_name="stripe_pipeline")
 def stripe_data_sync_assets(
-    context: AssetExecutionContext, snowflake: SnowflakeResource
+    context: AssetExecutionContext, snowflake_stripe: SnowflakeResource
 ) -> Iterator[ObserveResult]:
     """Assets representing stripe's data sync process."""
     subsetted_table_names = [
         asset_keys_to_table_names[asset_key] for asset_key in context.selected_asset_keys
     ]
-    with snowflake.get_connection() as conn:
+    with snowflake_stripe.get_connection() as conn:
         freshness_results = fetch_last_updated_timestamps(
             snowflake_connection=conn,
             schema=STRIPE_SYNC_SCHEMA,
@@ -93,4 +97,12 @@ stripe_data_sync_schedule = ScheduleDefinition(
         selection=AssetSelection.keys(*asset_keys_to_table_names.keys()),
     ),
     default_status=DefaultScheduleStatus.RUNNING,
+)
+
+defs = Definitions(
+    assets=add_code_references_and_link_to_git([stripe_data_sync_assets]),
+    schedules=[stripe_data_sync_schedule],
+    resources={
+        "snowflake_stripe": snowflake_resource,
+    },
 )
