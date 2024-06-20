@@ -23,6 +23,8 @@ workspace:
         - pattern: sling.*.*
         - pattern: fivetran.*.*
         - pattern: sandbox.*.*
+      targets:
+        - pattern: sandbox.*.*
 
 ---
 
