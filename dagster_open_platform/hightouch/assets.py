@@ -8,7 +8,7 @@ from dagster_open_platform.hightouch.resources import ConfigurableHightouchResou
 org_activity_monthly = get_asset_key_for_model([dbt_non_partitioned_models], "org_activity_monthly")
 
 
-@asset(deps=[org_activity_monthly], compute_kind="hightouch", group_name="sales")
+@asset(deps=[org_activity_monthly], compute_kind="hightouch", group_name="hightouch_syncs")
 def hightouch_org_activity_monthly(
     hightouch: ConfigurableHightouchResource,
 ) -> MaterializeResult:
@@ -28,7 +28,7 @@ def hightouch_org_activity_monthly(
 org_info = get_asset_key_for_model([dbt_non_partitioned_models], "org_info")
 
 
-@asset(deps=[org_info], compute_kind="hightouch", group_name="sales")
+@asset(deps=[org_info], compute_kind="hightouch", group_name="hightouch_syncs")
 def hightouch_org_info(hightouch: ConfigurableHightouchResource) -> MaterializeResult:
     result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_ORG_INFO_SYNC_ID", ""))
     return MaterializeResult(
@@ -49,7 +49,7 @@ def hightouch_org_info(hightouch: ConfigurableHightouchResource) -> MaterializeR
         get_asset_key_for_model([dbt_non_partitioned_models], "stg_cloud_product__users"),
     ],
     compute_kind="hightouch",
-    group_name="sales",
+    group_name="hightouch_syncs",
 )
 def hightouch_null_contact_names(
     hightouch: ConfigurableHightouchResource,
@@ -73,7 +73,7 @@ cloud_users = get_asset_key_for_model([dbt_non_partitioned_models], "cloud_users
 @asset(
     deps=[cloud_users],
     compute_kind="hightouch",
-    group_name="sales",
+    group_name="hightouch_syncs",
 )
 def hightouch_cloud_users(
     hightouch: ConfigurableHightouchResource,

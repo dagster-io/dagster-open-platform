@@ -49,6 +49,7 @@ dbt_analytics_core_job = define_asset_job(
         - AssetSelection.groups(
             # insights groups
             "cloud_reporting",
+            "hightouch_syncs",
         )
     ),
     tags={"team": "devrel", "dbt_pipeline": "analytics_core"},

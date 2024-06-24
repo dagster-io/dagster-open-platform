@@ -1,6 +1,7 @@
 from dagster import Definitions, EnvVar
 from dagster_open_platform.hightouch import assets
 from dagster_open_platform.hightouch.resources import ConfigurableHightouchResource
+from dagster_open_platform.hightouch.schedules import hightouch_syncs_schedule
 
 from ..utils.source_code import add_code_references_and_link_to_git
 
@@ -18,4 +19,5 @@ defs = Definitions(
     resources={
         "hightouch": hightouch_resource,
     },
+    schedules=[hightouch_syncs_schedule],
 )
