@@ -3,6 +3,7 @@ from dagster import (
     DagsterRunStatus,
     RunRequest,
     RunsFilter,
+    ScheduleDefinition,
     define_asset_job,
     schedule,
 )
@@ -59,3 +60,13 @@ def cloud_product_sync_low_volume_schedule(context):
         RunsFilter(job_name="cloud_product_sync_low_volume", statuses=in_progress_statuses)
     )
     return RunRequest() if not in_progress_jobs else None
+
+
+sling_egress_schedule = ScheduleDefinition(
+    job=define_asset_job(
+        name="sling_egress_job",
+        selection=AssetSelection.groups("sling_egress"),
+        tags={"team": "devrel"},
+    ),
+    cron_schedule="0 3 * * *",
+)

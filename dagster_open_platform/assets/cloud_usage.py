@@ -32,7 +32,7 @@ prod_sync_usage_metrics = [
         sling_resource_key="cloud_prod_sling",
         source_table=USAGE_METRICS_SELECT_QUERY,
         dest_table="public.usage_metrics_daily_jobs_aggregated",
-        group_name="cloud_product",
+        group_name="sling_egress",
         mode=SlingMode.TRUNCATE,
         deps=[
             get_asset_key_for_model(

@@ -43,13 +43,10 @@ dbt_analytics_core_job = define_asset_job(
         DbtManifestAssetSelection.build(
             manifest=dagster_open_platform_dbt_project.manifest_path,
             dagster_dbt_translator=CustomDagsterDbtTranslator(),
-        )
-        .downstream()
-        .required_multi_asset_neighbors()
+        ).required_multi_asset_neighbors()
         - AssetSelection.groups(
             # insights groups
             "cloud_reporting",
-            "hightouch_syncs",
         )
     ),
     tags={"team": "devrel", "dbt_pipeline": "analytics_core"},
