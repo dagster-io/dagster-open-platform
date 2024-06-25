@@ -16,6 +16,20 @@ dagster_open_platform:
       threads: 8
       client_session_keep_alive: false
 
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+
+      user: purina
+      password: "{{ env_var('SNOWFLAKE_DBT_PASSWORD', '') }}"
+
+      role: "purina"
+      database: "purina_dev"
+      warehouse: "purina"
+      schema: "public"
+      threads: 8
+      client_session_keep_alive: false
+
     branch_deployment:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
@@ -50,19 +64,5 @@ dagster_open_platform:
       database: "sandbox"
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'elementl') }}"
       schema: "{{ env_var('SNOWFLAKE_ROLE', '') }}"
-      threads: 8
-      client_session_keep_alive: false
-
-    dogfood:
-      type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
-
-      user: purina
-      password: "{{ env_var('SNOWFLAKE_DBT_PASSWORD', '') }}"
-
-      role: "purina"
-      database: "dogfood_purina"
-      warehouse: "purina"
-      schema: "public"
       threads: 8
       client_session_keep_alive: false
