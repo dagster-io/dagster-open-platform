@@ -11,8 +11,6 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  +post-hook:
-    - "{{ dagster.log_column_level_metadata() }}"
   +tags: ["model"]
   +meta:
     dagster:
@@ -48,8 +46,6 @@ models:
 
 seeds:
   +tags: seed
-  +post-hook:
-    - "{{ dagster.log_column_level_metadata() }}"
 
 vars:
   session_threshold_seconds: 1800

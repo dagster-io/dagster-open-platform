@@ -93,7 +93,7 @@ def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResour
     yield from dbt_with_snowflake_insights(
         context=context,
         dbt_cli_invocation=cli_invocation,
-        dagster_events=cli_invocation.stream().fetch_row_counts(),
+        dagster_events=cli_invocation.stream().fetch_row_counts().fetch_column_metadata(),
     )
 
 
@@ -125,7 +125,7 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
     yield from dbt_with_snowflake_insights(
         context=context,
         dbt_cli_invocation=cli_invocation,
-        dagster_events=cli_invocation.stream().fetch_row_counts(),
+        dagster_events=cli_invocation.stream().fetch_row_counts().fetch_column_metadata(),
     )
 
 
