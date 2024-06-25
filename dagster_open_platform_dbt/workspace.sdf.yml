@@ -1,5 +1,5 @@
 workspace:
-  edition: '1.2'
+  edition: '1.3'
   defaults:
     catalog: {{env_var('SNOWFLAKE_DATABASE')}}
     schema: {{env_var('SNOWFLAKE_SCHEMA')}}
@@ -11,8 +11,8 @@ workspace:
     index: catalog-schema-table-name
   - path: seeds
     type: seed
-  providers:
-    - type: snowflake
+  integrations:
+    - provider: snowflake
       credential: default
       sources: 
         - pattern: dlt.*.*

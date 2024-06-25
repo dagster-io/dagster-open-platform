@@ -6,3 +6,4 @@ logs/
 config/.user.yml
 .user.yml
 .sdfcache/
+sdftarget/
