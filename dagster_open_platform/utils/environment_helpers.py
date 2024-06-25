@@ -2,6 +2,8 @@ import os
 
 
 def get_environment() -> str:
+    if os.getenv("DAGSTER_ORGANIZATION", "") == "dogfood":
+        return "DOGFOOD"
     if os.getenv("DAGSTER_CLOUD_IS_BRANCH_DEPLOYMENT", "") == "1":
         return "BRANCH"
     if os.getenv("DAGSTER_CLOUD_DEPLOYMENT_NAME", "") == "prod":
@@ -33,6 +35,8 @@ def get_schema_for_environment(default_schema: str) -> str:
 
 def get_dbt_target() -> str:
     env = get_environment()
+    if env == "DOGFOOD":
+        return "dev"
     if env == "BRANCH":
         return "branch_deployment"
     if env == "PROD":
