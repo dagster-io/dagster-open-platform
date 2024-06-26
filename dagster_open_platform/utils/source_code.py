@@ -7,8 +7,55 @@ from typing import TYPE_CHECKING, Optional, Sequence, Union
 
 from dagster import DagsterInvariantViolationError
 from dagster._annotations import experimental
-from dagster._core.definitions.metadata import link_to_source_control, with_source_code_references
+from dagster._core.definitions.metadata import with_source_code_references
 from dagster._core.types.loadable_target_origin import LoadableTargetOrigin
+
+# handle change in experimental api
+try:
+    from dagster._core.definitions.metadata import AnchorBasedFilePathMapping, link_to_git
+
+    def _link_to_git_wrapper(
+        assets_defs: Sequence[
+            Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]
+        ],
+        source_control_url: str,
+        source_control_branch: str,
+        repository_root_absolute_path: Union[Path, str],
+    ):
+        return link_to_git(
+            assets_defs=assets_defs,
+            git_url=source_control_url,
+            git_branch=source_control_branch,
+            file_path_mapping=AnchorBasedFilePathMapping(
+                local_file_anchor=Path(repository_root_absolute_path),
+                file_anchor_path_in_repository="",
+            ),
+        )
+
+    _link_to_git = _link_to_git_wrapper
+
+except ImportError:
+    from dagster._core.definitions.metadata.source_code import (
+        link_to_source_control,  # type: ignore
+    )
+
+    def _link_to_source_control_wrapper(
+        assets_defs: Sequence[
+            Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]
+        ],
+        source_control_url: str,
+        source_control_branch: str,
+        repository_root_absolute_path: Union[Path, str],
+    ):
+        return link_to_source_control(
+            assets_defs=assets_defs,
+            source_control_url=source_control_url,
+            source_control_branch=source_control_branch,
+            repository_root_absolute_path=repository_root_absolute_path,
+        )
+
+    _link_to_git = _link_to_source_control_wrapper
+
 
 if TYPE_CHECKING:
     from dagster import AssetsDefinition, SourceAsset
@@ -96,7 +143,7 @@ def link_to_git_if_cloud(
             "`repository_root_absolute_path`."
         )
 
-    return link_to_source_control(
+    return _link_to_git(
         assets_defs=assets_defs,
         source_control_url=source_control_url,
         source_control_branch=source_control_branch,
