@@ -10,6 +10,7 @@ all_assets = [
     assets.hightouch_org_info,
     assets.hightouch_null_contact_names,
     assets.hightouch_cloud_users,
+    assets.hightouch_user_attribution,
 ]
 
 hightouch_resource = ConfigurableHightouchResource(api_key=EnvVar("HIGHTOUCH_API_KEY"))

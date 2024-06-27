@@ -89,3 +89,27 @@ def hightouch_cloud_users(
             "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
         }
     )
+
+
+user_attribution = get_asset_key_for_model([dbt_non_partitioned_models], "user_attribution")
+
+
+@asset(
+    deps=[user_attribution],
+    compute_kind="hightouch",
+    group_name="hightouch_syncs",
+)
+def hightouch_user_attribution(
+    hightouch: ConfigurableHightouchResource,
+) -> MaterializeResult:
+    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_USER_ATTRIBUTION_SYNC_ID", ""))
+    return MaterializeResult(
+        metadata={
+            "sync_details": result.sync_details,
+            "sync_run_details": result.sync_run_details,
+            "destination_details": result.destination_details,
+            "query_size": result.sync_run_details.get("querySize"),
+            "completion_ratio": result.sync_run_details.get("completionRatio"),
+            "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
+        }
+    )
