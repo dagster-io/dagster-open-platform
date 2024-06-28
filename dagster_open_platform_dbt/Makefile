@@ -32,3 +32,10 @@ check-lineage: auth-sdf
 	dbt compile
 	sdf dbt refresh --no-save
 	sdf compile
+
+SELECT ?= ""
+run-local-read-prod:
+	dbt compile --target=prod
+	mv target prod-target
+	dbt run --select $(SELECT) --defer --state prod-target
+	rm -rf prod-target
