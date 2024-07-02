@@ -27,7 +27,7 @@ high_volume_assets = AssetSelection.keys(
 cloud_product_sync_high_volume_job = define_asset_job(
     name="cloud_product_sync_high_volume",
     selection=high_volume_assets,
-    tags={"team": "devrel", "dagster/max_runtime": 60 * 15},
+    tags={"team": "devrel-high-volume", "dagster/max_runtime": 60 * 15},
 )
 
 in_progress_statuses = [
