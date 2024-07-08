@@ -12,7 +12,10 @@ from dagster._core.types.loadable_target_origin import LoadableTargetOrigin
 
 # handle change in experimental api
 try:
-    from dagster._core.definitions.metadata import AnchorBasedFilePathMapping, link_to_git
+    from dagster._core.definitions.metadata import (
+        AnchorBasedFilePathMapping,
+        link_code_references_to_git,
+    )
 
     def _link_to_git_wrapper(
         assets_defs: Sequence[
@@ -22,7 +25,7 @@ try:
         source_control_branch: str,
         repository_root_absolute_path: Union[Path, str],
     ):
-        return link_to_git(
+        return link_code_references_to_git(
             assets_defs=assets_defs,
             git_url=source_control_url,
             git_branch=source_control_branch,
@@ -89,7 +92,7 @@ def _locate_git_root() -> Optional[Path]:
 
 
 @experimental
-def link_to_git_if_cloud(
+def link_code_references_to_git_if_cloud(
     assets_defs: Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]],
     source_control_url: Optional[str] = None,
     source_control_branch: Optional[str] = None,
@@ -154,7 +157,7 @@ def link_to_git_if_cloud(
 def add_code_references_and_link_to_git(
     assets: Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]],
 ) -> Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]]:
-    return link_to_git_if_cloud(
+    return link_code_references_to_git_if_cloud(
         with_source_code_references(assets),
         repository_root_absolute_path=Path(__file__)
         .parent.parent.parent.parent.parent.resolve()
