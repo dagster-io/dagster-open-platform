@@ -92,7 +92,7 @@ class GithubDagsterDltTranslator(DagsterDltTranslator):
         dlt_configuration["sources"]["github"]["repositories"],
         items_per_page=100,
         max_items=500,
-    ).with_resources("issues"),
+    ).with_resources("issues", "stargazers"),
     dlt_pipeline=pipeline(
         pipeline_name="github_issues",
         dataset_name="github",
