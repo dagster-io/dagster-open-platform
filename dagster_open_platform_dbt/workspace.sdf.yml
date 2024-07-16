@@ -23,6 +23,7 @@ workspace:
         - pattern: sling.*.*
         - pattern: fivetran.*.*
         - pattern: sandbox.*.*
+        - pattern: aws.*.*
       targets:
         - pattern: sandbox.*.*
 

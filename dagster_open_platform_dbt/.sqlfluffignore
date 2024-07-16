@@ -8,3 +8,4 @@ reporting_deduped_internal_asset_materialization_metrics.sql
 reporting_metadata_asset_materialization_metrics.sql
 reporting_job_metrics_daily_rollup.sql
 reporting_run_metrics.sql
+stg_cloud_product__repository_locations_latest.sql
