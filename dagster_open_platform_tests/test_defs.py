@@ -90,18 +90,20 @@ def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
     from dagster_open_platform.definitions import defs
 
     assert len(defs.get_asset_graph().all_asset_keys) > 0
+    assert defs.original_args["assets"] is not None
 
-    for asset in defs.assets:
-        if isinstance(asset, AssetsDefinition):
-            for key in asset.keys:
-                code_references_meta = CodeReferencesMetadataSet.extract(asset.metadata_by_key[key])
-                assert code_references_meta.code_references is not None
+    for asset in defs.original_args["assets"]:
+        if not isinstance(asset, AssetsDefinition):
+            continue
+        for key in asset.keys:
+            code_references_meta = CodeReferencesMetadataSet.extract(asset.metadata_by_key[key])
+            assert code_references_meta.code_references is not None
 
-                assert len(code_references_meta.code_references.code_references) > 0
-                is_ref = [
-                    isinstance(ref, UrlCodeReference if cloud_env else LocalFileCodeReference)
-                    for ref in code_references_meta.code_references.code_references
-                ]
-                assert all(
-                    is_ref
-                ), f"{key} has incorrect code references: {code_references_meta.code_references.code_references}"
+            assert len(code_references_meta.code_references.code_references) > 0
+            is_ref = [
+                isinstance(ref, UrlCodeReference if cloud_env else LocalFileCodeReference)
+                for ref in code_references_meta.code_references.code_references
+            ]
+            assert all(
+                is_ref
+            ), f"{key} has incorrect code references: {code_references_meta.code_references.code_references}"
