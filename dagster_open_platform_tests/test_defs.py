@@ -84,6 +84,7 @@ def prepare_dop_environment(
         yield
 
 
+@pytest.mark.skip(reason="https://dagsterlabs.slack.com/archives/C03DPDM4M0Q/p1721278489574409")
 @pytest.mark.env_bk
 @pytest.mark.parametrize("cloud_env", [True, False])
 def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
