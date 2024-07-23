@@ -1,0 +1,15 @@
+dagster
+dagster-cloud
+dagster-cloud-cli
+dagstermill
+dagster-slack
+dagster-aws
+dagster-pipes
+dagster-snowflake
+dagster-slack
+dagster-pandas
+dagster-fivetran
+dagster-gcp
+dagster-dbt
+dagster-cloud
+dagster-embedded-elt
