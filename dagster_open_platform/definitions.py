@@ -10,19 +10,19 @@ import dagster_open_platform.scout.definitions as scout_definitions
 import dagster_open_platform.segment.definitions as segment_definitions
 import dagster_open_platform.slack.definitions as slack_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
+import dagster_open_platform.sling_custom.definitions as sling_custom_definitions
 import dagster_open_platform.snowflake.definitions as snowflake_definitions
 import dagster_open_platform.stripe as stripe_definitions
 from dagster import Definitions, ExperimentalWarning
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
-from .assets import cloud_usage, dagster_quickstart
+from .assets import dagster_quickstart
 from .checks import salesforce_checks
-from .resources import cloud_prod_sling_resource, snowflake_resource
+from .resources import snowflake_resource
 from .utils.source_code import add_code_references_and_link_to_git
 
 all_assets = [
-    *cloud_usage.prod_sync_usage_metrics,
     dagster_quickstart.dagster_quickstart_validation,
 ]
 
@@ -40,6 +40,7 @@ defs = Definitions.merge(
     dlt_definitions.defs,
     fivetran_definitions.defs,
     sling_definitions.defs,
+    sling_custom_definitions.defs,
     hightouch_definitions.defs,
     stripe_definitions.defs,
     pypi_definitions.defs,
@@ -53,7 +54,6 @@ defs = Definitions.merge(
         asset_checks=all_checks,
         resources={
             "snowflake": snowflake_resource,
-            "cloud_prod_sling": cloud_prod_sling_resource,
         },
         sensors=all_sensors,
     ),
