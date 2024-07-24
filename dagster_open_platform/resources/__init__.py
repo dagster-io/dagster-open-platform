@@ -1,16 +1,11 @@
 import os
 
 from dagster import EnvVar
-from dagster_cloud.dagster_insights import InsightsBigQueryResource
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
 from .scoutos_resource import GithubResource, ScoutosResource
 from .sling_resource import CustomSlingResource, SlingPostgresConfig, SlingSnowflakeConfig
-
-bigquery_resource = InsightsBigQueryResource(
-    gcp_credentials=EnvVar("GCP_CREDENTIALS"),
-)
 
 snowflake_resource = SnowflakeResource(
     user=EnvVar("SNOWFLAKE_USER"),

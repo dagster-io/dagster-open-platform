@@ -36,7 +36,7 @@ dagster_pypi_downloads_asset_key = ["purina", "oss_analytics", "dagster_pypi_dow
 def dagster_pypi_downloads(
     context: AssetExecutionContext,
     bigquery: InsightsBigQueryResource,
-    snowflake: SnowflakeResource,
+    snowflake_pypi: SnowflakeResource,
 ) -> MaterializeResult:
     """A table containing the number of PyPi downloads for each package in the Dagster ecosystem, aggregated at the weekly grain. This data is fetched from the public BigQuery dataset `bigquery-public-data.pypi.file_downloads`."""
     start_week = str(context.asset_partitions_time_window_for_output().start.date())
@@ -63,7 +63,7 @@ def dagster_pypi_downloads(
 
     context.log.info(f"Fetched {len(df)} rows from BigQuery")
 
-    with snowflake.get_connection() as conn:
+    with snowflake_pypi.get_connection() as conn:
         # for backfills and re-execution, delete all existing data for the given time window
         delete_query = f"""
             delete from {database}.{schema}.{table_name}
