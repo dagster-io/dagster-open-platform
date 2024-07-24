@@ -5,6 +5,7 @@ import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.pypi.definitions as pypi_definitions
+import dagster_open_platform.segment.definitions as segment_definitions
 import dagster_open_platform.slack.definitions as slack_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
 import dagster_open_platform.stripe as stripe_definitions
@@ -17,7 +18,6 @@ from .assets import (
     cloud_usage,
     dagster_quickstart,
     monitor_purina_clones,
-    source_segment,
     support_bot,
 )
 from .checks import salesforce_checks
@@ -31,7 +31,6 @@ from .schedules import scheduled_jobs, schedules
 from .utils.source_code import add_code_references_and_link_to_git
 
 support_bot_assets = load_assets_from_modules([support_bot])
-source_segment_assets = load_assets_from_modules([source_segment])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
@@ -39,7 +38,6 @@ all_assets = [
     *cloud_usage.prod_sync_usage_metrics,
     monitor_purina_clones.inactive_snowflake_clones,
     dagster_quickstart.dagster_quickstart_validation,
-    *source_segment_assets,
 ]
 
 all_checks = [
@@ -66,6 +64,7 @@ defs = Definitions.merge(
     stripe_definitions.defs,
     pypi_definitions.defs,
     slack_definitions.defs,
+    segment_definitions.defs,
     Definitions(
         assets=add_code_references_and_link_to_git(all_assets),
         asset_checks=all_checks,
