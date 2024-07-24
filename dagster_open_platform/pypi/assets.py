@@ -10,10 +10,10 @@ from dagster import (
     asset,
 )
 from dagster_cloud.dagster_insights import InsightsBigQueryResource
+from dagster_open_platform.pypi.partitions import oss_analytics_weekly_partition
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
 
-from ..partitions import oss_analytics_weekly_partition
 from ..utils.environment_helpers import get_database_for_environment, get_schema_for_environment
 
 NON_EMPTY_CHECK_NAME = "non_empty_etl"

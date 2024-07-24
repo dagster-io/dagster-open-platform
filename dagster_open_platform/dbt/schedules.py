@@ -1,8 +1,8 @@
 from dagster import AssetSelection, RunRequest, ScheduleDefinition, define_asset_job, schedule
 from dagster_dbt import DbtManifestAssetSelection
 from dagster_open_platform.dbt.assets import CustomDagsterDbtTranslator, dbt_snapshot_models
+from dagster_open_platform.dbt.partitions import insights_partition
 from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_project
-from dagster_open_platform.partitions import insights_partition
 
 ######################################################
 ##              INSIGHTS                            ##

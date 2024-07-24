@@ -15,8 +15,8 @@ from dagster_dbt import (
     dbt_assets,
 )
 from dagster_dbt.asset_utils import get_asset_key_for_model
+from dagster_open_platform.dbt.partitions import insights_partition
 from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_project
-from dagster_open_platform.partitions import insights_partition
 
 SNOWFLAKE_ACCOUNT_BASE, *_ = os.getenv("SNOWFLAKE_ACCOUNT", ".").split(".")
 PURINA_DATABASE_NAME = (
