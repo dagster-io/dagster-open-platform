@@ -13,7 +13,7 @@ import dagster_open_platform.slack.definitions as slack_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
 import dagster_open_platform.sling_custom.definitions as sling_custom_definitions
 import dagster_open_platform.snowflake.definitions as snowflake_definitions
-import dagster_open_platform.stripe as stripe_definitions
+import dagster_open_platform.stripe.definitions as stripe_definitions
 from dagster import Definitions, ExperimentalWarning
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
