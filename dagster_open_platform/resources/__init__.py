@@ -1,7 +1,6 @@
 import os
 
 from dagster import EnvVar
-from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
 from .scoutos_resource import GithubResource, ScoutosResource
@@ -14,9 +13,6 @@ snowflake_resource = SnowflakeResource(
     role=os.getenv("SNOWFLAKE_ROLE", "PURINA"),
     warehouse=os.getenv("SNOWFLAKE_WAREHOUSE", "PURINA"),
 )
-
-
-slack_resource = SlackResource(token=EnvVar("SLACK_ANALYTICS_TOKEN"))
 
 cloud_prod_sling_resource = CustomSlingResource(
     postgres_config=SlingPostgresConfig(

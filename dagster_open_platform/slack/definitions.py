@@ -8,11 +8,14 @@ from dagster import (
     AssetSelection,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    Definitions,
+    EnvVar,
     MaterializeResult,
     ScheduleDefinition,
     asset,
     define_asset_job,
 )
+from dagster_open_platform.resources import snowflake_resource
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
@@ -20,6 +23,8 @@ from dagster_open_platform.utils.environment_helpers import (
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
+
+from ..utils.source_code import add_code_references_and_link_to_git
 
 
 @asset(
@@ -32,7 +37,7 @@ from snowflake.connector.pandas_tools import write_pandas
     ),
 )
 def member_metrics(
-    slack: SlackResource, snowflake: SnowflakeResource
+    slack: SlackResource, snowflake_slack: SnowflakeResource
 ) -> Iterator[Union[MaterializeResult, AssetCheckResult]]:
     client = slack.get_client()
     # The Dagster Slack resource doesn't support setting headers
@@ -59,7 +64,7 @@ def member_metrics(
     schema = get_schema_for_environment("DAGSTER")
     table_name = "MEMBER_METRICS"
 
-    with snowflake.get_connection() as conn:
+    with snowflake_slack.get_connection() as conn:
         # Create a temporary table to stage the new data
         temp_table_name = f"{table_name}_TEMP"
         write_pandas(
@@ -115,4 +120,11 @@ slack_asset_job = define_asset_job(
 slack_daily_schedule = ScheduleDefinition(
     job=slack_asset_job,
     cron_schedule="0 1 * * *",
+)
+slack_resource = SlackResource(token=EnvVar("SLACK_ANALYTICS_TOKEN"))
+
+defs = Definitions(
+    assets=add_code_references_and_link_to_git([member_metrics]),
+    schedules=[slack_daily_schedule],
+    resources={"slack": slack_resource, "snowflake_slack": snowflake_resource},
 )

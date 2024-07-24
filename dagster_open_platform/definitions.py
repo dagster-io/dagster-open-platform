@@ -5,6 +5,7 @@ import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.pypi.definitions as pypi_definitions
+import dagster_open_platform.slack.definitions as slack_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
 import dagster_open_platform.stripe as stripe_definitions
 from dagster import Definitions, ExperimentalWarning, load_assets_from_modules
@@ -16,7 +17,6 @@ from .assets import (
     cloud_usage,
     dagster_quickstart,
     monitor_purina_clones,
-    slack_analytics,
     source_segment,
     support_bot,
 )
@@ -25,7 +25,6 @@ from .resources import (
     cloud_prod_sling_resource,
     github_resource,
     scoutos_resource,
-    slack_resource,
     snowflake_resource,
 )
 from .schedules import scheduled_jobs, schedules
@@ -36,7 +35,6 @@ source_segment_assets = load_assets_from_modules([source_segment])
 
 all_assets = [
     aws_cost_reporting.aws_cost_report,
-    slack_analytics.member_metrics,
     *support_bot_assets,
     *cloud_usage.prod_sync_usage_metrics,
     monitor_purina_clones.inactive_snowflake_clones,
@@ -53,7 +51,6 @@ all_jobs = [*scheduled_jobs]
 
 all_schedules = [
     *schedules,
-    slack_analytics.slack_daily_schedule,
 ]
 
 all_sensors = [
@@ -68,11 +65,11 @@ defs = Definitions.merge(
     hightouch_definitions.defs,
     stripe_definitions.defs,
     pypi_definitions.defs,
+    slack_definitions.defs,
     Definitions(
         assets=add_code_references_and_link_to_git(all_assets),
         asset_checks=all_checks,
         resources={
-            "slack": slack_resource,
             "snowflake": snowflake_resource,
             "github": github_resource,
             "scoutos": scoutos_resource,
