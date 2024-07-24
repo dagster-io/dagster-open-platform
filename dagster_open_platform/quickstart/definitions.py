@@ -2,7 +2,17 @@ import subprocess
 import tempfile
 
 import requests
-from dagster import AssetExecutionContext, Failure, RunRequest, asset, define_asset_job, sensor
+from dagster import (
+    AssetExecutionContext,
+    Definitions,
+    Failure,
+    RunRequest,
+    asset,
+    define_asset_job,
+    sensor,
+)
+
+from ..utils.source_code import add_code_references_and_link_to_git
 
 DAGSTER_QUICKSTART_REPO = "dagster-io/dagster-quickstart"
 
@@ -75,3 +85,9 @@ def dagster_quickstart_validation_sensor():
     # Only a distinct `run_key` will trigger a run, so we do not need to manually check if the
     # cursor has changed (eg. cursor != context.cursor).
     yield RunRequest(run_key=f"{current_git_commit_sha} {latest_dagster_release_name}")
+
+
+defs = Definitions(
+    assets=add_code_references_and_link_to_git([dagster_quickstart_validation]),
+    sensors=[dagster_quickstart_validation_sensor],
+)

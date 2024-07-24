@@ -6,6 +6,7 @@ import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.pypi.definitions as pypi_definitions
+import dagster_open_platform.quickstart.definitions as quickstart_definitions
 import dagster_open_platform.scout.definitions as scout_definitions
 import dagster_open_platform.segment.definitions as segment_definitions
 import dagster_open_platform.slack.definitions as slack_definitions
@@ -17,22 +18,12 @@ from dagster import Definitions, ExperimentalWarning
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
-from .assets import dagster_quickstart
 from .checks import salesforce_checks
 from .resources import snowflake_resource
-from .utils.source_code import add_code_references_and_link_to_git
-
-all_assets = [
-    dagster_quickstart.dagster_quickstart_validation,
-]
 
 all_checks = [
     salesforce_checks.account_has_valid_org_id,
     # *stripe_data_sync.stripe_pipeline_freshness_checks,
-]
-
-all_sensors = [
-    dagster_quickstart.dagster_quickstart_validation_sensor,
 ]
 
 defs = Definitions.merge(
@@ -49,12 +40,11 @@ defs = Definitions.merge(
     scout_definitions.defs,
     aws_definitions.defs,
     snowflake_definitions.defs,
+    quickstart_definitions.defs,
     Definitions(
-        assets=add_code_references_and_link_to_git(all_assets),
         asset_checks=all_checks,
         resources={
             "snowflake": snowflake_resource,
         },
-        sensors=all_sensors,
     ),
 )
