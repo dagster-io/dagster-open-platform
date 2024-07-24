@@ -8,7 +8,7 @@ from dagster import (
     asset,
 )
 
-from ..resources.scoutos_resource import GithubResource, ScoutosResource
+from .resources import GithubResource, ScoutosResource
 
 
 def extract_comments(issue_or_disccusion: dict) -> str:

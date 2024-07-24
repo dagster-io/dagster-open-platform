@@ -3,7 +3,6 @@ import os
 from dagster import EnvVar
 from dagster_snowflake import SnowflakeResource
 
-from .scoutos_resource import GithubResource, ScoutosResource
 from .sling_resource import CustomSlingResource, SlingPostgresConfig, SlingSnowflakeConfig
 
 snowflake_resource = SnowflakeResource(
@@ -32,7 +31,3 @@ cloud_prod_sling_resource = CustomSlingResource(
         role="purina",
     ),
 )
-
-
-github_resource = GithubResource(github_token=EnvVar("GITHUB_TOKEN"))
-scoutos_resource = ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY"))

@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 
 import gql
 import requests
-from dagster import ConfigurableResource, get_dagster_logger
+from dagster import ConfigurableResource, EnvVar, get_dagster_logger
 from gql.transport.requests import RequestsHTTPTransport
 
 from ..utils.github_gql_queries import GITHUB_DISCUSSIONS_QUERY, GITHUB_ISSUES_QUERY
@@ -78,3 +78,7 @@ class GithubResource(ConfigurableResource):
                 break
             cursor = search["pageInfo"]["endCursor"]
         return results
+
+
+github_resource = GithubResource(github_token=EnvVar("GITHUB_TOKEN"))
+scoutos_resource = ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY"))
