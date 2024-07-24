@@ -17,10 +17,10 @@ from dagster import (
 from dagster._core.definitions.asset_selection import AssetSelection
 from dagster._core.definitions.schedule_definition import DefaultScheduleStatus
 from dagster._core.execution.context.compute import AssetExecutionContext
+from dagster_open_platform.snowflake.resources import snowflake_resource
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
 
-from ..resources import snowflake_resource
 from ..utils.source_code import add_code_references_and_link_to_git
 
 STRIPE_SYNC_DATABASE = "STRIPE_PIPELINE"

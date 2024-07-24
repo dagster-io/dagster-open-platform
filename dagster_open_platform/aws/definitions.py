@@ -9,7 +9,7 @@ from dagster import (
     MonthlyPartitionsDefinition,
     asset,
 )
-from dagster_open_platform.resources import snowflake_resource
+from dagster_open_platform.snowflake.resources import snowflake_resource
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
