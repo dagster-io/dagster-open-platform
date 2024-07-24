@@ -18,13 +18,6 @@ from dagster import Definitions, ExperimentalWarning
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
-from .checks import salesforce_checks
-from .resources import snowflake_resource
-
-all_checks = [
-    salesforce_checks.account_has_valid_org_id,
-    # *stripe_data_sync.stripe_pipeline_freshness_checks,
-]
 
 defs = Definitions.merge(
     dbt_definitions.defs,
@@ -41,10 +34,4 @@ defs = Definitions.merge(
     aws_definitions.defs,
     snowflake_definitions.defs,
     quickstart_definitions.defs,
-    Definitions(
-        asset_checks=all_checks,
-        resources={
-            "snowflake": snowflake_resource,
-        },
-    ),
 )
