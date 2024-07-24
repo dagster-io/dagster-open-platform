@@ -4,15 +4,19 @@ from dagster import (
     AssetExecutionContext,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    Definitions,
     MaterializeResult,
     MonthlyPartitionsDefinition,
     asset,
 )
+from dagster_open_platform.resources import snowflake_resource
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
 )
 from dagster_snowflake import SnowflakeResource
+
+from ..utils.source_code import add_code_references_and_link_to_git
 
 # note: this is used as 2 different formats
 # YYYY-MM for sourcing the partition from s3
@@ -58,7 +62,7 @@ materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
 
 
 @asset(partitions_def=aws_monthly_partition, auto_materialize_policy=materialize_on_cron_policy)
-def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource):
+def aws_cost_report(context: AssetExecutionContext, snowflake_aws: SnowflakeResource):
     """AWS updates the monthly cost report once an hour, overwriting the existing
     files for the current month.
 
@@ -85,7 +89,7 @@ def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource
     )
     context.log.info(f"SQL debug {delete_partition}")
 
-    with snowflake.get_connection() as conn:
+    with snowflake_aws.get_connection() as conn:
         conn.autocommit(False)
 
         cur = conn.cursor()
@@ -110,3 +114,11 @@ def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource
             "rows_inserted": rows,
         }
     )
+
+
+defs = Definitions(
+    assets=add_code_references_and_link_to_git([aws_cost_report]),
+    resources={
+        "snowflake_aws": snowflake_resource,
+    },
+)
