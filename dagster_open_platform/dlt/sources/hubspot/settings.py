@@ -1,8 +1,8 @@
 """Hubspot source settings and constants."""
 
-from dlt.common import pendulum
+import datetime
 
-STARTDATE = pendulum.datetime(year=2000, month=1, day=1)
+STARTDATE = datetime.datetime(year=2000, month=1, day=1, tzinfo=datetime.timezone.utc)
 
 CRM_CONTACTS_ENDPOINT = "/crm/v3/objects/contacts?associations=deals,products,tickets,quotes"
 CRM_COMPANIES_ENDPOINT = (

@@ -17,11 +17,13 @@ The source also supports enabling Web Analytics Events for each endpoint by sett
 
 """
 
+import datetime
 from typing import Any, Dict, Iterator, List, Literal, Optional, Sequence
 from urllib.parse import quote
 
+from dagster._time import get_current_datetime
+
 import dlt
-from dlt.common import pendulum
 from dlt.common.typing import TDataItems
 from dlt.sources import DltResource
 
@@ -227,7 +229,7 @@ def hubspot_events_for_objects(
     object_type: THubspotObjectType,
     object_ids: List[str],
     api_key: str = dlt.secrets.value,
-    start_date: pendulum.DateTime = STARTDATE,
+    start_date: datetime.datetime = STARTDATE,
 ) -> DltResource:
     """A standalone DLT resources that retrieves web analytics events from the HubSpot API for a particular object type and list of object ids.
 
@@ -240,7 +242,7 @@ def hubspot_events_for_objects(
     Returns:
         incremental dlt resource to track events for objects from the list
     """
-    end_date = pendulum.now().isoformat()
+    end_date = get_current_datetime().isoformat()
     name = object_type + "_events"
 
     def get_web_analytics_events(
