@@ -19,7 +19,7 @@ dependencies = [
     "dagster-dbt",
     "dagster-cloud",
     "dagster-embedded-elt",
-    "sling",
+    "sling<1.2.14",
     "gql[requests]",
     "dlt[snowflake,duckdb]",
     "pydantic>2",
