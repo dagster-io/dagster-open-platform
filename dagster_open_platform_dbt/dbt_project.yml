@@ -37,8 +37,6 @@ models:
       +materialized: table
     marketing:
       +materialized: table
-    finance:
-      +materialized: table
     sales:
       +materialized: table
     hightouch:
