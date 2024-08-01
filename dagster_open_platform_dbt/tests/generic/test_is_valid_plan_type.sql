@@ -1,9 +1,9 @@
 {% test is_valid_plan_type(model, column_name) %}
 
 select
-    {{ column_name }}
+    split_part({{ column_name }}, '_', 1) as base_plan_type
 from {{ model }}
-where {{ column_name }} not in (
+where base_plan_type not in (
     'ENTERPRISE',
     'OPPORTUNITY',
     'PARTNER',
