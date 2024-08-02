@@ -9,6 +9,6 @@
     )
 }}
 
-select * from {{ ref('stg_salesforce__opportunities') }}
+    select * from {{ ref('stg_salesforce__opportunities') }}
 
 {% endsnapshot %}
