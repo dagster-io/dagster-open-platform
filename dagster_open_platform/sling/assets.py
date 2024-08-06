@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any, Mapping
 
 from dagster import AssetKey, SourceAsset
 from dagster_embedded_elt.sling.asset_decorator import sling_assets
@@ -12,7 +13,19 @@ from dagster_open_platform.utils.environment_helpers import (
 cloud_product_config_dir = Path(__file__).parent / "configs" / "cloud_product"
 
 
-class CustomSlingTranslatorMain(DagsterSlingTranslator):
+class CustomSlingTranslatorBase(DagsterSlingTranslator):
+    def get_tags(self, stream_definition: Mapping[str, Any]) -> Mapping[str, Any]:
+        return {"dagster/storage_kind": "snowflake"}
+
+    def get_metadata(self, stream_definition: Mapping[str, Any]) -> Mapping[str, Any]:
+        key: AssetKey = self.get_asset_key(stream_definition)
+        return {
+            **super().get_metadata(stream_definition),
+            "dagster/relation_identifier": ".".join(key.path),
+        }
+
+
+class CustomSlingTranslatorMain(CustomSlingTranslatorBase):
     def get_group_name(self, stream_definition):
         return "cloud_product_main"
 
@@ -49,7 +62,7 @@ cloud_product_main_source_assets = [
 ]
 
 
-class CustomSlingTranslatorShard1(DagsterSlingTranslator):
+class CustomSlingTranslatorShard1(CustomSlingTranslatorBase):
     def get_group_name(self, stream_definition):
         return "cloud_product_shard1"
 
