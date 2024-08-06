@@ -11,6 +11,8 @@ workspace:
     index: catalog-schema-table-name
   - path: seeds
     type: seed
+  - path: checks
+    type: check
   integrations:
     - provider: snowflake
       credential: default
