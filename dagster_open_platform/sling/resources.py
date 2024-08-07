@@ -18,8 +18,6 @@ embedded_elt_resource = SlingResource(
             database="dagster",  # type: ignore
             password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
             ssl_mode="require",  # type: ignore
-            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
-            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
         SlingConnectionResource(
             name="SLING_DB_MAIN",
@@ -40,8 +38,6 @@ embedded_elt_resource = SlingResource(
             database="shard1",  # type: ignore
             password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
             ssl_mode="require",  # type: ignore
-            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
-            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
         SlingConnectionResource(
             name="SLING_DB_SHARD1",
@@ -74,8 +70,6 @@ embedded_elt_resource = SlingResource(
             schema="public",  # type: ignore
             password=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_PASSWORD"),  # type: ignore
             sslmode="require",  # type: ignore
-            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
-            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
     ]
 )
