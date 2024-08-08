@@ -332,8 +332,8 @@ cloud_prod_sling_resource = CustomSlingResource(
         user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
         database="dagster",
         password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),
-        ssh_tunnel=None,
-        ssh_private_key=None,
+        ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),
+        ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),
     ),
     snowflake_config=SlingSnowflakeConfig(
         host=EnvVar("SNOWFLAKE_PURINA_ACCOUNT"),
