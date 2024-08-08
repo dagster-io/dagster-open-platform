@@ -13,13 +13,11 @@ embedded_elt_resource = SlingResource(
         SlingConnectionResource(
             name="CLOUD_PRODUCTION_MAIN",
             type="postgres",
-            host=EnvVar("CLOUD_PROD_READ_REPLICA_POSTGRES_HOST"),  # type: ignore
+            host=EnvVar("CLOUD_PROD_REPLICA_POSTGRES_TAILSCALE_HOST"),  # type: ignore
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
             database="dagster",  # type: ignore
             password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
             ssl_mode="require",  # type: ignore
-            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
-            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
         SlingConnectionResource(
             name="SLING_DB_MAIN",
@@ -35,13 +33,11 @@ embedded_elt_resource = SlingResource(
         SlingConnectionResource(
             name="CLOUD_PRODUCTION_SHARD1",
             type="postgres",
-            host=EnvVar("CLOUD_PROD_SHARD1_READ_REPLICA_POSTGRES_HOST"),  # type: ignore
+            host=EnvVar("CLOUD_PROD_SHARD1_REPLICA_POSTGRES_TAILSCALE_HOST"),  # type: ignore
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
             database="shard1",  # type: ignore
             password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
             ssl_mode="require",  # type: ignore
-            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
-            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
         SlingConnectionResource(
             name="SLING_DB_SHARD1",
@@ -68,14 +64,12 @@ embedded_elt_resource = SlingResource(
         SlingConnectionResource(
             name="REPORTING_DB",
             type="postgres",
-            host=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_HOST"),  # type: ignore
+            host=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_TAILSCALE_HOST"),  # type: ignore
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
             database="dagster",  # type: ignore
             schema="public",  # type: ignore
             password=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_PASSWORD"),  # type: ignore
             sslmode="require",  # type: ignore
-            ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),  # type: ignore
-            ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),  # type: ignore
         ),
     ]
 )

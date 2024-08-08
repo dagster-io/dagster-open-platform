@@ -249,7 +249,6 @@ def build_sync_postgres_to_snowflake_asset(
             update_key=update_key,
             mode=mode,
         ):
-            print(stdout_line)
             cleaned_line = re.sub(r"\[[0-9;]+[a-zA-Z]", " ", stdout_line)
             trimmed_line = cleaned_line[cleaned_line.find("INF") + 6 :].strip()
             match = re.search(r"(\d+) rows", trimmed_line)
@@ -315,7 +314,6 @@ def build_sync_snowflake_to_postgres_asset(
             mode=config.mode,
             allow_alter_table=allow_alter_table,
         ):
-            print(stdout_line)
             cleaned_line = re.sub(r"\[[0-9;]+[a-zA-Z]", " ", stdout_line)
             trimmed_line = cleaned_line[cleaned_line.find("INF") + 6 :].strip()
             match = re.search(r"(\d+) rows", trimmed_line)
@@ -328,12 +326,12 @@ def build_sync_snowflake_to_postgres_asset(
 
 cloud_prod_sling_resource = CustomSlingResource(
     postgres_config=SlingPostgresConfig(
-        host=EnvVar("CLOUD_PROD_POSTGRES_HOST"),
+        host=EnvVar("CLOUD_PROD_POSTGRES_TAILSCALE_HOST"),
         user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
         database="dagster",
         password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),
-        ssh_tunnel=EnvVar("CLOUD_PROD_BASTION_URI"),
-        ssh_private_key=EnvVar("POSTGRES_SSH_PRIVATE_KEY"),
+        ssh_tunnel=None,
+        ssh_private_key=None,
     ),
     snowflake_config=SlingSnowflakeConfig(
         host=EnvVar("SNOWFLAKE_PURINA_ACCOUNT"),
