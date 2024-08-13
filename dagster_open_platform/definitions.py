@@ -1,5 +1,9 @@
 import warnings
 
+from dagster import ExperimentalWarning
+
+warnings.filterwarnings("ignore", category=ExperimentalWarning)
+
 import dagster_open_platform.aws.definitions as aws_definitions
 import dagster_open_platform.dbt.definitions as dbt_definitions
 import dagster_open_platform.dlt.definitions as dlt_definitions
@@ -14,10 +18,7 @@ import dagster_open_platform.sling.definitions as sling_definitions
 import dagster_open_platform.sling_custom.definitions as sling_custom_definitions
 import dagster_open_platform.snowflake.definitions as snowflake_definitions
 import dagster_open_platform.stripe.definitions as stripe_definitions
-from dagster import Definitions, ExperimentalWarning
-
-warnings.filterwarnings("ignore", category=ExperimentalWarning)
-
+from dagster import Definitions
 
 defs = Definitions.merge(
     dbt_definitions.defs,
