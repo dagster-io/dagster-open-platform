@@ -7,7 +7,6 @@ from dagster import AssetExecutionContext, AssetKey, BackfillPolicy, Config, Met
 from dagster._core.definitions.asset_check_factories.freshness_checks.last_update import (
     build_last_update_freshness_checks,
 )
-from dagster_cloud.dagster_insights import dbt_with_snowflake_insights
 from dagster_dbt import (
     DagsterDbtTranslator,
     DagsterDbtTranslatorSettings,
@@ -89,11 +88,12 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     project=dagster_open_platform_dbt_project,
 )
 def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource):
-    cli_invocation = dbt.cli(["build"], context=context)
-    yield from dbt_with_snowflake_insights(
-        context=context,
-        dbt_cli_invocation=cli_invocation,
-        dagster_events=cli_invocation.stream().fetch_row_counts().fetch_column_metadata(),
+    yield from (
+        dbt.cli(["build"], context=context)
+        .stream()
+        .fetch_row_counts()
+        .fetch_column_metadata()
+        .with_insights()
     )
 
 
@@ -121,11 +121,12 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
     if config.full_refresh:
         args = ["build", "--full-refresh"]
 
-    cli_invocation = dbt.cli(args, context=context)
-    yield from dbt_with_snowflake_insights(
-        context=context,
-        dbt_cli_invocation=cli_invocation,
-        dagster_events=cli_invocation.stream().fetch_row_counts().fetch_column_metadata(),
+    yield from (
+        dbt.cli(args, context=context)
+        .stream()
+        .fetch_row_counts()
+        .fetch_column_metadata()
+        .with_insights()
     )
 
 
@@ -139,7 +140,7 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
     project=dagster_open_platform_dbt_project,
 )
 def dbt_snapshot_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
-    yield from dbt_with_snowflake_insights(context, dbt.cli(["snapshot"], context=context))
+    yield from dbt.cli(["snapshot"], context=context).stream().with_insights()
 
 
 # Usage metrics daily gets materialized each day. Give at least 12 hours berth time for any easy problems to be resolved.
