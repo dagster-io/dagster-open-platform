@@ -9,6 +9,8 @@ from dagster import (
     MonthlyPartitionsDefinition,
     asset,
 )
+from dagster_open_platform.aws.assets import workspace_data_json
+from dagster_open_platform.aws.sensors import organization_sensor
 from dagster_open_platform.snowflake.resources import snowflake_resource
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
@@ -117,7 +119,8 @@ def aws_cost_report(context: AssetExecutionContext, snowflake_aws: SnowflakeReso
 
 
 defs = Definitions(
-    assets=add_code_references_and_link_to_git([aws_cost_report]),
+    assets=add_code_references_and_link_to_git([aws_cost_report, workspace_data_json]),
+    sensors=[organization_sensor],
     resources={
         "snowflake_aws": snowflake_resource,
     },
