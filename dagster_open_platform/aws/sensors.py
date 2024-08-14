@@ -1,4 +1,5 @@
 import boto3
+import dagster._check as check
 from dagster import DynamicPartitionsDefinition, SensorEvaluationContext, SensorResult, sensor
 from dagster_open_platform.aws.constants import BUCKET_NAME
 
@@ -21,7 +22,7 @@ def organization_sensor(context: SensorEvaluationContext):
             )
         )
 
-        keys = [o["Key"] for o in bucket["Contents"]]
+        keys = [check.inst(o.get("Key"), str) for o in bucket.get("Contents", [])]
         org_ids.extend([key.split("/")[1] for key in keys])
 
         is_truncated = bucket["IsTruncated"]

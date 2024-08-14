@@ -1,6 +1,7 @@
 import json
 
 import boto3
+import dagster._check as check
 from dagster import AssetExecutionContext, AssetKey, AssetSpec, Output, multi_asset
 from dagster_open_platform.aws.constants import BUCKET_NAME, DAGSTER_OBJECTS
 from dagster_open_platform.aws.sensors import org_partitions_def
@@ -25,8 +26,8 @@ def workspace_data_json(context: AssetExecutionContext):
         Bucket=BUCKET_NAME, Prefix=f"workspace/{context.partition_key}"
     )
 
-    for j, obj_info in enumerate(bucket["Contents"]):
-        key = obj_info["Key"]
+    for j, obj_info in enumerate(bucket.get("Contents", [])):
+        key = check.inst(obj_info.get("Key"), str)
         output_directory = "processed"
         output_key_ending = "/".join(key.split("/")[1:])
 
