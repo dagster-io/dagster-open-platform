@@ -1,3 +1,5 @@
+import os
+
 import boto3
 import dagster._check as check
 from dagster import DynamicPartitionsDefinition, SensorEvaluationContext, SensorResult, sensor
@@ -8,7 +10,12 @@ org_partitions_def = DynamicPartitionsDefinition(name="organizations")
 
 @sensor(description="Sensor to detect new organizations in workspace replication")
 def organization_sensor(context: SensorEvaluationContext):
-    s3_client = boto3.client("s3")
+    session = boto3.Session(
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+        region_name=os.getenv("AWS_REGION"),
+    )
+    s3_client = session.client("s3")
 
     is_truncated = True
     continuation_token = None

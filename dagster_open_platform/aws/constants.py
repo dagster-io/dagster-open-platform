@@ -1,4 +1,6 @@
-BUCKET_NAME = "cloud-prod-workspace-replication"
+import os
+
+BUCKET_NAME = os.getenv("WORKSPACE_REPLICATION_BUCKET_NAME")
 DAGSTER_OBJECTS = {
     "external_asset_graph_data": "assets",
     "external_asset_checks": "asset_checks",

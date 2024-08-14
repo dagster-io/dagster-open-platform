@@ -1,4 +1,5 @@
 import json
+import os
 
 import boto3
 import dagster._check as check
@@ -21,7 +22,12 @@ from dagster_open_platform.aws.sensors import org_partitions_def
     partitions_def=org_partitions_def,
 )
 def workspace_data_json(context: AssetExecutionContext):
-    s3_client = boto3.client("s3")
+    session = boto3.Session(
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+        region_name=os.getenv("AWS_REGION"),
+    )
+    s3_client = session.client("s3")
     bucket = s3_client.list_objects_v2(
         Bucket=BUCKET_NAME, Prefix=f"workspace/{context.partition_key}"
     )
