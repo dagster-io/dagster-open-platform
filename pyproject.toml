@@ -7,8 +7,8 @@ name = "dagster-open-platform"
 version = "0.0.1"
 dependencies = [
     "boto3",
-    "dbt-core<1.7.14",
-    "dbt-snowflake<1.7.14",
+    "dbt-core<1.9",
+    "dbt-snowflake<1.9",
     "dagster",
     "dagster-snowflake",
     "dagster-slack",
