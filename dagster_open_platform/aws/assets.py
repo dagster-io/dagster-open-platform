@@ -1,41 +1,51 @@
 import json
-import os
 
-import boto3
-import dagster._check as check
-from dagster import AssetExecutionContext, AssetKey, AssetSpec, Output, multi_asset
-from dagster_open_platform.aws.constants import BUCKET_NAME, DAGSTER_OBJECTS
+from dagster import (
+    AssetExecutionContext,
+    AssetKey,
+    AssetSpec,
+    DailyPartitionsDefinition,
+    MultiPartitionsDefinition,
+    Output,
+    multi_asset,
+)
+from dagster_open_platform.aws.constants import (
+    BUCKET_NAME,
+    DAGSTER_OBJECTS,
+    INPUT_PREFIX,
+    OUTPUT_PREFIX,
+    session,
+)
 from dagster_open_platform.aws.sensors import org_partitions_def
 
 
 @multi_asset(
     group_name="aws",
     specs=[
-        AssetSpec(key=AssetKey(["cloud_prod", "workspace", "metadata"])),
-        AssetSpec(key=AssetKey(["cloud_prod", "workspace", "repo_metadata"])),
-        AssetSpec(key=AssetKey(["cloud_prod", "workspace", "external_repo_metadata"])),
+        AssetSpec(key=AssetKey([BUCKET_NAME, "raw", "workspace", "metadata"])),
+        AssetSpec(key=AssetKey([BUCKET_NAME, "raw", "workspace", "repo_metadata"])),
+        AssetSpec(key=AssetKey([BUCKET_NAME, "raw", "workspace", "external_repo_metadata"])),
         *[
-            AssetSpec(key=AssetKey(["cloud_prod", "workspace", dag_obj]))
+            AssetSpec(key=AssetKey([BUCKET_NAME, "raw", "workspace", dag_obj]))
             for dag_obj in DAGSTER_OBJECTS.values()
         ],
     ],
-    partitions_def=org_partitions_def,
+    partitions_def=MultiPartitionsDefinition(
+        {
+            "date": DailyPartitionsDefinition(start_date="2024-08-14"),
+            "organization": org_partitions_def,
+        }
+    ),
 )
 def workspace_data_json(context: AssetExecutionContext):
-    session = boto3.Session(
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-        region_name=os.getenv("AWS_REGION"),
-    )
     s3_client = session.client("s3")
-    bucket = s3_client.list_objects_v2(
-        Bucket=BUCKET_NAME, Prefix=f"workspace/{context.partition_key}"
-    )
 
-    for j, obj_info in enumerate(bucket.get("Contents", [])):
-        key = check.inst(obj_info.get("Key"), str)
-        output_directory = "processed"
-        output_key_ending = "/".join(key.split("/")[1:])
+    date, org = context.partition_key.split("|")
+    bucket = s3_client.list_objects_v2(Bucket=BUCKET_NAME, Prefix=f"{INPUT_PREFIX}/{date}/{org}/")
+
+    for obj_info in bucket.get("Contents", []):
+        key = obj_info.get("Key", "")
+        output_key_ending = "/".join(key.split("/")[2:])
 
         obj = s3_client.get_object(Bucket=BUCKET_NAME, Key=key)
         obj_dict = json.loads(obj["Body"].read().decode("utf-8"))
@@ -43,7 +53,7 @@ def workspace_data_json(context: AssetExecutionContext):
         # Pull the repo datas out of the object
         repository_datas = obj_dict.pop("repository_datas")
 
-        metadata_output_key = "/".join([output_directory, "metadata", output_key_ending])
+        metadata_output_key = "/".join([OUTPUT_PREFIX, "metadata", output_key_ending])
         s3_client.put_object(
             Bucket=BUCKET_NAME, Key=metadata_output_key, Body=json.dumps(obj_dict).encode("utf-8")
         )
@@ -54,7 +64,7 @@ def workspace_data_json(context: AssetExecutionContext):
 
             repo_name = external_repository_data.get("repo_name", "__repository__")
             repo_metadata_output_key = "/".join(
-                [output_directory, "repo_metadata", output_key_ending, repo_name]
+                [OUTPUT_PREFIX, "repo_metadata", output_key_ending, repo_name]
             )
             s3_client.put_object(
                 Bucket=BUCKET_NAME,
@@ -69,7 +79,7 @@ def workspace_data_json(context: AssetExecutionContext):
                         for i, item in enumerate(dagster_object):
                             dagster_object_output_key = "/".join(
                                 [
-                                    output_directory,
+                                    OUTPUT_PREFIX,
                                     dagster_object_name,
                                     output_key_ending,
                                     repo_name,
@@ -83,7 +93,7 @@ def workspace_data_json(context: AssetExecutionContext):
                             )
 
             external_repo_metadata_output_key = "/".join(
-                [output_directory, "external_repo_metadata", output_key_ending, repo_name]
+                [OUTPUT_PREFIX, "external_repo_metadata", output_key_ending, repo_name]
             )
             s3_client.put_object(
                 Bucket=BUCKET_NAME,
@@ -91,8 +101,8 @@ def workspace_data_json(context: AssetExecutionContext):
                 Body=json.dumps(external_repository_data).encode("utf-8"),
             )
 
-    yield Output(None, output_name="cloud_prod__workspace__metadata")
-    yield Output(None, output_name="cloud_prod__workspace__repo_metadata")
-    yield Output(None, output_name="cloud_prod__workspace__external_repo_metadata")
+    yield Output(None, output_name=f"{BUCKET_NAME}__raw__workspace__metadata")
+    yield Output(None, output_name=f"{BUCKET_NAME}__raw__workspace__repo_metadata")
+    yield Output(None, output_name=f"{BUCKET_NAME}__raw__workspace__external_repo_metadata")
     for dag_obj in DAGSTER_OBJECTS.values():
-        yield Output(None, output_name=f"cloud_prod__workspace__{dag_obj}")
+        yield Output(None, output_name=f"{BUCKET_NAME}__raw__workspace__{dag_obj}")

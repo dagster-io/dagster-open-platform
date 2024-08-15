@@ -1,4 +1,15 @@
-from dagster import MaterializeResult, asset, get_dagster_logger
+import os
+
+from dagster import (
+    AssetExecutionContext,
+    AssetSpec,
+    MaterializeResult,
+    asset,
+    get_dagster_logger,
+    multi_asset,
+)
+from dagster_open_platform.aws.assets import workspace_data_json
+from dagster_open_platform.aws.constants import BUCKET_NAME, OUTPUT_PREFIX
 from dagster_snowflake import SnowflakeResource
 
 log = get_dagster_logger()
@@ -51,3 +62,43 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
     return MaterializeResult(
         metadata={"dropped_databases": dbs_to_drop, "dropped_databases_count": len(dbs_to_drop)},
     )
+
+
+@multi_asset(
+    group_name="aws_stages",
+    description="Snowflake stages for AWS data",
+    specs=[
+        AssetSpec(
+            key=["aws", os.getenv("AWS_ACCOUNT_NAME", ""), str(asset_key[0][-1])], deps=[asset_key]
+        )
+        for asset_key in workspace_data_json.keys
+    ],
+)
+def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
+    integration_prefix = (
+        "CLOUD_PROD" if os.getenv("AWS_ACCOUNT_NAME", "") == "cloud-prod" else "DOGFOOD"
+    )
+    with snowflake_sf.get_connection() as conn:
+        cur = conn.cursor()
+        cur.execute("USE ROLE AWS_WRITER;")
+        for key in context.selected_asset_keys:
+            object_name = key[0][-1]
+            stage_name = f"WORKSPACE_STAGING_{object_name}"
+            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_ACCOUNT_NAME')};")
+
+            create_stage_query = f"""
+                CREATE OR REPLACE STAGE {stage_name}
+                URL='s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{object_name}'
+                STORAGE_INTEGRATION = {integration_prefix}_WORKSPACE_REPLICATION
+                FILE_FORMAT = AWS.PUBLIC.JSON_NO_EXTENSION
+                DIRECTORY = (ENABLE = TRUE);
+            """
+            cur.execute(f"SHOW STAGES LIKE '{stage_name}';")
+            stages = cur.fetchall()
+            if not stages:
+                cur.execute(create_stage_query)
+                log.info(f"Created stage {stage_name}")
+                return
+            cur.execute(f"ALTER STAGE {stage_name} REFRESH;")
+            log.info(f"Stage {stage_name} refreshed")
+            return

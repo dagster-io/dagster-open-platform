@@ -1,20 +1,18 @@
-import os
-
-import boto3
-import dagster._check as check
-from dagster import DynamicPartitionsDefinition, SensorEvaluationContext, SensorResult, sensor
-from dagster_open_platform.aws.constants import BUCKET_NAME
+from dagster import (
+    DynamicPartitionsDefinition,
+    SensorEvaluationContext,
+    SensorResult,
+    _check as check,
+    sensor,
+)
+from dagster_open_platform.aws.constants import BUCKET_NAME, INPUT_PREFIX, session
 
 org_partitions_def = DynamicPartitionsDefinition(name="organizations")
 
 
 @sensor(description="Sensor to detect new organizations in workspace replication")
 def organization_sensor(context: SensorEvaluationContext):
-    session = boto3.Session(
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-        region_name=os.getenv("AWS_REGION"),
-    )
+    # clear_org_partitions(context)
     s3_client = session.client("s3")
 
     is_truncated = True
@@ -22,15 +20,15 @@ def organization_sensor(context: SensorEvaluationContext):
     org_ids = []
     while is_truncated:
         bucket = (
-            s3_client.list_objects_v2(Bucket=BUCKET_NAME, Prefix="workspace")
+            s3_client.list_objects_v2(Bucket=BUCKET_NAME, Prefix=INPUT_PREFIX)
             if continuation_token is None
             else s3_client.list_objects_v2(
-                Bucket=BUCKET_NAME, Prefix="workspace", ContinuationToken=continuation_token
+                Bucket=BUCKET_NAME, Prefix=INPUT_PREFIX, ContinuationToken=continuation_token
             )
         )
 
-        keys = [check.inst(o.get("Key"), str) for o in bucket.get("Contents", [])]
-        org_ids.extend([key.split("/")[1] for key in keys])
+        keys = [o.get("Key", "") for o in bucket.get("Contents", [])]
+        org_ids.extend([key.split("/")[3] for key in keys])
 
         is_truncated = bucket["IsTruncated"]
         if is_truncated:
@@ -49,3 +47,12 @@ def organization_sensor(context: SensorEvaluationContext):
     return SensorResult(
         dynamic_partitions_requests=[org_partitions_def.build_add_request(new_orgs)]
     )
+
+
+def clear_org_partitions(context: SensorEvaluationContext):
+    org_ids = org_partitions_def.get_partition_keys(dynamic_partitions_store=context.instance)
+    for org_id in org_ids:
+        context.instance.delete_dynamic_partition(
+            partitions_def_name=check.not_none(org_partitions_def.name),
+            partition_key=org_id,
+        )
