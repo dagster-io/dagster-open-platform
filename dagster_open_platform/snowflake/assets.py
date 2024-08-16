@@ -91,7 +91,9 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
         for key in context.selected_asset_keys:
             stage_name = key[0][-1]
             object_name = stage_name.replace("workspace_staging_", "")
-            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME')};")
+            cur.execute(
+                f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"
+            )
 
             create_stage_query = f"""
                 CREATE OR REPLACE STAGE {stage_name}
@@ -132,7 +134,9 @@ def aws_external_tables(context: AssetExecutionContext, snowflake_sf: SnowflakeR
         for key in context.selected_asset_keys:
             table_name = key[0][-1]
             stage_name = table_name[:-4]  # Remove the "_ext" suffix
-            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME')};")
+            cur.execute(
+                f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"
+            )
 
             create_table_query = f"""
                 CREATE EXTERNAL TABLE {table_name}(
