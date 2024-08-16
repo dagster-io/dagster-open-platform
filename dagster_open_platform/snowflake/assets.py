@@ -71,7 +71,7 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
         AssetSpec(
             key=[
                 "aws",
-                os.getenv("AWS_ACCOUNT_NAME", ""),
+                os.getenv("AWS_WORKSPACE_REPLICATION_ACOUNT_NAME", ""),
                 f"workspace_staging_{asset_key[0][-1]!s}",
             ],
             deps=[asset_key],
@@ -81,7 +81,9 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
 )
 def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
     integration_prefix = (
-        "CLOUD_PROD" if os.getenv("AWS_ACCOUNT_NAME", "") == "cloud-prod" else "DOGFOOD"
+        "CLOUD_PROD"
+        if os.getenv("AWS_WORKSPACE_REPLICATION_ACOUNT_NAME", "") == "cloud-prod"
+        else "DOGFOOD"
     )
     with snowflake_sf.get_connection() as conn:
         cur = conn.cursor()
@@ -89,7 +91,7 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
         for key in context.selected_asset_keys:
             stage_name = key[0][-1]
             object_name = stage_name.replace("workspace_staging_", "")
-            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_ACCOUNT_NAME')};")
+            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACOUNT_NAME')};")
 
             create_stage_query = f"""
                 CREATE OR REPLACE STAGE {stage_name}
@@ -113,7 +115,11 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
     description="Snowflake external tables for AWS data.",
     specs=[
         AssetSpec(
-            key=["aws", os.getenv("AWS_ACCOUNT_NAME", ""), f"{asset_key[0][-1]!s}_ext"],
+            key=[
+                "aws",
+                os.getenv("AWS_WORKSPACE_REPLICATION_ACOUNT_NAME", ""),
+                f"{asset_key[0][-1]!s}_ext",
+            ],
             deps=[asset_key],
         )
         for asset_key in aws_stages.keys
@@ -126,7 +132,7 @@ def aws_external_tables(context: AssetExecutionContext, snowflake_sf: SnowflakeR
         for key in context.selected_asset_keys:
             table_name = key[0][-1]
             stage_name = table_name[:-4]  # Remove the "_ext" suffix
-            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_ACCOUNT_NAME')};")
+            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACOUNT_NAME')};")
 
             create_table_query = f"""
                 CREATE EXTERNAL TABLE {table_name}(
