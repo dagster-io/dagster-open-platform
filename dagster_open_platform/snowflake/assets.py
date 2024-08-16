@@ -66,10 +66,15 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
 
 @multi_asset(
     group_name="aws_stages",
-    description="Snowflake stages for AWS data",
+    description="Snowflake stages for AWS data, creates new stages for new assets, refreses existing stages.",
     specs=[
         AssetSpec(
-            key=["aws", os.getenv("AWS_ACCOUNT_NAME", ""), str(asset_key[0][-1])], deps=[asset_key]
+            key=[
+                "aws",
+                os.getenv("AWS_ACCOUNT_NAME", ""),
+                f"workspace_staging_{asset_key[0][-1]!s}",
+            ],
+            deps=[asset_key],
         )
         for asset_key in workspace_data_json.keys
     ],
@@ -82,8 +87,8 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:
-            object_name = key[0][-1]
-            stage_name = f"WORKSPACE_STAGING_{object_name}"
+            stage_name = key[0][-1]
+            object_name = stage_name.replace("workspace_staging_", "")
             cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_ACCOUNT_NAME')};")
 
             create_stage_query = f"""
@@ -98,7 +103,45 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
             if not stages:
                 cur.execute(create_stage_query)
                 log.info(f"Created stage {stage_name}")
-                return
+                continue
             cur.execute(f"ALTER STAGE {stage_name} REFRESH;")
             log.info(f"Stage {stage_name} refreshed")
-            return
+
+
+@multi_asset(
+    group_name="aws_external_tables",
+    description="Snowflake external tables for AWS data.",
+    specs=[
+        AssetSpec(
+            key=["aws", os.getenv("AWS_ACCOUNT_NAME", ""), f"{asset_key[0][-1]!s}_ext"],
+            deps=[asset_key],
+        )
+        for asset_key in aws_stages.keys
+    ],
+)
+def aws_external_tables(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
+    with snowflake_sf.get_connection() as conn:
+        cur = conn.cursor()
+        cur.execute("USE ROLE AWS_WRITER;")
+        for key in context.selected_asset_keys:
+            table_name = key[0][-1]
+            stage_name = table_name[:-4]  # Remove the "_ext" suffix
+            cur.execute(f"USE SCHEMA AWS.{os.getenv('AWS_ACCOUNT_NAME')};")
+
+            create_table_query = f"""
+                CREATE EXTERNAL TABLE {table_name}(
+                    FILENAME VARCHAR AS METADATA$FILENAME
+                )
+                LOCATION = @{stage_name}
+                FILE_FORMAT = AWS.PUBLIC.JSON_NO_EXTENSION
+                AUTO_REFRESH = FALSE
+                COMMENT = 'External table for stage {stage_name} from workspace replication';
+            """
+            cur.execute(f"SHOW TABLES LIKE '{table_name}';")
+            tables = cur.fetchall()
+            if not tables:
+                cur.execute(create_table_query)
+                log.info(f"Created external table {table_name}")
+                continue
+            cur.execute(f"ALTER EXTERNAL TABLE {table_name} REFRESH;")
+            log.info(f"Refreshed external table {table_name}")

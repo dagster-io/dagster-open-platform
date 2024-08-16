@@ -10,6 +10,7 @@ dependencies = [
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
     "dagster",
+    "dagster-aws",
     "dagster-snowflake",
     "dagster-slack",
     "dagster-pandas",

@@ -5,15 +5,16 @@ from dagster import (
     _check as check,
     sensor,
 )
-from dagster_open_platform.aws.constants import BUCKET_NAME, INPUT_PREFIX, session
+from dagster_aws.s3 import S3Resource
+from dagster_open_platform.aws.constants import BUCKET_NAME, INPUT_PREFIX
 
 org_partitions_def = DynamicPartitionsDefinition(name="organizations")
 
 
 @sensor(description="Sensor to detect new organizations in workspace replication")
-def organization_sensor(context: SensorEvaluationContext):
+def organization_sensor(context: SensorEvaluationContext, s3_resource: S3Resource):
     # clear_org_partitions(context)
-    s3_client = session.client("s3")
+    s3_client = s3_resource.get_client()
 
     is_truncated = True
     continuation_token = None
@@ -49,6 +50,7 @@ def organization_sensor(context: SensorEvaluationContext):
     )
 
 
+# Used in testing, allows user to clear the org partitions
 def clear_org_partitions(context: SensorEvaluationContext):
     org_ids = org_partitions_def.get_partition_keys(dynamic_partitions_store=context.instance)
     for org_id in org_ids:
