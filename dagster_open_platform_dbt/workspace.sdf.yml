@@ -31,43 +31,29 @@ workspace:
 
 ---
 
-table:
-  name: country_codes
-  location: seeds/country_codes.csv
-  file-format: csv
-  with-header: true
+function:
+  name: purina.public.bounded_slope
+  parameters: 
+    - datatype: float
+    - datatype: float
+    - datatype: int
+    - datatype: float
+    - datatype: float
+    - datatype: float
+    - datatype: float
+  returns: 
+    datatype: float
 
 ---
-table:
-  name: instance_type_priority
-  location: seeds/instance_type_priority.csv
-  file-format: csv
-  with-header: true
 
----
-table:
-  name: permission_levels
-  location: seeds/permission_levels.csv
-  file-format: csv
-  with-header: true
-
----
-table:
-  name: referrer_mapping
-  location: seeds/referrer_mapping.csv
-  file-format: csv
-  with-header: true
-
----
-table:
-  name: self_serve_stripe_products
-  location: seeds/self_serve_stripe_products.csv
-  file-format: csv
-  with-header: true
-
----
-table:
-  name: telemetry_example_map
-  location: seeds/telemetry_example_map.csv
-  file-format: csv
-  with-header: true
+function:
+  name: purina.public.bounded_intercept
+  parameters: 
+    - datatype: float
+    - datatype: float
+    - datatype: int
+    - datatype: float
+    - datatype: float
+    - datatype: float
+  returns: 
+    datatype: float
