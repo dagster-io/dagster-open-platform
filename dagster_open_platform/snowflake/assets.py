@@ -96,10 +96,10 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
             )
 
             create_stage_query = f"""
-                CREATE OR REPLACE STAGE {stage_name}
+                CREATE STAGE {stage_name}
                 URL='s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{object_name}'
                 STORAGE_INTEGRATION = {integration_prefix}_WORKSPACE_REPLICATION
-                FILE_FORMAT = AWS.PUBLIC.JSON_NO_EXTENSION
+                FILE_FORMAT = (TYPE = 'JSON', COMPRESSION = 'AUTO', STRIP_OUTER_ARRAY = TRUE)
                 DIRECTORY = (ENABLE = TRUE);
             """
             cur.execute(f"SHOW STAGES LIKE '{stage_name}';")
@@ -143,7 +143,7 @@ def aws_external_tables(context: AssetExecutionContext, snowflake_sf: SnowflakeR
                     FILENAME VARCHAR AS METADATA$FILENAME
                 )
                 LOCATION = @{stage_name}
-                FILE_FORMAT = AWS.PUBLIC.JSON_NO_EXTENSION
+                FILE_FORMAT = (TYPE = 'JSON', COMPRESSION = 'AUTO', STRIP_OUTER_ARRAY = TRUE)
                 AUTO_REFRESH = FALSE
                 COMMENT = 'External table for stage {stage_name} from workspace replication';
             """

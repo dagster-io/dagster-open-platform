@@ -7,6 +7,7 @@ from dagster import (
 )
 from dagster_aws.s3 import S3Resource
 from dagster_open_platform.aws.constants import BUCKET_NAME, INPUT_PREFIX
+from dagster_open_platform.aws.utils import S3Mailman
 
 org_partitions_def = DynamicPartitionsDefinition(name="organizations")
 
@@ -15,25 +16,14 @@ org_partitions_def = DynamicPartitionsDefinition(name="organizations")
 def organization_sensor(context: SensorEvaluationContext, s3_resource: S3Resource):
     # clear_org_partitions(context)
     s3_client = s3_resource.get_client()
-
-    is_truncated = True
-    continuation_token = None
-    org_ids = []
-    while is_truncated:
-        bucket = (
-            s3_client.list_objects_v2(Bucket=BUCKET_NAME, Prefix=INPUT_PREFIX)
-            if continuation_token is None
-            else s3_client.list_objects_v2(
-                Bucket=BUCKET_NAME, Prefix=INPUT_PREFIX, ContinuationToken=continuation_token
-            )
-        )
-
-        keys = [o.get("Key", "") for o in bucket.get("Contents", [])]
-        org_ids.extend([key.split("/")[3] for key in keys])
-
-        is_truncated = bucket["IsTruncated"]
-        if is_truncated:
-            continuation_token = bucket["NextContinuationToken"]
+    s3_mailman = S3Mailman(
+        bucket_name=BUCKET_NAME,
+        input_prefix=INPUT_PREFIX,
+        output_prefix="",
+        s3_client=s3_client,
+    )
+    contents = s3_mailman.get_contents(get_all=True)
+    org_ids = [content["Key"].split("/")[3] for content in contents]
 
     distinct_org_ids = list(set(org_ids))
 

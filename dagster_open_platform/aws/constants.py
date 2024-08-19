@@ -14,6 +14,7 @@ DAGSTER_OBJECTS = {
     "external_resource_data": "resources",
     "external_job_refs": "jobs",
 }
+DAGSTER_OBJECT_CHUNK_SIZE = 150
 DAGSTER_METADATA_OBJECTS = [
     "metadata",
     "repo_metadata",

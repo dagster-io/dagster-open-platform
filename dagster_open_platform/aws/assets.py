@@ -14,6 +14,7 @@ from dagster import (
     MultiPartitionsDefinition,
     Output,
     asset,
+    get_dagster_logger,
     multi_asset,
 )
 from dagster_aws.s3 import S3Resource
@@ -24,6 +25,7 @@ from dagster_open_platform.aws.constants import (
     COPY_DATA_QUERY,
     CREATE_TABLE_QUERY,
     DAGSTER_METADATA_OBJECTS,
+    DAGSTER_OBJECT_CHUNK_SIZE,
     DAGSTER_OBJECTS,
     DELETE_PARTITION_QUERY,
     INPUT_PREFIX,
@@ -36,6 +38,8 @@ from dagster_open_platform.utils.environment_helpers import (
     get_schema_for_environment,
 )
 from dagster_snowflake import SnowflakeResource
+
+log = get_dagster_logger()
 
 # metdata, repo_metadata, external_repo_metadata
 dagster_metadata_asset_specs = [
@@ -67,10 +71,7 @@ dagster_objet_asset_specs = [
     specs=dagster_metadata_asset_specs + dagster_objet_asset_specs,
     description="Assets for AWS workspace replication data",
     partitions_def=MultiPartitionsDefinition(
-        {
-            "date": DailyPartitionsDefinition(start_date="2024-08-14"),
-            "organization": org_partitions_def,
-        }
+        {"date": DailyPartitionsDefinition(start_date="2024-08-14"), "org": org_partitions_def}
     ),
 )
 def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource):
@@ -78,16 +79,19 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
     date, org = context.partition_key.split("|")
     s3_mailman = S3Mailman(
         bucket_name=BUCKET_NAME,
-        input_prefix=f"{INPUT_PREFIX}/{date}/{org}/",
+        input_prefix=f"{INPUT_PREFIX}/{date}/{org}",
         output_prefix=OUTPUT_PREFIX,
         s3_client=s3_client,
     )
 
-    bucket_contents = s3_mailman.get_contents()
+    bucket_contents = s3_mailman.get_contents(get_all=True)
+    log.info(f"Found {len(bucket_contents)} objects in {BUCKET_NAME}/{INPUT_PREFIX}/{date}")
 
     object_count = {}
     for obj_info in bucket_contents:
         key = obj_info.get("Key", "")
+        log.info(f"Processing {key}")
+
         output_key_ending = "/".join(key.split("/")[2:])
 
         obj_dict = json.loads(s3_mailman.get_body(key, decode="utf-8"))
@@ -96,15 +100,22 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
         repository_datas = obj_dict.pop("repository_datas")
 
         metadata_output_key = os.path.join("metadata", output_key_ending)
-        s3_mailman.send(json.dumps(obj_dict), metadata_output_key, encode="utf-8")
+        s3_mailman.send(
+            json.dumps(obj_dict), metadata_output_key, encode="utf-8", extension=".json"
+        )
 
-        for repository_data in repository_datas:
+        for _index, repository_data in enumerate(repository_datas):
             # Pull external repo datas out of the repository data
             external_repository_data = repository_data.pop("external_repository_data")
 
-            repo_name = external_repository_data.get("repo_name", "__repository__")
+            repo_name = external_repository_data.get("repo_name", f"__UNKNOWN_{_index}__")
             repo_metadata_output_key = os.path.join("repo_metadata", output_key_ending, repo_name)
-            s3_mailman.send(json.dumps(repository_data), repo_metadata_output_key, encode="utf-8")
+            s3_mailman.send(
+                json.dumps(repository_data),
+                repo_metadata_output_key,
+                encode="utf-8",
+                extension=".json",
+            )
 
             for dagster_object_key, dagster_object_name in DAGSTER_OBJECTS.items():
                 dagster_object = external_repository_data.pop(dagster_object_key, []) or []
@@ -112,6 +123,7 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
                     object_count[dagster_object_name] = len(dagster_object)
                 else:
                     object_count[dagster_object_name] += len(dagster_object)
+
                 dagster_object_output_base_path = os.path.join(
                     dagster_object_name, output_key_ending, repo_name
                 )
@@ -120,6 +132,8 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
                     dagster_object_output_base_path,
                     encode="utf-8",
                     preprocess=lambda x: json.dumps(x),
+                    chunk_size=DAGSTER_OBJECT_CHUNK_SIZE,
+                    extension=".json",
                 )
 
             external_repo_metadata_output_key = os.path.join(
@@ -129,6 +143,7 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
                 json.dumps(external_repository_data),
                 external_repo_metadata_output_key,
                 encode="utf-8",
+                extension=".json",
             )
 
     for metadata_obj in DAGSTER_METADATA_OBJECTS:

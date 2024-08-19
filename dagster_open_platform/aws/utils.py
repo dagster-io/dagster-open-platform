@@ -24,16 +24,35 @@ class S3Mailman:
         self.output_prefix = output_prefix
         self.s3_client = s3_client
 
-    def list_objects(self) -> Dict:
-        return self.s3_client.list_objects_v2(Bucket=self.bucket_name, Prefix=self.input_prefix)
+    def list_objects(self, continuation_token=None) -> Dict:
+        return (
+            self.s3_client.list_objects_v2(Bucket=self.bucket_name, Prefix=self.input_prefix)
+            if continuation_token is None
+            else self.s3_client.list_objects_v2(
+                Bucket=self.bucket_name,
+                Prefix=self.input_prefix,
+                ContinuationToken=continuation_token,
+            )
+        )
 
-    def get_contents(self) -> List:
+    def get_contents(self, get_all: bool = False) -> List:
+        if all:
+            bucket_contents = []
+            continuation_token = None
+            is_truncated = True
+            while is_truncated:
+                bucket = self.list_objects(continuation_token)
+                bucket_contents.extend(bucket.get("Contents", []))
+                is_truncated = bucket["IsTruncated"]
+                if is_truncated:
+                    continuation_token = bucket["NextContinuationToken"]
+            return bucket_contents
         return self.list_objects().get("Contents", [])
 
-    def send(self, body: Any, key, encode=None) -> None:
+    def send(self, body: Any, key, encode: str | None = None, extension: str = "") -> None:
         self.s3_client.put_object(
             Bucket=self.bucket_name,
-            Key=os.path.join(self.output_prefix, key),
+            Key=os.path.join(self.output_prefix, key + extension),
             Body=body if encode is None else body.encode(encode),
         )
 
@@ -43,10 +62,22 @@ class S3Mailman:
         base_path: str,
         encode: str | None = None,
         preprocess: Callable | None = None,
+        chunk_size: int | None = None,
+        extension: str = "",
     ) -> None:
-        for i, body in enumerate(objects):
-            body_processed = body if preprocess is None else preprocess(body)
-            self.send(body_processed, os.path.join(base_path, str(i + 1)), encode=encode)
+        if chunk_size is not None:
+            chunks = [objects[i : i + chunk_size] for i in range(0, len(objects), chunk_size)]
+            for j, chunk in enumerate(chunks):
+                chunk_processed = chunk if preprocess is None else preprocess(chunk)
+                self.send(
+                    chunk_processed, os.path.join(base_path, str(j + 1) + extension), encode=encode
+                )
+        else:
+            for k, body in enumerate(objects):
+                body_processed = body if preprocess is None else preprocess(body)
+                self.send(
+                    body_processed, os.path.join(base_path, str(k + 1) + extension), encode=encode
+                )
 
     def get(self, key: str) -> Dict:
         return self.s3_client.get_object(Bucket=self.bucket_name, Key=key)
