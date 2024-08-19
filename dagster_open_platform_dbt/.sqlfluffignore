@@ -9,3 +9,4 @@ reporting_metadata_asset_materialization_metrics.sql
 reporting_job_metrics_daily_rollup.sql
 reporting_run_metrics.sql
 stg_aws__code_location_data.sql
+opportunity_snapshots.sql
