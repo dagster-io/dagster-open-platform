@@ -108,7 +108,7 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
             # Pull external repo datas out of the repository data
             external_repository_data = repository_data.pop("external_repository_data")
 
-            repo_name = external_repository_data.get("repo_name", f"__UNKNOWN_{_index}__")
+            repo_name = repository_data.get("repo_name", f"__UNKNOWN_{_index}__")
             repo_metadata_output_key = os.path.join("repo_metadata", output_key_ending, repo_name)
             s3_mailman.send(
                 json.dumps(repository_data),
