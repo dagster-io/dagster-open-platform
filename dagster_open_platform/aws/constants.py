@@ -4,7 +4,7 @@ BUCKET_NAME = os.getenv("AWS_WORKSPACE_REPLICATION_BUCKET_NAME", "")
 ACCOUNT_NAME = os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", "")
 INPUT_PREFIX = "raw/workspace"
 OUTPUT_PREFIX = "staging"
-DAGSTER_OBJECTS = {
+EXTRACTED_DAGSTER_OBJECTS_DICT = {
     "external_asset_graph_data": "assets",
     "external_asset_checks": "asset_checks",
     "external_partition_set_datas": "partitions",

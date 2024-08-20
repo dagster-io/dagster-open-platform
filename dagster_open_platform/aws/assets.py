@@ -8,7 +8,6 @@ from dagster import (
     AssetSpec,
     AutoMaterializePolicy,
     AutoMaterializeRule,
-    DailyPartitionsDefinition,
     MaterializeResult,
     MonthlyPartitionsDefinition,
     MultiPartitionsDefinition,
@@ -26,12 +25,12 @@ from dagster_open_platform.aws.constants import (
     CREATE_TABLE_QUERY,
     DAGSTER_METADATA_OBJECTS,
     DAGSTER_OBJECT_CHUNK_SIZE,
-    DAGSTER_OBJECTS,
     DELETE_PARTITION_QUERY,
+    EXTRACTED_DAGSTER_OBJECTS_DICT,
     INPUT_PREFIX,
     OUTPUT_PREFIX,
 )
-from dagster_open_platform.aws.sensors import org_partitions_def
+from dagster_open_platform.aws.partitions import daily_partition_def, org_partitions_def
 from dagster_open_platform.aws.utils import S3Mailman
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
@@ -54,7 +53,7 @@ dagster_metadata_asset_specs = [
 ]
 
 # assets, asset checks, sensors, etc.
-dagster_objet_asset_specs = [
+dagster_object_asset_specs = [
     AssetSpec(
         key=AssetKey([BUCKET_NAME, "staging", dag_obj]),
         metadata={
@@ -62,16 +61,16 @@ dagster_objet_asset_specs = [
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_obj}",
         },
     )
-    for dag_obj in DAGSTER_OBJECTS.values()
+    for dag_obj in EXTRACTED_DAGSTER_OBJECTS_DICT.values()
 ]
 
 
 @multi_asset(
     group_name="aws",
-    specs=dagster_metadata_asset_specs + dagster_objet_asset_specs,
+    specs=dagster_metadata_asset_specs + dagster_object_asset_specs,
     description="Assets for AWS workspace replication data",
     partitions_def=MultiPartitionsDefinition(
-        {"date": DailyPartitionsDefinition(start_date="2024-08-14"), "org": org_partitions_def}
+        {"date": daily_partition_def, "org": org_partitions_def}
     ),
 )
 def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource):
@@ -117,7 +116,7 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
                 extension=".json",
             )
 
-            for dagster_object_key, dagster_object_name in DAGSTER_OBJECTS.items():
+            for dagster_object_key, dagster_object_name in EXTRACTED_DAGSTER_OBJECTS_DICT.items():
                 dagster_object = external_repository_data.pop(dagster_object_key, []) or []
                 if dagster_object_name not in object_count:
                     object_count[dagster_object_name] = len(dagster_object)
@@ -146,13 +145,11 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
                 extension=".json",
             )
 
-    for metadata_obj in DAGSTER_METADATA_OBJECTS:
-        yield Output(None, output_name=f"{BUCKET_NAME.replace('-', '_')}__staging__{metadata_obj}")
-    for dag_obj in DAGSTER_OBJECTS.values():
+    for asset_key in context.selected_asset_keys:
         yield Output(
             None,
-            output_name=f"{BUCKET_NAME.replace('-', '_')}__staging__{dag_obj}",
-            metadata={"count": object_count.get(dag_obj, 0)},
+            output_name=f"{asset_key[0][0].replace('-', '_')}__{asset_key[0][1]}__{asset_key[0][2]}",
+            metadata={"count": object_count.get(asset_key[0][2], None)},
         )
 
 

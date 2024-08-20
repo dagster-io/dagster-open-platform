@@ -36,7 +36,7 @@ class S3Mailman:
         )
 
     def get_contents(self, get_all: bool = False) -> List:
-        if all:
+        if get_all:
             bucket_contents = []
             continuation_token = None
             is_truncated = True
