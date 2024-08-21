@@ -71,7 +71,7 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
         AssetSpec(
             key=[
                 "aws",
-                os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", ""),
+                "cloud-prod",
                 f"workspace_staging_{asset_key[0][-1]!s}",
             ],
             deps=[asset_key],
@@ -119,7 +119,7 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
         AssetSpec(
             key=[
                 "aws",
-                os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", "").replace("-", "_"),
+                "cloud_prod",
                 f"{asset_key[0][-1]!s}_ext",
             ],
             deps=[asset_key],
