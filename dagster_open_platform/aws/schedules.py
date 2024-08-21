@@ -14,13 +14,6 @@ workspace_replication_ingestion_job = define_asset_job(
         {"date": daily_partition_def, "org": org_partitions_def}
     ),
     tags={"team": "devrel"},
-    config={
-        "execution": {
-            "config": {
-                "multiprocess": {"max_concurrent": 4},
-            }
-        }
-    },
 )
 
 workspace_replication_schedule = build_schedule_from_partitioned_job(

@@ -119,7 +119,7 @@ def aws_stages(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
         AssetSpec(
             key=[
                 "aws",
-                os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", ""),
+                os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", "").replace("-", "_"),
                 f"{asset_key[0][-1]!s}_ext",
             ],
             deps=[asset_key],
