@@ -58,11 +58,12 @@ dagster_open_platform:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
 
       user: "{{ env_var('SNOWFLAKE_USER', '') }}"
-      password: "{{ env_var('SNOWFLAKE_DBT_PASSWORD', '') }}"
-
       role: "{{ env_var('SNOWFLAKE_ROLE', '') }}"
+      authenticator: externalbrowser
+
       database: "sandbox"
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'elementl') }}"
+      
       schema: "{{ env_var('SNOWFLAKE_ROLE', '') }}"
       threads: 8
       client_session_keep_alive: false
