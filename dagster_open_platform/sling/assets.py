@@ -50,6 +50,14 @@ def cloud_product_main_high_volume(context, embedded_elt: SlingResource):
     yield from embedded_elt.replicate(context=context)
 
 
+@sling_assets(
+    replication_config=cloud_product_config_dir / "main_event_log.yaml",
+    dagster_sling_translator=CustomSlingTranslatorMain(),
+)
+def cloud_product_main_event_log(context, embedded_elt: SlingResource):
+    yield from embedded_elt.replicate(context=context)
+
+
 cloud_product_main_source_assets = [
     *[
         SourceAsset(key, group_name="postgres_main")
@@ -58,6 +66,10 @@ cloud_product_main_source_assets = [
     *[
         SourceAsset(key, group_name="postgres_main")
         for key in cloud_product_main_high_volume.dependency_keys
+    ],
+    *[
+        SourceAsset(key, group_name="postgres_main")
+        for key in cloud_product_main_event_log.dependency_keys
     ],
 ]
 
@@ -87,6 +99,14 @@ def cloud_product_shard1_high_volume(context, embedded_elt: SlingResource):
     yield from embedded_elt.replicate(context=context)
 
 
+@sling_assets(
+    replication_config=cloud_product_config_dir / "shard1_event_log.yaml",
+    dagster_sling_translator=CustomSlingTranslatorShard1(),
+)
+def cloud_product_shard1_event_log(context, embedded_elt: SlingResource):
+    yield from embedded_elt.replicate(context=context)
+
+
 cloud_product_shard1_source_assets = [
     *[
         SourceAsset(key, group_name="postgres_shard1")
@@ -95,6 +115,10 @@ cloud_product_shard1_source_assets = [
     *[
         SourceAsset(key, group_name="postgres_shard1")
         for key in cloud_product_shard1_high_volume.dependency_keys
+    ],
+    *[
+        SourceAsset(key, group_name="postgres_shard1")
+        for key in cloud_product_shard1_event_log.dependency_keys
     ],
 ]
 
