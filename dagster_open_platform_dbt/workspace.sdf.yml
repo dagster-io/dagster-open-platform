@@ -57,3 +57,12 @@ function:
     - datatype: float
   returns: 
     datatype: float
+
+---
+
+function:
+  name: purina.utils.uri_percent_decode
+  parameters:
+    - datatype: string
+  returns:
+    datatype: string

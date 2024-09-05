@@ -74,6 +74,7 @@ max_line_length = 100
 nocolor = true
 # Warn on the use of keywords as identifiers
 warnings = "RF04"
+large_file_skip_byte_limit = 35000
 
 [tool.sqlfluff.templater.dbt]
 project_dir = "./dagster_open_platform_dbt"

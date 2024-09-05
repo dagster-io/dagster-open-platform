@@ -25,6 +25,8 @@ models:
       +materialized: table
     intermediate:
       +materialized: view
+    mart:
+      +materialized: table
     cloud_reporting:
       +materialized: table
       +snowflake_warehouse: l_warehouse
