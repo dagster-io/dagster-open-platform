@@ -24,7 +24,7 @@ dependencies = [
     "sling<1.2.14", # https://github.com/slingdata-io/sling-cli/issues/349
     "gql[requests]",
     "dlt[snowflake,duckdb]",
-    "pydantic>2",
+    "pydantic<2.9.0", # https://dagsterlabs.slack.com/archives/C04J8BRN9ST/p1725559237966589
     "pyyaml",
 ]
 
