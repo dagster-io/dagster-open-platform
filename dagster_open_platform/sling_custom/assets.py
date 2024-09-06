@@ -40,5 +40,19 @@ prod_sync_usage_metrics = [
             )
         ],
         allow_alter_table=False,
-    )
+    ),
+    build_sync_snowflake_to_postgres_asset(
+        key=AssetKey(["postgres", "usage_metrics_daily_jobs_aggregated_reporting"]),
+        sling_resource_key="cloud_prod_reporting_sling",
+        source_table=USAGE_METRICS_SELECT_QUERY,
+        dest_table="public.usage_metrics_daily_jobs_aggregated",
+        group_name="sling_egress",
+        mode=SlingMode.TRUNCATE,
+        deps=[
+            get_asset_key_for_model(
+                [dbt_non_partitioned_models], "usage_metrics_daily_jobs_aggregated"
+            )
+        ],
+        allow_alter_table=False,
+    ),
 ]
