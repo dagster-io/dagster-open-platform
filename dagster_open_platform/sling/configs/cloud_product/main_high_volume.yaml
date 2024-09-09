@@ -7,14 +7,7 @@ defaults:
   source_options:
     limit: 500000
 
-streams: 
-  public.runs: 
-    primary_key: [id]
-    update_key: update_timestamp
-    meta:
-      dagster:
-        asset_key: sling.cloud_product.runs
-  
+streams:
   public.run_tags: 
     meta:
       dagster:

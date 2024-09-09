@@ -1,0 +1,16 @@
+source: CLOUD_PRODUCTION_SHARD1
+target: SLING_DB_SHARD1
+defaults: 
+  mode: incremental
+  object: '{stream_table}'
+  update_key: id
+  source_options:
+    limit: 500000
+
+streams: 
+  public.runs: 
+    primary_key: [id]
+    update_key: update_timestamp
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.runs

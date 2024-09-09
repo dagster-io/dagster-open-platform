@@ -8,13 +8,6 @@ defaults:
     limit: 500000
 
 streams: 
-  public.runs: 
-    primary_key: [id]
-    update_key: update_timestamp
-    meta:
-      dagster:
-        asset_key: sling.cloud_product_shard1.runs
-  
   public.run_tags: 
     meta:
       dagster:
