@@ -39,7 +39,7 @@ class CustomSlingTranslatorMain(CustomSlingTranslatorBase):
     dagster_sling_translator=CustomSlingTranslatorMain(),
 )
 def cloud_product_main_low_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 @sling_assets(
@@ -47,7 +47,7 @@ def cloud_product_main_low_volume(context, embedded_elt: SlingResource):
     dagster_sling_translator=CustomSlingTranslatorMain(),
 )
 def cloud_product_main_high_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 @sling_assets(
@@ -55,7 +55,7 @@ def cloud_product_main_high_volume(context, embedded_elt: SlingResource):
     dagster_sling_translator=CustomSlingTranslatorMain(),
 )
 def cloud_product_main_event_log(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 @sling_assets(
@@ -63,7 +63,7 @@ def cloud_product_main_event_log(context, embedded_elt: SlingResource):
     dagster_sling_translator=CustomSlingTranslatorMain(),
 )
 def cloud_product_main_runs(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 cloud_product_main_source_assets = [
@@ -100,7 +100,7 @@ class CustomSlingTranslatorShard1(CustomSlingTranslatorBase):
     dagster_sling_translator=CustomSlingTranslatorShard1(),
 )
 def cloud_product_shard1_low_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 @sling_assets(
@@ -108,7 +108,7 @@ def cloud_product_shard1_low_volume(context, embedded_elt: SlingResource):
     dagster_sling_translator=CustomSlingTranslatorShard1(),
 )
 def cloud_product_shard1_high_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 @sling_assets(
@@ -116,7 +116,7 @@ def cloud_product_shard1_high_volume(context, embedded_elt: SlingResource):
     dagster_sling_translator=CustomSlingTranslatorShard1(),
 )
 def cloud_product_shard1_event_log(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 @sling_assets(
@@ -124,7 +124,7 @@ def cloud_product_shard1_event_log(context, embedded_elt: SlingResource):
     dagster_sling_translator=CustomSlingTranslatorShard1(),
 )
 def cloud_product_shard1_runs(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
 
 
 cloud_product_shard1_source_assets = [
@@ -167,4 +167,4 @@ class CustomSlingTranslator(DagsterSlingTranslator):
     dagster_sling_translator=CustomSlingTranslator(),
 )
 def salesforce_contract_info(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context)
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
