@@ -324,25 +324,6 @@ def build_sync_snowflake_to_postgres_asset(
     return sync
 
 
-cloud_prod_sling_resource = CustomSlingResource(
-    postgres_config=SlingPostgresConfig(
-        host=EnvVar("CLOUD_PROD_POSTGRES_TAILSCALE_HOST"),
-        user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
-        database="dagster",
-        password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),
-        ssh_tunnel=None,
-        ssh_private_key=None,
-    ),
-    snowflake_config=SlingSnowflakeConfig(
-        host=EnvVar("SNOWFLAKE_PURINA_ACCOUNT"),
-        user=EnvVar("SNOWFLAKE_PURINA_USER"),
-        password=EnvVar("SNOWFLAKE_PURINA_PASSWORD"),
-        database="purina",
-        warehouse="purina",
-        role="purina",
-    ),
-)
-
 cloud_prod_reporting_sling_resource = CustomSlingResource(
     postgres_config=SlingPostgresConfig(
         host=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_TAILSCALE_HOST"),
