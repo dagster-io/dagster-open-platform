@@ -20,7 +20,7 @@ class CustomSlingTranslator(DagsterSlingTranslator):
         self.shard_name = shard_name
 
     def get_tags(self, stream_definition: Mapping[str, Any]) -> Mapping[str, Any]:
-        return {"dagster/storage_kind": "snowflake"}
+        return {"dagster/kind/snowflake": ""}
 
     def get_metadata(self, stream_definition: Mapping[str, Any]) -> Mapping[str, Any]:
         key: AssetKey = self.get_asset_key(stream_definition)
