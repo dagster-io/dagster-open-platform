@@ -293,7 +293,7 @@ def build_sync_snowflake_to_postgres_asset(
         required_resource_keys={sling_resource_key} | (preflight_resource_keys or set()),
         key=key,
         deps=deps,
-        compute_kind="sling",
+        tags={"dagster/kind/postgres": "", "dagster/kind/sling": ""},
         group_name=group_name,
     )
     def sync(context: AssetExecutionContext, config: ConfigClass) -> None:  # type: ignore

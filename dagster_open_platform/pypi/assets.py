@@ -23,7 +23,7 @@ dagster_pypi_downloads_asset_key = ["purina", "oss_analytics", "dagster_pypi_dow
 
 
 @asset(
-    compute_kind="Snowflake",
+    tags={"dagster/kind/snowflake": ""},
     key=dagster_pypi_downloads_asset_key,
     group_name="oss_analytics",
     partitions_def=oss_analytics_weekly_partition,
