@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Iterable, Mapping
 
 from dagster import AssetKey, AutoMaterializePolicy, AutomationCondition, SourceAsset
 from dagster_embedded_elt.sling.asset_decorator import sling_assets
@@ -49,32 +49,32 @@ class CustomSlingTranslator(DagsterSlingTranslator):
     replication_config=cloud_product_config_dir / "main_low_volume.yaml",
     dagster_sling_translator=CustomSlingTranslator(cron_schedule="0 */2 * * *"),
 )
-def cloud_product_main_low_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_main_low_volume(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 @sling_assets(
     replication_config=cloud_product_config_dir / "main_high_volume.yaml",
     dagster_sling_translator=CustomSlingTranslator(),
 )
-def cloud_product_main_high_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_main_high_volume(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 @sling_assets(
     replication_config=cloud_product_config_dir / "main_event_log.yaml",
     dagster_sling_translator=CustomSlingTranslator(),
 )
-def cloud_product_main_event_log(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_main_event_log(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 @sling_assets(
     replication_config=cloud_product_config_dir / "main_runs.yaml",
     dagster_sling_translator=CustomSlingTranslator(),
 )
-def cloud_product_main_runs(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_main_runs(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 cloud_product_main_source_assets = [
@@ -103,32 +103,32 @@ cloud_product_main_source_assets = [
         cron_schedule="0 */2 * * *", shard_name="shard1"
     ),
 )
-def cloud_product_shard1_low_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_shard1_low_volume(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 @sling_assets(
     replication_config=cloud_product_config_dir / "shard1_high_volume.yaml",
     dagster_sling_translator=CustomSlingTranslator(shard_name="shard1"),
 )
-def cloud_product_shard1_high_volume(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_shard1_high_volume(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 @sling_assets(
     replication_config=cloud_product_config_dir / "shard1_event_log.yaml",
     dagster_sling_translator=CustomSlingTranslator(shard_name="shard1"),
 )
-def cloud_product_shard1_event_log(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_shard1_event_log(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 @sling_assets(
     replication_config=cloud_product_config_dir / "shard1_runs.yaml",
     dagster_sling_translator=CustomSlingTranslator(shard_name="shard1"),
 )
-def cloud_product_shard1_runs(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def cloud_product_shard1_runs(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
 cloud_product_shard1_source_assets = [
@@ -170,5 +170,5 @@ class CustomSlingTranslatorEgress(DagsterSlingTranslator):
     replication_config=reporting_db_config_dir / "salesforce_contract_info.yaml",
     dagster_sling_translator=CustomSlingTranslatorEgress(),
 )
-def salesforce_contract_info(context, embedded_elt: SlingResource):
-    yield from embedded_elt.replicate(context=context).fetch_column_metadata()
+def salesforce_contract_info(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
