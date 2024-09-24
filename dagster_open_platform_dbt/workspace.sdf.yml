@@ -16,7 +16,7 @@ workspace:
   integrations:
     - provider: snowflake
       credential: default
-      sources: 
+      sources:
         - pattern: dlt.*.*
         - pattern: segment.*.*
         - pattern: stripe_pipeline.*.*
@@ -33,7 +33,7 @@ workspace:
 
 function:
   name: purina.public.bounded_slope
-  parameters: 
+  parameters:
     - datatype: float
     - datatype: float
     - datatype: int
@@ -41,21 +41,21 @@ function:
     - datatype: float
     - datatype: float
     - datatype: float
-  returns: 
+  returns:
     datatype: float
 
 ---
 
 function:
   name: purina.public.bounded_intercept
-  parameters: 
+  parameters:
     - datatype: float
     - datatype: float
     - datatype: int
     - datatype: float
     - datatype: float
     - datatype: float
-  returns: 
+  returns:
     datatype: float
 
 ---
@@ -66,3 +66,21 @@ function:
     - datatype: string
   returns:
     datatype: string
+
+---
+function:
+  name: filter
+  parameters:
+    - datatype: array
+    - datatype: function(boolean, $1)
+  returns:
+    datatype: array
+
+---
+function:
+  name: transform
+  parameters:
+    - datatype: array
+    - datatype: function(varchar, $1)
+  returns:
+    datatype: array
