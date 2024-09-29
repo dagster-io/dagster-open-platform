@@ -17,7 +17,7 @@ embedded_elt_resource = SlingResource(
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
             database="dagster",  # type: ignore
             password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
-            ssl_mode="require",  # type: ignore
+            sslmode="require",  # type: ignore
         ),
         SlingConnectionResource(
             name="SLING_DB_MAIN",
@@ -37,7 +37,7 @@ embedded_elt_resource = SlingResource(
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
             database="shard1",  # type: ignore
             password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
-            ssl_mode="require",  # type: ignore
+            sslmode="require",  # type: ignore
         ),
         SlingConnectionResource(
             name="SLING_DB_SHARD1",
