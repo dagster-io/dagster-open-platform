@@ -1,14 +1,4 @@
-from dagster import (
-    AssetCheckResult,
-    AssetCheckSeverity,
-    AssetCheckSpec,
-    AssetExecutionContext,
-    AutoMaterializePolicy,
-    MaterializeResult,
-    MetadataValue,
-    SourceAsset,
-    asset,
-)
+import dagster as dg
 from dagster_cloud.dagster_insights import InsightsBigQueryResource
 from dagster_open_platform.pypi.partitions import oss_analytics_weekly_partition
 from dagster_snowflake import SnowflakeResource
@@ -22,22 +12,22 @@ SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
 dagster_pypi_downloads_asset_key = ["purina", "oss_analytics", "dagster_pypi_downloads"]
 
 
-@asset(
+@dg.asset(
     tags={"dagster/kind/snowflake": ""},
     key=dagster_pypi_downloads_asset_key,
     group_name="oss_analytics",
     partitions_def=oss_analytics_weekly_partition,
-    auto_materialize_policy=AutoMaterializePolicy.eager(),
+    automation_condition=dg.AutomationCondition.eager(),
     check_specs=[
-        AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
-        AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
+        dg.AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
+        dg.AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
     ],
 )
 def dagster_pypi_downloads(
-    context: AssetExecutionContext,
+    context: dg.AssetExecutionContext,
     bigquery: InsightsBigQueryResource,
     snowflake_pypi: SnowflakeResource,
-) -> MaterializeResult:
+) -> dg.MaterializeResult:
     """A table containing the number of PyPi downloads for each package in the Dagster ecosystem, aggregated at the weekly grain. This data is fetched from the public BigQuery dataset `bigquery-public-data.pypi.file_downloads`."""
     start_week = str(context.asset_partitions_time_window_for_output().start.date())
     end_week = str(context.asset_partitions_time_window_for_output().end.date())
@@ -105,27 +95,27 @@ def dagster_pypi_downloads(
 
     dagster_download_count = int(df[df["package"] == "dagster"]["num_downloads"].values[0])
 
-    non_empty_check_result = AssetCheckResult(
+    non_empty_check_result = dg.AssetCheckResult(
         check_name=NON_EMPTY_CHECK_NAME,
         passed=(len(df) > 0),
-        metadata={"num_rows": MetadataValue.int(len(df))},
-        severity=AssetCheckSeverity.WARN,
+        metadata={"num_rows": dg.MetadataValue.int(len(df))},
+        severity=dg.AssetCheckSeverity.WARN,
     )
 
-    same_rows_check_results = AssetCheckResult(
+    same_rows_check_results = dg.AssetCheckResult(
         check_name=SAME_ROWS_CHECK_NAME, passed=(len(df) == rows_inserted)
     )
 
-    return MaterializeResult(
+    return dg.MaterializeResult(
         metadata={
-            "top_downloads": MetadataValue.md(top_downloads.to_markdown()),
-            "dagster_download_count": MetadataValue.int(dagster_download_count),
+            "top_downloads": dg.MetadataValue.md(top_downloads.to_markdown()),
+            "dagster_download_count": dg.MetadataValue.int(dagster_download_count),
         },
         check_results=[non_empty_check_result, same_rows_check_results],
     )
 
 
-oss_telemetry_events_raw = SourceAsset(
+oss_telemetry_events_raw = dg.SourceAsset(
     key=["purina", "prod_telemetry", "oss_telemetry_events_raw"],
     description="OSS Telemetry events ingested from S3. The actual asset for this is currently in Purina until we can refactor the logic for it.",
     group_name="telemetry",
