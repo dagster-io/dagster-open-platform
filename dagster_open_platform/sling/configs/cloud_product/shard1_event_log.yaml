@@ -4,13 +4,14 @@ defaults:
   mode: incremental
   object: '{stream_table}'
   update_key: id
-  source_options:
-    limit: 500000
 
 streams: 
   public.event_logs: 
     sql: >
-      SELECT * FROM public.event_logs where {incremental_where_cond} and dagster_event_type is not null
+      with candidates as (                
+        SELECT * FROM public.event_logs where id > {incremental_where_cond} order by id desc limit 500000
+      )
+      select * from candidates where dagster_event_type is not null
     meta:
       dagster: 
         asset_key: sling.cloud_product_shard1.event_logs
