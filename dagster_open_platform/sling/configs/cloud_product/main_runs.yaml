@@ -12,7 +12,7 @@ streams:
       from public.runs
       where
         update_timestamp > coalesce({incremental_value}, to_timestamp('2021-06-30 00:0:00', 'YYYY-MM-DD HH24:MI:SS'))
-        and update_timestamp <= coalesce({incremental_value}, to_timestamp('2021-06-30 00:0:00', 'YYYY-MM-DD HH24:MI:SS')) + INTERVAL \'1 hour\''
+        and update_timestamp <= coalesce({incremental_value}, to_timestamp('2021-06-30 00:0:00', 'YYYY-MM-DD HH24:MI:SS')) + INTERVAL '1 hour'
     primary_key: [id]
     update_key: update_timestamp
     meta:
