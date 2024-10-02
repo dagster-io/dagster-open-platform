@@ -9,7 +9,7 @@ streams:
   public.event_logs:
     sql: >
       with candidates as (
-        select * from public.event_logs where id > {incremental_value} and id <= {incremental_value} + 100000
+        select * from public.event_logs where id > {incremental_value} and id <= {incremental_value} + 500000
       )
       select * from candidates where dagster_event_type is not null
     meta:
