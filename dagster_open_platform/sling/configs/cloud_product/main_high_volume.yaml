@@ -25,11 +25,6 @@ streams:
       dagster: 
         asset_key: sling.cloud_product.asset_observations
     
-  public.asset_partitions:
-    meta:
-      dagster: 
-        asset_key: sling.cloud_product.asset_partitions
-    
   public.alert_policies:
     meta:
       dagster: 
