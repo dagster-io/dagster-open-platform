@@ -1,12 +1,17 @@
+import json
 import os
 
+import pandas as pd
 from dagster import (
     AssetExecutionContext,
     BackfillPolicy,
     DailyPartitionsDefinition,
     MaterializeResult,
+    MetadataValue,
     asset,
 )
+from dagster_snowflake import SnowflakeResource
+from snowflake.connector.pandas_tools import write_pandas
 
 from .resources import GithubResource, ScoutosResource
 
@@ -105,3 +110,59 @@ def github_issues(
     scoutos.write_documents(collection, parsed_issues)
     scoutos.write_documents(collection, parsed_discussions)
     return MaterializeResult()
+
+
+scout_queries_daily_partition = DailyPartitionsDefinition(start_date="2024-06-01")
+
+
+@asset(
+    compute_kind="python",
+    partitions_def=scout_queries_daily_partition,
+    group_name="scoutos",
+)
+def scoutos_app_runs(
+    context: AssetExecutionContext, snowflake: SnowflakeResource, scoutos: ScoutosResource
+) -> MaterializeResult:
+    partition_date_str = context.partition_key
+    data = scoutos.get_runs(partition_date_str, partition_date_str)
+    df = pd.concat([pd.json_normalize(obj) for obj in data], ignore_index=True)
+    df["partition_date"] = df["timestamp_start"].str[:10]
+    df["blocks"] = df["blocks"].apply(
+        lambda x: [block["block_output"] for block in x if "block_output" in block]
+    )
+    df["blocks"] = df["blocks"].apply(lambda x: json.dumps(x) if x is not None else None)
+    context.log.info(f"Fetched Total records: {len(df)}")
+    with snowflake.get_connection() as conn:
+        table_name = "scout_queries"
+        delete_query = f"""
+            delete from SCOUT.QUERIES.{table_name}
+            where partition_date ='{partition_date_str}'
+        """
+        try:
+            conn.cursor().execute(delete_query)
+            context.log.info(f"Deleted Partition data for {partition_date_str}")
+
+            success, number_chunks, rows_inserted, output = write_pandas(
+                conn,
+                df,
+                table_name,
+                database="SCOUT",
+                schema="QUERIES",
+                auto_create_table=False,
+                overwrite=False,
+                quote_identifiers=False,
+            )
+
+            context.log.info(f"Inserted {rows_inserted} rows into SCOUT.QUERIES.{table_name}")
+        except Exception as e:
+            context.log.error(f"Error inserting data into {table_name}")
+            context.log.error(e)
+            conn.rollback()
+            raise e
+
+    return MaterializeResult(
+        metadata={
+            "row_count": MetadataValue.int(rows_inserted),
+            "preview": MetadataValue.md(df.head(10).to_markdown(index=False)),
+        }
+    )

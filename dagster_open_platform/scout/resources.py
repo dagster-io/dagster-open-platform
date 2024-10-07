@@ -14,18 +14,43 @@ class ScoutosResource(ConfigurableResource):
 
     api_key: str
 
-    def write_documents(self, collection_id: str, documents: list[dict]) -> Dict[str, Any]:
-        """Writes documents to the ScoutOS API."""
-        request_url = f"https://api.scoutos.com/v1/collections/{collection_id}/files"
-        headers_list = {
+    @property
+    def headers(self):
+        return {
             "Accept": "*/*",
             "User-Agent": "Thunder Client (https://www.thunderclient.com)",
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
         }
+
+    def write_documents(self, collection_id: str, documents: list[dict]) -> Dict[str, Any]:
+        """Writes documents to the ScoutOS API."""
+        request_url = f"https://api.scoutos.com/v1/collections/{collection_id}/files"
         payload = json.dumps({"files": documents})
-        response = requests.request("POST", request_url, data=payload, headers=headers_list)
+        response = requests.request("POST", request_url, data=payload, headers=self.headers)
         return response.json()
+
+    def get_runs(self, startdate: str, enddate: str) -> List[Dict[str, Any]]:
+        """Returns the runs for a time period for Scout."""
+        url = "https://api.scoutos.com/v1/apps/runs"
+        params = {
+            "start_date": startdate,
+            "end_date": enddate,
+            "limit": 50,
+            "status": "completed",
+        }
+        all_runs: List[Dict[str, Any]] = []
+
+        while True:
+            response = requests.get(url, params=params, headers=self.headers)
+            data = response.json()
+            all_runs.append(data["records"])
+
+            if data["pagination"]["has_more"]:
+                params["cursor"] = data["pagination"]["next_cursor"]
+            else:
+                break
+        return all_runs
 
 
 class GithubResource(ConfigurableResource):

@@ -3,6 +3,7 @@ from datetime import timedelta
 from dagster import (
     AssetSelection,
     RunRequest,
+    ScheduleDefinition,
     ScheduleEvaluationContext,
     define_asset_job,
     schedule,
@@ -30,3 +31,13 @@ def support_bot_schedule(context: ScheduleEvaluationContext) -> RunRequest:
             ASSET_PARTITION_RANGE_END_TAG: context.scheduled_execution_time.strftime("%Y-%m-%d"),
         }
     )
+
+
+ask_ai_daily_runs = ScheduleDefinition(
+    job=define_asset_job(
+        name="ask_ai_daily_job",
+        selection=AssetSelection.keys("scoutos_app_runs"),
+        tags={"team": "devrel"},
+    ),
+    cron_schedule="59 23 * * *",  #
+)
