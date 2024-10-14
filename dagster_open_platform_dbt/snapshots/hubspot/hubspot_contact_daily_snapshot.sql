@@ -38,7 +38,10 @@
         predictive_contact_score,
         salesforce_contact_id,
         create_time,
-        create_date
+        create_date,
+        request_type,
+        how_did_you_hear_about_us,
+        message
     from {{ ref('stg_hubspot__contacts') }}
 
 {% endsnapshot %}
