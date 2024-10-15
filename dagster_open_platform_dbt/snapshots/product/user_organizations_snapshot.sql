@@ -1,4 +1,4 @@
-{% snapshot user_organizations_snapshots %}
+{% snapshot user_organizations_snapshot %}
 
 {{
     config(
