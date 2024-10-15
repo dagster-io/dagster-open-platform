@@ -1,3 +1,4 @@
+import datetime
 import json
 from typing import Any, Dict, List
 
@@ -30,12 +31,16 @@ class ScoutosResource(ConfigurableResource):
         response = requests.request("POST", request_url, data=payload, headers=self.headers)
         return response.json()
 
-    def get_runs(self, startdate: str, enddate: str) -> List[Dict[str, Any]]:
+    def get_runs(
+        self, startdate: datetime.datetime, enddate: datetime.datetime
+    ) -> List[Dict[str, Any]]:
         """Returns the runs for a time period for Scout."""
+        startdate_str: str = startdate.strftime("%Y-%m-%d")
+        enddate_str: str = enddate.strftime("%Y-%m-%d")
         url = "https://api.scoutos.com/v1/apps/runs"
         params = {
-            "start_date": startdate,
-            "end_date": enddate,
+            "start_date": startdate_str,
+            "end_date": enddate_str,
             "limit": 50,
             "status": "completed",
         }
@@ -43,6 +48,7 @@ class ScoutosResource(ConfigurableResource):
 
         while True:
             response = requests.get(url, params=params, headers=self.headers)
+            response.raise_for_status()
             data = response.json()
             all_runs.append(data["records"])
 

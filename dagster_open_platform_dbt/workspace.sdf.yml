@@ -26,6 +26,7 @@ workspace:
         - pattern: fivetran.*.*
         - pattern: sandbox.*.*
         - pattern: aws.*.*
+        - pattern: scout.*.*
       targets:
         - pattern: sandbox.*.*
 

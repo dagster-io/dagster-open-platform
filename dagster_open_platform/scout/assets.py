@@ -1,19 +1,15 @@
 import json
 import os
 
+import dagster as dg
 import pandas as pd
-from dagster import (
-    AssetExecutionContext,
-    BackfillPolicy,
-    DailyPartitionsDefinition,
-    MaterializeResult,
-    MetadataValue,
-    asset,
+from dagster_open_platform.scout.resources import GithubResource, ScoutosResource
+from dagster_open_platform.utils.environment_helpers import (
+    get_database_for_environment,
+    get_schema_for_environment,
 )
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
-
-from .resources import GithubResource, ScoutosResource
 
 
 def extract_comments(issue_or_disccusion: dict) -> str:
@@ -24,7 +20,7 @@ def extract_comments(issue_or_disccusion: dict) -> str:
 
 
 START_TIME = "2023-01-01"
-daily_partition = DailyPartitionsDefinition(start_date=START_TIME)
+daily_partition = dg.DailyPartitionsDefinition(start_date=START_TIME)
 
 
 def parse_discussion(d: dict) -> dict:
@@ -70,16 +66,16 @@ def parse_issue(i: dict) -> dict:
     }
 
 
-@asset(
-    compute_kind="github",
+@dg.asset(
     group_name="support_bot",
     partitions_def=daily_partition,
-    op_tags={"team": "devrel"},
-    backfill_policy=BackfillPolicy.single_run(),
+    backfill_policy=dg.BackfillPolicy.single_run(),
+    kinds={"github", "scout"},
+    owners=["team:devrel"],
 )
 def github_issues(
-    context: AssetExecutionContext, github: GithubResource, scoutos: ScoutosResource
-) -> MaterializeResult:
+    context: dg.AssetExecutionContext, github: GithubResource, scoutos: ScoutosResource
+) -> dg.MaterializeResult:
     """Fetch Github Issues and Discussions and feed into Scout Support Bot.
 
     Since the Github API limits search results to 1000, we partition by updated at
@@ -109,60 +105,90 @@ def github_issues(
     context.log.info(f"Using Collection ID: {collection}")
     scoutos.write_documents(collection, parsed_issues)
     scoutos.write_documents(collection, parsed_discussions)
-    return MaterializeResult()
+    return dg.MaterializeResult()
 
 
-scout_queries_daily_partition = DailyPartitionsDefinition(start_date="2024-06-01")
+scout_queries_daily_partition = dg.DailyPartitionsDefinition(start_date="2024-06-01")
 
 
-@asset(
-    compute_kind="python",
+@dg.asset(
     partitions_def=scout_queries_daily_partition,
     group_name="scoutos",
+    description="ScoutOS App Runs",
+    automation_condition=dg.AutomationCondition.on_cron("0 0 * * *"),
+    kinds={"github", "scout", "snowflake"},
+    owners=["team:devrel"],
 )
 def scoutos_app_runs(
-    context: AssetExecutionContext, snowflake: SnowflakeResource, scoutos: ScoutosResource
-) -> MaterializeResult:
-    partition_date_str = context.partition_key
-    data = scoutos.get_runs(partition_date_str, partition_date_str)
+    context: dg.AssetExecutionContext, snowflake: SnowflakeResource, scoutos: ScoutosResource
+) -> dg.MaterializeResult:
+    start, end = context.partition_time_window
+    data = scoutos.get_runs(start, end)
+
     df = pd.concat([pd.json_normalize(obj) for obj in data], ignore_index=True)
     df["partition_date"] = df["timestamp_start"].str[:10]
+    context.log.info(f"Fetched Total records: {len(df)}")
+
+    df["block_id"] = df["blocks"].apply(
+        lambda x: [block["block_id"] for block in x if "block_id" in block]
+    )
     df["blocks"] = df["blocks"].apply(
         lambda x: [block["block_output"] for block in x if "block_output" in block]
     )
     df["blocks"] = df["blocks"].apply(lambda x: json.dumps(x) if x is not None else None)
-    context.log.info(f"Fetched Total records: {len(df)}")
+    database_name = get_database_for_environment("SCOUT")
+    schema_name = get_schema_for_environment("QUERIES")
+    table_name = "scout_queries"
+    temp_table_name = f"{table_name}_TEMP"
     with snowflake.get_connection() as conn:
-        table_name = "scout_queries"
-        delete_query = f"""
-            delete from SCOUT.QUERIES.{table_name}
-            where partition_date ='{partition_date_str}'
+        write_pandas(
+            conn,
+            df,
+            temp_table_name,
+            database=database_name,
+            schema=schema_name,
+            overwrite=True,
+            auto_create_table=True,
+            quote_identifiers=False,
+        )
+
+        create_table_sql = f"""
+        CREATE TABLE {database_name}.{schema_name}.{table_name} IF NOT EXISTS LIKE {database_name}.{schema_name}.{temp_table_name}
         """
+        conn.cursor().execute(create_table_sql)
+
+        delete_query = f"""
+            delete from {database_name}.{schema_name}.{table_name}
+            where partition_date ='{start.strftime("%Y-%m-%d")}'
+        """
+
         try:
             conn.cursor().execute(delete_query)
-            context.log.info(f"Deleted Partition data for {partition_date_str}")
+            context.log.info(f"Deleted Partition data for {start}")
 
             success, number_chunks, rows_inserted, output = write_pandas(
                 conn,
                 df,
                 table_name,
-                database="SCOUT",
-                schema="QUERIES",
+                database=database_name,
+                schema=schema_name,
                 auto_create_table=False,
                 overwrite=False,
                 quote_identifiers=False,
             )
 
-            context.log.info(f"Inserted {rows_inserted} rows into SCOUT.QUERIES.{table_name}")
+            context.log.info(
+                f"Inserted {rows_inserted} rows into {database_name}.{schema_name}.{table_name}"
+            )
         except Exception as e:
             context.log.error(f"Error inserting data into {table_name}")
             context.log.error(e)
             conn.rollback()
             raise e
 
-    return MaterializeResult(
+    return dg.MaterializeResult(
         metadata={
-            "row_count": MetadataValue.int(rows_inserted),
-            "preview": MetadataValue.md(df.head(10).to_markdown(index=False)),
+            "row_count": dg.MetadataValue.int(rows_inserted),
+            "preview": dg.MetadataValue.md(df.head(10).to_markdown(index=False)),
         }
     )
