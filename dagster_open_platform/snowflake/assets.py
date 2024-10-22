@@ -27,7 +27,7 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
             with
             recent_queries as (
                 select
-                    database_name, 
+                    database_name,
                     coalesce(
                         max(date(start_time)),
                         current_date - 30
@@ -44,11 +44,11 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
                     coalesce(last_query_date, current_date - 30)
                 ) as last_activity,
                 current_date - last_activity as days_since_last_activity
-            from snowflake.information_schema.databases 
+            from snowflake.information_schema.databases
                 left join recent_queries using(database_name)
             where
                 database_name regexp $$PURINA_CLONE_\d+$$
-                and days_since_last_activity > 14;        
+                and days_since_last_activity > 14;
         """)
         result = cur.fetch_pandas_all()
         dbs_to_drop = result["DATABASE_NAME"].to_list()
@@ -73,7 +73,7 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
             key=[
                 "aws",
                 "cloud-prod",
-                f"workspace_staging_{asset_key[0][-1]!s}",
+                f"workspace_staging_{asset_key.path[-1]!s}",
             ],
             deps=[asset_key],
         )
@@ -92,7 +92,7 @@ def workspace_replication_aws_stages(
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:
-            stage_name = key[0][-1]
+            stage_name = key.path[-1]
             object_name = stage_name.replace("workspace_staging_", "")
             cur.execute(
                 f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"
@@ -123,7 +123,7 @@ def workspace_replication_aws_stages(
             key=[
                 "aws",
                 "cloud_prod",
-                f"{asset_key[0][-1]!s}_ext",
+                f"{asset_key.path[-1]!s}_ext",
             ],
             deps=[asset_key],
         )
@@ -137,7 +137,7 @@ def workspace_replication_aws_external_tables(
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:
-            table_name = key[0][-1]
+            table_name = key.path[-1]
             stage_name = table_name[:-4]  # Remove the "_ext" suffix
             cur.execute(
                 f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"
@@ -178,7 +178,7 @@ def user_roles_aws_stage(context: AssetExecutionContext, snowflake_sf: Snowflake
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:
-            stage_name = key[0][-1]
+            stage_name = key.path[-1]
             cur.execute(
                 f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"
             )
@@ -211,7 +211,7 @@ def user_roles_aws_external_table(context: AssetExecutionContext, snowflake_sf: 
     with snowflake_sf.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
-        table_name = context.asset_key[0][-1]
+        table_name = context.asset_key.path[-1]
         stage_name = table_name[:-4]  # Remove the "_ext" suffix
         cur.execute(
             f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"

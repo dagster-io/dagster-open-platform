@@ -148,8 +148,8 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
     for asset_key in context.selected_asset_keys:
         yield Output(
             None,
-            output_name=f"{asset_key[0][0].replace('-', '_')}__{asset_key[0][1]}__{asset_key[0][2]}",
-            metadata={"count": object_count.get(asset_key[0][2], None)},
+            output_name=f"{asset_key.path[0].replace('-', '_')}__{asset_key.path[1]}__{asset_key.path[2]}",
+            metadata={"count": object_count.get(asset_key.path[2], None)},
         )
 
 
