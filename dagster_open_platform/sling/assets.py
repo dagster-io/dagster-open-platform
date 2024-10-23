@@ -26,7 +26,7 @@ class CustomSlingTranslator(DagsterSlingTranslator):
         key: AssetKey = self.get_asset_key(stream_definition)
         return {
             **super().get_metadata(stream_definition),
-            "dagster/relation_identifier": ".".join(key.path),
+            "dagster/table_name": ".".join(key.path),
         }
 
     def get_auto_materialize_policy(
