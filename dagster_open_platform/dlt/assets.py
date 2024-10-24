@@ -36,7 +36,7 @@ class ThinkificDagsterDltTranslator(DagsterDltTranslator):
     ),
     name="thinkific",
     group_name="thinkific",
-    dlt_dagster_translator=ThinkificDagsterDltTranslator(),
+    dagster_dlt_translator=ThinkificDagsterDltTranslator(),
 )
 def thinkific_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
@@ -65,7 +65,7 @@ class HubspotDagsterDltTranslator(DagsterDltTranslator):
     ),
     name="hubspot",
     group_name="hubspot",
-    dlt_dagster_translator=HubspotDagsterDltTranslator(),
+    dagster_dlt_translator=HubspotDagsterDltTranslator(),
 )
 def hubspot_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
@@ -101,7 +101,7 @@ class GithubDagsterDltTranslator(DagsterDltTranslator):
     ),
     name="github",
     group_name="github",
-    dlt_dagster_translator=GithubDagsterDltTranslator(),
+    dagster_dlt_translator=GithubDagsterDltTranslator(),
 )
 def github_reactions_dagster_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
@@ -133,7 +133,7 @@ class BuildkiteDltTranslator(DagsterDltTranslator):
     ),
     name="buildkite",
     group_name="buildkite",
-    dlt_dagster_translator=BuildkiteDltTranslator(),
+    dagster_dlt_translator=BuildkiteDltTranslator(),
 )
 def buildkite_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
