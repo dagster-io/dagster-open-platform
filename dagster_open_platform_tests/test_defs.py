@@ -90,7 +90,7 @@ def prepare_dop_environment(
 def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
     from dagster_open_platform.definitions import defs
 
-    assert len(defs.get_asset_graph().all_asset_keys) > 0
+    assert len(defs.get_asset_graph().get_all_asset_keys()) > 0
     assert defs.assets is not None
 
     for asset in defs.assets:
