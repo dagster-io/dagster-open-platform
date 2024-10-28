@@ -7,10 +7,7 @@ from dagster_open_platform.snowflake.assets import (
     workspace_replication_aws_stages,
 )
 from dagster_open_platform.snowflake.resources import snowflake_resource
-from dagster_open_platform.snowflake.schedules import (
-    purina_clone_cleanup_schedule,
-    workspace_replication_snowflake_staging_schedule,
-)
+from dagster_open_platform.snowflake.schedules import purina_clone_cleanup_schedule
 
 from ..utils.source_code import add_code_references_and_link_to_git
 
@@ -24,6 +21,6 @@ defs = Definitions(
             user_roles_aws_external_table,
         ]
     ),
-    schedules=[purina_clone_cleanup_schedule, workspace_replication_snowflake_staging_schedule],
+    schedules=[purina_clone_cleanup_schedule],
     resources={"snowflake_sf": snowflake_resource},
 )

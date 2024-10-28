@@ -8,6 +8,7 @@ from dagster import (
     AssetSpec,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    AutomationCondition,
     MaterializeResult,
     MonthlyPartitionsDefinition,
     MultiPartitionsDefinition,
@@ -48,6 +49,8 @@ dagster_metadata_asset_specs = [
             "aws_account": ACCOUNT_NAME,
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_metadata_obj}",
         },
+        automation_condition=AutomationCondition.on_cron("0 3 * * *"),
+        tags={"dagster/concurrency_key": "workspace-replication"},
     )
     for dag_metadata_obj in DAGSTER_METADATA_OBJECTS
 ]
@@ -60,6 +63,8 @@ dagster_object_asset_specs = [
             "aws_account": ACCOUNT_NAME,
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_obj}",
         },
+        automation_condition=AutomationCondition.on_cron("0 3 * * *"),
+        tags={"dagster/concurrency_key": "workspace-replication"},
     )
     for dag_obj in EXTRACTED_DAGSTER_OBJECTS_DICT.values()
 ]

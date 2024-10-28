@@ -76,6 +76,7 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
                 f"workspace_staging_{asset_key.path[-1]!s}",
             ],
             deps=[asset_key],
+            automation_condition=AutomationCondition.on_cron("0 3 * * *"),
         )
         for asset_key in workspace_data_json.keys
     ],
@@ -126,6 +127,7 @@ def workspace_replication_aws_stages(
                 f"{asset_key.path[-1]!s}_ext",
             ],
             deps=[asset_key],
+            automation_condition=AutomationCondition.on_cron("0 3 * * *"),
         )
         for asset_key in workspace_replication_aws_stages.keys
     ],
