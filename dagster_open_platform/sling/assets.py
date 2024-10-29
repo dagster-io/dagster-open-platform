@@ -41,8 +41,8 @@ class CustomSlingTranslator(DagsterSlingTranslator):
         return f"cloud_product_{self.shard_name}"
 
     def get_deps_asset_key(self, stream_definition):
-        stream_asset_key = super().get_deps_asset_key(stream_definition)[0]
-        return AssetKey([self.shard_name, *stream_asset_key[0]])
+        stream_asset_key = next(iter(super().get_deps_asset_key(stream_definition)))
+        return AssetKey([self.shard_name, *stream_asset_key.path])
 
 
 @sling_assets(
@@ -159,8 +159,8 @@ class CustomSlingTranslatorEgress(DagsterSlingTranslator):
         return "sling_egress"
 
     def get_deps_asset_key(self, stream_definition):
-        stream_asset_key = super().get_deps_asset_key(stream_definition)[0]
-        db, schema, table = stream_asset_key[0]
+        stream_asset_key = next(iter(super().get_deps_asset_key(stream_definition)))
+        db, schema, table = stream_asset_key.path
         db = "sandbox" if get_environment() == "LOCAL" else "purina"
         schema = get_schema_for_environment(schema)
         return AssetKey([db, schema, table])
