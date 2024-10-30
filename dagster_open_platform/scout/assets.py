@@ -118,6 +118,7 @@ scout_queries_daily_partition = dg.DailyPartitionsDefinition(start_date="2024-06
     automation_condition=dg.AutomationCondition.on_cron("0 0 * * *"),
     kinds={"github", "scout", "snowflake"},
     owners=["team:devrel"],
+    tags={"dagster/concurrency_key": "scoutos_app_runs"},
 )
 def scoutos_app_runs(
     context: dg.AssetExecutionContext, snowflake: SnowflakeResource, scoutos: ScoutosResource
