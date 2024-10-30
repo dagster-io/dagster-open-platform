@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+from datetime import timedelta
 from typing import Any, Mapping, Optional
 
 from dagster import AssetExecutionContext, AssetKey, BackfillPolicy, Config, MetadataValue
@@ -113,7 +114,7 @@ class DbtConfig(Config):
 )
 def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
     dbt_vars = {
-        "min_date": context.partition_time_window.start.isoformat(),
+        "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
         "max_date": context.partition_time_window.end.isoformat(),
     }
     args = ["build", "--vars", json.dumps(dbt_vars)]
