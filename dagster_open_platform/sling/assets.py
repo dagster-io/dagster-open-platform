@@ -158,12 +158,12 @@ class CustomSlingTranslatorEgress(DagsterSlingTranslator):
     def get_group_name(self, stream_definition):
         return "sling_egress"
 
-    def get_deps_asset_key(self, stream_definition):
+    def get_deps_asset_key(self, stream_definition) -> Iterable[AssetKey]:
         stream_asset_key = next(iter(super().get_deps_asset_key(stream_definition)))
         db, schema, table = stream_asset_key.path
         db = "sandbox" if get_environment() == "LOCAL" else "purina"
         schema = get_schema_for_environment(schema)
-        return AssetKey([db, schema, table])
+        return [AssetKey([db, schema, table])]
 
 
 @sling_assets(
