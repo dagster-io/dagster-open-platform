@@ -40,9 +40,9 @@ class CustomSlingTranslator(DagsterSlingTranslator):
     def get_group_name(self, stream_definition):
         return f"cloud_product_{self.shard_name}"
 
-    def get_deps_asset_key(self, stream_definition):
+    def get_deps_asset_key(self, stream_definition) -> Iterable[AssetKey]:
         stream_asset_key = next(iter(super().get_deps_asset_key(stream_definition)))
-        return AssetKey([self.shard_name, *stream_asset_key.path])
+        return [AssetKey([self.shard_name, *stream_asset_key.path])]
 
 
 @sling_assets(
