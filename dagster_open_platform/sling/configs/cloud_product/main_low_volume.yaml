@@ -88,6 +88,11 @@ streams:
       dagster:
         asset_key: sling.cloud_product.jobs
   
+  public.notifications: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.notifications
+  
   public.repository_locations_data: 
     sql: |
       select
