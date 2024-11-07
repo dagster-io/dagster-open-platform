@@ -1,4 +1,4 @@
-from dagster import AssetSelection, RunRequest, ScheduleDefinition, define_asset_job, schedule
+import dagster as dg
 from dagster_dbt import DbtManifestAssetSelection
 from dagster_open_platform.dbt.assets import CustomDagsterDbtTranslator, dbt_snapshot_models
 from dagster_open_platform.dbt.partitions import insights_partition
@@ -8,7 +8,7 @@ from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_projec
 ##              INSIGHTS                            ##
 ######################################################
 
-insights_job = define_asset_job(
+insights_job = dg.define_asset_job(
     name="insights_job",
     selection=(
         # select all insights models, and fetch upstream, including ingestion
@@ -19,32 +19,34 @@ insights_job = define_asset_job(
         )
         .upstream()
         .required_multi_asset_neighbors()
-        - AssetSelection.groups("cloud_product_main")
-        - AssetSelection.groups("cloud_product_shard1")
+        - dg.AssetSelection.groups("cloud_product_main")
+        - dg.AssetSelection.groups("cloud_product_shard1")
     ),
     partitions_def=insights_partition,
     tags={"team": "insights", "dbt_pipeline": "insights"},
 )
 
 
-@schedule(cron_schedule="0 */3 * * *", job=insights_job)
+@dg.schedule(cron_schedule="0 */3 * * *", job=insights_job)
 def insights_schedule():
     most_recent_partition = insights_partition.get_last_partition_key()
-    yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
+    yield dg.RunRequest(
+        partition_key=str(most_recent_partition), run_key=str(most_recent_partition)
+    )
 
 
 ######################################################
 ##              Main DBT Pipeline                   ##
 ######################################################
 
-dbt_analytics_core_job = define_asset_job(
+dbt_analytics_core_job = dg.define_asset_job(
     name="dbt_analytics_core_job",
     selection=(
         DbtManifestAssetSelection.build(
             manifest=dagster_open_platform_dbt_project.manifest_path,
             dagster_dbt_translator=CustomDagsterDbtTranslator(),
         ).required_multi_asset_neighbors()
-        - AssetSelection.groups(
+        - dg.AssetSelection.groups(
             # insights groups
             "cloud_reporting",
         )
@@ -56,21 +58,22 @@ dbt_analytics_core_job = define_asset_job(
 # Cloud usage metrics isn't partitioned, but it uses a partitioned asset
 # that is managed by Insights. It doesn't matter which partition runs
 # but does need to specify the most recent partition of Insights will be run
-@schedule(cron_schedule="0 3 * * *", job=dbt_analytics_core_job)
+@dg.schedule(cron_schedule="0 3 * * *", job=dbt_analytics_core_job)
 def dbt_analytics_core_schedule():
     most_recent_partition = insights_partition.get_last_partition_key()
-    yield RunRequest(partition_key=str(most_recent_partition), run_key=str(most_recent_partition))
+    yield dg.RunRequest(
+        partition_key=str(most_recent_partition), run_key=str(most_recent_partition)
+    )
 
 
-dbt_analytics_snapshot_schedule = ScheduleDefinition(
-    job=define_asset_job(
-        name="dbt_analytics_snapshot_job",
-        selection=(AssetSelection.assets(dbt_snapshot_models)),
-        tags={"team": "devrel"},
-    ),
-    cron_schedule="0 * * * *",
+dbt_analytics_snapshot_sensor = dg.AutomationConditionSensorDefinition(
+    "dbt_analytics_snapshot_sensor",
+    target=dg.AssetSelection.assets(dbt_snapshot_models),
+    default_condition=dg.AutomationCondition.on_cron("0 * * * *"),
+    use_user_code_server=True,
 )
 
+sensors = [dbt_analytics_snapshot_sensor]
 
 scheduled_jobs = [insights_job]
 
@@ -78,5 +81,4 @@ scheduled_jobs = [insights_job]
 schedules = [
     insights_schedule,
     dbt_analytics_core_schedule,
-    dbt_analytics_snapshot_schedule,
 ]
