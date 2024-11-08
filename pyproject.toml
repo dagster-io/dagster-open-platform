@@ -10,7 +10,7 @@ dependencies = [
     "boto3",
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
-    "dagster",
+    "dagster!=1.9.1",
     "dagster-aws",
     "dagster-snowflake",
     "dagster-slack",
