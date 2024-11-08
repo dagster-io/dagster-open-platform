@@ -1,63 +1,37 @@
 workspace:
   edition: '1.3'
-  defaults:
-    catalog: {{env_var('SNOWFLAKE_DATABASE')}}
-    schema: {{env_var('SNOWFLAKE_SCHEMA')}}
-    dialect: snowflake
-    preprocessor: jinja
   name: dagster_open_platform
   includes:
-  - path: target/compiled/sdf/models
-    index: catalog-schema-table-name
-  - path: seeds
-    type: seed
   - path: checks
     type: check
+  - path: seeds
+    type: seed
+  - path: target/compiled/sdf/models
+    index: catalog-schema-table-name
+  - path: target/compiled/sdf/snapshots
+    index: catalog-schema-table-name
   integrations:
-    - provider: snowflake
-      credential: default
-      sources:
-        - pattern: dlt.*.*
-        - pattern: segment.*.*
-        - pattern: stripe_pipeline.*.*
-        - pattern: purina.*.*
-        - pattern: slack.*.*
-        - pattern: sling.*.*
-        - pattern: fivetran.*.*
-        - pattern: sandbox.*.*
-        - pattern: aws.*.*
-        - pattern: scout.*.*
-      targets:
-        - pattern: sandbox.*.*
-
----
-
-function:
-  name: purina.public.bounded_slope
-  parameters:
-    - datatype: float
-    - datatype: float
-    - datatype: int
-    - datatype: float
-    - datatype: float
-    - datatype: float
-    - datatype: float
-  returns:
-    datatype: float
-
----
-
-function:
-  name: purina.public.bounded_intercept
-  parameters:
-    - datatype: float
-    - datatype: float
-    - datatype: int
-    - datatype: float
-    - datatype: float
-    - datatype: float
-  returns:
-    datatype: float
+  - type: database
+    provider: snowflake
+    credential: default
+    sources:
+    - pattern: dlt.*.*
+    - pattern: segment.*.*
+    - pattern: stripe_pipeline.*.*
+    - pattern: purina.*.*
+    - pattern: slack.*.*
+    - pattern: sling.*.*
+    - pattern: fivetran.*.*
+    - pattern: sandbox.*.*
+    - pattern: aws.*.*
+    - pattern: scout.*.*
+    targets:
+    - pattern: sandbox.*.*
+  defaults:
+    environment: dbg
+    dialect: snowflake
+    catalog: purina
+    schema: public
 
 ---
 
