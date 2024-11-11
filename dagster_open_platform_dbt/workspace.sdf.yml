@@ -25,6 +25,7 @@ workspace:
     - pattern: sandbox.*.*
     - pattern: aws.*.*
     - pattern: scout.*.*
+    - pattern: pylon.*.*
     targets:
     - pattern: sandbox.*.*
   defaults:
