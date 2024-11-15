@@ -1,39 +1,39 @@
 source: CLOUD_PRODUCTION_SHARD1
 target: SLING_DB_SHARD1
-defaults: 
+defaults:
   mode: incremental
   object: '{stream_table}'
   primary_key: [id]
 
-streams: 
-  public.asset_keys: 
+streams:
+  public.asset_keys:
     update_key: last_materialization_timestamp
     meta:
-      dagster: 
+      dagster:
         asset_key: sling.cloud_product_shard1.asset_keys
-  
-  public.jobs: 
+
+  public.jobs:
     meta:
       dagster:
         asset_key: sling.cloud_product_shard1.jobs
-  
-  public.notifications: 
+
+  public.notifications:
     meta:
       dagster:
         asset_key: sling.cloud_product_shard1.notifications
-  
-  public.alerts: 
+
+  public.alerts:
     meta:
       dagster:
         asset_key: sling.cloud_product_shard1.alerts
 
-  public.repository_locations_data: 
+  public.repository_locations_data:
     sql: |
       select
-        id, 
-        organization_id, 
-        deployment_id, 
-        create_timestamp, 
+        id,
+        organization_id,
+        deployment_id,
+        create_timestamp,
         timestamp as update_timestamp,
         jsonb_path_query_array(
           replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,

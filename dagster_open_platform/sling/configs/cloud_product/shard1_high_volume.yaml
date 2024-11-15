@@ -1,26 +1,31 @@
 source: CLOUD_PRODUCTION_SHARD1
 target: SLING_DB_SHARD1
-defaults: 
+defaults:
   mode: incremental
   object: '{stream_table}'
   update_key: id
   source_options:
     limit: 500000
 
-streams: 
-  public.run_tags: 
+streams:
+  public.run_tags:
     meta:
       dagster:
         asset_key: sling.cloud_product_shard1.run_tags
-    
+
   public.asset_materializations:
     update_key: event_id
     meta:
-      dagster: 
+      dagster:
         asset_key: sling.cloud_product_shard1.asset_materializations
-    
+
   public.asset_observations:
     update_key: event_id
     meta:
-      dagster: 
+      dagster:
         asset_key: sling.cloud_product_shard1.asset_observations
+
+  public.alert_policies:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.alert_policies
