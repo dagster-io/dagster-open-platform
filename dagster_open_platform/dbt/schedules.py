@@ -39,9 +39,9 @@ def insights_schedule():
 ##              Main DBT Pipeline                   ##
 ######################################################
 
-dbt_analytics_core_job = dg.define_asset_job(
-    name="dbt_analytics_core_job",
-    selection=(
+dbt_analytics_core_sensor = dg.AutomationConditionSensorDefinition(
+    "dbt_analytics_core_sensor",
+    target=(
         DbtManifestAssetSelection.build(
             manifest=dagster_open_platform_dbt_project.manifest_path,
             dagster_dbt_translator=CustomDagsterDbtTranslator(),
@@ -50,20 +50,12 @@ dbt_analytics_core_job = dg.define_asset_job(
             # insights groups
             "cloud_reporting",
         )
+        # snapshot models
+        - dg.AssetSelection.assets(dbt_snapshot_models)
     ),
-    tags={"team": "devrel", "dbt_pipeline": "analytics_core"},
+    default_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+    use_user_code_server=True,
 )
-
-
-# Cloud usage metrics isn't partitioned, but it uses a partitioned asset
-# that is managed by Insights. It doesn't matter which partition runs
-# but does need to specify the most recent partition of Insights will be run
-@dg.schedule(cron_schedule="0 3 * * *", job=dbt_analytics_core_job)
-def dbt_analytics_core_schedule():
-    most_recent_partition = insights_partition.get_last_partition_key()
-    yield dg.RunRequest(
-        partition_key=str(most_recent_partition), run_key=str(most_recent_partition)
-    )
 
 
 dbt_analytics_snapshot_sensor = dg.AutomationConditionSensorDefinition(
@@ -73,12 +65,11 @@ dbt_analytics_snapshot_sensor = dg.AutomationConditionSensorDefinition(
     use_user_code_server=True,
 )
 
-sensors = [dbt_analytics_snapshot_sensor]
+sensors = [dbt_analytics_snapshot_sensor, dbt_analytics_core_sensor]
 
 scheduled_jobs = [insights_job]
 
 
 schedules = [
     insights_schedule,
-    dbt_analytics_core_schedule,
 ]
