@@ -50,7 +50,6 @@ dagster_metadata_asset_specs = [
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_metadata_obj}",
         },
         automation_condition=AutomationCondition.on_cron("0 3 * * *"),
-        tags={"dagster/concurrency_key": "workspace-replication"},
     )
     for dag_metadata_obj in DAGSTER_METADATA_OBJECTS
 ]
@@ -64,7 +63,6 @@ dagster_object_asset_specs = [
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_obj}",
         },
         automation_condition=AutomationCondition.on_cron("0 3 * * *"),
-        tags={"dagster/concurrency_key": "workspace-replication"},
     )
     for dag_obj in EXTRACTED_DAGSTER_OBJECTS_DICT.values()
 ]
@@ -77,6 +75,7 @@ dagster_object_asset_specs = [
     partitions_def=MultiPartitionsDefinition(
         {"date": daily_partition_def, "org": org_partitions_def}
     ),
+    op_tags={"dagster/concurrency_key": "workspace-replication"},
 )
 def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource):
     s3_client = s3_resource.get_client()
