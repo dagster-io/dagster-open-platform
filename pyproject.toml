@@ -10,7 +10,7 @@ dependencies = [
     "boto3",
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
-    "dagster!=1.9.1",
+    "dagster>=1.9.2", # 1.9.1 has a bug in the dagster-fivetran integration
     "dagster-aws",
     "dagster-snowflake",
     "dagster-slack",
