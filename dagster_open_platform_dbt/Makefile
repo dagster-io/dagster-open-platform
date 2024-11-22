@@ -29,8 +29,8 @@ auth-sdf:
 
 check-lineage: auth-sdf
 	dbt deps
-	dbt compile
-	sdf dbt refresh --no-save
+	dbt compile --target prod
+	sdf dbt refresh
 	sdf compile
 
 SELECT ?= ""
