@@ -27,7 +27,7 @@ insights_job = dg.define_asset_job(
 )
 
 
-@dg.schedule(cron_schedule="0 */3 * * *", job=insights_job)
+@dg.schedule(cron_schedule="0 0 * * *", job=insights_job)
 def insights_schedule():
     most_recent_partition = insights_partition.get_last_partition_key()
     yield dg.RunRequest(
