@@ -205,7 +205,7 @@ def user_roles_aws_stage(context: AssetExecutionContext, snowflake_sf: Snowflake
 @asset(
     group_name="aws_external_tables",
     description="Snowflake external tables for AWS data.",
-    key=["aws", "cloud-prod", "user_roles_ext"],
+    key=["aws", "cloud_prod", "user_roles_ext"],
     deps=[user_roles_aws_stage],
     automation_condition=AutomationCondition.on_cron("0 3 * * *"),
 )
