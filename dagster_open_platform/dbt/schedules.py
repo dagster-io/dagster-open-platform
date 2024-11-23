@@ -53,7 +53,7 @@ dbt_analytics_core_sensor = dg.AutomationConditionSensorDefinition(
         # snapshot models
         - dg.AssetSelection.assets(dbt_snapshot_models)
     ),
-    default_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+    default_condition=dg.AutomationCondition.cron_tick_passed("0 3 * * *"),
     use_user_code_server=True,
 )
 
