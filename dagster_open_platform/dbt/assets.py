@@ -4,7 +4,7 @@ import os
 from datetime import timedelta
 from typing import Any, Mapping, Optional
 
-from dagster import AssetExecutionContext, AssetKey, BackfillPolicy, Config, MetadataValue
+import dagster as dg
 from dagster._core.definitions.asset_check_factories.freshness_checks.last_update import (
     build_last_update_freshness_checks,
 )
@@ -40,7 +40,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             return "_".join(asset_path)
         return "default"
 
-    def get_asset_key(self, dbt_resource_props: Mapping[str, Any]) -> AssetKey:
+    def get_asset_key(self, dbt_resource_props: Mapping[str, Any]) -> dg.AssetKey:
         resource_database = dbt_resource_props["database"]
         resource_schema = dbt_resource_props["schema"]
         resource_name = dbt_resource_props["name"]
@@ -53,15 +53,15 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             and "dagster" in dbt_resource_props["meta"]
             and "asset_key" in dbt_resource_props["meta"]["dagster"]
         ):
-            return AssetKey(dbt_resource_props["meta"]["dagster"]["asset_key"])
+            return dg.AssetKey(dbt_resource_props["meta"]["dagster"]["asset_key"])
 
-        return AssetKey([resource_database, resource_schema, resource_name])
+        return dg.AssetKey([resource_database, resource_schema, resource_name])
 
     def get_metadata(self, dbt_resource_props: Mapping[str, Any]) -> Mapping[str, Any]:
         url_metadata = {}
         if dbt_resource_props["resource_type"] == "model":
             url_metadata = {
-                "url": MetadataValue.url(
+                "url": dg.MetadataValue.url(
                     "/".join(
                         [
                             SNOWFLAKE_URL,
@@ -78,6 +78,15 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             **url_metadata,
         }
 
+    def get_automation_condition(
+        self, dbt_resource_props: Mapping[str, Any]
+    ) -> dg.AutomationCondition | None:
+        if dbt_resource_props["resource_type"] == "snapshot":
+            return dg.AutomationCondition.on_cron("0 * * * *")
+        if self.get_group_name(dbt_resource_props) == "cloud_reporting":
+            return None
+        return dg.AutomationCondition.cron_tick_passed("0 3 * * *")
+
 
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
@@ -85,10 +94,10 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
         settings=DagsterDbtTranslatorSettings(enable_code_references=True)
     ),
     exclude=INCREMENTAL_SELECTOR + " " + SNAPSHOT_SELECTOR,
-    backfill_policy=BackfillPolicy.single_run(),
+    backfill_policy=dg.BackfillPolicy.single_run(),
     project=dagster_open_platform_dbt_project,
 )
-def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource):
+def dbt_non_partitioned_models(context: dg.AssetExecutionContext, dbt: DbtCliResource):
     yield from (
         dbt.cli(["build"], context=context)
         .stream()
@@ -98,7 +107,7 @@ def dbt_non_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResour
     )
 
 
-class DbtConfig(Config):
+class DbtConfig(dg.Config):
     full_refresh: bool = False
 
 
@@ -109,10 +118,12 @@ class DbtConfig(Config):
         settings=DagsterDbtTranslatorSettings(enable_code_references=True)
     ),
     partitions_def=insights_partition,
-    backfill_policy=BackfillPolicy.single_run(),
+    backfill_policy=dg.BackfillPolicy.single_run(),
     project=dagster_open_platform_dbt_project,
 )
-def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
+def dbt_partitioned_models(
+    context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
+):
     # handle case where we are only executing checks (which are unpartitioned)
     if context.has_partition_key:
         dbt_vars = {
@@ -141,10 +152,10 @@ def dbt_partitioned_models(context: AssetExecutionContext, dbt: DbtCliResource, 
     dagster_dbt_translator=CustomDagsterDbtTranslator(
         settings=DagsterDbtTranslatorSettings(enable_code_references=True)
     ),
-    backfill_policy=BackfillPolicy.single_run(),
+    backfill_policy=dg.BackfillPolicy.single_run(),
     project=dagster_open_platform_dbt_project,
 )
-def dbt_snapshot_models(context: AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
+def dbt_snapshot_models(context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
     yield from dbt.cli(["snapshot"], context=context).stream().with_insights()
 
 

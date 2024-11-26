@@ -1,6 +1,6 @@
 import dagster as dg
 from dagster_dbt import DbtManifestAssetSelection
-from dagster_open_platform.dbt.assets import CustomDagsterDbtTranslator, dbt_snapshot_models
+from dagster_open_platform.dbt.assets import CustomDagsterDbtTranslator
 from dagster_open_platform.dbt.partitions import insights_partition
 from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_project
 
@@ -38,34 +38,6 @@ def insights_schedule():
 ######################################################
 ##              Main DBT Pipeline                   ##
 ######################################################
-
-dbt_analytics_core_sensor = dg.AutomationConditionSensorDefinition(
-    "dbt_analytics_core_sensor",
-    target=(
-        DbtManifestAssetSelection.build(
-            manifest=dagster_open_platform_dbt_project.manifest_path,
-            dagster_dbt_translator=CustomDagsterDbtTranslator(),
-        ).required_multi_asset_neighbors()
-        - dg.AssetSelection.groups(
-            # insights groups
-            "cloud_reporting",
-        )
-        # snapshot models
-        - dg.AssetSelection.assets(dbt_snapshot_models)
-    ),
-    default_condition=dg.AutomationCondition.cron_tick_passed("0 3 * * *"),
-    use_user_code_server=True,
-)
-
-
-dbt_analytics_snapshot_sensor = dg.AutomationConditionSensorDefinition(
-    "dbt_analytics_snapshot_sensor",
-    target=dg.AssetSelection.assets(dbt_snapshot_models),
-    default_condition=dg.AutomationCondition.on_cron("0 * * * *"),
-    use_user_code_server=True,
-)
-
-sensors = [dbt_analytics_snapshot_sensor, dbt_analytics_core_sensor]
 
 scheduled_jobs = [insights_job]
 
