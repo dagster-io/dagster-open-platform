@@ -3,6 +3,7 @@ from typing import Optional
 import yaml
 from dagster import (
     AssetExecutionContext,
+    AssetKey,
     AutoMaterializePolicy,
     AutoMaterializeRule,
     SourceAsset,
@@ -53,6 +54,10 @@ class HubspotDagsterDltTranslator(DagsterDltTranslator):
         return AutoMaterializePolicy.eager().with_rules(
             AutoMaterializeRule.materialize_on_cron("0 0 * * *")
         )
+
+    @public
+    def get_asset_key(self, resource: DltResource) -> AssetKey:
+        return AssetKey(["dlt", resource.source_name, resource.name])
 
 
 @dlt_assets(
