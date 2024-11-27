@@ -78,15 +78,6 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             **url_metadata,
         }
 
-    def get_automation_condition(
-        self, dbt_resource_props: Mapping[str, Any]
-    ) -> dg.AutomationCondition | None:
-        if dbt_resource_props["resource_type"] == "snapshot":
-            return dg.AutomationCondition.on_cron("0 * * * *")
-        if self.get_group_name(dbt_resource_props) == "cloud_reporting":
-            return None
-        return dg.AutomationCondition.cron_tick_passed("0 3 * * *")
-
 
 @dbt_assets(
     manifest=dagster_open_platform_dbt_project.manifest_path,
