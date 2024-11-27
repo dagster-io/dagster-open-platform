@@ -115,15 +115,11 @@ class DbtConfig(dg.Config):
 def dbt_partitioned_models(
     context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
 ):
-    # handle case where we are only executing checks (which are unpartitioned)
-    if context.has_partition_key:
-        dbt_vars = {
-            "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
-            "max_date": context.partition_time_window.end.isoformat(),
-        }
-        args = ["build", "--vars", json.dumps(dbt_vars)]
-    else:
-        args = ["build"]
+    dbt_vars = {
+        "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
+        "max_date": context.partition_time_window.end.isoformat(),
+    }
+    args = ["build", "--vars", json.dumps(dbt_vars)]
 
     if config.full_refresh:
         args = ["build", "--full-refresh"]
