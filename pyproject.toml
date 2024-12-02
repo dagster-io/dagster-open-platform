@@ -33,7 +33,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "click",
-    "dagster-webserver",
     "pytest",
     "sqlfluff>=3",
     "sqlfluff-templater-dbt",
