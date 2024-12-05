@@ -35,7 +35,7 @@ dagster_open_platform:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
 
       user: "purina"
-      password: "{{ env_var('SNOWFLAKE_DBT_PASSWORD', '') }}"
+      private_key: "{{ env_var('SNOWFLAKE_DBT_PRIVATE_KEY', '') }}"
 
       role: "purina"
       database: "purina_clone_{{ env_var('DAGSTER_CLOUD_PULL_REQUEST_ID', '') }}"
