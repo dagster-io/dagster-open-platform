@@ -6,6 +6,7 @@ from dagster import (
     AssetKey,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    AutomationCondition,
     SourceAsset,
     file_relative_path,
 )
@@ -50,9 +51,9 @@ thinkific_source_assets = [
 
 class HubspotDagsterDltTranslator(DagsterDltTranslator):
     @public
-    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
-        return AutoMaterializePolicy.eager().with_rules(
-            AutoMaterializeRule.materialize_on_cron("0 0 * * *")
+    def get_automation_condition(self, resource):
+        return (
+            AutomationCondition.cron_tick_passed("0 0 * * *") & ~AutomationCondition.in_progress()
         )
 
     @public

@@ -15,5 +15,6 @@ fivetran_assets_no_amp = load_assets_from_fivetran_instance(
 )
 
 fivetran_assets = dg.load_assets_from_current_module(
-    automation_condition=dg.AutomationCondition.on_cron("0 * * * *"),
+    automation_condition=dg.AutomationCondition.cron_tick_passed("0 * * * *")
+    & ~dg.AutomationCondition.in_progress(),
 )

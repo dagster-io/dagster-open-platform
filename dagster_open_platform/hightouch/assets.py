@@ -145,3 +145,77 @@ def hightouch_sales_cycles(
             "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
         }
     )
+
+
+sync_hubspot_company = get_asset_key_for_model([dbt_non_partitioned_models], "sync_hubspot_company")
+
+
+@asset(
+    deps=[sync_hubspot_company],
+    tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
+    group_name="hightouch_syncs",
+)
+def hightouch_sync_hubspot_company(
+    hightouch: ConfigurableHightouchResource,
+) -> MaterializeResult:
+    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_SYNC_HUBSPOT_COMPANY_SYNC_ID", ""))
+    return MaterializeResult(
+        metadata={
+            "sync_details": result.sync_details,
+            "sync_run_details": result.sync_run_details,
+            "destination_details": result.destination_details,
+            "query_size": result.sync_run_details.get("querySize"),
+            "completion_ratio": result.sync_run_details.get("completionRatio"),
+            "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
+        }
+    )
+
+
+sync_hubspot_contact = get_asset_key_for_model([dbt_non_partitioned_models], "sync_hubspot_contact")
+
+
+@asset(
+    deps=[sync_hubspot_contact],
+    tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
+    group_name="hightouch_syncs",
+)
+def hightouch_sync_hubspot_contact(
+    hightouch: ConfigurableHightouchResource,
+) -> MaterializeResult:
+    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_SYNC_HUBSPOT_CONTACT_SYNC_ID", ""))
+    return MaterializeResult(
+        metadata={
+            "sync_details": result.sync_details,
+            "sync_run_details": result.sync_run_details,
+            "destination_details": result.destination_details,
+            "query_size": result.sync_run_details.get("querySize"),
+            "completion_ratio": result.sync_run_details.get("completionRatio"),
+            "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
+        }
+    )
+
+
+sync_hubspot_organization = get_asset_key_for_model(
+    [dbt_non_partitioned_models], "sync_hubspot_organization"
+)
+
+
+@asset(
+    deps=[sync_hubspot_organization],
+    tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
+    group_name="hightouch_syncs",
+)
+def hightouch_sync_hubspot_organization(
+    hightouch: ConfigurableHightouchResource,
+) -> MaterializeResult:
+    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_SYNC_HUBSPOT_ORGANIZATION_SYNC_ID", ""))
+    return MaterializeResult(
+        metadata={
+            "sync_details": result.sync_details,
+            "sync_run_details": result.sync_run_details,
+            "destination_details": result.destination_details,
+            "query_size": result.sync_run_details.get("querySize"),
+            "completion_ratio": result.sync_run_details.get("completionRatio"),
+            "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
+        }
+    )
