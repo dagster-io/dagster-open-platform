@@ -17,7 +17,6 @@ streams:
         deployment_id,
         last_materialization_timestamp,
         wipe_timestamp,
-        cached_status_data,
         id,
         last_planned_materialization_event_id,
         last_planned_materialization_run_id,
