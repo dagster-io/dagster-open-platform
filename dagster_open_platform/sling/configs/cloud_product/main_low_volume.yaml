@@ -7,6 +7,23 @@ defaults:
 
 streams: 
   public.asset_keys: 
+    sql: |
+      select
+        asset_key,
+        last_materialization,
+        last_run_id,
+        create_timestamp,
+        organization_id,
+        deployment_id,
+        last_materialization_timestamp,
+        wipe_timestamp,
+        cached_status_data,
+        id,
+        last_planned_materialization_event_id,
+        last_planned_materialization_run_id,
+        last_observation
+      from asset_keys
+      where {incremental_where_cond}
     update_key: last_materialization_timestamp
     meta:
       dagster: 
