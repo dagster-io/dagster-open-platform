@@ -3,7 +3,6 @@ import os
 from dagster import (
     AssetExecutionContext,
     AssetSpec,
-    AutomationCondition,
     MaterializeResult,
     asset,
     get_dagster_logger,
@@ -76,7 +75,6 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
                 f"workspace_staging_{asset_key.path[-1]!s}",
             ],
             deps=[asset_key],
-            automation_condition=AutomationCondition.on_cron("0 3 * * *"),
         )
         for asset_key in workspace_data_json.keys
     ],
@@ -127,7 +125,6 @@ def workspace_replication_aws_stages(
                 f"{asset_key.path[-1]!s}_ext",
             ],
             deps=[asset_key],
-            automation_condition=AutomationCondition.on_cron("0 3 * * *"),
         )
         for asset_key in workspace_replication_aws_stages.keys
     ],
@@ -168,7 +165,6 @@ def workspace_replication_aws_external_tables(
     group_name="aws_stages",
     description="Snowflake stages for AWS data, creates new stages for new assets, refreses existing stages.",
     key=["aws", "cloud-prod", "user_roles"],
-    automation_condition=AutomationCondition.on_cron("0 3 * * *"),
 )
 def user_roles_aws_stage(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
     integration_prefix = (
@@ -207,7 +203,6 @@ def user_roles_aws_stage(context: AssetExecutionContext, snowflake_sf: Snowflake
     description="Snowflake external tables for AWS data.",
     key=["aws", "cloud_prod", "user_roles_ext"],
     deps=[user_roles_aws_stage],
-    automation_condition=AutomationCondition.on_cron("0 3 * * *"),
 )
 def user_roles_aws_external_table(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
     with snowflake_sf.get_connection() as conn:

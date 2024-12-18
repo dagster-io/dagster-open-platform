@@ -62,7 +62,6 @@ dagster_object_asset_specs = [
             "aws_account": ACCOUNT_NAME,
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_obj}",
         },
-        automation_condition=AutomationCondition.on_cron("0 3 * * *"),
     )
     for dag_obj in EXTRACTED_DAGSTER_OBJECTS_DICT.values()
 ]
