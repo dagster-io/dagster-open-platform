@@ -1,0 +1,13 @@
+source: CLOUD_PRODUCTION_MAIN
+target: SLING_DB_MAIN
+
+streams:
+  public.users_organizations: 
+    mode: full-refresh
+    sql: |
+      select id
+      from users_organizations
+    object: '{stream_table}_current_state_ids'
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.users_organizations_current_state_ids

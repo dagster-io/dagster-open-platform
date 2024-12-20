@@ -131,6 +131,14 @@ def cloud_product_shard1_runs(context, embedded_elt: SlingResource) -> Iterable[
     yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
 
 
+@sling_assets(
+    replication_config=cloud_product_config_dir / "main_full_refresh.yaml",
+    dagster_sling_translator=CustomSlingTranslator(cron_schedule="0 */2 * * *"),
+)
+def cloud_product_full_refresh(context, embedded_elt: SlingResource) -> Iterable[Any]:
+    yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
+
+
 cloud_product_shard1_source_assets = [
     *[
         SourceAsset(key, group_name="postgres_shard1")
