@@ -19,7 +19,7 @@ try:
 
     def _link_to_git_wrapper(
         assets_defs: Sequence[
-            Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]
+            Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition", "AssetSpec"]
         ],
         source_control_url: str,
         source_control_branch: str,
@@ -44,7 +44,7 @@ except ImportError:
 
     def _link_to_source_control_wrapper(
         assets_defs: Sequence[
-            Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]
+            Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition", "AssetSpec"]
         ],
         source_control_url: str,
         source_control_branch: str,
@@ -61,7 +61,7 @@ except ImportError:
 
 
 if TYPE_CHECKING:
-    from dagster import AssetsDefinition, SourceAsset
+    from dagster import AssetsDefinition, AssetSpec, SourceAsset
     from dagster._core.definitions.cacheable_assets import CacheableAssetsDefinition
 
 import sys
@@ -93,11 +93,13 @@ def _locate_git_root() -> Optional[Path]:
 
 @experimental
 def link_code_references_to_git_if_cloud(
-    assets_defs: Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]],
+    assets_defs: Sequence[
+        Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition", "AssetSpec"]
+    ],
     source_control_url: Optional[str] = None,
     source_control_branch: Optional[str] = None,
     repository_root_absolute_path: Optional[Union[Path, str]] = None,
-) -> Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]]:
+) -> Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition", "AssetSpec"]]:
     """Wrapper function which converts local file path code references to hosted git URLs
     if running in a Dagster Plus cloud environment. This is determined by the presence of
     the `DAGSTER_CLOUD_DEPLOYMENT_NAME` environment variable. When running in any other context,
@@ -155,8 +157,10 @@ def link_code_references_to_git_if_cloud(
 
 
 def add_code_references_and_link_to_git(
-    assets: Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]],
-) -> Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition"]]:
+    assets: Sequence[
+        Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition", "AssetSpec"]
+    ],
+) -> Sequence[Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition", "AssetSpec"]]:
     return link_code_references_to_git_if_cloud(
         with_source_code_references(assets),
         repository_root_absolute_path=Path(__file__)
