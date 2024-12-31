@@ -11,6 +11,9 @@ dependencies = [
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
     "dagster>=1.9.2", # 1.9.1 has a bug in the dagster-fivetran integration
+    "dagster-webserver",
+    "dagster-pipes",
+    "dagster-graphql",
     "dagster-aws",
     "dagster-snowflake",
     "dagster-slack",
