@@ -1,5 +1,6 @@
 import dagster as dg
 from dagster_open_platform.aws.assets import workspace_data_json
+from dagster_open_platform.aws.partitions import org_daily_partition_def
 from dagster_open_platform.snowflake.assets import (
     user_roles_aws_external_table,
     user_roles_aws_stage,
@@ -12,6 +13,7 @@ aws_replication_schedule = dg.ScheduleDefinition(
     cron_schedule="0 3 * * *",
     job=dg.define_asset_job(
         name="aws_replication_job",
+        partitions_def=org_daily_partition_def,
         selection=[
             workspace_data_json,
             workspace_replication_aws_external_tables,

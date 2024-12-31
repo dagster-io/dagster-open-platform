@@ -8,10 +8,8 @@ from dagster import (
     AssetSpec,
     AutoMaterializePolicy,
     AutoMaterializeRule,
-    AutomationCondition,
     MaterializeResult,
     MonthlyPartitionsDefinition,
-    MultiPartitionsDefinition,
     Output,
     asset,
     get_dagster_logger,
@@ -31,7 +29,7 @@ from dagster_open_platform.aws.constants import (
     INPUT_PREFIX,
     OUTPUT_PREFIX,
 )
-from dagster_open_platform.aws.partitions import daily_partition_def, org_partitions_def
+from dagster_open_platform.aws.partitions import org_daily_partition_def
 from dagster_open_platform.aws.utils import S3Mailman
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
@@ -49,7 +47,6 @@ dagster_metadata_asset_specs = [
             "aws_account": ACCOUNT_NAME,
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_metadata_obj}",
         },
-        automation_condition=AutomationCondition.on_cron("0 3 * * *"),
     )
     for dag_metadata_obj in DAGSTER_METADATA_OBJECTS
 ]
@@ -71,9 +68,7 @@ dagster_object_asset_specs = [
     group_name="aws",
     specs=dagster_metadata_asset_specs + dagster_object_asset_specs,
     description="Assets for AWS workspace replication data",
-    partitions_def=MultiPartitionsDefinition(
-        {"date": daily_partition_def, "org": org_partitions_def}
-    ),
+    partitions_def=org_daily_partition_def,
     op_tags={"dagster/concurrency_key": "workspace-replication"},
 )
 def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource):
