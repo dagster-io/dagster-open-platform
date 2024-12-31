@@ -27,7 +27,8 @@ workspace:
     - pattern: scout.*.*
     - pattern: pylon.*.*
     targets:
-    - pattern: sandbox.*.*
+    - pattern: purina.*.*
+      rename-as: sandbox.${1}.${2}
   defaults:
     environment: dbg
     dialect: snowflake

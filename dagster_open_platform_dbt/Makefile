@@ -29,7 +29,7 @@ auth-sdf:
 
 check-lineage: auth-sdf
 	dbt deps
-	dbt compile --target prod
+	dbt compile --target sdf
 	sdf dbt refresh
 	sdf compile
 

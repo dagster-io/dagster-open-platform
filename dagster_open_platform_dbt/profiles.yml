@@ -53,6 +53,21 @@ dagster_open_platform:
       warehouse: elementl
       schema: public
 
+    sdf:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+
+      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', '') }}"
+      authenticator: externalbrowser
+
+      role: "purina"
+      database: "purina"
+      warehouse: "purina"
+      schema: "public"
+      threads: 8
+      client_session_keep_alive: false
+
     personal:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
