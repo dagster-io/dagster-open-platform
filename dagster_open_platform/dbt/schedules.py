@@ -3,7 +3,10 @@ from dagster_dbt import DbtManifestAssetSelection
 from dagster_open_platform.dbt.assets import CustomDagsterDbtTranslator, dbt_snapshot_models
 from dagster_open_platform.dbt.partitions import insights_partition
 from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_project
-from dagster_open_platform.utils.environment_helpers import get_database_asset_key_for_environment, get_schema_for_environment
+from dagster_open_platform.utils.environment_helpers import (
+    get_database_asset_key_for_environment,
+    get_schema_for_environment,
+)
 
 ######################################################
 ##              INSIGHTS                            ##
@@ -14,10 +17,18 @@ UNMATCHED_SNOWFLAKE_SUBMISSION_ASSETS = dg.AssetSelection.assets(
     # heuristics that identify potential pipeline issues rather than strict
     # correctness checks.
     dg.AssetKey(
-        [get_database_asset_key_for_environment().lower(), get_schema_for_environment("cloud_reporting").lower(), "reporting_unmatched_snowflake_cost_observation_metadata"]
+        [
+            get_database_asset_key_for_environment().lower(),
+            get_schema_for_environment("cloud_reporting").lower(),
+            "reporting_unmatched_snowflake_cost_observation_metadata",
+        ]
     ),
     dg.AssetKey(
-        [get_database_asset_key_for_environment().lower(), get_schema_for_environment("cloud_reporting").lower(), "reporting_unmatched_user_submitted_snowflake_cost_metrics"]
+        [
+            get_database_asset_key_for_environment().lower(),
+            get_schema_for_environment("cloud_reporting").lower(),
+            "reporting_unmatched_user_submitted_snowflake_cost_metrics",
+        ]
     ),
 )
 
