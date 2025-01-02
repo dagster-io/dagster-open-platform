@@ -92,7 +92,7 @@ def dbt_non_partitioned_models(context: dg.AssetExecutionContext, dbt: DbtCliRes
     yield from (
         dbt.cli(["build"], context=context)
         .stream()
-        .fetch_row_counts()
+        # .fetch_row_counts() # removing row counts for now due to performance issues
         .fetch_column_metadata()
         .with_insights()
     )
@@ -127,7 +127,7 @@ def dbt_partitioned_models(
     yield from (
         dbt.cli(args, context=context)
         .stream()
-        .fetch_row_counts()
+        # .fetch_row_counts() # removing row counts for now due to performance issues
         .fetch_column_metadata()
         .with_insights()
     )

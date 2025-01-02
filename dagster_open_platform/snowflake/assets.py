@@ -143,22 +143,21 @@ def workspace_replication_aws_external_tables(
             )
 
             create_table_query = f"""
-                CREATE EXTERNAL TABLE {table_name}(
-                    FILENAME VARCHAR AS METADATA$FILENAME
+                CREATE OR REPLACE EXTERNAL TABLE {table_name}(
+                    FILENAME VARCHAR AS METADATA$FILENAME,
+                    REPLICATION_DATE DATE AS cast(split_part(METADATA$FILENAME, '/', 3) as date),
+                    ORGANIZATION_ID VARCHAR AS split_part(METADATA$FILENAME, '/', 4),
+                    DEPLOYMENT_ID VARCHAR AS split_part(METADATA$FILENAME, '/', 5),
+                    CODE_LOCATION VARCHAR AS replace(split_part(METADATA$FILENAME, '/', 6), '.json')
                 )
+                PARTITION BY (REPLICATION_DATE)
                 LOCATION = @{stage_name}
                 FILE_FORMAT = (TYPE = 'JSON', COMPRESSION = 'AUTO', STRIP_OUTER_ARRAY = TRUE)
                 AUTO_REFRESH = FALSE
                 COMMENT = 'External table for stage {stage_name} from workspace replication';
             """
-            cur.execute(f"SHOW TABLES LIKE '{table_name}';")
-            tables = cur.fetchall()
-            if not tables:
-                cur.execute(create_table_query)
-                log.info(f"Created external table {table_name}")
-                continue
-            cur.execute(f"ALTER EXTERNAL TABLE {table_name} REFRESH;")
-            log.info(f"Refreshed external table {table_name}")
+            cur.execute(create_table_query)
+            log.info(f"Created external table {table_name}")
 
 
 @asset(
