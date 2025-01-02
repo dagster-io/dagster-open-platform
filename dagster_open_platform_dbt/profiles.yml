@@ -79,6 +79,6 @@ dagster_open_platform:
       database: "sandbox"
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'elementl') }}"
       
-      schema: "{{ env_var('SNOWFLAKE_ROLE', '') }}"
+      schema: "{{ env_var('SANDBOX_SCHEMA_NAME', '') }}"
       threads: 8
       client_session_keep_alive: false

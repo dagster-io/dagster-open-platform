@@ -19,6 +19,12 @@ def get_database_for_environment(default_database: str = "PURINA") -> str:
         return default_database
     return "SANDBOX"
 
+def get_database_asset_key_for_environment(default_database: str = "PURINA") -> str:
+    env = get_environment()
+    if env in ["BRANCH", "PROD"]:
+        return default_database
+    return "SANDBOX"
+
 
 def get_schema_for_environment(default_schema: str) -> str:
     """Returns the schema to use in the current environment. If the environment is LOCAL, it will use
