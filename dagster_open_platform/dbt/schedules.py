@@ -8,29 +8,15 @@ from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_projec
 ##              INSIGHTS                            ##
 ######################################################
 
-UNMATCHED_SNOWFLAKE_SUBMISSION_CHECKS = dg.AssetSelection.checks(
-    # Do not run these checks along with the insights job, since they are
+UNMATCHED_SNOWFLAKE_SUBMISSION_ASSETS = dg.AssetSelection.assets(
+    # Do not build these models along with the insights job, since they are
     # heuristics that identify potential pipeline issues rather than strict
     # correctness checks.
-    dg.AssetCheckKey(
-        asset_key=dg.AssetKey(
-            [
-                "purina",
-                "cloud_reporting",
-                "reporting_unmatched_snowflake_cost_observation_metadata",
-            ]
-        ),
-        name="assert_snowflake_observation_metrics_have_matches",
+    dg.AssetKey(
+        ["purina", "cloud_reporting", "reporting_unmatched_snowflake_cost_observation_metadata"]
     ),
-    dg.AssetCheckKey(
-        asset_key=dg.AssetKey(
-            [
-                "purina",
-                "cloud_reporting",
-                "reporting_unmatched_user_submitted_snowflake_cost_metrics",
-            ]
-        ),
-        name="assert_user_submitted_snowflake_metrics_have_matches",
+    dg.AssetKey(
+        ["purina", "cloud_reporting", "reporting_unmatched_user_submitted_snowflake_cost_metrics"]
     ),
 )
 
@@ -50,7 +36,7 @@ insights_job = dg.define_asset_job(
         # Do not run these checks along with the insights job, since they are
         # heuristics that identify potential pipeline issues rather than strict
         # correctness checks.
-        - UNMATCHED_SNOWFLAKE_SUBMISSION_CHECKS
+        - UNMATCHED_SNOWFLAKE_SUBMISSION_ASSETS
     ),
     partitions_def=insights_partition,
     tags={"team": "insights", "dbt_pipeline": "insights"},
@@ -69,7 +55,7 @@ insights_snowflake_submission_checks_schedule = dg.ScheduleDefinition(
     cron_schedule="30 1 * * *",
     job=dg.define_asset_job(
         "insights_snowflake_submission_checks_job",
-        selection=UNMATCHED_SNOWFLAKE_SUBMISSION_CHECKS,
+        selection=UNMATCHED_SNOWFLAKE_SUBMISSION_ASSETS,
         tags={"team": "insights", "dbt_pipeline": "insights"},
     ),
 )
