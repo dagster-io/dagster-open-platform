@@ -22,7 +22,7 @@ def get_database_for_environment(default_database: str = "PURINA") -> str:
 
 def get_database_asset_key_for_environment(default_database: str = "PURINA") -> str:
     env = get_environment()
-    if env in ["BRANCH", "PROD"]:
+    if env in ["BRANCH", "PROD", "DOGFOOD"]:
         return default_database
     return "SANDBOX"
 
