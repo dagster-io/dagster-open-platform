@@ -54,16 +54,8 @@ def organization_sensor(context: SensorEvaluationContext, s3_resource: S3Resourc
 
     distinct_org_ids = list(set(all_org_ids))
 
-    new_orgs = [
-        org_id
-        for org_id in distinct_org_ids
-        if not org_partitions_def.has_partition_key(
-            org_id, dynamic_partitions_store=context.instance
-        )
-    ]
-
     return SensorResult(
-        dynamic_partitions_requests=[org_partitions_def.build_add_request(new_orgs)]
+        dynamic_partitions_requests=[org_partitions_def.build_add_request(distinct_org_ids)]
     )
 
 
