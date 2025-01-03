@@ -3,34 +3,10 @@ from dagster_dbt import DbtManifestAssetSelection
 from dagster_open_platform.dbt.assets import CustomDagsterDbtTranslator, dbt_snapshot_models
 from dagster_open_platform.dbt.partitions import insights_partition
 from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_project
-from dagster_open_platform.utils.environment_helpers import (
-    get_database_asset_key_for_environment,
-    get_schema_for_environment,
-)
 
 ######################################################
 ##              INSIGHTS                            ##
 ######################################################
-
-UNMATCHED_SNOWFLAKE_SUBMISSION_ASSETS = dg.AssetSelection.assets(
-    # Do not build these models along with the insights job, since they are
-    # heuristics that identify potential pipeline issues rather than strict
-    # correctness checks.
-    dg.AssetKey(
-        [
-            get_database_asset_key_for_environment().lower(),
-            get_schema_for_environment("cloud_reporting").lower(),
-            "reporting_unmatched_snowflake_cost_observation_metadata",
-        ]
-    ),
-    dg.AssetKey(
-        [
-            get_database_asset_key_for_environment().lower(),
-            get_schema_for_environment("cloud_reporting").lower(),
-            "reporting_unmatched_user_submitted_snowflake_cost_metrics",
-        ]
-    ),
-)
 
 insights_job = dg.define_asset_job(
     name="insights_job",
@@ -45,10 +21,6 @@ insights_job = dg.define_asset_job(
         .required_multi_asset_neighbors()
         - dg.AssetSelection.groups("cloud_product_main")
         - dg.AssetSelection.groups("cloud_product_shard1")
-        # Do not run these checks along with the insights job, since they are
-        # heuristics that identify potential pipeline issues rather than strict
-        # correctness checks.
-        - UNMATCHED_SNOWFLAKE_SUBMISSION_ASSETS
     ),
     partitions_def=insights_partition,
     tags={"team": "insights", "dbt_pipeline": "insights"},
@@ -62,15 +34,6 @@ def insights_schedule():
         partition_key=str(most_recent_partition), run_key=str(most_recent_partition)
     )
 
-
-insights_snowflake_submission_checks_schedule = dg.ScheduleDefinition(
-    cron_schedule="30 1 * * *",
-    job=dg.define_asset_job(
-        "insights_snowflake_submission_checks_job",
-        selection=UNMATCHED_SNOWFLAKE_SUBMISSION_ASSETS,
-        tags={"team": "insights", "dbt_pipeline": "insights"},
-    ),
-)
 
 ######################################################
 ##              Main DBT Pipeline                   ##
@@ -111,10 +74,6 @@ dbt_analytics_snapshot_sensor = dg.AutomationConditionSensorDefinition(
 
 scheduled_jobs = [insights_job, dbt_analytics_core_job]
 
-schedules = [
-    insights_schedule,
-    dbt_analytics_core_schedule,
-    insights_snowflake_submission_checks_schedule,
-]
+schedules = [insights_schedule, dbt_analytics_core_schedule]
 
 sensors = [dbt_analytics_snapshot_sensor]
