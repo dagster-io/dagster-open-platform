@@ -1,25 +1,18 @@
 import os
 
-from dagster import (
-    AssetExecutionContext,
-    AssetSpec,
-    MaterializeResult,
-    asset,
-    get_dagster_logger,
-    multi_asset,
-)
+import dagster as dg
 from dagster_open_platform.aws.assets import workspace_data_json
 from dagster_open_platform.aws.constants import BUCKET_NAME, OUTPUT_PREFIX
 from dagster_snowflake import SnowflakeResource
 
-log = get_dagster_logger()
+log = dg.get_dagster_logger()
 
 
-@asset(
+@dg.asset(
     name="inactive_snowflake_clones",
     description="Drops clone purina databases after 14 days of inactivity.",
 )
-def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeResult:
+def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> dg.MaterializeResult:
     with snowflake_sf.get_connection() as conn:
         cur = conn.cursor()
         cur.execute(r"""
@@ -59,28 +52,29 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> MaterializeRes
                 log.info(f"{db} dropped.")
         else:
             log.info("No databases to drop.")
-    return MaterializeResult(
+    return dg.MaterializeResult(
         metadata={"dropped_databases": dbs_to_drop, "dropped_databases_count": len(dbs_to_drop)},
     )
 
 
-@multi_asset(
+@dg.multi_asset(
     group_name="aws_stages",
     description="Snowflake stages for AWS data, creates new stages for new assets, refreses existing stages.",
     specs=[
-        AssetSpec(
+        dg.AssetSpec(
             key=[
                 "aws",
                 "cloud-prod",
                 f"workspace_staging_{asset_key.path[-1]!s}",
             ],
             deps=[asset_key],
+            automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
         )
         for asset_key in workspace_data_json.keys
     ],
 )
 def workspace_replication_aws_stages(
-    context: AssetExecutionContext, snowflake_sf: SnowflakeResource
+    context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
 ):
     integration_prefix = (
         "CLOUD_PROD"
@@ -114,23 +108,24 @@ def workspace_replication_aws_stages(
             log.info(f"Stage {stage_name} refreshed")
 
 
-@multi_asset(
+@dg.multi_asset(
     group_name="aws_external_tables",
     description="Snowflake external tables for AWS data.",
     specs=[
-        AssetSpec(
+        dg.AssetSpec(
             key=[
                 "aws",
                 "cloud_prod",
                 f"{asset_key.path[-1]!s}_ext",
             ],
             deps=[asset_key],
+            automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
         )
         for asset_key in workspace_replication_aws_stages.keys
     ],
 )
 def workspace_replication_aws_external_tables(
-    context: AssetExecutionContext, snowflake_sf: SnowflakeResource
+    context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
 ):
     with snowflake_sf.get_connection() as conn:
         cur = conn.cursor()
@@ -160,12 +155,13 @@ def workspace_replication_aws_external_tables(
             log.info(f"Created external table {table_name}")
 
 
-@asset(
+@dg.asset(
     group_name="aws_stages",
     description="Snowflake stages for AWS data, creates new stages for new assets, refreses existing stages.",
     key=["aws", "cloud-prod", "user_roles"],
+    automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
 )
-def user_roles_aws_stage(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
+def user_roles_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource):
     integration_prefix = (
         "CLOUD_PROD"
         if os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", "") == "cloud-prod"
@@ -197,13 +193,16 @@ def user_roles_aws_stage(context: AssetExecutionContext, snowflake_sf: Snowflake
             log.info(f"Stage {stage_name} refreshed")
 
 
-@asset(
+@dg.asset(
     group_name="aws_external_tables",
     description="Snowflake external tables for AWS data.",
     key=["aws", "cloud_prod", "user_roles_ext"],
     deps=[user_roles_aws_stage],
+    automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
 )
-def user_roles_aws_external_table(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
+def user_roles_aws_external_table(
+    context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
+):
     with snowflake_sf.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
