@@ -2,9 +2,7 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 from dagster import AssetKey, AutoMaterializePolicy, AutomationCondition, SourceAsset
-from dagster_embedded_elt.sling.asset_decorator import sling_assets
-from dagster_embedded_elt.sling.dagster_sling_translator import DagsterSlingTranslator
-from dagster_embedded_elt.sling.resources import SlingResource
+from dagster_embedded_elt.sling import DagsterSlingTranslator, SlingResource, sling_assets
 from dagster_open_platform.utils.environment_helpers import (
     get_environment,
     get_schema_for_environment,
