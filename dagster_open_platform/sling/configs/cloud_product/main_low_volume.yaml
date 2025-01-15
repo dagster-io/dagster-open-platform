@@ -114,6 +114,11 @@ streams:
       dagster:
         asset_key: sling.cloud_product.alerts
   
+  public.alerts_alert_policies_new: 
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.alerts_alert_policies_new
+  
   public.repository_locations_data: 
     sql: |
       select
