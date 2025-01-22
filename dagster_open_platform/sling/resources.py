@@ -1,5 +1,5 @@
 from dagster import EnvVar
-from dagster_embedded_elt.sling import SlingConnectionResource, SlingResource
+from dagster_sling import SlingConnectionResource, SlingResource
 
 from ..utils.environment_helpers import (
     get_database_for_environment,

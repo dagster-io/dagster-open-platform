@@ -2,11 +2,11 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 from dagster import AssetKey, AutoMaterializePolicy, AutomationCondition, SourceAsset
-from dagster_embedded_elt.sling import DagsterSlingTranslator, SlingResource, sling_assets
 from dagster_open_platform.utils.environment_helpers import (
     get_environment,
     get_schema_for_environment,
 )
+from dagster_sling import DagsterSlingTranslator, SlingResource, sling_assets
 
 cloud_product_config_dir = Path(__file__).parent / "configs" / "cloud_product"
 

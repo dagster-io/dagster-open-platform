@@ -24,7 +24,8 @@ dependencies = [
     "dagster-gcp",
     "dagster-dbt",
     "dagster-cloud",
-    "dagster-embedded-elt",
+    "dagster-dlt",
+    "dagster-sling",
     "sling<1.2.14", # https://github.com/slingdata-io/sling-cli/issues/349
     "gql[requests]",
     "dlt[snowflake,duckdb]",

@@ -17,7 +17,7 @@ see: https://dlthub.com/docs/tutorial/grouping-resources#handle-secrets
 """
 
 from dagster import Definitions, load_assets_from_modules
-from dagster_embedded_elt.dlt import DagsterDltResource
+from dagster_dlt import DagsterDltResource
 from dagster_open_platform.dlt import assets
 
 from ..utils.source_code import add_code_references_and_link_to_git

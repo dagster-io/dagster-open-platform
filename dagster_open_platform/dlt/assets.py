@@ -11,7 +11,7 @@ from dagster import (
     file_relative_path,
 )
 from dagster._annotations import public
-from dagster_embedded_elt.dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
+from dagster_dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
 from dagster_open_platform.dlt.sources.buildkite import pipelines
 from dagster_open_platform.dlt.sources.github import github_reactions
 from dagster_open_platform.dlt.sources.hubspot import hubspot
