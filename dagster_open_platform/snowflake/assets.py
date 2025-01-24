@@ -285,8 +285,10 @@ def oss_telemetry_aws_external_table(
 
         create_table_query = f"""
             CREATE EXTERNAL TABLE {table_name}(
-                FILENAME VARCHAR AS METADATA$FILENAME
+                FILENAME VARCHAR AS METADATA$FILENAME,
+                REPLICATION_DATE DATE AS cast(split_part(METADATA$FILENAME, '/', 1) || '-' || split_part(METADATA$FILENAME, '/', 2) || '-' || split_part(METADATA$FILENAME, '/', 3) as date)
             )
+            PARTITION BY (REPLICATION_DATE)
             LOCATION = @{stage_name}
             FILE_FORMAT = 'JSON_NO_EXTENSION'
             AUTO_REFRESH = FALSE
