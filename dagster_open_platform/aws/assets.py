@@ -1,6 +1,9 @@
 import json
 import os
+import zlib
 from datetime import datetime
+from io import BytesIO
+from urllib.parse import urlparse
 
 from dagster import (
     AssetExecutionContext,
@@ -16,6 +19,7 @@ from dagster import (
     multi_asset,
 )
 from dagster_aws.s3 import S3Resource
+from dagster_cloud.api.dagster_cloud_api import FileFormat
 from dagster_open_platform.aws.constants import (
     ACCOUNT_NAME,
     BASE_S3_LOCATION,
@@ -94,7 +98,43 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
         obj_dict = json.loads(s3_mailman.get_body(key, decode="utf-8"))
 
         # Pull the repo datas out of the object
-        repository_datas = obj_dict.pop("repository_datas")
+
+        # Legacy full json blob
+        if "repository_datas" in obj_dict:
+            repository_datas = obj_dict["repository_datas"]
+
+        # New pointers to S3 copies
+        elif "repositories" in obj_dict:
+            repository_datas = []
+            repository_manifests = obj_dict["repositories"]
+            for repo_manifest in repository_manifests:
+                s3_uri = repo_manifest["stored_snapshot"]["uri"]
+                fmt = repo_manifest["stored_snapshot"]["format"]
+                parsed_s3 = urlparse(s3_uri)
+                buffer = BytesIO()
+                s3_client.download_fileobj(
+                    Bucket=parsed_s3.netloc,
+                    Key=parsed_s3.path.lstrip("/"),
+                    Fileobj=buffer,
+                )
+                if fmt == FileFormat.JSON:
+                    json_bytes = buffer.getvalue()
+                elif fmt == FileFormat.GZIPPED_JSON:
+                    json_bytes = zlib.decompress(buffer.getvalue())
+                else:
+                    raise Exception(f"Unknown snapshot format {fmt}")
+                json_str = json_bytes.decode("utf-8")
+                repo_snap_obj = json.loads(json_str)
+                repository_datas.append(
+                    {
+                        "external_repository_data": repo_snap_obj,
+                        "repo_name": repo_manifest["name"],
+                    }
+                )
+        else:
+            raise Exception(
+                f"Unknown structure in workspace replication bucket, top level keys {list(obj_dict.keys())}"
+            )
 
         metadata_output_key = os.path.join("metadata", output_key_ending)
         s3_mailman.send(
