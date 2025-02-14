@@ -52,7 +52,9 @@
         create_date,
         request_type,
         how_did_you_hear_about_us,
-        message
-    from {{ ref('stg_hubspot__contacts') }}
+        message,
+        abm_score
+    from {{ ref('stg_hubspot__contacts') }} c1
+        left join {{ ref('abm_contact_intent_scores') }} c2 on c1.contact_id = c2.hubspot_contact_id
 
 {% endsnapshot %}
