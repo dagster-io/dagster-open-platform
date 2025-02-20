@@ -1,11 +1,7 @@
-from typing import Optional
-
 import yaml
 from dagster import (
     AssetExecutionContext,
     AssetKey,
-    AutoMaterializePolicy,
-    AutoMaterializeRule,
     AutomationCondition,
     SourceAsset,
     file_relative_path,
@@ -22,9 +18,10 @@ from dlt.extract.resource import DltResource
 
 
 class ThinkificDagsterDltTranslator(DagsterDltTranslator):
-    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
-        return AutoMaterializePolicy.eager().with_rules(
-            AutoMaterializeRule.materialize_on_cron("0 1 * * *")
+    @public
+    def get_automation_condition(self, resource):
+        return (
+            AutomationCondition.cron_tick_passed("0 0 * * *") & ~AutomationCondition.in_progress()
         )
 
 
@@ -87,9 +84,9 @@ dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
 
 class GithubDagsterDltTranslator(DagsterDltTranslator):
     @public
-    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
-        return AutoMaterializePolicy.eager().with_rules(
-            AutoMaterializeRule.materialize_on_cron("0 0 * * *")
+    def get_automation_condition(self, resource):
+        return (
+            AutomationCondition.cron_tick_passed("0 0 * * *") & ~AutomationCondition.in_progress()
         )
 
 
@@ -120,9 +117,9 @@ github_source_assets = [
 
 class BuildkiteDltTranslator(DagsterDltTranslator):
     @public
-    def get_auto_materialize_policy(self, resource: DltResource) -> Optional[AutoMaterializePolicy]:
-        return AutoMaterializePolicy.eager().with_rules(
-            AutoMaterializeRule.materialize_on_cron("0 0 * * *")
+    def get_automation_condition(self, resource):
+        return (
+            AutomationCondition.cron_tick_passed("0 0 * * *") & ~AutomationCondition.in_progress()
         )
 
 
