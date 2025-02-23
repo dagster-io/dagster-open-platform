@@ -21,6 +21,9 @@ insights_job = dg.define_asset_job(
         .required_multi_asset_neighbors()
         - dg.AssetSelection.groups("cloud_product_main")
         - dg.AssetSelection.groups("cloud_product_shard1")
+        - dg.AssetSelection.groups("fivetran_salesforce")
+        - dg.AssetSelection.groups("aws_external_tables")
+        - dg.AssetSelection.groups("aws_stages")
     ),
     partitions_def=insights_partition,
     tags={"team": "insights", "dbt_pipeline": "insights"},
