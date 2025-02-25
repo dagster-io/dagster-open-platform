@@ -27,8 +27,7 @@ MOCK_ISSUES = {
 def pipeline():
     @dlt.resource(primary_key="id", write_disposition="merge")
     def repos():
-        for d in MOCK_REPOS:
-            yield d
+        yield from MOCK_REPOS
 
     @dlt.transformer(
         primary_key=["repo_id", "issue_id"], write_disposition="merge", data_from=repos

@@ -65,7 +65,7 @@ dagster_open_platform:
       database: "purina"
       warehouse: "purina"
       schema: "public"
-      threads: 8
+      threads: 1
       client_session_keep_alive: false
 
     personal:
@@ -80,5 +80,5 @@ dagster_open_platform:
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'elementl') }}"
       
       schema: "{{ env_var('SANDBOX_SCHEMA_NAME', '') }}"
-      threads: 8
+      threads: 1
       client_session_keep_alive: false

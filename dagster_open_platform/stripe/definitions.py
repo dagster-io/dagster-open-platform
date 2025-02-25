@@ -1,7 +1,7 @@
 """Source assets representing stripe's data sync process."""
 
 import datetime
-from typing import Iterator
+from collections.abc import Iterator
 
 from dagster import (
     AssetKey,

@@ -1,5 +1,6 @@
+from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any
 
 from dagster import AssetKey, AutoMaterializePolicy, AutomationCondition, SourceAsset
 from dagster_open_platform.utils.environment_helpers import (

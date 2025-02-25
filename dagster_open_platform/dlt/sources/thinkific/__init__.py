@@ -85,22 +85,19 @@ def thinkific(
     @dlt.transformer(primary_key="id", write_disposition="merge", data_from=courses)
     def course_reviews(courses):
         for course in courses:
-            for page in _paginate(
+            yield from _paginate(
                 THINKIFIC_BASE_URL + "course_reviews", params={"course_id": course["id"]}
-            ):
-                yield page
+            )
 
     @dlt.resource(primary_key="id", write_disposition="merge")
     def enrollments():
         # Enhancement - update to do incremental loads, see:
         # https://dlthub.com/docs/examples/incremental_loading/
-        for page in _paginate(THINKIFIC_BASE_URL + "enrollments"):
-            yield page
+        yield from _paginate(THINKIFIC_BASE_URL + "enrollments")
 
     @dlt.resource(primary_key="id", write_disposition="merge")
     def users():
-        for page in _paginate(THINKIFIC_BASE_URL + "users"):
-            yield page
+        yield from _paginate(THINKIFIC_BASE_URL + "users")
 
     return courses, course_reviews, enrollments, users
 

@@ -2,8 +2,9 @@
 # in advance of releasing this functionality
 
 import os
+from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 from dagster import DagsterInvariantViolationError
 from dagster._annotations import beta

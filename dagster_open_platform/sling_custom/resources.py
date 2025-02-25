@@ -3,8 +3,9 @@ import enum
 import os
 import re
 import tempfile
+from collections.abc import Generator, Iterable
 from subprocess import PIPE, STDOUT, Popen
-from typing import Any, Callable, Dict, Generator, Iterable, List, Optional, Set, Union
+from typing import Any, Callable, Optional, Union
 
 import sling
 import yaml
@@ -56,7 +57,7 @@ class CustomSlingResource(ConfigurableResource):
     postgres_config: SlingPostgresConfig
     snowflake_config: SlingSnowflakeConfig
 
-    def _get_env_config(self) -> Dict[str, Any]:
+    def _get_env_config(self) -> dict[str, Any]:
         return {
             "connections": {
                 "postgres": {
@@ -119,7 +120,7 @@ class CustomSlingResource(ConfigurableResource):
         source_table: str,
         dest_table: str,
         mode: SlingMode = SlingMode.FULL_REFRESH,
-        primary_key: Optional[List[str]] = None,
+        primary_key: Optional[list[str]] = None,
         update_key: Optional[str] = None,
         allow_alter_table: bool = True,
     ) -> Generator[str, None, None]:
@@ -178,7 +179,7 @@ class CustomSlingResource(ConfigurableResource):
         source_table: str,
         dest_table: str,
         mode: SlingMode = SlingMode.FULL_REFRESH,
-        primary_key: Optional[List[str]] = None,
+        primary_key: Optional[list[str]] = None,
         update_key: Optional[str] = None,
     ) -> Generator[str, None, None]:
         """Runs a Sling sync from the given Postgres table to the given Snowflake table. Generates
@@ -199,7 +200,7 @@ class CustomSlingResource(ConfigurableResource):
         source_table: str,
         dest_table: str,
         mode: SlingMode = SlingMode.FULL_REFRESH,
-        primary_key: Optional[List[str]] = None,
+        primary_key: Optional[list[str]] = None,
         update_key: Optional[str] = None,
         allow_alter_table: bool = True,
     ) -> Generator[str, None, None]:
@@ -224,7 +225,7 @@ def build_sync_postgres_to_snowflake_asset(
     source_table: str,
     dest_table: str,
     mode=SlingMode.FULL_REFRESH,
-    primary_key: Optional[Union[str, List[str]]] = None,
+    primary_key: Optional[Union[str, list[str]]] = None,
     update_key: Optional[str] = None,
     deps: Optional[Iterable[CoercibleToAssetKey]] = None,
 ) -> AssetsDefinition:
@@ -265,11 +266,11 @@ def build_sync_snowflake_to_postgres_asset(
     source_table: str,
     dest_table: str,
     mode=SlingMode.FULL_REFRESH,
-    primary_key: Optional[Union[str, List[str]]] = None,
+    primary_key: Optional[Union[str, list[str]]] = None,
     update_key: Optional[str] = None,
     deps: Optional[Iterable[CoercibleToAssetKey]] = None,
     preflight_check: Optional[Callable[[AssetExecutionContext], None]] = None,
-    preflight_resource_keys: Optional[Set[str]] = None,
+    preflight_resource_keys: Optional[set[str]] = None,
     group_name: Optional[str] = None,
     allow_alter_table: bool = True,
 ) -> AssetsDefinition:
@@ -285,7 +286,7 @@ def build_sync_snowflake_to_postgres_asset(
         source=(str, source_table),
         dest=(str, dest_table),
         update_key=(Optional[str], update_key),
-        primary_key=(Optional[List[str]], primary_key),
+        primary_key=(Optional[list[str]], primary_key),
         mode=(SlingMode, mode.value.upper()),
     )
 

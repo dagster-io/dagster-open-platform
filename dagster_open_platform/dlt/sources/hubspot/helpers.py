@@ -1,7 +1,8 @@
 """Hubspot source helpers."""
 
 import urllib.parse
-from typing import Any, Dict, Iterator, List, Optional
+from collections.abc import Iterator
+from typing import Any, Optional
 
 from dlt.sources.helpers import requests
 
@@ -15,7 +16,7 @@ def get_url(endpoint: str) -> str:
     return urllib.parse.urljoin(BASE_URL, endpoint)
 
 
-def _get_headers(api_key: str) -> Dict[str, str]:
+def _get_headers(api_key: str) -> dict[str, str]:
     """Return a dictionary of HTTP headers to use for API requests, including the specified API key.
 
     Args:
@@ -30,7 +31,7 @@ def _get_headers(api_key: str) -> Dict[str, str]:
     return dict(authorization=f"Bearer {api_key}")
 
 
-def extract_property_history(objects: List[Dict[str, Any]]) -> Iterator[Dict[str, Any]]:
+def extract_property_history(objects: list[dict[str, Any]]) -> Iterator[dict[str, Any]]:
     for item in objects:
         history = item.get("propertiesWithHistory")
         if not history:
@@ -47,8 +48,8 @@ def fetch_property_history(
     endpoint: str,
     api_key: str,
     props: str,
-    params: Optional[Dict[str, Any]] = None,
-) -> Iterator[List[Dict[str, Any]]]:
+    params: Optional[dict[str, Any]] = None,
+) -> Iterator[list[dict[str, Any]]]:
     """Fetch property history from the given CRM endpoint.
 
     Args:
@@ -89,8 +90,8 @@ def fetch_property_history(
 
 
 def fetch_data(
-    endpoint: str, api_key: str, params: Optional[Dict[str, Any]] = None
-) -> Iterator[List[Dict[str, Any]]]:
+    endpoint: str, api_key: str, params: Optional[dict[str, Any]] = None
+) -> Iterator[list[dict[str, Any]]]:
     """Fetch data from HUBSPOT endpoint using a specified API key and yield the properties of each result.
     For paginated endpoint this function yields item from all pages.
 
@@ -128,7 +129,7 @@ def fetch_data(
     # Yield the properties of each result in the API response
     while _data is not None:
         if "results" in _data:
-            _objects: List[Dict[str, Any]] = []
+            _objects: list[dict[str, Any]] = []
             for _result in _data["results"]:
                 _obj = _result.get("properties", _result)
                 if "id" not in _obj and "id" in _result:
@@ -162,7 +163,7 @@ def fetch_data(
             _data = None
 
 
-def _get_property_names(api_key: str, object_type: str) -> List[str]:
+def _get_property_names(api_key: str, object_type: str) -> list[str]:
     """Retrieve property names for a given entity from the HubSpot API.
 
     Args:

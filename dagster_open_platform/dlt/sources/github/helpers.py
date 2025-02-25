@@ -1,4 +1,5 @@
-from typing import Iterator, List, Mapping, Optional, Sequence, Tuple
+from collections.abc import Iterator, Mapping, Sequence
+from typing import Optional
 
 from dlt.common.typing import DictStrAny, StrAny
 from dlt.common.utils import chunks
@@ -30,7 +31,7 @@ def _get_auth_header(access_token: Optional[str]) -> StrAny:
         return {}
 
 
-def get_rest_pages(access_token: Optional[str], query: str) -> Iterator[List[StrAny]]:
+def get_rest_pages(access_token: Optional[str], query: str) -> Iterator[list[StrAny]]:
     def _request(page_url: str) -> requests.Response:
         r = session.get(page_url, headers=_get_auth_header(access_token))
         print(f"got page {page_url}, requests left: " + r.headers["x-ratelimit-remaining"])
@@ -168,7 +169,7 @@ def _extract_nested_nodes(item: DictStrAny) -> DictStrAny:
 
 def _run_graphql_query(
     access_token: str, query: str, variables: DictStrAny
-) -> Tuple[StrAny, StrAny]:
+) -> tuple[StrAny, StrAny]:
     def _request() -> requests.Response:
         # TODO -
         # In processing pipe pull_requests: extraction of resource pull_requests in generator
@@ -197,7 +198,7 @@ def _get_graphql_pages(
     node_type: str,
     max_items: Optional[int],
     top_level: str,
-) -> Iterator[List[DictStrAny]]:
+) -> Iterator[list[DictStrAny]]:
     items_count = 0
     while True:
         data, rate_limit = _run_graphql_query(access_token, query, variables)
@@ -217,7 +218,7 @@ def _get_graphql_pages(
             return
 
 
-def _get_comment_reaction(comment_ids: List[str], access_token: str) -> StrAny:
+def _get_comment_reaction(comment_ids: list[str], access_token: str) -> StrAny:
     """Builds a query from a list of comment nodes and returns associated reactions."""
     idx = 0
     data: DictStrAny = {}

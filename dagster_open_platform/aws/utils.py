@@ -1,5 +1,5 @@
 import os
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable
 
 """
 This class provides utility functions for working with AWS S3.
@@ -24,7 +24,7 @@ class S3Mailman:
         self.output_prefix = output_prefix
         self.s3_client = s3_client
 
-    def list_objects(self, continuation_token=None) -> Dict:
+    def list_objects(self, continuation_token=None) -> dict:
         return (
             self.s3_client.list_objects_v2(Bucket=self.bucket_name, Prefix=self.input_prefix)
             if continuation_token is None
@@ -35,7 +35,7 @@ class S3Mailman:
             )
         )
 
-    def get_contents(self, get_all: bool = False) -> List:
+    def get_contents(self, get_all: bool = False) -> list:
         if get_all:
             bucket_contents = []
             continuation_token = None
@@ -58,7 +58,7 @@ class S3Mailman:
 
     def send_all(
         self,
-        objects: List,
+        objects: list,
         base_path: str,
         encode: str | None = None,
         preprocess: Callable | None = None,
@@ -79,7 +79,7 @@ class S3Mailman:
                     body_processed, os.path.join(base_path, str(k + 1) + extension), encode=encode
                 )
 
-    def get(self, key: str) -> Dict:
+    def get(self, key: str) -> dict:
         return self.s3_client.get_object(Bucket=self.bucket_name, Key=key)
 
     def get_body(self, key: str, decode: str | None = None) -> Any:

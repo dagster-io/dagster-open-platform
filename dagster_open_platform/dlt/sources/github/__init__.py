@@ -1,7 +1,8 @@
 """Source that load github issues, pull requests and reactions for a specific repository via customizable graphql query. Loads events incrementally."""
 
 import urllib.parse
-from typing import Iterator, Mapping, Optional, Sequence
+from collections.abc import Iterator, Mapping, Sequence
+from typing import Optional
 
 import dlt
 from dlt.common.typing import TDataItems

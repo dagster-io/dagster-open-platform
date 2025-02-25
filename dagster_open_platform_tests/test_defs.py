@@ -1,7 +1,8 @@
 import os
 import sys
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Callable, Iterator
+from typing import Callable
 
 import pytest
 from dagster import (

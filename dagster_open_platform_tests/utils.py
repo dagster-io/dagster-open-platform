@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 
 class ExtractionStatus(Enum):
@@ -48,7 +48,7 @@ class ExtractionStatus(Enum):
             return None
 
 
-def sample_streams_data(stream_data: Dict[str, int]) -> List[Dict[str, Any]]:
+def sample_streams_data(stream_data: dict[str, int]) -> list[dict[str, Any]]:
     return [
         {
             "stream_name": stream_name,
@@ -60,7 +60,7 @@ def sample_streams_data(stream_data: Dict[str, int]) -> List[Dict[str, Any]]:
     ]
 
 
-def sample_extractions_data(jobs: Dict[str, ExtractionStatus]) -> Dict[str, Any]:
+def sample_extractions_data(jobs: dict[str, ExtractionStatus]) -> dict[str, Any]:
     return {
         "data": [
             {

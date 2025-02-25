@@ -1,8 +1,9 @@
 import datetime
 import json
 import os
+from collections.abc import Mapping
 from datetime import timedelta
-from typing import Any, Mapping, Optional
+from typing import Any, Optional
 
 import dagster as dg
 from dagster._core.definitions.asset_check_factories.freshness_checks.last_update import (

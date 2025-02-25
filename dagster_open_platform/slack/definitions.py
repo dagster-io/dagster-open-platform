@@ -1,5 +1,6 @@
 import os
-from typing import Iterator, Union
+from collections.abc import Iterator
+from typing import Union
 
 import dagster as dg
 import pandas as pd

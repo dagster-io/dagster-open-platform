@@ -1,6 +1,6 @@
 import datetime
 import json
-from typing import Any, Dict, List
+from typing import Any
 
 import gql
 import requests
@@ -24,7 +24,7 @@ class ScoutosResource(ConfigurableResource):
             "Authorization": f"Bearer {self.api_key}",
         }
 
-    def write_documents(self, collection_id: str, documents: list[dict]) -> Dict[str, Any]:
+    def write_documents(self, collection_id: str, documents: list[dict]) -> dict[str, Any]:
         """Writes documents to the ScoutOS API."""
         request_url = f"https://api.scoutos.com/v1/collections/{collection_id}/files"
         payload = json.dumps({"files": documents})
@@ -33,7 +33,7 @@ class ScoutosResource(ConfigurableResource):
 
     def get_runs(
         self, startdate: datetime.datetime, enddate: datetime.datetime
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Returns the runs for a time period for Scout."""
         startdate_str: str = startdate.strftime("%Y-%m-%d")
         enddate_str: str = enddate.strftime("%Y-%m-%d")
@@ -44,7 +44,7 @@ class ScoutosResource(ConfigurableResource):
             "limit": 50,
             "status": "completed",
         }
-        all_runs: List[Dict[str, Any]] = []
+        all_runs: list[dict[str, Any]] = []
 
         while True:
             response = requests.get(url, params=params, headers=self.headers)
@@ -77,19 +77,19 @@ class GithubResource(ConfigurableResource):
             fetch_schema_from_transport=True,
         )
 
-    def get_issues(self, start_date="2023-01-01", end_date="2023-12-31") -> List[dict]:
+    def get_issues(self, start_date="2023-01-01", end_date="2023-12-31") -> list[dict]:
         issues_query_str = GITHUB_ISSUES_QUERY.replace("START_DATE", start_date).replace(
             "END_DATE", end_date
         )
         return self._fetch_results(issues_query_str, "issues")
 
-    def get_discussions(self, start_date="2023-01-01", end_date="2023-12-31") -> List[dict]:
+    def get_discussions(self, start_date="2023-01-01", end_date="2023-12-31") -> list[dict]:
         discussion_query_str = GITHUB_DISCUSSIONS_QUERY.replace("START_DATE", start_date).replace(
             "END_DATE", end_date
         )
         return self._fetch_results(discussion_query_str, "discussions")
 
-    def _fetch_results(self, query_str: str, object_type: str) -> List[dict]:
+    def _fetch_results(self, query_str: str, object_type: str) -> list[dict]:
         log = get_dagster_logger()
         client = self.client()
         cursor = None
