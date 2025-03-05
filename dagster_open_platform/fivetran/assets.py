@@ -8,7 +8,7 @@ fivetran_instance = FivetranResource(
 
 fivetran_assets_no_amp = load_assets_from_fivetran_instance(
     fivetran_instance,
-    connector_to_group_fn=lambda connector: f"fivetran_{connector}",
+    connector_to_group_fn=lambda connector: f"fivetran_{'_'.join(connector.split('.'))}",
     connector_to_asset_key_fn=lambda metadata, table_name: dg.AssetKey(
         ["fivetran", *table_name.split(".")]
     ),
