@@ -36,7 +36,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
         if dbt_resource_props["resource_type"] == "snapshot":
             return "snapshots"
         # Same logic that sets the custom schema in macros/get_custom_schema.sql
-        asset_path = dbt_resource_props["fqn"][1:-1]
+        asset_path = dbt_resource_props["fqn"][2:-1]
         if asset_path:
             return "_".join(asset_path)
         return "default"

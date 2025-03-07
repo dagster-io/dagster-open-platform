@@ -17,30 +17,29 @@ models:
       owners: ["nickroach@dagsterlabs.com", "team:data"]
 
   dagster_open_platform:
-    staging:
-      +materialized: view
-    model:
-      +materialized: table
-    metrics:
-      +materialized: table
-    intermediate:
-      +materialized: view
-    mart:
-      +materialized: table
-    cloud_reporting:
-      +materialized: table
-      +snowflake_warehouse: l_warehouse
-      +meta:
-        dagster:
-          owners: ["ben@dagsterlabs.com", "team:dagster-plus"]
-    core:
-      +materialized: table
-    product:
-      +materialized: table
-    sales:
-      +materialized: table
-    hightouch:
-      +materialized: table
+    purina:
+      staging:
+        +materialized: view
+      model:
+        +materialized: table
+      metrics:
+        +materialized: table
+      intermediate:
+        +materialized: view
+      mart:
+        +materialized: table
+      cloud_reporting:
+        +materialized: table
+        +snowflake_warehouse: l_warehouse
+        +meta:
+          dagster:
+            owners: ["ben@dagsterlabs.com", "team:dagster-plus"]
+      core:
+        +materialized: table
+      product:
+        +materialized: table
+      hightouch:
+        +materialized: table
 
 seeds:
   +tags: seed
