@@ -17,6 +17,8 @@ models:
       owners: ["nickroach@dagsterlabs.com", "team:data"]
 
   dagster_open_platform:
+    dwh_reporting:
+      +materialized: table
     purina:
       staging:
         +materialized: view
