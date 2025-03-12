@@ -18,22 +18,24 @@ import dagster_open_platform.slack.definitions as slack_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
 import dagster_open_platform.sling_custom.definitions as sling_custom_definitions
 import dagster_open_platform.snowflake.definitions as snowflake_definitions
+import dagster_open_platform.statsig.definitions as statsig_definitions
 import dagster_open_platform.stripe.definitions as stripe_definitions
 from dagster import Definitions
 
 defs = Definitions.merge(
+    aws_definitions.defs,
     dbt_definitions.defs,
     dlt_definitions.defs,
     fivetran_definitions.defs,
-    sling_definitions.defs,
-    sling_custom_definitions.defs,
     hightouch_definitions.defs,
-    stripe_definitions.defs,
     pypi_definitions.defs,
-    slack_definitions.defs,
-    segment_definitions.defs,
-    scout_definitions.defs,
-    aws_definitions.defs,
-    snowflake_definitions.defs,
     quickstart_definitions.defs,
+    scout_definitions.defs,
+    segment_definitions.defs,
+    slack_definitions.defs,
+    sling_custom_definitions.defs,
+    sling_definitions.defs,
+    snowflake_definitions.defs,
+    statsig_definitions.defs,
+    stripe_definitions.defs,
 )
