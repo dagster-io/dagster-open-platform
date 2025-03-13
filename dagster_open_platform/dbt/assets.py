@@ -85,7 +85,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     dagster_dbt_translator=CustomDagsterDbtTranslator(
         settings=DagsterDbtTranslatorSettings(enable_code_references=True)
     ),
-    exclude=INCREMENTAL_SELECTOR + " " + SNAPSHOT_SELECTOR,
+    exclude=" ".join([INCREMENTAL_SELECTOR, SNAPSHOT_SELECTOR]),
     backfill_policy=dg.BackfillPolicy.single_run(),
     project=dagster_open_platform_dbt_project,
 )
@@ -120,10 +120,12 @@ def dbt_partitioned_models(
         "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
         "max_date": context.partition_time_window.end.isoformat(),
     }
-    args = ["build", "--vars", json.dumps(dbt_vars)]
 
-    if config.full_refresh:
-        args = ["build", "--full-refresh"]
+    args = (
+        ["build", "--full-refresh"]
+        if config.full_refresh
+        else ["build", "--vars", json.dumps(dbt_vars)]
+    )
 
     yield from (
         dbt.cli(args, context=context)
@@ -152,6 +154,7 @@ usage_metrics_daily_freshness_checks = build_last_update_freshness_checks(
     assets=[
         get_asset_key_for_model([dbt_non_partitioned_models], "usage_metrics_daily"),
         get_asset_key_for_model([dbt_partitioned_models], "usage_metrics_daily_jobs_aggregated"),
+        get_asset_key_for_model([dbt_partitioned_models], "statsig_user_activity_daily"),
     ],
     lower_bound_delta=datetime.timedelta(hours=36),
 )
