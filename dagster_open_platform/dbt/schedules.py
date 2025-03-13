@@ -68,15 +68,14 @@ def dbt_analytics_core_schedule():
     )
 
 
-dbt_analytics_snapshot_sensor = dg.AutomationConditionSensorDefinition(
-    "dbt_analytics_snapshot_sensor",
-    target=dg.AssetSelection.assets(dbt_snapshot_models),
-    default_condition=dg.AutomationCondition.on_cron("0 * * * *"),
-    use_user_code_server=True,
+dbt_analytics_snapshot_schedule = dg.ScheduleDefinition(
+    job=dg.define_asset_job(
+        name="dbt_analytics_snapshot_job",
+        selection=dg.AssetSelection.assets(dbt_snapshot_models).downstream(),
+    ),
+    cron_schedule="0 7 * * *",
 )
 
 scheduled_jobs = [insights_job, dbt_analytics_core_job]
 
-schedules = [insights_schedule, dbt_analytics_core_schedule]
-
-sensors = [dbt_analytics_snapshot_sensor]
+schedules = [insights_schedule, dbt_analytics_core_schedule, dbt_analytics_snapshot_schedule]
