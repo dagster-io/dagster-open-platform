@@ -5,6 +5,7 @@ dagstermill
 dagster-slack
 dagster-aws
 dagster-pipes
+dagster-shared
 dagster-snowflake
 dagster-slack
 dagster-pandas
