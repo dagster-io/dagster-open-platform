@@ -6,16 +6,12 @@ from datetime import timedelta
 from typing import Any, Optional
 
 import dagster as dg
-from dagster._core.definitions.asset_check_factories.freshness_checks.last_update import (
-    build_last_update_freshness_checks,
-)
 from dagster_dbt import (
     DagsterDbtTranslator,
     DagsterDbtTranslatorSettings,
     DbtCliResource,
     dbt_assets,
 )
-from dagster_dbt.asset_utils import get_asset_key_for_model
 from dagster_open_platform.dbt.partitions import insights_partition
 from dagster_open_platform.dbt.resources import dagster_open_platform_dbt_project
 
@@ -149,12 +145,7 @@ def dbt_snapshot_models(context: dg.AssetExecutionContext, dbt: DbtCliResource, 
     yield from dbt.cli(["snapshot"], context=context).stream().with_insights()
 
 
-# Usage metrics daily gets materialized each day. Give at least 12 hours berth time for any easy problems to be resolved.
-usage_metrics_daily_freshness_checks = build_last_update_freshness_checks(
-    assets=[
-        get_asset_key_for_model([dbt_non_partitioned_models], "usage_metrics_daily"),
-        get_asset_key_for_model([dbt_partitioned_models], "usage_metrics_daily_jobs_aggregated"),
-        get_asset_key_for_model([dbt_partitioned_models], "statsig_user_activity_daily"),
-    ],
+snapshots_freshness_checks = dg.build_last_update_freshness_checks(
+    assets=[dbt_snapshot_models],
     lower_bound_delta=datetime.timedelta(hours=36),
 )

@@ -10,7 +10,7 @@ dbt_assets = load_assets_from_modules([assets])
 
 defs = Definitions(
     assets=add_code_references_and_link_to_git(dbt_assets),
-    # asset_checks=assets.usage_metrics_daily_freshness_checks,
+    asset_checks=assets.snapshots_freshness_checks,
     resources={
         "dbt": dbt_resource,
     },
