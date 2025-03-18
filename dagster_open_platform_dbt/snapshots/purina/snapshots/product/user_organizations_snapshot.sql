@@ -5,7 +5,8 @@
       target_schema='snapshots',
       unique_key='unique_key',
       strategy='check',
-      check_cols=['organization_id', 'user_id', 'relationship_created_at']
+      check_cols=['organization_id', 'user_id', 'relationship_created_at'],
+      hard_deletes='invalidate'
     )
 }}
 
