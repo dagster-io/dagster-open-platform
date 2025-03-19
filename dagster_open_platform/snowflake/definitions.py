@@ -8,6 +8,7 @@ from dagster_open_platform.snowflake.assets import (
     workspace_replication_aws_external_tables,
     workspace_replication_aws_stages,
 )
+from dagster_open_platform.snowflake.jobs import clone_purina, drop_purina_clone
 from dagster_open_platform.snowflake.resources import snowflake_resource
 from dagster_open_platform.snowflake.schedules import purina_clone_cleanup_schedule
 
@@ -27,4 +28,5 @@ defs = Definitions(
     ),
     schedules=[purina_clone_cleanup_schedule],
     resources={"snowflake_sf": snowflake_resource},
+    jobs=[clone_purina, drop_purina_clone],
 )
