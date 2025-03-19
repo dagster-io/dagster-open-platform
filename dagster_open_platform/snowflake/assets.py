@@ -41,7 +41,7 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> dg.Materialize
             from snowflake.information_schema.databases
                 left join recent_queries using(database_name)
             where
-                database_name regexp $$PURINA_CLONE_\d+$$
+                database_name regexp $$\w+_CLONE_\d+$$
                 and days_since_last_activity > 14;
         """)
         result = cur.fetch_pandas_all()
@@ -49,8 +49,11 @@ def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> dg.Materialize
         if dbs_to_drop:
             for db in dbs_to_drop:
                 pr_id = db.split("_")[-1]  # Get the pull request ID from the database name
+                base_db_name = "_".join(db.split("_")[:-2])
                 log.info(f"Dropping {db}")
-                cur.execute(f"CALL UTIL_DB.PUBLIC.CLEANUP_PURINA_CLONE('{pr_id}')")
+                cur.execute(
+                    f"CALL UTIL_DB.PUBLIC.CLEANUP_DATABASE_CLONE('{base_db_name}', '{pr_id}')"
+                )
                 log.info(f"{db} dropped.")
         else:
             log.info("No databases to drop.")

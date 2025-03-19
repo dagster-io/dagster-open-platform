@@ -14,13 +14,17 @@ def drop_database_clone(
     """Drops a clone of the Purina Snowflake database associated with a Pull Request,
     based on the pull request id provided in the config.
     """
-    snowflake.execute_query(
-        f"CALL UTIL_DB.PUBLIC.CLEANUP_PURINA_CLONE('{config.pull_request_id}')",
+    snowflake.execute_queries(
+        sql_queries=[
+            f"CALL UTIL_DB.PUBLIC.CLEANUP_DATABASE_CLONE('PURINA', '{config.pull_request_id}')",
+            f"CALL UTIL_DB.PUBLIC.CLEANUP_DATABASE_CLONE('DWH_REPORTING', '{config.pull_request_id}')",
+        ],
+        fetch_results=True,
     )
 
 
 @op(ins={"start": In(Nothing)})
-def clone_purina_database(
+def clone_database(
     context: OpExecutionContext,
     config: DatabaseCloneConfig,
     snowflake: ResourceParam[SnowflakeConnection],
@@ -29,8 +33,11 @@ def clone_purina_database(
     based on the pull request id provided in the config. This process is powered by a stored
     procedure defined in DOP under the procedures/admin directory.
     """
-    snowflake.execute_query(
-        f"CALL UTIL_DB.PUBLIC.CLONE_PURINA('{config.pull_request_id}')",
+    snowflake.execute_queries(
+        sql_queries=[
+            f"CALL UTIL_DB.PUBLIC.CLONE_DATABASE('PURINA', '{config.pull_request_id}')",
+            f"CALL UTIL_DB.PUBLIC.CLONE_DATABASE('DWH_REPORTING', '{config.pull_request_id}')",
+        ],
         fetch_results=True,
     )
 
@@ -57,7 +64,7 @@ def clone_purina_database(
                     "pull_request_id": {"env": "DAGSTER_CLOUD_PULL_REQUEST_ID"},
                 }
             },
-            "clone_purina_database": {
+            "clone_database": {
                 "config": {
                     "pull_request_id": {"env": "DAGSTER_CLOUD_PULL_REQUEST_ID"},
                 }
@@ -67,8 +74,8 @@ def clone_purina_database(
     description="""Creates a copy-on-write of the Purina Snowflake database associated with a Pull Request.
 This is automatically run when a Pull Request is opened via GitHub Action.""",
 )
-def clone_purina() -> None:
-    clone_purina_database(start=drop_database_clone())
+def clone_databases() -> None:
+    clone_database(start=drop_database_clone())
 
 
 @job(
@@ -100,5 +107,5 @@ This is automatically run when a Pull Request is closed via GitHub Action. The `
 sensor will also periodically run to clean up any clones that may have been overlooked.
 """,
 )
-def drop_purina_clone() -> None:
+def drop_database_clones() -> None:
     drop_database_clone()

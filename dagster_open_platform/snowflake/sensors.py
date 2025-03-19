@@ -21,14 +21,14 @@ def _query_gh_api(method: str, endpoint: str, data: Optional[Any] = None) -> Any
 PREFIX = "PURINA_CLONE_"
 
 
-@sensor(job_name="drop_purina_clone", minimum_interval_seconds=86400)
-def drop_old_purina_clones(ctx: SensorEvaluationContext, snowflake_telemetry: SnowflakeResource):
+@sensor(job_name="drop_database_clones", minimum_interval_seconds=86400)
+def drop_old_database_clones(ctx: SensorEvaluationContext, snowflake_telemetry: SnowflakeResource):
     # fetch list Snowflake DBs with prefix "PURINA_CLONE_"
     with snowflake_telemetry.get_connection() as conn:
         databases = cast(
             list[tuple[str, ...]],
             conn.cursor().execute(
-                "SELECT database_name FROM PURINA.INFORMATION_SCHEMA.DATABASES",
+                "SELECT database_name FROM SNOWFLAKE.INFORMATION_SCHEMA.DATABASES",
             ),
         )
     pr_ids_snowflake_clones = [db[0][len(PREFIX) :] for db in databases if db[0].startswith(PREFIX)]

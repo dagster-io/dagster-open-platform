@@ -8,9 +8,10 @@ from dagster_open_platform.snowflake.assets import (
     workspace_replication_aws_external_tables,
     workspace_replication_aws_stages,
 )
-from dagster_open_platform.snowflake.jobs import clone_purina, drop_purina_clone
+from dagster_open_platform.snowflake.jobs import clone_databases, drop_database_clones
 from dagster_open_platform.snowflake.resources import snowflake_resource
-from dagster_open_platform.snowflake.schedules import purina_clone_cleanup_schedule
+from dagster_open_platform.snowflake.schedules import database_clone_cleanup_schedule
+from dagster_open_platform.snowflake.sensors import drop_old_database_clones
 
 from ..utils.source_code import add_code_references_and_link_to_git
 
@@ -26,7 +27,8 @@ defs = Definitions(
             oss_telemetry_aws_external_table,
         ]
     ),
-    schedules=[purina_clone_cleanup_schedule],
+    schedules=[database_clone_cleanup_schedule],
     resources={"snowflake_sf": snowflake_resource},
-    jobs=[clone_purina, drop_purina_clone],
+    jobs=[clone_databases, drop_database_clones],
+    sensors=[drop_old_database_clones],
 )
