@@ -6,7 +6,7 @@ USAGE
 
 """
 
-from dagster_open_platform.dlt.sources.buildkite import pipelines
+from dagster_open_platform.dlt.sources.buildkite import buildkite_source
 
 from dlt import pipeline
 
@@ -14,10 +14,9 @@ if __name__ == "__main__":
     pipeline(
         pipeline_name="buildkite_pipelines",
         dataset_name="buildkite",
-        destination="snowflake",
+        destination="duckdb",
     ).run(
-        pipelines(
+        buildkite_source(
             org_slug="dagster",
-            pipeline_slugs=["internal", "dagster"],
         )
     )

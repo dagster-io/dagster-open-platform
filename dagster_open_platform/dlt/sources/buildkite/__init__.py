@@ -1,6 +1,7 @@
 import dlt
 from dlt.extract.incremental import Incremental
 from dlt.sources.helpers import requests
+from dlt.sources.rest_api import RESTAPIConfig, rest_api_resources
 
 
 @dlt.source
@@ -46,3 +47,37 @@ def pipelines(
                 page += 1
 
     return builds
+
+
+# A fancy variation of the Buildkite source that does this:
+# https://dlthub.com/docs/dlt-ecosystem/verified-sources/rest_api/basic
+@dlt.source
+def buildkite_source_v2(org_slug: str, buildkite_api_token=dlt.secrets.value):
+    headers = {"Authorization": f"Bearer {buildkite_api_token}"}
+
+    config: RESTAPIConfig = {
+        "client": {
+            "base_url": f"https://api.buildkite.com/v2/organizations/{org_slug}",
+            "headers": headers,
+        },
+        "resource_defaults": {
+            "primary_key": "id",
+            "write_disposition": "merge",
+            "endpoint": {},
+        },
+        "resources": [
+            "pipelines",
+            {
+                "name": "builds",
+                "endpoint": {
+                    "path": "pipelines/{resources.pipelines.slug}/builds",
+                    "params": {
+                        "include_retried_jobs": "true",
+                        "created_from": "2025-01-01T00:00:00Z",
+                    },
+                },
+            },
+        ],
+    }
+
+    yield from rest_api_resources(config)

@@ -8,7 +8,7 @@ from dagster import (
 )
 from dagster._annotations import public
 from dagster_dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
-from dagster_open_platform.dlt.sources.buildkite import pipelines
+from dagster_open_platform.dlt.sources.buildkite import buildkite_source_v2, pipelines
 from dagster_open_platform.dlt.sources.github import github_reactions
 from dagster_open_platform.dlt.sources.hubspot import hubspot
 from dagster_open_platform.dlt.sources.thinkific import thinkific
@@ -142,6 +142,24 @@ def buildkite_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
     yield from dlt.run(context=context)
 
 
+@dlt_assets(
+    dlt_source=buildkite_source_v2(
+        org_slug="dagster",
+    ),
+    dlt_pipeline=pipeline(
+        pipeline_name="buildkite_pipelines",
+        dataset_name="buildkite_v2",
+        destination="snowflake",
+        progress="log",
+    ),
+    name="buildkite_v2",
+    group_name="buildkite_v2",
+    dagster_dlt_translator=BuildkiteDltTranslator(),
+)
+def buildkite_assets_v2(context: AssetExecutionContext, dlt: DagsterDltResource):
+    yield from dlt.run(context=context)
+
+
 buildkite_source_assets = [
     SourceAsset(key, group_name="buildkite") for key in buildkite_assets.dependency_keys
-]
+] + [SourceAsset(key, group_name="buildkite_v2") for key in buildkite_assets_v2.dependency_keys]
