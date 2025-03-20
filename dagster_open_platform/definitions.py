@@ -19,6 +19,7 @@ import dagster_open_platform.slack.definitions as slack_definitions
 import dagster_open_platform.sling.definitions as sling_definitions
 import dagster_open_platform.sling_custom.definitions as sling_custom_definitions
 import dagster_open_platform.snowflake.definitions as snowflake_definitions
+import dagster_open_platform.statsig.definitions as statsig_definitions
 import dagster_open_platform.stripe.definitions as stripe_definitions
 from dagster import Definitions
 
@@ -37,5 +38,6 @@ defs = Definitions.merge(
     sling_custom_definitions.defs,
     sling_definitions.defs,
     snowflake_definitions.defs,
+    statsig_definitions.defs,
     stripe_definitions.defs,
 )
