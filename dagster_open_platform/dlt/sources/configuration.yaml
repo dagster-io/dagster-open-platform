@@ -3,6 +3,10 @@ sources:
     repositories:
       dagster-io:
         - dagster
+        - internal
+        - community-integrations
+        - dagster-website
+        - elementl-website
       apache:
         - airflow
       PrefectHQ:
