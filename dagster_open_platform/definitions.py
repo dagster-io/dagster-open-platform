@@ -9,6 +9,7 @@ import dagster_open_platform.aws.definitions as aws_definitions
 import dagster_open_platform.dbt.definitions as dbt_definitions
 import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
+import dagster_open_platform.gong.definitions as gong_definitions
 import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.pypi.definitions as pypi_definitions
 import dagster_open_platform.quickstart.definitions as quickstart_definitions
@@ -26,6 +27,7 @@ defs = Definitions.merge(
     dbt_definitions.defs,
     dlt_definitions.defs,
     fivetran_definitions.defs,
+    gong_definitions.defs,
     hightouch_definitions.defs,
     pypi_definitions.defs,
     quickstart_definitions.defs,

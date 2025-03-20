@@ -26,13 +26,15 @@ dependencies = [
     "dagster-cloud",
     "dagster-dlt",
     "dagster-sling",
+    "dagster-anthropic",
     "sling<1.2.14", # https://github.com/slingdata-io/sling-cli/issues/349
     "statsig",
     "gql[requests]",
     "dlt[snowflake,duckdb]",
     "pydantic<2.9.0", # https://dagsterlabs.slack.com/archives/C04J8BRN9ST/p1725559237966589
     "pyyaml",
-    "pyOpenSSL>=23.0.0" # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
+    "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
+    "snowflake-connector-python[secure-local-storage,pandas]",
 ]
 
 [project.optional-dependencies]

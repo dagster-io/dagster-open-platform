@@ -9,4 +9,5 @@ snowflake_resource = SnowflakeResource(
     password=EnvVar("SNOWFLAKE_PASSWORD"),
     role=os.getenv("SNOWFLAKE_ROLE", "PURINA"),
     warehouse=os.getenv("SNOWFLAKE_WAREHOUSE", "PURINA"),
+    additional_snowflake_connection_args={"authenticator": "username_password_mfa"},
 )
