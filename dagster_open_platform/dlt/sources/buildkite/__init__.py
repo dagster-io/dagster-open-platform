@@ -63,17 +63,30 @@ def buildkite_source_v2(org_slug: str, buildkite_api_token=dlt.secrets.value):
         "resource_defaults": {
             "primary_key": "id",
             "write_disposition": "merge",
-            "endpoint": {},
+            "endpoint": {
+                "params": {
+                    "per_page": 100,
+                },
+            },
         },
         "resources": [
             "pipelines",
             {
                 "name": "builds",
                 "endpoint": {
-                    "path": "pipelines/{resources.pipelines.slug}/builds",
+                    "path": "pipelines/{pipeline_slug}/builds",
                     "params": {
                         "include_retried_jobs": "true",
-                        "created_from": "2025-01-01T00:00:00Z",
+                        "pipeline_slug": {
+                            "type": "resolve",
+                            "resource": "pipelines",
+                            "field": "slug",
+                        },
+                        "finished_from": {
+                            "type": "incremental",
+                            "cursor_path": "finished_at",
+                            "initial_value": "2025-01-01T00:00:00Z",
+                        },
                     },
                 },
             },
