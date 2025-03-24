@@ -9,6 +9,6 @@ aws_replication_schedule = dg.build_schedule_from_partitioned_job(
         name="aws_replication_job",
         partitions_def=org_daily_partition_def,
         selection=[workspace_data_json],
-        tags={"project": "aws-workspace-replication"},
+        tags={"project": "aws-workspace-replication", "dagster/max_retries": 1},
     ),
 )
