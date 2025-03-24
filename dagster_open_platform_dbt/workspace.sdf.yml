@@ -28,6 +28,7 @@ workspace:
     - pattern: pylon.*.*
     - pattern: mixpanel.*.*
     - pattern: gong.*.*
+    - pattern: product_operations.*.*
     targets:
     - pattern: purina.*.*
       rename-as: sandbox.${1}.${2}
