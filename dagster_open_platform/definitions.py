@@ -1,12 +1,15 @@
 import warnings
 
+from dagster import Definitions
 from dagster._utils.warnings import BetaWarning, PreviewWarning
 
 warnings.filterwarnings("ignore", category=PreviewWarning)
 warnings.filterwarnings("ignore", category=BetaWarning)
 
+import dagster_components as dg_components
 import dagster_open_platform.aws.definitions as aws_definitions
 import dagster_open_platform.dbt.definitions as dbt_definitions
+import dagster_open_platform.defs
 import dagster_open_platform.dlt.definitions as dlt_definitions
 import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.gong.definitions as gong_definitions
@@ -21,7 +24,6 @@ import dagster_open_platform.sling_custom.definitions as sling_custom_definition
 import dagster_open_platform.snowflake.definitions as snowflake_definitions
 import dagster_open_platform.statsig.definitions as statsig_definitions
 import dagster_open_platform.stripe.definitions as stripe_definitions
-from dagster import Definitions
 
 defs = Definitions.merge(
     aws_definitions.defs,
@@ -40,4 +42,5 @@ defs = Definitions.merge(
     snowflake_definitions.defs,
     statsig_definitions.defs,
     stripe_definitions.defs,
+    dg_components.load_defs(dagster_open_platform.defs),
 )

@@ -1,21 +1,24 @@
 uv_install:
 	pip install uv
 
-test_install:
-	uv pip install -e ".[tests]"
+uv_venv:
+	if [ ! -d ".venv" ]; then uv venv; fi
 
-dev_install: uv_install
-	uv pip install -e ".[dev]"
-	cd dagster_open_platform_dbt && dbt deps && cd ..
+test_install: uv_venv
+	uv sync --extra tests
 
-test_local: test_install
-	pytest dagster_open_platform_tests -m "not env_bk"  --disable-warnings
+dev_install: uv_install uv_venv
+	uv sync --extra dev --prerelease=allow
+	cd dagster_open_platform_dbt && uv run dbt deps && cd ..
 
-manifest:
-	cd dagster_open_platform_dbt && dbt parse && cd ..
+test: test_install
+	uv run pytest dagster_open_platform_tests -m "not env_bk"  --disable-warnings
+
+manifest: uv_venv
+	cd dagster_open_platform_dbt && uv run dbt parse && cd ..
 
 dev:
-	dagster dev
+	uv run dg dev
 
 lint:
 	sqlfluff lint ./dagster_open_platform_dbt/models --disable-progress-bar --processes 4
@@ -28,6 +31,3 @@ install_ruff:
 
 ruff:
 	$(MAKE) -C ../.. ruff
-
-update_to_latest_dagster:
-	pip freeze | grep '^dagster' | cut -d '=' -f 1 | tr '\n' ' ' | xargs uv pip install --upgrade
