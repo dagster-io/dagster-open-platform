@@ -74,6 +74,9 @@ directory_type = "project"
 root_module = "dagster_open_platform"
 defs_module = "dagster_open_platform.defs"
 
+[project.entry-points]
+"dagster_dg.library" = { example = "dagster_open_platform.lib"}
+
 # ########################
 # ##### SQLFLUFF
 # ########################

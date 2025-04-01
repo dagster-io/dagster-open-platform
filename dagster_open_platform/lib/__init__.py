@@ -1,0 +1,1 @@
+from dagster_open_platform.lib.simple_asset import SimpleAssetComponent as SimpleAssetComponent
