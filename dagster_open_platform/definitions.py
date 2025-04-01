@@ -15,7 +15,6 @@ import dagster_open_platform.fivetran.definitions as fivetran_definitions
 import dagster_open_platform.gong.definitions as gong_definitions
 import dagster_open_platform.hightouch.definitions as hightouch_definitions
 import dagster_open_platform.pypi.definitions as pypi_definitions
-import dagster_open_platform.quickstart.definitions as quickstart_definitions
 import dagster_open_platform.scout.definitions as scout_definitions
 import dagster_open_platform.segment.definitions as segment_definitions
 import dagster_open_platform.slack.definitions as slack_definitions
@@ -33,7 +32,6 @@ defs = Definitions.merge(
     gong_definitions.defs,
     hightouch_definitions.defs,
     pypi_definitions.defs,
-    quickstart_definitions.defs,
     scout_definitions.defs,
     segment_definitions.defs,
     slack_definitions.defs,
