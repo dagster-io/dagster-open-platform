@@ -1,12 +1,14 @@
+import itertools
 import os
 import sys
 from collections.abc import Iterator
 from pathlib import Path
-from typing import Callable
+from typing import Any, Callable
 
 import pytest
 from dagster import (
     AssetsDefinition,
+    AssetSpec,
     _check as check,
 )
 from dagster._core.definitions.metadata.source_code import (
@@ -61,8 +63,12 @@ def prepare_dop_environment(
 
     with environ(
         {
-            "FIVETRAN_API_SECRET": check.not_none(os.getenv(FIVETRAN_API_SECRET_ENV_VAR)),
-            "FIVETRAN_API_KEY": check.not_none(os.getenv(FIVETRAN_API_KEY_ENV_VAR)),
+            "FIVETRAN_API_SECRET": check.not_none(
+                os.getenv(FIVETRAN_API_SECRET_ENV_VAR), f"{FIVETRAN_API_SECRET_ENV_VAR} is not set"
+            ),
+            "FIVETRAN_API_KEY": check.not_none(
+                os.getenv(FIVETRAN_API_KEY_ENV_VAR), f"{FIVETRAN_API_KEY_ENV_VAR} is not set"
+            ),
             "THINKIFIC_SUBDOMAIN": PLACEHOLDER_ENV_VAR_VALUE,
             "THINKIFIC_API_KEY": PLACEHOLDER_ENV_VAR_VALUE,
             "SOURCES__HUBSPOT__API_KEY": PLACEHOLDER_ENV_VAR_VALUE,
@@ -85,7 +91,7 @@ def prepare_dop_environment(
         yield
 
 
-@pytest.mark.skip(reason="https://dagsterlabs.slack.com/archives/C03DPDM4M0Q/p1721278489574409")
+@pytest.mark.skip(reason="Skipping code references test until components implement them")
 @pytest.mark.env_bk
 @pytest.mark.parametrize("cloud_env", [True, False])
 def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
@@ -99,7 +105,7 @@ def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
             continue
         for key in asset.keys:
             code_references_meta = CodeReferencesMetadataSet.extract(asset.metadata_by_key[key])
-            assert code_references_meta.code_references is not None
+            assert code_references_meta.code_references is not None, f"{key} has no code references"
 
             assert len(code_references_meta.code_references.code_references) > 0
             is_ref = [
@@ -109,3 +115,84 @@ def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
             assert all(
                 is_ref
             ), f"{key} has incorrect code references: {code_references_meta.code_references.code_references}"
+
+
+# We ignore certain metadata keys which are not reliably regenerated in each test run
+IGNORED_METADATA_KEYS = {"dagster_dbt/manifest", "dagster/code_references"}
+IGNORED_METADATA_PREFIXES = {"dagster_dlt"}
+
+
+def _asset_spec_data(asset: AssetSpec) -> dict[str, Any]:
+    """Gets formatted, sorted representation of an asset spec for snapshot testing."""
+    return {
+        "key": asset.key,
+        "deps": sorted(asset.deps, key=lambda x: x.asset_key.to_user_string()),
+        "description": asset.description,
+        "metadata": {
+            k: v
+            for k, v in asset.metadata.items()
+            if k not in IGNORED_METADATA_KEYS
+            and not any(k.startswith(prefix) for prefix in IGNORED_METADATA_PREFIXES)
+        },
+        "group_name": asset.group_name,
+        "owners": asset.owners,
+        "tags": asset.tags,
+    }
+
+
+@pytest.mark.skipif(
+    os.environ.get("DOP_PYTEST_FULL") != "1",
+    reason="Snapshot tests are opt-in using `--run-skipped`",
+)
+@pytest.mark.parametrize("cloud_env", [True])
+def test_assets_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> None:
+    """Ensures that the asset specs are stable across test runs, and don't unexpectedly change.
+
+    To run locally, you will need env vars configured as in the README.
+    """
+    from dagster_open_platform.definitions import defs
+
+    assert len(defs.get_asset_graph().get_all_asset_keys()) > 0
+    assert defs.assets is not None
+
+    # flatten
+    specs = sorted(
+        itertools.chain.from_iterable(
+            [asset] if isinstance(asset, AssetSpec) else asset.specs
+            for asset in defs.assets
+            if isinstance(asset, (AssetsDefinition, AssetSpec))
+        ),
+        key=lambda x: x.key,
+    )
+    # Separately validate that the asset keys are stable across test runs, since this is easier to
+    # reason about than the full spec data.
+    spec_keys = [spec.key for spec in specs]
+    snapshot.assert_match(spec_keys)
+
+    spec_data = [_asset_spec_data(spec) for spec in specs]
+    snapshot.assert_match(spec_data)
+
+
+@pytest.mark.skipif(
+    os.environ.get("DOP_PYTEST_FULL") != "1",
+    reason="Snapshot tests are opt-in using `--run-skipped`",
+)
+@pytest.mark.parametrize("cloud_env", [True])
+def test_jobs_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> None:
+    """Ensures that job list and job asset selection are stable across test runs, and don't
+    unexpectedly change.
+    """
+    from dagster_open_platform.definitions import defs
+
+    resolved_defs = defs.get_repository_def()
+
+    job_data = [
+        {
+            "name": job.name,
+            "asset_selection": job.asset_layer.asset_graph.get_all_asset_keys()
+            if job.asset_layer
+            else None,
+        }
+        for job in resolved_defs.get_all_jobs()
+    ]
+    snapshot.assert_match(job_data)

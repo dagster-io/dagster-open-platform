@@ -53,7 +53,8 @@ dev = [
 
 tests = [
     "pytest",
-    "responses"
+    "responses",
+    "syrupy"
 ]
 
 [tool.setuptools.packages.find]

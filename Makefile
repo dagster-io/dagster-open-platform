@@ -14,6 +14,12 @@ dev_install: uv_install uv_venv
 test: test_install
 	uv run pytest dagster_open_platform_tests -m "not env_bk"  --disable-warnings
 
+test_full: test_install
+	@DOP_PYTEST_FULL=1 uv run pytest dagster_open_platform_tests -m "not env_bk"  --disable-warnings
+
+update_snapshot: test_install
+	uv run pytest --snapshot-update dagster_open_platform_tests -k "snapshot" --disable-warnings
+
 manifest: uv_venv
 	cd dagster_open_platform_dbt && uv run dbt parse && cd ..
 
