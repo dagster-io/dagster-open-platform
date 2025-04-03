@@ -1,8 +1,4 @@
 from dagster import Definitions
-from dagster_open_platform.snowflake.assets.common_room import (
-    common_room_aws_external_table,
-    common_room_aws_stage,
-)
 from dagster_open_platform.snowflake.assets.oss_telemetry import (
     oss_telemetry_aws_external_table,
     oss_telemetry_aws_stage,
@@ -33,8 +29,8 @@ defs = Definitions(
             user_roles_aws_external_table,
             oss_telemetry_aws_stage,
             oss_telemetry_aws_external_table,
-            common_room_aws_stage,
-            common_room_aws_external_table,
+            # common_room_aws_stage,
+            # common_room_aws_external_table,
         ]
     ),
     schedules=[database_clone_cleanup_schedule],

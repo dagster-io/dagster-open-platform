@@ -4,10 +4,12 @@ from dagster_snowflake import SnowflakeResource
 
 log = dg.get_dagster_logger()
 
+objects = ["activities", "community_members", "groups"]
+
 
 @dg.multi_asset(
     group_name="aws_stages",
-    description="Snowflake stage for Common Room export data.",
+    description="Snowflake stages for Common Room export data.",
     specs=[
         dg.AssetSpec(
             key=[
@@ -15,9 +17,9 @@ log = dg.get_dagster_logger()
                 "elementl",
                 f"stage_common_room_{_object}",
             ],
-            automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+            # automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
         )
-        for _object in ["activities", "community_members", "groups"]
+        for _object in objects
     ],
 )
 def common_room_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource):
@@ -69,9 +71,9 @@ def common_room_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: Snowf
                 f"ext_common_room_{_object}",
             ],
             deps=[["aws", "elementl", f"stage_common_room_{_object}"]],
-            automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+            # automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
         )
-        for _object in ["activities", "community_members", "groups"]
+        for _object in objects
     ],
 )
 def common_room_aws_external_table(
