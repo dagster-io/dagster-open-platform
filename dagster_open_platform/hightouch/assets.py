@@ -29,16 +29,20 @@ def hightouch_org_activity_monthly(
     )
 
 
-org_info = get_asset_key_for_model([dbt_non_partitioned_models], "org_info")
+sync_salesforce_account = get_asset_key_for_model(
+    [dbt_non_partitioned_models], "sync_salesforce_account"
+)
 
 
 @asset(
-    deps=[org_info],
+    deps=[sync_salesforce_account],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
 )
-def hightouch_org_info(hightouch: ConfigurableHightouchResource) -> MaterializeResult:
-    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_ORG_INFO_SYNC_ID", ""))
+def hightouch_sync_salesforce_account(
+    hightouch: ConfigurableHightouchResource,
+) -> MaterializeResult:
+    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_SYNC_SALESFORCE_ACCOUNT_SYNC_ID", ""))
     return MaterializeResult(
         metadata={
             "sync_details": result.sync_details,
