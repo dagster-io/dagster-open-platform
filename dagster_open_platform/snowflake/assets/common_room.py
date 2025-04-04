@@ -59,6 +59,10 @@ def common_room_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: Snowf
                 continue
             cur.execute(f"ALTER STAGE {stage_name} REFRESH;")
             log.info(f"Stage {stage_name} refreshed")
+            yield dg.Output(
+                None,
+                output_name=f"{key.path[0]}__{key.path[1]}__{key.path[2]}",
+            )
 
 
 @dg.multi_asset(
@@ -119,3 +123,7 @@ def common_room_aws_external_table(
                 log.info(f"Created external table {table_name}")
             cur.execute(f"ALTER EXTERNAL TABLE {table_name} REFRESH;")
             log.info(f"Refreshed external table {table_name}")
+            yield dg.Output(
+                None,
+                output_name=f"{key.path[0]}__{key.path[1]}__{key.path[2]}",
+            )
