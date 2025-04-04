@@ -10,6 +10,7 @@ objects = ["activities", "community_members", "groups"]
 @dg.multi_asset(
     group_name="aws_stages",
     description="Snowflake stages for Common Room export data.",
+    can_subset=True,
     specs=[
         dg.AssetSpec(
             key=[
@@ -17,7 +18,7 @@ objects = ["activities", "community_members", "groups"]
                 "elementl",
                 f"stage_common_room_{_object}",
             ],
-            # automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+            automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
         )
         for _object in objects
     ],
@@ -63,6 +64,7 @@ def common_room_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: Snowf
 @dg.multi_asset(
     group_name="aws_external_tables",
     description="Snowflake external table for Common Room export data.",
+    can_subset=True,
     specs=[
         dg.AssetSpec(
             key=[
@@ -71,7 +73,7 @@ def common_room_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: Snowf
                 f"ext_common_room_{_object}",
             ],
             deps=[["aws", "elementl", f"stage_common_room_{_object}"]],
-            # automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+            automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
         )
         for _object in objects
     ],
