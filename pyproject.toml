@@ -54,7 +54,8 @@ dev = [
 tests = [
     "pytest",
     "responses",
-    "syrupy"
+    "syrupy",
+    "buildkite-test-collector",
 ]
 
 [tool.setuptools.packages.find]
