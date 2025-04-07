@@ -39,3 +39,10 @@ run-local-read-prod:
 	mv target prod-target
 	dbt run --select $(SELECT) --defer --state prod-target
 	rm -rf prod-target
+
+build-prod-manifest:
+	dbt parse --target sdf --target-path target_prod
+
+update-dbt-project:
+	git pull
+	make build-prod-manifest
