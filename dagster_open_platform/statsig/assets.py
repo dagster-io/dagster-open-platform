@@ -1,5 +1,4 @@
 from collections import defaultdict
-from datetime import datetime
 
 import dagster as dg
 import pandas as pd
@@ -64,8 +63,8 @@ def user_activity_metrics(
     statsig: StatsigResource,
 ):
     _, end_timestamp = (
-        int(datetime.strptime(context.partition_key_range.start, "%Y-%m-%d-%H:%M").timestamp()),
-        int(datetime.strptime(context.partition_key_range.end, "%Y-%m-%d-%H:%M").timestamp()),
+        int(context.partition_time_window.start.timestamp()),
+        int(context.partition_time_window.end.timestamp()),
     )
 
     database = get_database_for_environment()
@@ -79,6 +78,7 @@ def user_activity_metrics(
             f"SELECT * FROM {qualified_name} WHERE DS = DATE('{context.partition_key_range.start}', 'YYYY-MM-DD-HH:MI')"
         )
         for batch in cur.fetch_pandas_batches():
+            batch.fillna(0, inplace=True)
             result = statsig.write_events(
                 [
                     _convert_user_activity_record_to_statsig_event(record, end_timestamp)
@@ -92,7 +92,7 @@ def user_activity_metrics(
 def _convert_org_performance_record_to_statsig_event(record: dict, timestamp: int) -> StatsigEvent:
     user = StatsigUser(
         custom_ids={
-            "organization_id": record["organization_id"],
+            "organization_id": record["ORGANIZATION_ID"],
         },
     )
     return StatsigEvent(
@@ -128,9 +128,10 @@ def org_performance_metrics(
         "response_size": "sum:dagster_cloud.request_cost.response_size{*} by {organization}.rollup(sum, daily, 12am)",
     }
     start_timestamp, end_timestamp = (
-        int(datetime.strptime(context.partition_key_range.start, "%Y-%m-%d-%H:%M").timestamp()),
-        int(datetime.strptime(context.partition_key_range.end, "%Y-%m-%d-%H:%M").timestamp()),
+        int(context.partition_time_window.start.timestamp()),
+        int(context.partition_time_window.end.timestamp()),
     )
+
     all_metrics = defaultdict(dict)
     for name, query in metrics.items():
         metric_per_org = datadog.query_metrics_for_last_value(

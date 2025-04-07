@@ -11,7 +11,7 @@ statsig_upload_job = dg.define_asset_job(
 
 @dg.schedule(cron_schedule="0 1 * * *", job=statsig_upload_job)
 def statsig_upload_schedule():
-    most_recent_partition = statsig_upload_job.get_last_partition_key()
+    most_recent_partition = insights_partition.get_last_partition_key()
     yield dg.RunRequest(
         partition_key=str(most_recent_partition), run_key=str(most_recent_partition)
     )
