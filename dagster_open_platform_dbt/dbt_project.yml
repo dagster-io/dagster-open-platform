@@ -30,12 +30,6 @@ models:
         +materialized: view
       mart:
         +materialized: table
-      cloud_reporting:
-        +materialized: table
-        +snowflake_warehouse: l_warehouse
-        +meta:
-          dagster:
-            owners: ["ben@dagsterlabs.com", "team:dagster-plus"]
       core:
         +materialized: table
       product:
