@@ -10,7 +10,6 @@ dependencies = [
     "boto3",
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
-    "dagster>=1.10.7",
     "dagster-cloud",
     "dagster-cloud-cli",
     "dagster-webserver",
@@ -18,7 +17,6 @@ dependencies = [
     "dagster-pipes",
     # integrations
     "dagster-aws",
-    "dagster-components",
     "dagster-dbt",
     "dagster-dlt",
     "dagster-fivetran",
@@ -40,6 +38,8 @@ dependencies = [
     "pyyaml",
     "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
     "snowflake-connector-python[secure-local-storage,pandas]",
+    "dagster>=1.10.9",
+    "psutil>=7.0.0",
 ]
 
 [project.optional-dependencies]

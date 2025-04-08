@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from dagster import Definitions
 from dagster._core.definitions.decorators.asset_decorator import asset
 from dagster._core.execution.context.asset_execution_context import AssetExecutionContext
-from dagster_components import Component, ComponentLoadContext, Resolvable
+from dagster.components import Component, ComponentLoadContext, Resolvable
 
 
 @dataclass(frozen=True)

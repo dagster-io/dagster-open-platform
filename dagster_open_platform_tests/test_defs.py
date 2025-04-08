@@ -42,7 +42,7 @@ def prepare_dop_environment(
     PLACEHOLDER_ENV_VAR_VALUE = "x"
     # Empty values because we don't need to run the pipelines, just load them
 
-    from dagster_open_platform.dbt.resources import dbt_resource
+    from dagster_open_platform.defs.dbt.resources import dbt_resource
 
     dbt_resource.cli(["deps"]).wait()
     dbt_resource.cli(["parse"], target_path=Path("target")).wait()

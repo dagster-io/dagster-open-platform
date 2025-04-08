@@ -1,4 +1,4 @@
-from dagster_open_platform.scout.assets import parse_discussion, parse_issue
+from dagster_open_platform.defs.scout.assets import parse_discussion, parse_issue
 
 
 def test_parse_discussion():
