@@ -27,6 +27,6 @@ hightouch_hubspot_syncs_schedule = dg.ScheduleDefinition(
             - dg.AssetSelection.groups("staging_aws").upstream()
         ),
     ),
-    tags={"team": "devrel"},
+    tags={"team": "devrel", "dagster/max_retries": 1},
     cron_schedule="0 * * * *",
 )
