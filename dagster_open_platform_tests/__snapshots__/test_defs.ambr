@@ -249,6 +249,48 @@
     AssetKey(
       parts=tuple(
         'aws',
+        'elementl',
+        'ext_common_room_activities',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'aws',
+        'elementl',
+        'ext_common_room_community_members',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'aws',
+        'elementl',
+        'ext_common_room_groups',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'aws',
+        'elementl',
+        'stage_common_room_activities',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'aws',
+        'elementl',
+        'stage_common_room_community_members',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'aws',
+        'elementl',
+        'stage_common_room_groups',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'aws',
         'oss_telemetry',
         'oss_telemetry_prod',
       ),
@@ -263,11 +305,6 @@
     AssetKey(
       parts=tuple(
         'aws_cost_report',
-      ),
-    ),
-    AssetKey(
-      parts=tuple(
-        'dagster_quickstart_validation',
       ),
     ),
     AssetKey(
@@ -377,11 +414,6 @@
     ),
     AssetKey(
       parts=tuple(
-        'hightouch_org_info',
-      ),
-    ),
-    AssetKey(
-      parts=tuple(
         'hightouch_sales_cycles',
       ),
     ),
@@ -398,6 +430,11 @@
     AssetKey(
       parts=tuple(
         'hightouch_sync_hubspot_organization',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'hightouch_sync_salesforce_account',
       ),
     ),
     AssetKey(
@@ -432,6 +469,20 @@
         'purina',
         'oss_analytics',
         'dagster_pypi_downloads',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'abm_activity_scoring',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'abm_company_activity',
       ),
     ),
     AssetKey(
@@ -516,6 +567,13 @@
         'sandbox',
         'NICKROACH',
         'asset_groups',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'attributed_conversions',
       ),
     ),
     AssetKey(
@@ -774,6 +832,27 @@
       parts=tuple(
         'sandbox',
         'NICKROACH',
+        'common_room_activities',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'common_room_community_members',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'common_room_groups',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
         'conversion_events',
       ),
     ),
@@ -809,6 +888,13 @@
       parts=tuple(
         'sandbox',
         'NICKROACH',
+        'dagster_user_roles',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
         'deployment_insights_usage_daily',
       ),
     ),
@@ -824,6 +910,13 @@
         'sandbox',
         'NICKROACH',
         'dim_accounts_by_day',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'dim_contacts',
       ),
     ),
     AssetKey(
@@ -921,6 +1014,20 @@
       parts=tuple(
         'sandbox',
         'NICKROACH',
+        'fct_gong_meeting_participants',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'fct_gong_meetings',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
         'fct_outreach_mailings',
       ),
     ),
@@ -963,6 +1070,13 @@
       parts=tuple(
         'sandbox',
         'NICKROACH',
+        'first_touch',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
         'first_user_web_session',
       ),
     ),
@@ -992,6 +1106,20 @@
         'sandbox',
         'NICKROACH',
         'gong_emails',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'gong_meetings',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'gong_users',
       ),
     ),
     AssetKey(
@@ -1264,6 +1392,13 @@
       parts=tuple(
         'sandbox',
         'NICKROACH',
+        'opportunity_fiscal_qtr_start_snapshots',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
         'opportunity_snapshots',
       ),
     ),
@@ -1510,6 +1645,13 @@
         'sandbox',
         'NICKROACH',
         'salesforce_events',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'salesforce_leaderfeeder_sessions',
       ),
     ),
     AssetKey(
@@ -1776,6 +1918,27 @@
         'sandbox',
         'NICKROACH',
         'stg_aws__code_location_sensors',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'stg_aws__common_room_activities',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'stg_aws__common_room_community_members',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'stg_aws__common_room_groups',
       ),
     ),
     AssetKey(
@@ -2272,7 +2435,21 @@
       parts=tuple(
         'sandbox',
         'NICKROACH',
+        'stg_salesforce__leadfeederapp_website_visit_c',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
         'stg_salesforce__opportunities',
+      ),
+    ),
+    AssetKey(
+      parts=tuple(
+        'sandbox',
+        'NICKROACH',
+        'stg_salesforce__opportunity_history',
       ),
     ),
     AssetKey(
@@ -2671,7 +2848,7 @@
       parts=tuple(
         'sandbox',
         'NICKROACH',
-        'sync_salesforce_organization',
+        'sync_salesforce_account',
       ),
     ),
     AssetKey(
@@ -4277,6 +4454,150 @@
     }),
     dict({
       'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'aws',
+              'elementl',
+              'stage_common_room_activities',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': 'Snowflake external table for Common Room export data.',
+      'group_name': 'aws_external_tables',
+      'key': AssetKey(
+        parts=tuple(
+          'aws',
+          'elementl',
+          'ext_common_room_activities',
+        ),
+      ),
+      'metadata': dict({
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'aws',
+              'elementl',
+              'stage_common_room_community_members',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': 'Snowflake external table for Common Room export data.',
+      'group_name': 'aws_external_tables',
+      'key': AssetKey(
+        parts=tuple(
+          'aws',
+          'elementl',
+          'ext_common_room_community_members',
+        ),
+      ),
+      'metadata': dict({
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'aws',
+              'elementl',
+              'stage_common_room_groups',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': 'Snowflake external table for Common Room export data.',
+      'group_name': 'aws_external_tables',
+      'key': AssetKey(
+        parts=tuple(
+          'aws',
+          'elementl',
+          'ext_common_room_groups',
+        ),
+      ),
+      'metadata': dict({
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+      ]),
+      'description': 'Snowflake stages for Common Room export data.',
+      'group_name': 'aws_stages',
+      'key': AssetKey(
+        parts=tuple(
+          'aws',
+          'elementl',
+          'stage_common_room_activities',
+        ),
+      ),
+      'metadata': dict({
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+      ]),
+      'description': 'Snowflake stages for Common Room export data.',
+      'group_name': 'aws_stages',
+      'key': AssetKey(
+        parts=tuple(
+          'aws',
+          'elementl',
+          'stage_common_room_community_members',
+        ),
+      ),
+      'metadata': dict({
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+      ]),
+      'description': 'Snowflake stages for Common Room export data.',
+      'group_name': 'aws_stages',
+      'key': AssetKey(
+        parts=tuple(
+          'aws',
+          'elementl',
+          'stage_common_room_groups',
+        ),
+      ),
+      'metadata': dict({
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
       ]),
       'description': 'Snowflake stage for open source telemetry data.',
       'group_name': 'aws_stages',
@@ -4334,23 +4655,6 @@
       'key': AssetKey(
         parts=tuple(
           'aws_cost_report',
-        ),
-      ),
-      'metadata': dict({
-      }),
-      'owners': list([
-      ]),
-      'tags': dict({
-      }),
-    }),
-    dict({
-      'deps': list([
-      ]),
-      'description': None,
-      'group_name': 'validation',
-      'key': AssetKey(
-        parts=tuple(
-          'dagster_quickstart_validation',
         ),
       ),
       'metadata': dict({
@@ -4971,35 +5275,6 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
-              'org_info',
-            ),
-          ),
-          partition_mapping=None,
-        ),
-      ]),
-      'description': None,
-      'group_name': 'hightouch_syncs',
-      'key': AssetKey(
-        parts=tuple(
-          'hightouch_org_info',
-        ),
-      ),
-      'metadata': dict({
-      }),
-      'owners': list([
-      ]),
-      'tags': dict({
-        'dagster/kind/hightouch': '',
-        'dagster/kind/salesforce': '',
-      }),
-    }),
-    dict({
-      'deps': list([
-        AssetDep(
-          asset_key=AssetKey(
-            parts=tuple(
-              'sandbox',
-              'NICKROACH',
               'sales_cycles',
             ),
           ),
@@ -5098,6 +5373,35 @@
       'key': AssetKey(
         parts=tuple(
           'hightouch_sync_hubspot_organization',
+        ),
+      ),
+      'metadata': dict({
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+        'dagster/kind/hightouch': '',
+        'dagster/kind/salesforce': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'sync_salesforce_account',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': None,
+      'group_name': 'hightouch_syncs',
+      'key': AssetKey(
+        parts=tuple(
+          'hightouch_sync_salesforce_account',
         ),
       ),
       'metadata': dict({
@@ -5299,6 +5603,306 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'abm_company_activity',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'abm_contact_activity',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'event_score_mapping',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'hubspot_contacts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Unions contact and company level activities into one table and adds scores
+        
+        #### Raw SQL:
+        ```sql
+            with company_activity as (
+        
+                select * from {{ ref('abm_company_activity') }}
+            ),
+        
+            contact_activity as (
+        
+                select * from {{ ref('abm_contact_activity') }}
+            ),
+        
+            contacts as (
+        
+                select * from {{ ref('hubspot_contacts') }}
+            ),
+        
+            unioned as (
+        
+                select *, 'company' as activity_level_source from company_activity
+                union
+                select *, 'contact' as activity_level_source from contact_activity
+            ),
+        
+            activity_with_detail as (
+        
+                select
+                    a.hubspot_contact_id,
+                    a.hubspot_company_id,
+                    a.salesforce_contact_id,
+                    a.salesforce_account_id,
+                    a.event_source,
+                    a.event_timestamp,
+                    a.event_name,
+                    regexp_replace(lower(a.event_name), '[^a-zA-Z0-9]+', '-') as event_slug,
+                    a.event_attributes,
+                    case
+                        when event_slug like ('%loaded-a-page%') then a.event_attributes:path::varchar
+                        when event_slug = 'hubspot-form-submission' then a.event_attributes:hubspot_form_category::varchar
+                        else 'NONE'
+                    end as event_detail,
+                    a.activity_level_source
+                from unioned a
+                    left join contacts c on a.hubspot_contact_id = c.contact_id
+                qualify row_number() over (partition by c.email, a.salesforce_account_id, a.event_name, a.event_attributes, a.event_timestamp order by c.merged_object_ids nulls last) = 1
+            ),
+        
+            activity_with_scores as (
+        
+                select
+                    a.*,
+                    score / pow(2, datediff('day', event_timestamp, current_date) / 30) as event_score
+                from activity_with_detail a
+                    left join {{ ref('event_score_mapping') }} esm on a.event_slug = esm.event_slug and a.event_detail like esm.event_detail -- allow partial matching on paths, e.g. /vs%
+            ),
+        
+            final as (
+        
+                select
+                    * replace (
+                        case
+                            when event_score is null and event_slug like ('%loaded-a-page%') then 2 / pow(2, datediff('day', event_timestamp, current_date) / 30)
+                            when event_score is null and event_slug = 'hubspot-form-submission' then 4 / pow(2, datediff('day', event_timestamp, current_date) / 30)
+                            else event_score
+                        end as event_score
+                    )
+                from activity_with_scores
+            )
+        
+            select * from final
+        ```
+      ''',
+      'group_name': 'mart_gtm',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'abm_activity_scoring',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='event_score',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.NICKROACH.abm_activity_scoring',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.abm_activity_scoring',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/ABM_ACTIVITY_SCORING',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'hubspot_contacts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'salesforce_leaderfeeder_sessions',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Describes activity for a hubspot company across channels. Data is only included in this model if we do not have contact level information
+        
+        #### Raw SQL:
+        ```sql
+            --- This model is meant to handle situations where we cannot get data at the contact level, but can identify at the account level
+            --- This could be a part of the abm_contact_activity model, but it is already a large model so this is being pulled out
+        
+        
+            with oss_usage as (
+        
+                select * from {{ ref('salesforce_leaderfeeder_sessions') }}  
+                where is_oss_usage = true
+                and account_id is not null
+            ),
+        
+            hubspot_contacts as (
+        
+                select * from {{ ref('hubspot_contacts') }}
+            ),
+        
+            first_oss_usage as (
+        
+                select 
+                    case 
+                        when row_number() over (partition by account_id, date(visit_at) order by visit_at) = 1 then true 
+                            else false
+                            end as is_first_oss_usage_of_the_day,
+                    case
+                        when row_number() over (partition by account_id order by visit_at) = 1 then true 
+                            else false
+                            end as is_first_ever_oss_usage,
+                    *
+                from oss_usage
+            ),
+        
+            first_daily_oss_visit as (
+        
+                select
+                    null as hubspot_contact_id,
+                    company_id as hubspot_company_id,
+                    null as salesforce_contact_id,
+                    salesforce_account_id,
+                    'Leadfeeder' as event_source,
+                    visit_at as event_timestamp,
+                    'first_daily_oss_visit' as event_name,
+                    cast(null as variant) as event_attributes
+                from first_oss_usage u
+                    inner join hubspot_contacts c on u.account_id = c.salesforce_account_id
+                where is_first_oss_usage_of_the_day = true
+                group by all
+            ),
+        
+            first_ever_oss_visit as (
+        
+                select
+                    null as hubspot_contact_id,
+                    company_id as hubspot_company_id,
+                    null as salesforce_contact_id,
+                    salesforce_account_id,
+                    'Leadfeeder' as event_source,
+                    visit_at as event_timestamp,
+                    'first_ever_oss_visit' as event_name,
+                    cast(null as variant) as event_attributes
+                from first_oss_usage u
+                    inner join hubspot_contacts c on u.account_id = c.salesforce_account_id
+                where is_first_ever_oss_usage = true
+                group by all
+            ),
+        
+            unioned as (
+        
+                select * from first_ever_oss_visit
+                union 
+                select * from first_daily_oss_visit
+            )
+        
+            select * from unioned
+        ```
+      ''',
+      'group_name': 'mart_gtm',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'abm_company_activity',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.abm_company_activity',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.abm_company_activity',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/ABM_COMPANY_ACTIVITY',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'abm_contact_intent_scores',
             ),
           ),
@@ -5375,6 +5979,16 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'common_room_activities',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'dim_users',
             ),
           ),
@@ -5405,16 +6019,6 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
-              'event_score_mapping',
-            ),
-          ),
-          partition_mapping=None,
-        ),
-        AssetDep(
-          asset_key=AssetKey(
-            parts=tuple(
-              'sandbox',
-              'NICKROACH',
               'fct_outreach_mailings',
             ),
           ),
@@ -5436,6 +6040,16 @@
               'sandbox',
               'NICKROACH',
               'fct_segment_web_page_visits',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'fct_zoom_webinar_registration',
             ),
           ),
           partition_mapping=None,
@@ -5613,6 +6227,45 @@
                 where c.contact_id is not null
             ),
         
+            webinar_registration as (
+        
+                select
+                    c.contact_id as hubspot_contact_id,
+                    c.company_id as hubspot_company_id,
+                    c.salesforce_contact_id,
+                    c.salesforce_account_id,
+                    'Zoom' as event_source,
+                    e.signed_up_at as event_timestamp,
+                    'webinar-sign-up' as event_name,
+                    object_construct(
+                        'webinar_name', webinar_name::variant
+                    ) as event_attributes
+                from {{ ref('fct_zoom_webinar_registration') }} e 
+                    inner join {{ ref('hubspot_contacts') }} c on e.email = c.email
+                where c.contact_id is not null
+            ),
+        
+            webinar_attended as (
+        
+                select
+                    c.contact_id as hubspot_contact_id,
+                    c.company_id as hubspot_company_id,
+                    c.salesforce_contact_id,
+                    c.salesforce_account_id,
+                    'Zoom' as event_source,
+                    e.initial_join_at as event_timestamp,
+                    'webinar-attended' as event_name,
+                    object_construct(
+                        'webinar_name', webinar_name::variant
+                    ) as event_attributes
+                from {{ ref('fct_zoom_webinar_registration') }} e 
+                    inner join {{ ref('hubspot_contacts') }} c on e.email = c.email
+                where c.contact_id is not null
+                --- only those who attended for more than a minute
+                and initial_join_at is not null
+                and total_attendance_time >= 60
+            ),
+        
             form_submissions as (
                 select distinct
                     c.contact_id as hubspot_contact_id,
@@ -5641,7 +6294,12 @@
                 from {{ ref('hubspot_contact_form_submissions') }} fs
                     inner join {{ ref('hubspot_contacts') }} c
                         on c.contact_id = fs.contact_id
-                where fs.form_category != 'Trial Sign-Up'
+                where 
+                    fs.form_category != 'Trial Sign-Up'
+                    --- we will be getting this info from Zoom.
+                    and fs.form_category != 'Webinar'
+                    --- should not be scoring password resets even though there are not many
+                    and lower(fs.form_category) not like ('%password_reset_request%')
             ),
         
             trial_starts as (
@@ -5700,6 +6358,35 @@
                 where uo.organization_user_rank > 1
             ),
         
+            -- Multiple emails can be associated with a single contact, here we explode these records
+            -- for every email in the "emails" array
+            common_room_activities_explode_email as (
+        
+                select
+                    value::varchar as email,
+                    -- Split the activity type from Common Room as it is PascalCase, do not split company names
+                    ARRAY_TO_STRING(REGEXP_SUBSTR_ALL(ACTIVITY_TYPE, 'LinkedIn|GitHub|YouTube|[A-Z][a-z]*'), ' ') as activity_type,
+                    service_name,
+                    activity_timestamp
+                from {{ ref('common_room_activities') }},
+                    lateral flatten(emails)
+            ),
+        
+            common_room_activities as (
+                select
+                    c.contact_id as hubspot_contact_id,
+                    c.company_id as hubspot_company_id,
+                    c.salesforce_contact_id,
+                    c.salesforce_account_id,
+                    cra.service_name || ' - Common Room' as event_source,
+                    cra.activity_timestamp as event_timestamp,
+                    cra.activity_type as event_name,
+                    null as event_attributes
+                from common_room_activities_explode_email cra
+                    inner join {{ ref('hubspot_contacts') }} c
+                        on cra.email = c.email
+            ),
+        
             unioned_activity as (
         
                 select * from education_users
@@ -5709,6 +6396,10 @@
                 select * from education_completions
                 union
                 select * from marketing_website_activity
+                union
+                select * from webinar_attended
+                union
+                select * from webinar_registration
                 union
                 select * from email_sent
                 union
@@ -5723,54 +6414,11 @@
                 select * from users_created
                 union
                 select * from user_org_adds
-            ),
-        
-            activity_with_detail as (
-        
-                select
-                    a.hubspot_contact_id,
-                    a.hubspot_company_id,
-                    a.salesforce_contact_id,
-                    a.salesforce_account_id,
-                    a.event_source,
-                    a.event_timestamp,
-                    a.event_name,
-                    regexp_replace(lower(a.event_name), '[^a-zA-Z0-9]+', '-') as event_slug,
-                    a.event_attributes,
-                    case
-                        when event_slug like ('%loaded-a-page%') then a.event_attributes:path::varchar
-                        when event_slug = 'hubspot-form-submission' then a.event_attributes:hubspot_form_category::varchar
-                        else 'NONE'
-                    end as event_detail
-                from unioned_activity a
-                    left join {{ ref('hubspot_contacts') }} c on a.hubspot_contact_id = c.contact_id
-                qualify row_number() over (partition by c.email, a.event_name, a.event_attributes, a.event_timestamp order by c.merged_object_ids nulls last) = 1
-            ),
-        
-            activity_with_scores as (
-        
-                select
-                    a.*,
-                    score / pow(2, datediff('day', event_timestamp, current_date) / 30) as event_score
-                from activity_with_detail a
-                    left join {{ ref('event_score_mapping') }} esm on a.event_slug = esm.event_slug and a.event_detail like esm.event_detail -- allow partial matching on paths, e.g. /vs%
-        
-            ),
-        
-            final as (
-        
-                select
-                    * replace (
-                        case
-                            when event_score is null and event_slug like ('%loaded-a-page%') then 2 / pow(2, datediff('day', event_timestamp, current_date) / 30)
-                            when event_score is null and event_slug = 'hubspot-form-submission' then 4 / pow(2, datediff('day', event_timestamp, current_date) / 30)
-                            else event_score
-                        end as event_score
-                    )
-                from activity_with_scores
+                union
+                select * from common_room_activities
             )
         
-            select * from final
+            select * from unioned_activity
         ```
       ''',
       'group_name': 'mart_gtm',
@@ -5783,27 +6431,6 @@
       ),
       'metadata': dict({
         'dagster-dbt/materialization_type': 'table',
-        'dagster/column_schema': TableSchema(
-          columns=list([
-            TableColumn(
-              constraints=TableColumnConstraints(
-                nullable=True,
-                other=list([
-                ]),
-                unique=False,
-              ),
-              description='',
-              name='event_score',
-              tags=dict({
-              }),
-              type='?',
-            ),
-          ]),
-          constraints=TableConstraints(
-            other=list([
-            ]),
-          ),
-        ),
         'dagster/table_name': 'sandbox.NICKROACH.abm_contact_activity',
         'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
           settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
@@ -5830,7 +6457,7 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
-              'abm_contact_activity',
+              'abm_activity_scoring',
             ),
           ),
           partition_mapping=None,
@@ -5845,7 +6472,7 @@
                 hubspot_contact_id,
                 hubspot_company_id,
                 sum(event_score) as abm_score
-            from {{ ref('abm_contact_activity') }}
+            from {{ ref('abm_activity_scoring') }}
             group by all
         ```
       ''',
@@ -5859,27 +6486,6 @@
       ),
       'metadata': dict({
         'dagster-dbt/materialization_type': 'table',
-        'dagster/column_schema': TableSchema(
-          columns=list([
-            TableColumn(
-              constraints=TableColumnConstraints(
-                nullable=True,
-                other=list([
-                ]),
-                unique=False,
-              ),
-              description='',
-              name='hubspot_contact_id',
-              tags=dict({
-              }),
-              type='?',
-            ),
-          ]),
-          constraints=TableConstraints(
-            other=list([
-            ]),
-          ),
-        ),
         'dagster/table_name': 'sandbox.NICKROACH.abm_contact_intent_scores',
         'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
           settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
@@ -6297,7 +6903,7 @@
                         when 
                             is_target_account = true 
                             then '1. Target with no Marketing Activity'
-                    else 'Non-Target'
+                    else '0. Non-Target'
                     end as abm_status
                 from accounts
             ),
@@ -6313,6 +6919,9 @@
                     acct.intent_score,
                     acct.is_intent_score_greater_than_zero,
                     acct.is_engaged,
+                    acct.has_active_contract,
+                    acct.first_contract_start_date,
+                    acct.last_contract_end_date,
                     acct.organization_id, 
                     acct.hubspot_company_id,
                     acct.stripe_customer_id, 
@@ -6969,6 +7578,188 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.asset_groups',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/ASSET_GROUPS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'dim_organizations',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'dim_users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'first_touch',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'user_organizations',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Final attributed conversion model on first touch sessions
+        
+        #### Raw SQL:
+        ```sql
+            with user_organizations as (
+                select * from {{ ref('user_organizations') }}
+            ),
+        
+            first_touch as (
+                select * from {{ ref('first_touch') }}
+            ),
+        
+            organizations as (
+                select * from {{ ref('dim_organizations') }}
+            ),
+        
+            users as (
+                select * from {{ ref('dim_users') }}
+            ),
+        
+            workspace_creating_user as (
+                select
+        
+                    organization_id,
+                    user_id::varchar as user_id,
+                    relationship_created_at as first_created_at,
+                    row_number() over (partition by organization_id order by relationship_created_at) as rn
+        
+                from user_organizations
+                qualify rn = 1
+            ),
+        
+            first_touch_cats as (
+                select
+        
+                    blended_user_id,
+                    session_id,
+                    session_started_at,
+                    attribution_category
+        
+                from first_touch
+        
+                qualify row_number() over (partition by blended_user_id order by session_started_at asc) = 1
+            ),
+        
+            final as (
+                select
+        
+                    users.user_id,
+                    users.user_name,
+                    users.email,
+                    users.user_title,
+                    users.experience,
+                    users.created_at as user_created_at,
+        
+                    workspace_creating_user.first_created_at as user_workspace_first_created_at,
+        
+                    organizations.organization_id,
+                    organizations.organization_name,
+                    organizations.org_created_at,
+                    organizations.is_active,
+                    organizations.plan_type,
+                    organizations.status as organisation_status,
+                    organizations.last_run_at,
+        
+                    first_touch_cats.session_id,
+                    first_touch_cats.session_started_at,
+                    first_touch_cats.attribution_category
+        
+                from workspace_creating_user
+                inner join first_touch_cats
+                    on
+                        workspace_creating_user.user_id = first_touch_cats.blended_user_id
+                        and workspace_creating_user.first_created_at >= first_touch_cats.session_started_at
+                        and datediff(
+                            'days',
+                            first_touch_cats.session_started_at,
+                            workspace_creating_user.first_created_at
+                        )
+                        <= {{ var('attribution_lookback_days') }}
+                inner join organizations using (organization_id)
+                inner join users using (user_id)
+                where not organizations.is_internal
+            )
+        
+            select * from final
+        ```
+      ''',
+      'group_name': 'mart_marketing',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'attributed_conversions',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='organization_id',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.NICKROACH.attributed_conversions',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.attributed_conversions',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/ATTRIBUTED_CONVERSIONS',
         ),
       }),
       'owners': list([
@@ -10346,6 +11137,159 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'stg_aws__common_room_activities',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        One row per activity tracked by Common Room.
+        
+        #### Raw SQL:
+        ```sql
+            select *
+            from {{ ref('stg_aws__common_room_activities' )}}
+        ```
+      ''',
+      'group_name': 'model_common_room',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'common_room_activities',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.common_room_activities',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.common_room_activities',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/COMMON_ROOM_ACTIVITIES',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_aws__common_room_community_members',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Latest snapshot of Common Room community members data.
+        
+        #### Raw SQL:
+        ```sql
+            select *
+            from {{ ref('stg_aws__common_room_community_members' )}}
+        ```
+      ''',
+      'group_name': 'model_common_room',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'common_room_community_members',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.common_room_community_members',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.common_room_community_members',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/COMMON_ROOM_COMMUNITY_MEMBERS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_aws__common_room_groups',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Latest snapshot of Common Room groups data.
+        
+        #### Raw SQL:
+        ```sql
+            select *
+            from {{ ref('stg_aws__common_room_groups' )}}
+        ```
+      ''',
+      'group_name': 'model_common_room',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'common_room_groups',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.common_room_groups',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.common_room_groups',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/COMMON_ROOM_GROUPS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'cloud_product_users',
             ),
           ),
@@ -10677,6 +11621,16 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'dim_accounts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'dim_organizations',
             ),
           ),
@@ -10688,16 +11642,6 @@
               'sandbox',
               'NICKROACH',
               'fct_runs',
-            ),
-          ),
-          partition_mapping=None,
-        ),
-        AssetDep(
-          asset_key=AssetKey(
-            parts=tuple(
-              'sandbox',
-              'NICKROACH',
-              'salesforce_accounts',
             ),
           ),
           partition_mapping=None,
@@ -10745,7 +11689,7 @@
             ),
         
             sfdc_accounts as (
-                select * from {{ ref('salesforce_accounts') }}
+                select * from {{ ref('dim_accounts') }}
             ),
         
             product_usage as (
@@ -10783,6 +11727,8 @@
                     organizations.organization_name,
                     account_name,
                     account_status,
+                    sfdc_accounts.first_contract_start_date,
+                    sfdc_accounts.last_contract_end_date,
                     contracts.arr,
                     cloud_credits_contracted,
                     cloud_credits as cloud_credits_contracted_with_rollover,
@@ -10864,6 +11810,8 @@
                     subs.cloud_credits_contracted_with_rollover,
                     subs.contract_start_date,
                     subs.contract_end_date,
+                    subs.first_contract_start_date,
+                    subs.last_contract_end_date,
                     subs.contract_term,
                     subs.contract_length as contract_length_days,
                     subs.pricing_model,
@@ -11270,6 +12218,75 @@
     }),
     dict({
       'deps': list([
+      ]),
+      'description': '''
+        Mapping of dagster roles to whether they are paid roles
+        
+        #### Raw SQL:
+        ```sql
+        
+        ```
+      ''',
+      'group_name': 'public',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'dagster_user_roles',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'seed',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='role',
+              tags=dict({
+              }),
+              type='?',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='is_paid',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.NICKROACH.dagster_user_roles',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'seed.dagster_open_platform.dagster_user_roles',
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'seed': '',
+      }),
+    }),
+    dict({
+      'deps': list([
         AssetDep(
           asset_key=AssetKey(
             parts=tuple(
@@ -11369,6 +12386,16 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'salesforce_contracts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'salesforce_opportunities',
             ),
           ),
@@ -11415,6 +12442,11 @@
                 select * from {{ ref('salesforce_opportunities') }}
             ),
         
+            contracts as (
+        
+                select * from {{ ref('salesforce_contracts') }}
+            ),
+        
             account_dates as (    
             
                 select        
@@ -11443,6 +12475,18 @@
                 from opportunities
                 group by account_id
             ),
+        
+            contract_dates as (
+            
+                select
+                    account_id,
+                    min(case when lower(contract_status) = 'activated' then contract_start_date end) as first_contract_start_date,
+                    max(case when lower(contract_status) = 'activated' then contract_end_date end) as last_contract_end_date,
+                    max(is_active_contract) as has_active_contract
+                from contracts
+                group by account_id
+            ),
+        
         
             final as (
         
@@ -11495,12 +12539,16 @@
                     opp_dates.first_sal_date,
                     opp_dates.last_sal_date,
                     opp_dates.first_meeting_held_date,
-                    opp_dates.first_opp_won_date
+                    opp_dates.first_opp_won_date,
+                    contract_dates.first_contract_start_date,
+                    contract_dates.last_contract_end_date,
+                    contract_dates.has_active_contract
                 from salesforce_accounts as acct
                 left join hubspot_companies comp on comp.salesforce_account_id = acct.account_id
                 left join sf_users on acct.owner_id = sf_users.user_id
                 left join account_dates on acct.account_id = account_dates.account_id
                 left join opp_dates on acct.account_id = opp_dates.account_id
+                left join contract_dates on acct.account_id = contract_dates.account_id
             )
         
             select * from final
@@ -11738,6 +12786,120 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.dim_accounts_by_day',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/DIM_ACCOUNTS_BY_DAY',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'salesforce_accounts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'salesforce_contacts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Uses Salesforce Contact as the source of records to list all external contacts
+        
+        #### Raw SQL:
+        ```sql
+            with contacts as (
+        
+                select * from {{ ref('salesforce_contacts') }}
+            ),
+        
+            accounts as (
+        
+                select * from {{ ref('salesforce_accounts') }}
+            ),
+        
+            joined as (
+        
+                select 
+                    contacts.contact_id,
+                    contacts.name,
+                    contacts.account_id,
+                    accounts.account_name,
+                    contacts.first_name,
+                    contacts.last_name,
+                    contacts.email,
+                    contacts.phone,
+                    contacts.title,
+                    contacts.lead_source,
+                    contacts.contact_source,
+                    contacts.traffic_source,
+                    contacts.owner_id,
+                    contacts.status,
+                    contacts.linkedin_url,
+                    contacts.created_date
+                from contacts
+                left join accounts on contacts.account_id = accounts.account_id
+            )
+        
+            select * from joined
+        ```
+      ''',
+      'group_name': 'core',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'dim_contacts',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='contact_id',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.NICKROACH.dim_contacts',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.dim_contacts',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/DIM_CONTACTS',
         ),
       }),
       'owners': list([
@@ -13543,6 +14705,243 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'dim_contacts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'gong_conversation_participants',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'gong_meetings',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        One line per meeting participant using Gong Meeting and Meeting Participant data
+        
+        #### Raw SQL:
+        ```sql
+            with meetings as (
+        
+              select * from {{ ref('gong_meetings') }}
+            ),
+        
+            participants as (
+        
+              select * from {{ ref('gong_conversation_participants') }}
+            ),
+        
+            contacts as (
+        
+              select * from {{ ref('dim_contacts') }}
+            ),
+        
+            joined as (
+        
+              select 
+                meetings.meeting_title,
+                coalesce(participants.name, contacts.name) as attendee_name,
+                participants.email,
+                participants.affiliation,
+                participants.type,
+                participants.invitee_status,
+                participants.internal_role_name,
+                contacts.account_id,
+                contacts.account_name,
+                meetings.start_at,
+                meetings.end_at,
+                meetings.is_canceled,
+                meetings.row_id,
+                meetings.conversation_key,
+                meetings.meeting_event_type,
+                meetings.created_at,
+                meetings.modified_at,
+                meetings.organizer_user_id,
+                meetings.organizer_name,
+                meetings.is_recurring,
+                meetings.is_internal,
+                meetings.is_all_day,
+                meetings.conversation_id,
+                meetings.call_id,
+                meetings.call_conversation_key,
+                meetings.workspace_ids,
+                participants.fields_snapshot,
+                participants.user_id,
+                participants.associated_object_id,
+              from meetings
+              left join participants on meetings.conversation_key = participants.conversation_key
+              left join contacts on participants.associated_object_id = contacts.contact_id
+            )
+        
+            select * from joined
+        ```
+      ''',
+      'group_name': 'core',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'fct_gong_meeting_participants',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.fct_gong_meeting_participants',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.fct_gong_meeting_participants',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/FCT_GONG_MEETING_PARTICIPANTS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'fct_gong_meeting_participants',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        One line per meeting using Gong Meeting with aggregated facts from Meeting Participant data
+        
+        #### Raw SQL:
+        ```sql
+            with source as (
+            
+                select * from {{ ref('fct_gong_meeting_participants') }}
+            ),
+        
+            choose_primary_account as (
+        
+            --- there is the possibility that more than one account is represented on the call, so we try to choose a primary
+                select 
+                    conversation_key, 
+                    account_id,
+                    account_name
+                from source
+                where account_id is not null
+                group by all
+                qualify row_number() over (partition by conversation_key order by count(*) desc) = 1
+            ),
+        
+            final as (
+        
+                select
+                    source.conversation_key,
+                    meeting_title,
+                    organizer_name,
+                    start_at,
+                    end_at,
+                    count(case when affiliation != 'company' then email end) as customer_invite_count,
+                    count(case when affiliation = 'company' then email end) as internal_invite_count,
+                    choose_primary_account.account_id as primary_account_id,
+                    choose_primary_account.account_name as primary_account_name,
+                    is_canceled,
+                    meeting_event_type,
+                    created_at,
+                    modified_at,
+                    organizer_user_id,
+                    is_recurring,
+                    is_internal,
+                    is_all_day,
+                    conversation_id
+                from source
+                left join choose_primary_account on source.conversation_key = choose_primary_account.conversation_key
+                group by all
+            )
+        
+            select * from final
+        ```
+      ''',
+      'group_name': 'core',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'fct_gong_meetings',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='conversation_key',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.NICKROACH.fct_gong_meetings',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.fct_gong_meetings',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/FCT_GONG_MEETINGS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'outreach_accounts',
             ),
           ),
@@ -14964,6 +16363,129 @@
         ),
       ]),
       'description': '''
+        First touch attributed model on sessions
+        
+        #### Raw SQL:
+        ```sql
+            with sessions as (
+                select * from {{ ref('segment_web_sessions') }}
+            ),
+        
+            user_stitching as (
+                select * from {{ ref('segment_cloud_users') }}
+            ),
+        
+            attributed as (
+        
+                select
+        
+                    *,
+                    first_attribution_category as attribution_category
+        
+                from sessions
+            ),
+        
+            final as (
+        
+                select
+        
+                    attributed.*,
+                    coalesce(user_stitching.user_id, attributed.anonymous_id) as blended_user_id
+        
+                from attributed
+                left join user_stitching using (anonymous_id)
+            )
+        
+            select * from final
+        ```
+      ''',
+      'group_name': 'mart_marketing',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'first_touch',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='blended_user_id',
+              tags=dict({
+              }),
+              type='?',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='session_id',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.NICKROACH.first_touch',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.first_touch',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/FIRST_TOUCH',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'segment_cloud_users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'segment_web_sessions',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
         First user web session information for cloud users
         
         #### Raw SQL:
@@ -15305,6 +16827,16 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'gong_users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'stg_gong__conversation_participants',
             ),
           ),
@@ -15321,24 +16853,32 @@
                   select * from {{ ref('stg_gong__conversation_participants') }}
             ),
         
+            users as (
+        
+                  select * from {{ ref('gong_users') }} 
+            ),
+        
             renamed as (
             
               select
-                    row_id, 
-                    conversation_key, 
-                    name, 
-                    email_address, 
-                    phone_number, 
-                    associated_object_type, 
-                    speaker_id, 
-                    mapped_fields_snapshot, 
-                    fields_snapshot, 
-                    affiliation, 
-                    type, 
-                    invitee_status, 
-                    user_id, 
-                    associated_object_id
+                  source.row_id, 
+                  source.conversation_key, 
+                  --- without this coalesce the name field for internal users is "-"
+                  coalesce(users.name, source.name) as name, 
+                  source.email, 
+                  source.phone_number, 
+                  source.associated_object_type, 
+                  source.speaker_id, 
+                  source.mapped_fields_snapshot, 
+                  source.fields_snapshot, 
+                  source.affiliation, 
+                  source.type, 
+                  source.invitee_status, 
+                  source.user_id, 
+                  source.associated_object_id,
+                  users.role_name as internal_role_name
               from source
+              left join users on source.user_id = users.user_id
             )
         
             select * from renamed
@@ -15499,6 +17039,188 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.gong_emails',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/GONG_EMAILS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'gong_users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_gong__meetings',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        One line per meeting tracked by Gong
+        
+        #### Raw SQL:
+        ```sql
+            with source as (
+        
+              select * from {{ ref('stg_gong__meetings') }}
+            ),
+        
+            users as (
+        
+              select * from {{ ref('gong_users') }}
+            ),
+        
+            renamed as (
+          
+              select
+                source.row_id, 
+                source.conversation_key, 
+                source.meeting_title, 
+                source.organizer_user_id, 
+                users.name as organizer_name,
+                source.meeting_event_type, 
+                source.created_at, 
+                source.modified_at, 
+                source.start_at, 
+                source.end_at, 
+                source.is_canceled, 
+                source.is_recurring, 
+                source.is_internal, 
+                source.is_all_day, 
+                source.conversation_id, 
+                source.call_id, 
+                source.call_conversation_key, 
+                source.workspace_ids
+              from source
+              left join users on source.organizer_user_id = users.user_id
+            )
+        
+            select * from renamed
+        ```
+      ''',
+      'group_name': 'model_gong',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'gong_meetings',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.gong_meetings',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.gong_meetings',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/GONG_MEETINGS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'salesforce_users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_gong__users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        One line per internal Gong user
+        
+        #### Raw SQL:
+        ```sql
+            with source as (
+            
+                select * from {{ ref('stg_gong__users') }}
+            ),
+        
+            salesforce_users as (
+        
+                select * from {{ ref('salesforce_users') }}
+            ),
+        
+            ---if a user gets a new manager, a new record is created with the same user_id
+            latest_record as (
+        
+                select 
+                    * 
+                from source
+                qualify row_number() over (partition by user_id order by valid_from_datetime desc) = 1
+            ),
+        
+            joined as (
+                select 
+                    latest_record.*,
+                    salesforce_users.role_name 
+                from latest_record
+                left join salesforce_users on latest_record.email = salesforce_users.email
+            )
+        
+            select * from joined
+        ```
+      ''',
+      'group_name': 'model_gong',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'gong_users',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.gong_users',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.gong_users',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/GONG_USERS',
         ),
       }),
       'owners': list([
@@ -19916,6 +21638,156 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.opportunities_by_day',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/OPPORTUNITIES_BY_DAY',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_salesforce__opportunities',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_salesforce__opportunity_history',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_salesforce__users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'time_spine',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Contains a start of fiscal quarter snapshot of Salesforce Opportunities to see the state of all opportunities at the start of each fiscal quarter.
+        
+        #### Raw SQL:
+        ```sql
+            with date_spine as (
+                select
+                    case
+                        when date_day >= '2025-02-01'
+                            then dateadd('month', 1, date_trunc('quarter', dateadd(month, -1, date_day)))
+                        when date_day between '2024-10-01' and '2025-01-31'
+                            then '2024-10-01'::date
+                        else date_trunc('quarter', dateadd(month, -1, date_day)) end as fiscal_qtr_start
+                from {{ ref('time_spine') }}
+                where date_day <= current_date
+                group by 1
+            ),
+        
+            field_history as (
+                select
+                    date_spine.fiscal_qtr_start,
+                    date(created_date) as created_date,
+                    opportunity_id,
+                    stage_name,
+                    forecast_category,
+                    probability
+                from date_spine
+                join {{ ref('stg_salesforce__opportunity_history') }} as opportunity_history
+                    on date(opportunity_history.created_date) <= date(date_spine.fiscal_qtr_start)
+                    and date(opportunity_history.close_date) >= date(date_spine.fiscal_qtr_start)
+                qualify row_number() over (partition by opportunity_history.opportunity_id, date_spine.fiscal_qtr_start order by created_date desc nulls last) = 1
+            ),
+        
+            opportunity as (
+                select *
+                from {{ ref('stg_salesforce__opportunities') }}
+            ),
+        
+            users as (
+                select *
+                from {{ ref('stg_salesforce__users') }}
+            ),
+        
+            final as (
+            select
+                date_spine.fiscal_qtr_start,
+                opportunity.opportunity_id,
+                opportunity.opportunity_name,
+                opportunity.account_id,
+                opportunity.owner_id,
+                users.name as owner_name,
+                opportunity_type,
+                field_history.forecast_category as forecast_category_at_fiscal_qtr_start,
+                opportunity.forecast_category as current_forecast_category,
+                field_history.stage_name as stage_name_at_fiscal_qtr_start,
+                field_history.created_date as stage_last_updated_date,
+                opportunity.stage_name as current_stage_name,
+                field_history.probability as probability_at_fiscal_qtr_start,
+                opportunity.probability as current_probability,
+                opportunity.arr,
+                opportunity.new_arr,
+                opportunity.amount_year1,
+                date(opportunity.created_at) as created_date,
+                opportunity.close_date
+            from date_spine
+            join opportunity
+                on date(opportunity.created_at) <= date_spine.fiscal_qtr_start
+                and date(opportunity.close_date) >= date_spine.fiscal_qtr_start
+            join users
+                on opportunity.owner_id = users.user_id
+            join field_history
+                on opportunity.opportunity_id = field_history.opportunity_id
+                and field_history.fiscal_qtr_start = date_spine.fiscal_qtr_start
+            )
+        
+            select * from final
+        ```
+      ''',
+      'group_name': 'mart_sales',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'opportunity_fiscal_qtr_start_snapshots',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.opportunity_fiscal_qtr_start_snapshots',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.opportunity_fiscal_qtr_start_snapshots',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/OPPORTUNITY_FISCAL_QTR_START_SNAPSHOTS',
         ),
       }),
       'owners': list([
@@ -25221,7 +27093,27 @@
         
         #### Raw SQL:
         ```sql
-            select * from {{ ref("stg_salesforce__contracts") }}
+            with source as (
+        
+                select * from {{ ref("stg_salesforce__contracts") }}
+            ),
+        
+            flags as (
+        
+                select
+                    *,
+                    case 
+                        when 
+                            current_date >= contract_start_date 
+                            and current_date <= contract_end_date 
+                            and lower(contract_status) = 'activated' 
+                            then true
+                        else false
+                        end as is_active_contract 
+                from source
+            )
+        
+            select * from flags
         ```
       ''',
       'group_name': 'model_salesforce',
@@ -25292,6 +27184,92 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.salesforce_events',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/SALESFORCE_EVENTS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'stg_salesforce__leadfeederapp_website_visit_c',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Leadfeeder data that is exported into Salesforce summarized as sessions
+        
+        #### Raw SQL:
+        ```sql
+            with source as (
+        
+                select * from {{ref ('stg_salesforce__leadfeederapp_website_visit_c') }} 
+            ),
+        
+            final as (
+        
+                select
+                    leadfeeder_visit_id,
+                    visit_name,
+                    visit_at,
+                    visit_duration_seconds,
+                    landing_page,
+                    total_pageviews,
+                    case when lower(landing_page) like ('%dagster.io/telemetry.html%') then true
+                        else false
+                        end as is_oss_usage,
+                    case 
+                        when lower(landing_page) like ('%dagster.io/telemetry.html%') then 'oss_telemetry'
+                        when lower(landing_page) like ('%docs.dagster.io%') then 'docs'
+                        when lower(landing_page) like ('%dagster.io/%') then 'marketing'
+                        end as landing_page_type,
+                    account_id,
+                    campaign_id,
+                    contact_id,
+                    {{ email_cleaner('email') }} as email,
+                    external_id,
+                    keyword,
+                    lead_id,
+                    medium,
+                    pages,
+                    referrer,
+                    source
+                from source
+            )
+        
+            select * from final
+        ```
+      ''',
+      'group_name': 'model_salesforce',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'salesforce_leaderfeeder_sessions',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/table_name': 'sandbox.NICKROACH.salesforce_leaderfeeder_sessions',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.salesforce_leaderfeeder_sessions',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/SALESFORCE_LEADERFEEDER_SESSIONS',
         ),
       }),
       'owners': list([
@@ -25573,6 +27551,26 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'salesforce_contacts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'salesforce_users',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'stg_salesforce__tasks',
             ),
           ),
@@ -25584,8 +27582,63 @@
         
         #### Raw SQL:
         ```sql
-            select *
-            from {{ ref('stg_salesforce__tasks') }}
+            with source as (
+            
+                select * from {{ ref('stg_salesforce__tasks') }}
+            ),
+        
+            users as (
+        
+                select * from {{ ref('salesforce_users') }}
+            ),
+        
+            contacts as (
+        
+                select * from {{ ref('salesforce_contacts') }}
+            ),
+        
+            final as (
+        
+                select 
+                    source.task_id,
+                    source.who_id,
+                    contacts.name as contact_name,
+                    contacts.account_id as contact_account_id,
+                    source.what_id,
+                    source.subject,
+                    source.activity_date,
+                    source.task_type,
+                    source.task_subtype,
+                    source.status,
+                    source.owner_id,
+                    users.name as owner_name,
+                    source.priority,
+                    source.description,
+                    source.account_id,
+                    source.is_closed,
+                    source.created_date,
+                    source.created_by_id,
+                    source.completed_date_time,
+                    source.call_notes,
+                    source.contact_lifecycle,
+                    source.account_recent_source,
+                    source.gong_meeting_prospect_canceled,
+                    source.canceled_cp,
+                    source.no_show_cp,
+                    --- note: these are both calculated fields in Salesforce, they are recreated in the warehouse for the sake of specific reporting
+                    users.role_custom_field as assigned_to_role,
+                    case 
+                        when role_custom_field in ('CSR','EAE', 'BDR')  
+                            and subject like ('%[Outreach]%') 
+                            and subject not like  ('%[In]%') then TRUE
+                        else FALSE
+                        end as created_by_sales
+                from source
+                left join users on source.owner_id = users.user_id
+                left join contacts on source.who_id = contacts.contact_id
+            )
+        
+            select * from final
         ```
       ''',
       'group_name': 'model_salesforce',
@@ -25624,6 +27677,16 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'stg_salesforce__user_roles',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'stg_salesforce__users',
             ),
           ),
@@ -25638,10 +27701,23 @@
             with users as (
         
                 select * from {{ ref('stg_salesforce__users') }}
+            ),
         
+            user_role as (
+        
+                select * from {{ ref('stg_salesforce__user_roles') }}
+            ),
+        
+            joined as (
+        
+                select 
+                    users.*,
+                    user_role.role_name
+                from users    
+                left join user_role on users.user_role_id = user_role.user_role_id
             )
         
-            select * from users
+            select * from joined
         ```
       ''',
       'group_name': 'model_salesforce',
@@ -28392,6 +30468,203 @@
           asset_key=AssetKey(
             parts=tuple(
               'aws',
+              'elementl',
+              'ext_common_room_activities',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        dbt model stg_aws__common_room_activities
+        
+        #### Raw SQL:
+        ```sql
+            select
+                value:activity_type::varchar as activity_type,
+                value:service_name::varchar as service_name,
+                value:activity_timestamp::timestamp as activity_timestamp,
+                value:full_name::varchar as full_name,
+                value:primary_email::varchar as primary_email,
+                value:contact_token::varchar as contact_token,
+                filter(split(value:emails, ','), x -> length(x::varchar) > 0) as emails,
+                filter(split(value:profiles, ','), x -> length(x::varchar) > 0) as profiles,
+                value:first_activity_date::varchar as first_activity_date,
+                replication_date
+            from {{ source('common_room', 'ext_common_room_activities') }}
+            qualify count(*) over (partition by primary_email, activity_type, service_name, activity_timestamp) = 1 -- deduplicate activities
+        ```
+      ''',
+      'group_name': 'staging_aws',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'stg_aws__common_room_activities',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'view',
+        'dagster/table_name': 'sandbox.NICKROACH.stg_aws__common_room_activities',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_aws__common_room_activities',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/STG_AWS__COMMON_ROOM_ACTIVITIES',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'aws',
+              'elementl',
+              'ext_common_room_community_members',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        dbt model stg_aws__common_room_community_members
+        
+        #### Raw SQL:
+        ```sql
+            select
+                value:primary_email::varchar as primary_email,
+                value:full_name::varchar as full_name,
+                value:organization_domain::varchar as organization_domain,
+                value:organization_name::varchar as organization_name,
+                value:job_title::varchar as job_title,
+                value:location::varchar as location,
+                filter(split(value:contact_tokens, ','), x -> length(x::varchar) > 0) as contact_tokens,
+                filter(split(value:emails, ','), x -> length(x::varchar) > 0) as emails,
+                filter(split(value:profiles, ','), x -> length(x::varchar) > 0) as profiles,
+                filter(split(value:segment_names, ','), x -> length(x::varchar) > 0) as segment_names,
+                filter(split(value:tags, ','), x -> length(x::varchar) > 0) as tags,
+                value:first_activity_date::date as first_activity_date,
+                value:first_activity_source::varchar as first_activity_source,
+                value:last_activity_date::date as last_activity_date,
+                value:last_activity_source::varchar as last_activity_source,
+                replication_date
+            from {{ source('common_room', 'ext_common_room_community_members') }}
+            qualify rank() over (order by replication_date desc) = 1
+        ```
+      ''',
+      'group_name': 'staging_aws',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'stg_aws__common_room_community_members',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'view',
+        'dagster/table_name': 'sandbox.NICKROACH.stg_aws__common_room_community_members',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_aws__common_room_community_members',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/STG_AWS__COMMON_ROOM_COMMUNITY_MEMBERS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'aws',
+              'elementl',
+              'ext_common_room_groups',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        dbt model stg_aws__common_room_groups
+        
+        #### Raw SQL:
+        ```sql
+            select
+                value:organization_domain::varchar as organization_domain,
+                value:organization_name::varchar as organization_name,
+                value:location::varchar as location,
+                value:employee_count::varchar as employee_count,
+                value:contact_count::varchar as contact_count,
+                value:approx_capital_raised::varchar as approx_capital_raised,
+                value:approx_revenue_max::varchar as approx_revenue_max,
+                value:approx_revenue_min::varchar as approx_revenue_min,
+                filter(split(value:segment_names, ','), x -> length(x::varchar) > 0) as segment_names,
+                filter(split(value:tags, ','), x -> length(x::varchar) > 0) as tags,
+                value:first_activity_date::date as first_activity_date,
+                value:first_activity_source::varchar as first_activity_source,
+                value:last_activity_date::date as last_activity_date,
+                value:last_activity_source::varchar as last_activity_source,
+                replication_date
+            from {{ source('common_room', 'ext_common_room_groups') }}
+            qualify rank() over (order by replication_date desc) = 1
+        ```
+      ''',
+      'group_name': 'staging_aws',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'stg_aws__common_room_groups',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'view',
+        'dagster/table_name': 'sandbox.NICKROACH.stg_aws__common_room_groups',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_aws__common_room_groups',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/STG_AWS__COMMON_ROOM_GROUPS',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'aws',
               'dev',
               'user_roles_ext',
             ),
@@ -28488,11 +30761,11 @@
                 source,
                 author__username,
                 author__name,
-                author__email,
+                {{ email_cleaner('author__email') }} as author__email,
                 creator__id,
                 creator__graphql_id,
                 creator__name,
-                creator__email,
+                {{ email_cleaner('creator__email') }} as creator__email,
                 creator__avatar_url,
                 creator__created_at,
                 created_at,
@@ -28545,7 +30818,7 @@
                 pipeline__created_by__id,
                 pipeline__created_by__graphql_id,
                 pipeline__created_by__name,
-                pipeline__created_by__email,
+                {{ email_cleaner('pipeline__created_by__email') }} as pipeline__created_by__email,
                 pipeline__created_by__avatar_url,
                 pipeline__created_by__created_at,
                 pipeline__created_at,
@@ -30713,7 +32986,7 @@
             select
         
                 id as user_id,
-                email,
+                {{ email_cleaner('email') }} as email,
                 name as user_name,
                 title as user_title,
                 first_name,
@@ -30887,7 +33160,7 @@
                     row_id, 
                     conversation_key, 
                     name, 
-                    email_address, 
+                    {{ email_cleaner('email_address') }} as email,
                     phone_number, 
                     associated_object_type, 
                     speaker_id, 
@@ -31103,17 +33376,18 @@
         
               select * from {{ source('gong', 'meetings') }}
             ),
+        
             renamed as (
               select
                 row_id, 
                 conversation_key, 
+                title as meeting_title, 
                 type as meeting_event_type, 
                 created_datetime as created_at, 
                 modified_datetime as modified_at, 
                 start_datetime as start_at, 
                 end_datetime as end_at, 
                 organizer_user_id, 
-                title, 
                 is_canceled, 
                 is_recurring, 
                 is_internal, 
@@ -31179,16 +33453,18 @@
         #### Raw SQL:
         ```sql
             with source as (
-                    select * from {{ source('gong', 'users') }}
-              ),
+                
+                select * from {{ source('gong', 'users') }}
+            ),
         
             renamed as (
             
                 select
                     user_id, 
-                    email_address, 
+                    {{ email_cleaner('email_address') }} as email,
                     first_name, 
                     last_name, 
+                    concat(first_name, ' ', last_name) as name,
                     time_zone, 
                     locale, 
                     manager_id, 
@@ -32161,7 +34437,7 @@
                 select
                     hubspot_contact.contact_id,
                     web_attributed_conversions.user_id,
-                    web_attributed_conversions.email,
+                    {{ email_cleaner('web_attributed_conversions.email') }} as email,
                     web_attributed_conversions.user_created_at,
                     web_attributed_conversions.org_created_at,
                     web_attributed_conversions.session_started_at as first_touch_session_started_at,
@@ -32798,8 +35074,8 @@
         
                 select
                     id as contact_id,
-                    property_email as email,
-                    split(property_hs_additional_emails,';') as additional_emails,
+                    {{ email_cleaner('property_email') }} as email,
+                    split({{ email_cleaner('property_hs_additional_emails') }},';') as additional_emails,
                     property_hs_email_domain as email_domain,
                     property_firstname as first_name,
                     property_lastname as last_name,
@@ -33676,7 +35952,7 @@
                 select
                     id as email_address_id, 
                     type, 
-                    email,
+                    {{ email_cleaner('email') }} as email,
                     email_type,
                     status,
                     created_at,
@@ -34525,7 +36801,7 @@
                 city,
                 state,
                 country,
-                email,
+                {{ email_cleaner('email') }} as email,
                 lead_source,
                 company_or_account,
                 type as salesforce_object_assocation
@@ -34687,7 +36963,7 @@
                 account_id,
                 first_name,
                 last_name,
-                email,
+                {{ email_cleaner('email') }} as email,
                 phone,
                 title,
                 lead_source,
@@ -34696,7 +36972,9 @@
                 owner_id,
                 status_c as status,
                 linked_in_c as linkedin_url,
-                created_date
+                created_date,
+                x_1_st_meeting_completed_c as contact_first_meeting,
+                last_meeting_completed_c as contact_last_meeting
         
         
             from {{ source('salesforce', 'contact') }}
@@ -34905,6 +37183,97 @@
             parts=tuple(
               'fivetran',
               'salesforce',
+              'leadfeederapp_website_visit_c',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        dbt model stg_salesforce__leadfeederapp_website_visit_c
+        
+        #### Raw SQL:
+        ```sql
+            with source as (
+          
+              select * from {{ source('salesforce', 'leadfeederapp_website_visit_c') }}
+            ),
+        
+            renamed as (
+        
+              select
+                id as leadfeeder_visit_id,
+                name as visit_name,
+                leadfeederapp_time_c as visit_at,
+                leadfeederapp_account_c as account_id,
+                leadfeederapp_campaign_c as campaign_id,
+                leadfeederapp_contact_c as contact_id,
+                leadfeederapp_duration_seconds_c as visit_duration_seconds,
+                leadfeederapp_email_address_c as email,
+                leadfeederapp_external_id_c as external_id,
+                leadfeederapp_keyword_c as keyword,
+                leadfeederapp_landing_page_c as landing_page,
+                leadfeederapp_lead_c as lead_id,
+                leadfeederapp_medium_c as medium,
+                leadfeederapp_pages_c as pages,
+                leadfeederapp_pageviews_c as total_pageviews,
+                leadfeederapp_referrer_c as referrer,
+                leadfeederapp_source_c as source,
+                owner_id,
+                created_date,
+                last_modified_date,
+                last_modified_by_id,
+                system_modstamp,
+                last_activity_date,
+                last_viewed_date,
+                last_referenced_date,
+                created_by_id,
+                _fivetran_deleted,
+                _fivetran_synced,
+                is_deleted,
+              from source
+            )
+        
+            select * from renamed
+            where is_deleted = false
+        ```
+      ''',
+      'group_name': 'staging_salesforce',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'stg_salesforce__leadfeederapp_website_visit_c',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'view',
+        'dagster/table_name': 'sandbox.NICKROACH.stg_salesforce__leadfeederapp_website_visit_c',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_salesforce__leadfeederapp_website_visit_c',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/STG_SALESFORCE__LEADFEEDERAPP_WEBSITE_VISIT_C',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'fivetran',
+              'salesforce',
               'opportunity',
             ),
           ),
@@ -35014,6 +37383,93 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_salesforce__opportunities',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/STG_SALESFORCE__OPPORTUNITIES',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'fivetran',
+              'salesforce',
+              'opportunity_history',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        dbt model stg_salesforce__opportunity_history
+        
+        #### Raw SQL:
+        ```sql
+            select
+                id as opportunity_history_id,
+                opportunity_id,
+                created_by_id,
+                created_date,
+                stage_name,
+                close_date,
+                probability,
+                forecast_category,
+                system_modstamp,
+                is_deleted,
+                prev_close_date,
+                amount,
+                expected_revenue,
+                prev_amount
+            from {{ source('salesforce', 'opportunity_history') }}
+            where not is_deleted
+        ```
+      ''',
+      'group_name': 'staging_salesforce',
+      'key': AssetKey(
+        parts=tuple(
+          'sandbox',
+          'NICKROACH',
+          'stg_salesforce__opportunity_history',
+        ),
+      ),
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'view',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='opportunity_history_id',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.NICKROACH.stg_salesforce__opportunity_history',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_salesforce__opportunity_history',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/STG_SALESFORCE__OPPORTUNITY_HISTORY',
         ),
       }),
       'owners': list([
@@ -35209,7 +37665,7 @@
         #### Raw SQL:
         ```sql
             select
-                id,
+                id as task_id,
                 who_id,
                 what_id,
                 subject,
@@ -35361,14 +37817,23 @@
         ```sql
             select
                 id as user_id,
-                email,
+                {{ email_cleaner('email') }} as email,
                 first_name,
                 last_name,
                 name,
                 is_active,
-                user_role_id
+                user_role_id,
+                role_c as role_custom_field,
+                username as user_name,
+                region_c as region,
+                in_rotation_c as in_rotation,
+                sales_start_date_c as sales_start_date,
+                sales_end_date_c as sales_end_date,
+                assigned_bdr_c as assign_bdr_id,
+                _fivetran_deleted
         
             from {{ source('salesforce', 'user') }}
+            where _fivetran_deleted = false
         ```
       ''',
       'group_name': 'staging_salesforce',
@@ -35547,7 +38012,7 @@
                     coalesce(name, concat(first_name, ' ', last_name)) as name, 
                     first_name, 
                     last_name, 
-                    email, 
+                    {{ email_cleaner('email') }} as email,
                     user_id, 
                     received_at, 
                     context_page_referrer, 
@@ -35849,7 +38314,7 @@
             		ID as event_id,
             		ANONYMOUS_ID as anonymous_id,
             		lower(USER_ID) as user_id,
-            		lower(USER_ID) as email,
+            		{{ email_cleaner('USER_ID') }} as email,
             		STUDENT_NAME as student_name,
             		EVENT_TEXT as event_text,
             		EVENT as event,
@@ -35926,7 +38391,7 @@
             		ID as event_id,
             		ANONYMOUS_ID as anonymous_id,
             		lower(USER_ID) as user_id,
-            		lower(USER_ID) as email,
+            		{{ email_cleaner('USER_ID') }} as email,
             		COURSE_NAME as course_name,
             		EVENT_TEXT as event_text,
             		event as event,
@@ -36017,7 +38482,7 @@
                 coalesce(name, concat(first_name, ' ', last_name)) as name, 
                 first_name, 
                 last_name, 
-                email, 
+                {{ email_cleaner('email') }} as email,
                 user_id, 
                 uuid_ts, 
                 context_library_version, 
@@ -36100,7 +38565,7 @@
                 id as event_id,
                 anonymous_id,
                 lower(user_id) as user_id,
-                lower(user_id) as email,
+                {{ email_cleaner('USER_ID') }} as email,
                 context_page_title as page_title,
                 context_page_url as page_url,
                 parse_url(referrer, 1):host::string as referrer_host_unparsed,
@@ -36178,7 +38643,7 @@
             		ID as event_id,
             		ANONYMOUS_ID as anonymous_id,
             		lower(USER_ID) as user_id,
-            		lower(USER_ID) as email,
+            		{{ email_cleaner('USER_ID') }} as email,
             		COURSE_ID as course_id,
             		COURSE_NAME as course_name,
             		EVENT as event,
@@ -36256,7 +38721,7 @@
             		ID as event_id,
             		ANONYMOUS_ID as anonymous_id,
             		lower(USER_ID) as user_id,
-            		lower(USER_ID) as email,
+            		{{ email_cleaner('USER_ID') }} as email,
             		EVENT as event,
             		EVENT_TEXT as event_text,
         		
@@ -36508,7 +38973,7 @@
                     context_library_version as context_library_version,
                     context_user_agent_data_platform as context_user_agent_data_platform,
                     select_request_type as request_type,
-                    lower(email) as email,
+                    {{ email_cleaner('email') }} as email,
                     id as event_id,
                     timestamp as timestamp,
                     context_locale as context_locale,
@@ -37149,7 +39614,7 @@
                 failure_code,
                 failure_message,
                 paid as is_paid,
-                receipt_email,
+                {{ email_cleaner('receipt_email') }} as receipt_email,
                 receipt_number,
                 refunded as is_refunded,
                 status,
@@ -37235,7 +39700,7 @@
                 currency,
                 delinquent as is_delinquent,
                 description,
-                email,
+                {{ email_cleaner('email') }} as email,
         
                 created as created_at
         
@@ -38174,7 +40639,7 @@
             select
                 id as enrollment_id,
                 created_at,
-                user_email,
+                {{ email_cleaner('user_email') }} as user_email,
                 user_name,
                 user_id,
                 course_name,
@@ -38289,7 +40754,7 @@
                 last_name,
                 full_name,
                 company,
-                email,
+                {{ email_cleaner('email') }} as email,
                 avatar_url,
                 affiliate_commission_type,
                 headline
@@ -38817,7 +41282,7 @@
                 select
                     webinar_id,
                     registrant_id,
-                    email,
+                    {{ email_cleaner('email') }} as email,
                     _fivetran_synced,
                     _fivetran_deleted,
                 from source
@@ -38886,7 +41351,7 @@
                     customer_key,
                     leave_time,
                     failover,
-                    user_email,
+                    {{ email_cleaner('user_email') }} as user_email,
                     registrant_id,
                     name,
                     status,
@@ -38958,7 +41423,7 @@
               select
                 webinar_id,
                 user_id,
-                email,
+                {{ email_cleaner('email') }} as email,
                 org,
                 create_time,
                 country,
@@ -39802,7 +42267,7 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
-              'cloud_product_customer_info',
+              'accounts',
             ),
           ),
           partition_mapping=None,
@@ -39812,7 +42277,7 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
-              'cloud_product_user_organizations',
+              'cloud_product_customer_info',
             ),
           ),
           partition_mapping=None,
@@ -39842,6 +42307,16 @@
             parts=tuple(
               'sandbox',
               'NICKROACH',
+              'dagster_user_roles',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
               'dim_organizations',
             ),
           ),
@@ -39853,6 +42328,26 @@
               'sandbox',
               'NICKROACH',
               'product_engagement',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'salesforce_contacts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              'NICKROACH',
+              'salesforce_tasks',
             ),
           ),
           partition_mapping=None,
@@ -39899,13 +42394,124 @@
         ),
       ]),
       'description': '''
-        Dagster+ organization information. This data is sent to the Salesforce Organization__c object.
+        Summary of various Salesforce objects (Tasks, Contacts, etc) that is then sent to the Salesforce Account object.
         
         #### Raw SQL:
         ```sql
-            with
+            with accounts as (
+        
+                select * from {{ ref('accounts') }}
+            ),
+        
+            tasks as (
+        
+                select * from {{ ref('salesforce_tasks') }}
+            ),
+        
+            contacts as (
+        
+                select * from {{ ref('salesforce_contacts') }}
+            ),
+        
+            orgs as (
+        
+                select * from {{ ref('dim_organizations') }}
+            ),
+        
+            user_orgs as (
+        
+                select * from {{ ref('user_organizations') }}
+            ),
+        
+            stripe_invoices as (
+        
+                select * from {{ ref('stripe_invoices') }}
+            ),
+        
+            cloud_customer_info as (
+        
+                select * from {{ ref('cloud_product_customer_info') }}
+            ),
+        
+            stripe_subscriptions as (
+        
+                select * from {{ ref('stripe_subscriptions') }}
+            ),
+        
+            credit_utilization as (
+        
+                select * from {{ ref('credit_utilization') }}
+            ),
+        
+            credit_utilization_forecast as (
+        
+                select * from {{ ref('credit_utilization_forecast') }}
+            ),
+        
+            product_engagement as (
+        
+                select * from {{ ref('product_engagement') }}
+            ),
+        
+            product_deployment as (
+        
+                select * from {{ ref('stg_cloud_product__deployments') }}
+            ),
+        
+            user_organizations as (
+        
+                select * from {{ ref('user_organizations') }}
+            ),
+        
+            user_roles as (
+        
+                select * from {{ ref('dagster_user_roles') }}
+            ),
+        
+            l90d_bdr as (
+        
+                select 
+                    account_id,
+                    count(distinct who_id) as engaged_bdr_contacts,
+                    count(*) as l90d_bdr_activities,
+                    max(completed_date_time) as last_bdr_activity
+                from tasks
+                where 
+                    status = 'Completed' 
+                    and date(completed_date_time) >= current_date - 90
+                    and assigned_to_role = 'BDR' 
+                    and created_by_sales = TRUE
+                group by all
+            ),
+        
+            l90d_seller as (
+        
+                select 
+                    account_id,
+                    count(distinct who_id) as engaged_seller_contacts,
+                    count(*) as l90d_seller_activities,
+                    max(completed_date_time) as last_seller_activity
+                from tasks
+                where 
+                    status = 'Completed' 
+                    and date(completed_date_time) >= current_date - 90
+                    and (assigned_to_role = 'EAE' or assigned_to_role = 'CSR')
+                    and created_by_sales = TRUE
+                group by all
+            ),
+        
+            contact_meetings as (
+        
+                select
+                    account_id,
+                    min(contact_first_meeting) as account_first_meeting_completed,
+                    max(contact_last_meeting) as account_last_meeting_completed
+                from contacts
+                group by all
+            ),
         
             organizations as (
+            
                 select
                     organization_id,
                     organization_name,
@@ -39913,24 +42519,17 @@
                     salesforce_account_id,
                     stripe_customer_id,
                     is_active as is_active_org
-                from {{ ref('dim_organizations') }}
+                from orgs
                 where salesforce_account_id is not null
             ),
         
             org_user_counts as (
+            
                 select
                     organization_id,
-                    count(distinct case when role = 'ADMIN' then user_id end) as admin_count,
-                    count(distinct case when role = 'EDITOR' then user_id end) as editor_count,
-                    count(distinct case when role = 'LAUNCHER' then user_id end) as launcher_count,
-                    count(distinct case when role = 'VIEWER' then user_id end) as viewer_count,
-                    count(distinct case when role = 'CUSTOM' then user_id end) as custom_role_count,
-                    count(distinct user_id) as total_user_count
-                from {{ ref('user_organizations')}} 
-                    inner join {{ ref('cloud_product_user_organizations') }} using (user_id, organization_id) 
-                    inner join {{ ref('dim_organizations') }} o using (organization_id)
-                where is_activated and o.is_active
-                group by organization_id
+                    count(*) as total_user_count
+                from user_orgs
+                group by all
             ),
         
             last_invoice as (
@@ -39938,10 +42537,8 @@
                     organization_id,
                     date(invoice_created_at) as last_invoice_date,
                     round(invoice_total, 2) as last_invoice_amount
-                from {{ ref('stripe_invoices') }} as i
-                inner join
-                    {{ ref('cloud_product_customer_info') }} as ci
-                    on i.customer_id = ci.stripe_customer_id
+                from stripe_invoices as i
+                inner join cloud_customer_info as ci on i.customer_id = ci.stripe_customer_id
                 qualify row_number() over (partition by organization_id order by invoice_created_at desc) = 1
             ),
         
@@ -39950,8 +42547,21 @@
                     customer_id as stripe_customer_id,
                     trial_start,
                     trial_end
-                from {{ ref('stripe_subscriptions') }}
+                from stripe_subscriptions
                 where trial_start is not null
+            ),
+        
+            last_weekly_utilization as (
+                select
+                    organization_id,
+                    week_utilization_pct,
+                    date_trunc(week, credits_date) as week_start_date
+                from credit_utilization
+                where
+                    credits_date < current_date
+                    -- must be a complete week
+                    and week_start_date < current_date - interval '7 days'
+                qualify row_number() over (partition by organization_id order by credits_date desc) = 1
             ),
         
             running_credits_sum as (
@@ -39961,20 +42571,7 @@
                     sum(total_credits_used)
                         over (partition by organization_id order by credits_date)
                         as running_credits_used
-                from {{ ref('credit_utilization') }}
-            ),
-        
-            last_weekly_utilization as (
-                select
-                    organization_id,
-                    week_utilization_pct,
-                    date_trunc(week, credits_date) as week_start_date
-                from {{ ref('credit_utilization') }}
-                where
-                    credits_date < current_date
-                    -- must be a complete week
-                    and week_start_date < current_date - interval '7 days'
-                qualify row_number() over (partition by organization_id order by credits_date desc) = 1
+                from credit_utilization
             ),
         
             contract_credits_used as (
@@ -39993,15 +42590,14 @@
                     actual_predicted_utilization,
                     is_predicted_healthy_organization,
                     actual_predicted_credits_used
-                from {{ ref('credit_utilization_forecast') }}
+                from credit_utilization_forecast
             ),
         
             engagement as (
                 select
                     organization_id,
                     is_90day_activated
-        
-                from {{ ref('product_engagement') }}
+                from product_engagement
             ),
         
             deployment_type_count as (
@@ -40009,54 +42605,91 @@
                     organization_id,
                     count_if(is_hybrid) as hybrid_deployment_count,
                     count_if(is_serverless) as serverless_deployment_count
-                from {{ ref('stg_cloud_product__deployments') }}
+                from product_deployment
                 where is_active
                 group by all
+            ),
+        
+            organization_role_counts as (
+                select
+                    organization_id,
+                    count_if(role = 'ADMIN') as admin_seats,
+                    count_if(role = 'EDITOR') as editor_seats,
+                    count_if(role = 'LAUNCHER') as launcher_seats,
+                    count_if(role = 'VIEWER' or role = 'CATALOG_VIEWER') as viewer_seats,
+                    count_if(role = 'CUSTOM') as custom_seats,
+                    count(*) as total_seats,
+                    count_if(is_paid) as total_paid_seats
+                from user_organizations
+                    left join user_roles using (role)
+                where not is_elementl_user and is_activated and role is not null
+                group by organization_id
+            ),
+        
+            organizations_summary as (
+        
+                select
+                    organization_id,
+                    organization_name,
+                    plan_type,
+                    case
+                        when plan_type = 'ENTERPRISE' then 'ENTERPRISE'
+                        else 'SELF_SERVE'
+                    end as self_serve_or_enterprise,
+                    salesforce_account_id,
+                    stripe_customer_id,
+                    is_active_org,
+                    running_credits_used as contract_credits_used,
+                    total_user_count,
+                    hybrid_deployment_count,
+                    serverless_deployment_count,
+                    last_invoice_amount,
+                    last_invoice_date,
+                    trial_start as trial_start_date,
+                    trial_end as trial_end_date,
+                    predicted_utilization,
+                    actual_predicted_utilization,
+                    actual_predicted_credits_used,
+                    is_predicted_healthy_organization,
+                    is_90day_activated,
+                    week_utilization_pct,
+                    admin_seats,
+                    editor_seats,
+                    launcher_seats,
+                    viewer_seats,
+                    custom_seats,
+                    total_seats,
+                    total_paid_seats
+                from organizations
+                inner join org_user_counts using (organization_id)
+                left join last_invoice using (organization_id)
+                left join contract_credits_used using (organization_id)
+                left join trials_dates using (stripe_customer_id)
+                left join forecast_predictions using (organization_id)
+                left join engagement using (organization_id)
+                left join deployment_type_count using (organization_id)
+                left join last_weekly_utilization using (organization_id)
+                left join organization_role_counts using (organization_id)
+                qualify row_number() over (partition by organization_id order by trial_start_date desc nulls last) = 1
+            ),
+        
+            final as (
+        
+                select
+                    accounts.account_id as salesforce_account_id,
+                    accounts.abm_status,
+                    l90d_bdr.* EXCLUDE account_id,
+                    l90d_seller.* EXCLUDE account_id,
+                    contact_meetings.* EXCLUDE account_id,
+                    organizations_summary.* EXCLUDE salesforce_account_id 
+                from accounts
+                left join l90d_bdr on accounts.account_id = l90d_bdr.account_id
+                left join l90d_seller on accounts.account_id = l90d_seller.account_id
+                left join contact_meetings on accounts.account_id = contact_meetings.account_id
+                left join organizations_summary on accounts.account_id = organizations_summary.salesforce_account_id
             )
         
-            select
-                organization_id,
-                organization_name,
-                plan_type,
-                case
-                    when plan_type = 'ENTERPRISE' then 'ENTERPRISE'
-                    else 'SELF_SERVE'
-                end as self_serve_or_enterprise,
-                salesforce_account_id,
-                stripe_customer_id,
-                is_active_org,
-                running_credits_used as contract_credits_used,
-                admin_count,
-                editor_count,
-                launcher_count,
-                viewer_count,
-                custom_role_count,
-                total_user_count,
-                hybrid_deployment_count,
-                serverless_deployment_count,
-                last_invoice_amount,
-                last_invoice_date,
-                trial_start as trial_start_date,
-                trial_end as trial_end_date,
-                predicted_utilization,
-                actual_predicted_utilization,
-                actual_predicted_credits_used,
-                is_predicted_healthy_organization,
-                is_90day_activated,
-                week_utilization_pct
-        
-            from
-                organizations
-            inner join org_user_counts using (organization_id)
-            left join last_invoice using (organization_id)
-            left join contract_credits_used using (organization_id)
-            left join trials_dates using (stripe_customer_id)
-            left join forecast_predictions using (organization_id)
-            left join engagement using (organization_id)
-            left join deployment_type_count using (organization_id)
-            left join last_weekly_utilization using(organization_id)
-            qualify
-                row_number() over (partition by organization_id order by trial_start_date desc nulls last) = 1
+            select * from final
         ```
       ''',
       'group_name': 'hightouch',
@@ -40064,7 +42697,7 @@
         parts=tuple(
           'sandbox',
           'NICKROACH',
-          'sync_salesforce_organization',
+          'sync_salesforce_account',
         ),
       ),
       'metadata': dict({
@@ -40079,7 +42712,7 @@
                 unique=False,
               ),
               description='',
-              name='organization_id',
+              name='salesforce_account_id',
               tags=dict({
               }),
               type='?',
@@ -40090,13 +42723,13 @@
             ]),
           ),
         ),
-        'dagster/table_name': 'sandbox.NICKROACH.sync_salesforce_organization',
+        'dagster/table_name': 'sandbox.NICKROACH.sync_salesforce_account',
         'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
           settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False),
         ),
-        'dagster_dbt/unique_id': 'model.dagster_open_platform.sync_salesforce_organization',
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.sync_salesforce_account',
         'url': UrlMetadataValue(
-          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/SYNC_SALESFORCE_ORGANIZATION',
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas/NICKROACH/table/SYNC_SALESFORCE_ACCOUNT',
         ),
       }),
       'owners': list([
@@ -50941,6 +53574,48 @@
         AssetKey(
           parts=tuple(
             'aws',
+            'elementl',
+            'ext_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
             'oss_telemetry',
             'oss_telemetry_prod',
           ),
@@ -50960,11 +53635,6 @@
         AssetKey(
           parts=tuple(
             'buildkite_source_v2_pipelines',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'dagster_quickstart_validation',
           ),
         ),
         AssetKey(
@@ -53403,69 +56073,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'call',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_disposition',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_purpose',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'compliance_request',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_membership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_ownership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'custom_field',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'data_connection',
           ),
         ),
@@ -53494,27 +56101,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'favorite',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mail_alias',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mailbox',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'mailing',
           ),
         ),
@@ -53530,55 +56116,6 @@
             'fivetran',
             'outreach',
             'mailing_reference',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_prospect_role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'persona',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'phone_number',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'profile',
           ),
         ),
         AssetKey(
@@ -53648,27 +56185,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'ruleset',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'sequence',
           ),
         ),
@@ -53698,83 +56214,6 @@
             'fivetran',
             'outreach',
             'sequence_template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task_priority',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'team',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_bcc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_cc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_to_recipient',
           ),
         ),
         AssetKey(
@@ -53859,6 +56298,13 @@
             'fivetran',
             'salesforce',
             'event',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'fivetran',
+            'salesforce',
+            'leadfeederapp_website_visit_c',
           ),
         ),
         AssetKey(
@@ -54479,11 +56925,6 @@
         ),
         AssetKey(
           parts=tuple(
-            'hightouch_org_info',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
             'hightouch_sales_cycles',
           ),
         ),
@@ -54500,6 +56941,11 @@
         AssetKey(
           parts=tuple(
             'hightouch_sync_hubspot_organization',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'hightouch_sync_salesforce_account',
           ),
         ),
         AssetKey(
@@ -54801,6 +57247,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'abm_activity_scoring',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'abm_company_activity',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'abm_company_intent_scores',
           ),
         ),
@@ -54879,6 +57339,13 @@
             'sandbox',
             'NICKROACH',
             'asset_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'attributed_conversions',
           ),
         ),
         AssetKey(
@@ -55137,6 +57604,27 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'conversion_events',
           ),
         ),
@@ -55172,6 +57660,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'dagster_user_roles',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'deployment_insights_usage_daily',
           ),
         ),
@@ -55187,6 +57682,13 @@
             'sandbox',
             'NICKROACH',
             'dim_accounts_by_day',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'dim_contacts',
           ),
         ),
         AssetKey(
@@ -55284,6 +57786,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'fct_gong_meeting_participants',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'fct_gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'fct_outreach_mailings',
           ),
         ),
@@ -55326,6 +57842,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'first_touch',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'first_user_web_session',
           ),
         ),
@@ -55355,6 +57878,20 @@
             'sandbox',
             'NICKROACH',
             'gong_emails',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_users',
           ),
         ),
         AssetKey(
@@ -55627,6 +58164,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'opportunity_fiscal_qtr_start_snapshots',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'opportunity_snapshots',
           ),
         ),
@@ -55873,6 +58417,13 @@
             'sandbox',
             'NICKROACH',
             'salesforce_events',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'salesforce_leaderfeeder_sessions',
           ),
         ),
         AssetKey(
@@ -56139,6 +58690,27 @@
             'sandbox',
             'NICKROACH',
             'stg_aws__code_location_sensors',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_groups',
           ),
         ),
         AssetKey(
@@ -56635,7 +59207,21 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'stg_salesforce__leadfeederapp_website_visit_c',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'stg_salesforce__opportunities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_salesforce__opportunity_history',
           ),
         ),
         AssetKey(
@@ -57034,7 +59620,7 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
-            'sync_salesforce_organization',
+            'sync_salesforce_account',
           ),
         ),
         AssetKey(
@@ -57838,17 +60424,17 @@
         ),
         AssetKey(
           parts=tuple(
-            'hightouch_org_info',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
             'hightouch_sales_cycles',
           ),
         ),
         AssetKey(
           parts=tuple(
             'hightouch_sync_hubspot_contact',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'hightouch_sync_salesforce_account',
           ),
         ),
         AssetKey(
@@ -57861,6 +60447,13 @@
             'sandbox',
             'NICKROACH',
             'abm_contact_intent_scores',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'accounts',
           ),
         ),
         AssetKey(
@@ -57889,6 +60482,13 @@
             'sandbox',
             'NICKROACH',
             'credit_utilization_forecast',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'dagster_user_roles',
           ),
         ),
         AssetKey(
@@ -57924,13 +60524,6 @@
             'sandbox',
             'NICKROACH',
             'org_deployments_daily',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'sandbox',
-            'NICKROACH',
-            'org_info',
           ),
         ),
         AssetKey(
@@ -58070,6 +60663,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'sync_salesforce_account',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'usage_metrics_daily',
           ),
         ),
@@ -58195,16 +60795,6 @@
       'asset_selection': set({
         AssetKey(
           parts=tuple(
-            'dagster_quickstart_validation',
-          ),
-        ),
-      }),
-      'name': 'dagster_quickstart_validation_job',
-    }),
-    dict({
-      'asset_selection': set({
-        AssetKey(
-          parts=tuple(
             'inactive_snowflake_clones',
           ),
         ),
@@ -58295,6 +60885,48 @@
             'aws',
             'dev',
             'workspace_staging_sensors_ext',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_groups',
           ),
         ),
         AssetKey(
@@ -59299,69 +61931,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'call',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_disposition',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_purpose',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'compliance_request',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_membership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_ownership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'custom_field',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'data_connection',
           ),
         ),
@@ -59390,27 +61959,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'favorite',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mail_alias',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mailbox',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'mailing',
           ),
         ),
@@ -59426,55 +61974,6 @@
             'fivetran',
             'outreach',
             'mailing_reference',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_prospect_role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'persona',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'phone_number',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'profile',
           ),
         ),
         AssetKey(
@@ -59544,27 +62043,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'ruleset',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'sequence',
           ),
         ),
@@ -59594,83 +62072,6 @@
             'fivetran',
             'outreach',
             'sequence_template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task_priority',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'team',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_bcc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_cc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_to_recipient',
           ),
         ),
         AssetKey(
@@ -59755,6 +62156,13 @@
             'fivetran',
             'salesforce',
             'event',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'fivetran',
+            'salesforce',
+            'leadfeederapp_website_visit_c',
           ),
         ),
         AssetKey(
@@ -60310,6 +62718,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'abm_activity_scoring',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'abm_company_activity',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'abm_company_intent_scores',
           ),
         ),
@@ -60388,6 +62810,13 @@
             'sandbox',
             'NICKROACH',
             'asset_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'attributed_conversions',
           ),
         ),
         AssetKey(
@@ -60646,6 +63075,27 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'conversion_events',
           ),
         ),
@@ -60681,6 +63131,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'dagster_user_roles',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'deployment_insights_usage_daily',
           ),
         ),
@@ -60696,6 +63153,13 @@
             'sandbox',
             'NICKROACH',
             'dim_accounts_by_day',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'dim_contacts',
           ),
         ),
         AssetKey(
@@ -60793,6 +63257,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'fct_gong_meeting_participants',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'fct_gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'fct_outreach_mailings',
           ),
         ),
@@ -60835,6 +63313,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'first_touch',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'first_user_web_session',
           ),
         ),
@@ -60864,6 +63349,20 @@
             'sandbox',
             'NICKROACH',
             'gong_emails',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_users',
           ),
         ),
         AssetKey(
@@ -61136,6 +63635,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'opportunity_fiscal_qtr_start_snapshots',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'opportunity_snapshots',
           ),
         ),
@@ -61382,6 +63888,13 @@
             'sandbox',
             'NICKROACH',
             'salesforce_events',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'salesforce_leaderfeeder_sessions',
           ),
         ),
         AssetKey(
@@ -61648,6 +64161,27 @@
             'sandbox',
             'NICKROACH',
             'stg_aws__code_location_sensors',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_groups',
           ),
         ),
         AssetKey(
@@ -62144,7 +64678,21 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'stg_salesforce__leadfeederapp_website_visit_c',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'stg_salesforce__opportunities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_salesforce__opportunity_history',
           ),
         ),
         AssetKey(
@@ -62543,7 +65091,7 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
-            'sync_salesforce_organization',
+            'sync_salesforce_account',
           ),
         ),
         AssetKey(
@@ -63393,6 +65941,48 @@
         AssetKey(
           parts=tuple(
             'aws',
+            'elementl',
+            'ext_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
             'oss_telemetry',
             'oss_telemetry_prod',
           ),
@@ -64392,69 +66982,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'call',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_disposition',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_purpose',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'compliance_request',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_membership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_ownership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'custom_field',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'data_connection',
           ),
         ),
@@ -64483,27 +67010,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'favorite',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mail_alias',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mailbox',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'mailing',
           ),
         ),
@@ -64519,55 +67025,6 @@
             'fivetran',
             'outreach',
             'mailing_reference',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_prospect_role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'persona',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'phone_number',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'profile',
           ),
         ),
         AssetKey(
@@ -64637,27 +67094,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'ruleset',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'sequence',
           ),
         ),
@@ -64687,83 +67123,6 @@
             'fivetran',
             'outreach',
             'sequence_template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task_priority',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'team',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_bcc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_cc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_to_recipient',
           ),
         ),
         AssetKey(
@@ -64848,6 +67207,13 @@
             'fivetran',
             'salesforce',
             'event',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'fivetran',
+            'salesforce',
+            'leadfeederapp_website_visit_c',
           ),
         ),
         AssetKey(
@@ -65189,6 +67555,11 @@
         ),
         AssetKey(
           parts=tuple(
+            'hightouch_sync_salesforce_account',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
             'hubspot_companies',
           ),
         ),
@@ -65411,6 +67782,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'abm_activity_scoring',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'abm_company_activity',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'abm_company_intent_scores',
           ),
         ),
@@ -65489,6 +67874,13 @@
             'sandbox',
             'NICKROACH',
             'asset_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'attributed_conversions',
           ),
         ),
         AssetKey(
@@ -65740,6 +68132,27 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'conversion_events',
           ),
         ),
@@ -65775,6 +68188,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'dagster_user_roles',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'deployment_insights_usage_daily',
           ),
         ),
@@ -65790,6 +68210,13 @@
             'sandbox',
             'NICKROACH',
             'dim_accounts_by_day',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'dim_contacts',
           ),
         ),
         AssetKey(
@@ -65887,6 +68314,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'fct_gong_meeting_participants',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'fct_gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'fct_outreach_mailings',
           ),
         ),
@@ -65929,6 +68370,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'first_touch',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'first_user_web_session',
           ),
         ),
@@ -65958,6 +68406,20 @@
             'sandbox',
             'NICKROACH',
             'gong_emails',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_users',
           ),
         ),
         AssetKey(
@@ -66230,6 +68692,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'opportunity_fiscal_qtr_start_snapshots',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'opportunity_snapshots',
           ),
         ),
@@ -66469,6 +68938,13 @@
             'sandbox',
             'NICKROACH',
             'salesforce_events',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'salesforce_leaderfeeder_sessions',
           ),
         ),
         AssetKey(
@@ -66728,6 +69204,27 @@
             'sandbox',
             'NICKROACH',
             'stg_aws__code_location_sensors',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_groups',
           ),
         ),
         AssetKey(
@@ -67224,7 +69721,21 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'stg_salesforce__leadfeederapp_website_visit_c',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'stg_salesforce__opportunities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_salesforce__opportunity_history',
           ),
         ),
         AssetKey(
@@ -67623,7 +70134,7 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
-            'sync_salesforce_organization',
+            'sync_salesforce_account',
           ),
         ),
         AssetKey(
@@ -68525,6 +71036,48 @@
             'aws',
             'dev',
             'workspace_staging_sensors_ext',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'ext_common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'aws',
+            'elementl',
+            'stage_common_room_groups',
           ),
         ),
         AssetKey(
@@ -69557,69 +72110,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'call',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_disposition',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_purpose',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'call_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'compliance_request',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_membership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'content_category_ownership',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'custom_field',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'data_connection',
           ),
         ),
@@ -69648,27 +72138,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'favorite',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mail_alias',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'mailbox',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'mailing',
           ),
         ),
@@ -69684,55 +72153,6 @@
             'fivetran',
             'outreach',
             'mailing_reference',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_prospect_role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'opportunity_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'persona',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'phone_number',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'profile',
           ),
         ),
         AssetKey(
@@ -69802,27 +72222,6 @@
           parts=tuple(
             'fivetran',
             'outreach',
-            'recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'role',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'ruleset',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
             'sequence',
           ),
         ),
@@ -69852,83 +72251,6 @@
             'fivetran',
             'outreach',
             'sequence_template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'snippet_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'stage',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'task_priority',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'team',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_bcc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_cc_recipient',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_tag',
-          ),
-        ),
-        AssetKey(
-          parts=tuple(
-            'fivetran',
-            'outreach',
-            'template_to_recipient',
           ),
         ),
         AssetKey(
@@ -70013,6 +72335,13 @@
             'fivetran',
             'salesforce',
             'event',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'fivetran',
+            'salesforce',
+            'leadfeederapp_website_visit_c',
           ),
         ),
         AssetKey(
@@ -70591,6 +72920,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'abm_activity_scoring',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'abm_company_activity',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'abm_company_intent_scores',
           ),
         ),
@@ -70669,6 +73012,13 @@
             'sandbox',
             'NICKROACH',
             'asset_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'attributed_conversions',
           ),
         ),
         AssetKey(
@@ -70920,6 +73270,27 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'common_room_groups',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'conversion_events',
           ),
         ),
@@ -70955,6 +73326,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'dagster_user_roles',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'deployment_insights_usage_daily',
           ),
         ),
@@ -70970,6 +73348,13 @@
             'sandbox',
             'NICKROACH',
             'dim_accounts_by_day',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'dim_contacts',
           ),
         ),
         AssetKey(
@@ -71067,6 +73452,20 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'fct_gong_meeting_participants',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'fct_gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'fct_outreach_mailings',
           ),
         ),
@@ -71109,6 +73508,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'first_touch',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'first_user_web_session',
           ),
         ),
@@ -71138,6 +73544,20 @@
             'sandbox',
             'NICKROACH',
             'gong_emails',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_meetings',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'gong_users',
           ),
         ),
         AssetKey(
@@ -71410,6 +73830,13 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'opportunity_fiscal_qtr_start_snapshots',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'opportunity_snapshots',
           ),
         ),
@@ -71649,6 +74076,13 @@
             'sandbox',
             'NICKROACH',
             'salesforce_events',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'salesforce_leaderfeeder_sessions',
           ),
         ),
         AssetKey(
@@ -71908,6 +74342,27 @@
             'sandbox',
             'NICKROACH',
             'stg_aws__code_location_sensors',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_activities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_community_members',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_aws__common_room_groups',
           ),
         ),
         AssetKey(
@@ -72404,7 +74859,21 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
+            'stg_salesforce__leadfeederapp_website_visit_c',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
             'stg_salesforce__opportunities',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'sandbox',
+            'NICKROACH',
+            'stg_salesforce__opportunity_history',
           ),
         ),
         AssetKey(
@@ -72803,7 +75272,7 @@
           parts=tuple(
             'sandbox',
             'NICKROACH',
-            'sync_salesforce_organization',
+            'sync_salesforce_account',
           ),
         ),
         AssetKey(
