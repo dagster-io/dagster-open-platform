@@ -1,7 +1,6 @@
-import os
-
+import dagster as dg
 from dagster_anthropic import AnthropicResource
 
 claude_resource = AnthropicResource(
-    api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
+    api_key=dg.EnvVar("ANTHROPIC_API_KEY"),
 )
