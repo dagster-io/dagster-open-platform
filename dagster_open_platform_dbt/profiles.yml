@@ -44,6 +44,20 @@ dagster_open_platform:
       threads: 8
       client_session_keep_alive: false
 
+    purina_ci:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+
+      user: "purina"
+      private_key: "{{ env_var('SNOWFLAKE_DBT_PRIVATE_KEY', '') }}"
+
+      role: "purina"
+      database: "purina_ci"
+      warehouse: "purina"
+      schema: "public"
+      threads: 8
+      client_session_keep_alive: false
+
     ci:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
