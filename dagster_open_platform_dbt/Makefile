@@ -46,3 +46,12 @@ build-prod-manifest:
 update-dbt-project:
 	git pull
 	make build-prod-manifest
+
+# Bring in any changes from master and submit the branch to PR
+get-latest-and-submit:
+	@if [ "$$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then \
+		echo "Cannot push to master! Please create a branch."; \
+		exit 1; \
+	else \
+		gt get && gt submit; \
+	fi
