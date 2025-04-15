@@ -26,7 +26,7 @@ def drop_old_database_clones(ctx: SensorEvaluationContext, snowflake_sf: Snowfla
     # fetch list Snowflake DBs with prefix "PURINA_CLONE_"
     with snowflake_sf.get_connection() as conn:
         databases = cast(
-            list[tuple[str, ...]],
+            "list[tuple[str, ...]]",
             conn.cursor().execute(
                 "SELECT database_name FROM SNOWFLAKE.INFORMATION_SCHEMA.DATABASES",
             ),

@@ -112,9 +112,9 @@ def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
                 isinstance(ref, UrlCodeReference if cloud_env else LocalFileCodeReference)
                 for ref in code_references_meta.code_references.code_references
             ]
-            assert all(
-                is_ref
-            ), f"{key} has incorrect code references: {code_references_meta.code_references.code_references}"
+            assert all(is_ref), (
+                f"{key} has incorrect code references: {code_references_meta.code_references.code_references}"
+            )
 
 
 # We ignore certain metadata keys which are not reliably regenerated in each test run
