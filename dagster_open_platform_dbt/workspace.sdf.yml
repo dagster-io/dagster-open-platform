@@ -31,7 +31,9 @@ workspace:
     - pattern: product_operations.*.*
     targets:
     - pattern: purina.*.*
-      rename-as: sandbox.${1}.${2}
+      rename-as: sandbox.purina__${1}.${2}
+    - pattern: dwh_reporting.*.*
+      rename-as: sandbox.dwh_reporting__${1}.${2}
   defaults:
     environment: dbg
     dialect: snowflake
