@@ -1,6 +1,7 @@
 import os
 
 import dagster as dg
+from dagster_open_platform.definitions import global_freshness_policy_24h
 from dagster_open_platform.defs.aws.assets import workspace_data_json
 from dagster_open_platform.defs.aws.constants import BUCKET_NAME, OUTPUT_PREFIX
 from dagster_snowflake import SnowflakeResource
@@ -20,6 +21,7 @@ log = dg.get_dagster_logger()
             ],
             deps=[asset_key],
             automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+            internal_freshness_policy=global_freshness_policy_24h,
         )
         for asset_key in workspace_data_json.keys
     ],
@@ -71,6 +73,7 @@ def workspace_replication_aws_stages(
             ],
             deps=[asset_key],
             automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
+            internal_freshness_policy=global_freshness_policy_24h,
         )
         for asset_key in workspace_replication_aws_stages.keys
     ],

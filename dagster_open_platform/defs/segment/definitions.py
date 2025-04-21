@@ -1,4 +1,5 @@
 from dagster import AssetSpec, Definitions
+from dagster_open_platform.definitions import global_freshness_policy_24h
 from dagster_open_platform.utils.source_code import add_code_references_and_link_to_git
 
 segment_asset_keys = [
@@ -28,6 +29,7 @@ segment_source_assets = [
         description="A table containing Segment data loaded using a Snowflake integration.",
         group_name="segment",
         kinds={"segment"},
+        internal_freshness_policy=global_freshness_policy_24h,
     )
     for key in segment_asset_keys
 ]

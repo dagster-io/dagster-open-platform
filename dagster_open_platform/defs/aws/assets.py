@@ -20,6 +20,7 @@ from dagster import (
 )
 from dagster_aws.s3 import S3Resource
 from dagster_cloud.api.dagster_cloud_api import FileFormat
+from dagster_open_platform.definitions import global_freshness_policy_24h
 from dagster_open_platform.defs.aws.constants import (
     ACCOUNT_NAME,
     BASE_S3_LOCATION,
@@ -51,6 +52,7 @@ dagster_metadata_asset_specs = [
             "aws_account": ACCOUNT_NAME,
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_metadata_obj}",
         },
+        internal_freshness_policy=global_freshness_policy_24h,
     )
     for dag_metadata_obj in DAGSTER_METADATA_OBJECTS
 ]
@@ -63,6 +65,7 @@ dagster_object_asset_specs = [
             "aws_account": ACCOUNT_NAME,
             "s3_location": f"s3://{BUCKET_NAME}/{OUTPUT_PREFIX}/{dag_obj}",
         },
+        internal_freshness_policy=global_freshness_policy_24h,
     )
     for dag_obj in EXTRACTED_DAGSTER_OBJECTS_DICT.values()
 ]
@@ -198,7 +201,11 @@ materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
 )
 
 
-@asset(partitions_def=aws_monthly_partition, auto_materialize_policy=materialize_on_cron_policy)
+@asset(
+    partitions_def=aws_monthly_partition,
+    auto_materialize_policy=materialize_on_cron_policy,
+    internal_freshness_policy=global_freshness_policy_24h,
+)
 def aws_cost_report(context: AssetExecutionContext, snowflake_aws: SnowflakeResource):
     """AWS updates the monthly cost report once an hour, overwriting the existing
     files for the current month.

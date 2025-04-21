@@ -17,6 +17,7 @@ from dagster import (
 from dagster._core.definitions.asset_selection import AssetSelection
 from dagster._core.definitions.schedule_definition import DefaultScheduleStatus
 from dagster._core.execution.context.compute import AssetExecutionContext
+from dagster_open_platform.definitions import global_freshness_policy_24h
 from dagster_open_platform.defs.snowflake.resources import snowflake_resource
 from dagster_open_platform.utils.source_code import add_code_references_and_link_to_git
 from dagster_snowflake import SnowflakeResource
@@ -60,6 +61,7 @@ asset_specs = [
     AssetSpec(
         key=table_names_to_asset_keys[table_name],
         description=f"Stripe {table_name} table (synced using stripe pipeline)",
+        internal_freshness_policy=global_freshness_policy_24h,
     )
     for table_name in table_names
 ]
