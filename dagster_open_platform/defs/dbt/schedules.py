@@ -18,7 +18,7 @@ dbt_analytics_core_job = dg.define_asset_job(
         # snapshot models
         - dg.AssetSelection.assets(dbt_snapshot_models)
     ),
-    tags={"team": "devrel", "dbt_pipeline": "analytics_core"},
+    tags={"team": "devrel", "dbt_pipeline": "analytics_core", "dagster/max_retries": 1},
 )
 
 
