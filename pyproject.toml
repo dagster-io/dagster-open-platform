@@ -34,7 +34,7 @@ dependencies = [
     "statsig",
     "gql[requests]",
     "dlt[snowflake,duckdb]",
-    "pydantic<2.9.0", # https://dagsterlabs.slack.com/archives/C04J8BRN9ST/p1725559237966589
+    "pydantic",
     "pyyaml",
     "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
     "snowflake-connector-python[secure-local-storage,pandas]",
@@ -65,19 +65,17 @@ exclude = ["dagster_open_platform_tests"]
 # ##### DAGSTER
 # ########################
 
-[tool.dagster]
-module_name = "dagster_open_platform.definitions"
-code_location_name = "dagster_open_platform"
-
 [tool.dg]
 directory_type = "project"
 
 [tool.dg.project]
 root_module = "dagster_open_platform"
-defs_module = "dagster_open_platform.defs"
+
+[tool.dg.project.python_environment]
+active = true
 
 [project.entry-points]
-"dagster_dg.library" = { example = "dagster_open_platform.lib"}
+"dagster_dg.plugin" = { dagster_open_platform = "dagster_open_platform.lib"}
 
 # ########################
 # ##### SQLFLUFF
