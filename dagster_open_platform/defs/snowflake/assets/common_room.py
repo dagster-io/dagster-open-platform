@@ -1,5 +1,5 @@
 import dagster as dg
-from dagster_open_platform.definitions import global_freshness_policy_24h
+from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.utils.environment_helpers import get_environment
 from dagster_snowflake import SnowflakeResource
 
@@ -20,7 +20,7 @@ objects = ["activities", "community_members", "groups"]
                 f"stage_common_room_{_object}",
             ],
             automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
-            internal_freshness_policy=global_freshness_policy_24h,
+            internal_freshness_policy=global_freshness_policy,
         )
         for _object in objects
     ],
@@ -80,7 +80,7 @@ def common_room_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: Snowf
             ],
             deps=[["aws", "elementl", f"stage_common_room_{_object}"]],
             automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
-            internal_freshness_policy=global_freshness_policy_24h,
+            internal_freshness_policy=global_freshness_policy,
         )
         for _object in objects
     ],

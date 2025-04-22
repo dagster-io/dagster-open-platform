@@ -2,7 +2,7 @@ import os
 
 from dagster import MaterializeResult, asset
 from dagster_dbt import get_asset_key_for_model
-from dagster_open_platform.definitions import global_freshness_policy_24h
+from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.dbt.assets import dbt_non_partitioned_models
 from dagster_open_platform.defs.hightouch.resources import ConfigurableHightouchResource
 
@@ -13,7 +13,7 @@ org_activity_monthly = get_asset_key_for_model([dbt_non_partitioned_models], "or
     deps=[org_activity_monthly],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_org_activity_monthly(
     hightouch: ConfigurableHightouchResource,
@@ -40,7 +40,7 @@ sync_salesforce_account = get_asset_key_for_model(
     deps=[sync_salesforce_account],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_sync_salesforce_account(
     hightouch: ConfigurableHightouchResource,
@@ -65,7 +65,7 @@ def hightouch_sync_salesforce_account(
     ],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_null_contact_names(
     hightouch: ConfigurableHightouchResource,
@@ -90,7 +90,7 @@ cloud_users = get_asset_key_for_model([dbt_non_partitioned_models], "cloud_users
     deps=[cloud_users],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_cloud_users(
     hightouch: ConfigurableHightouchResource,
@@ -115,7 +115,7 @@ user_attribution = get_asset_key_for_model([dbt_non_partitioned_models], "user_a
     deps=[user_attribution],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_user_attribution(
     hightouch: ConfigurableHightouchResource,
@@ -140,7 +140,7 @@ sales_cycles = get_asset_key_for_model([dbt_non_partitioned_models], "sales_cycl
     deps=[sales_cycles],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_sales_cycles(
     hightouch: ConfigurableHightouchResource,
@@ -165,7 +165,7 @@ sync_hubspot_company = get_asset_key_for_model([dbt_non_partitioned_models], "sy
     deps=[sync_hubspot_company],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_sync_hubspot_company(
     hightouch: ConfigurableHightouchResource,
@@ -190,7 +190,7 @@ sync_hubspot_contact = get_asset_key_for_model([dbt_non_partitioned_models], "sy
     deps=[sync_hubspot_contact],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_sync_hubspot_contact(
     hightouch: ConfigurableHightouchResource,
@@ -217,7 +217,7 @@ sync_hubspot_organization = get_asset_key_for_model(
     deps=[sync_hubspot_organization],
     tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
     group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy_24h,
+    internal_freshness_policy=global_freshness_policy,
 )
 def hightouch_sync_hubspot_organization(
     hightouch: ConfigurableHightouchResource,

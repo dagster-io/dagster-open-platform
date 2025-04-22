@@ -21,7 +21,7 @@ from dagster import (
 )
 from dagster._core.definitions.events import CoercibleToAssetKey
 from dagster._core.test_utils import environ
-from dagster_open_platform.definitions import global_freshness_policy_24h
+from dagster_open_platform.definitions import global_freshness_policy
 from pydantic import create_model
 
 logger = get_dagster_logger()
@@ -241,7 +241,7 @@ def build_sync_postgres_to_snowflake_asset(
         key=key,
         deps=deps,
         group_name="postgres_mirror",
-        internal_freshness_policy=global_freshness_policy_24h,
+        internal_freshness_policy=global_freshness_policy,
     )
     def sync(context: AssetExecutionContext) -> None:
         sling: CustomSlingResource = getattr(context.resources, sling_resource_key)
@@ -298,7 +298,7 @@ def build_sync_snowflake_to_postgres_asset(
         deps=deps,
         tags={"dagster/kind/postgres": "", "dagster/kind/sling": ""},
         group_name=group_name,
-        internal_freshness_policy=global_freshness_policy_24h,
+        internal_freshness_policy=global_freshness_policy,
     )
     def sync(context: AssetExecutionContext, config: ConfigClass) -> None:  # type: ignore
         if preflight_check:
