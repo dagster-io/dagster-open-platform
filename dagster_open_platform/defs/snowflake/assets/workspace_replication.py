@@ -21,7 +21,12 @@ log = dg.get_dagster_logger()
             ],
             deps=[asset_key],
             automation_condition=dg.AutomationCondition.on_cron("@daily")
-            & ~dg.AutomationCondition.any_deps_missing(),
+            & (
+                ~dg.AutomationCondition.any_deps_match(
+                    dg.AutomationCondition.in_latest_time_window()
+                    & dg.AutomationCondition.missing()
+                )
+            ),
             internal_freshness_policy=global_freshness_policy,
         )
         for asset_key in workspace_data_json.keys
@@ -74,7 +79,12 @@ def workspace_replication_aws_stages(
             ],
             deps=[asset_key],
             automation_condition=dg.AutomationCondition.on_cron("@daily")
-            & ~dg.AutomationCondition.any_deps_missing(),
+            & (
+                ~dg.AutomationCondition.any_deps_match(
+                    dg.AutomationCondition.in_latest_time_window()
+                    & dg.AutomationCondition.missing()
+                )
+            ),
             internal_freshness_policy=global_freshness_policy,
         )
         for asset_key in workspace_replication_aws_stages.keys
