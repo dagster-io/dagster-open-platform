@@ -1,5 +1,0 @@
-type: dagster_open_platform.lib.SimpleAssetComponent
-
-attributes:
-  asset_key: simple_asset_component_example
-  value: Bonjour
