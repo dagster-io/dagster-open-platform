@@ -1,0 +1,24 @@
+source: CLOUD_PRODUCTION_MAIN
+target: SLING_DB_MAIN
+defaults: 
+  mode: incremental
+  object: '{stream_table}'
+
+streams: 
+  public.event_logs_partitioned:
+    primary_key: [date, organization_id]
+    sql: >
+      select
+        date(timestamp) as date,
+        organization_id,
+        count(*) as user_events_count
+      from event_logs_partitioned
+      where
+        dagster_event_type is null
+        and date(timestamp) between current_date - 7
+        and current_date
+      group by date, organization_id
+    meta:
+      dagster: 
+        asset_key: sling.cloud_product.user_events_counts
+    object: cloud_product.user_events_counts
