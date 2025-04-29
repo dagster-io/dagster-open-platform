@@ -78,7 +78,7 @@ def cloud_product_main_runs(context, embedded_elt: SlingResource) -> Iterable[An
 
 @sling_assets(
     replication_config=cloud_product_config_dir / "main_user_event_log.yaml",
-    dagster_sling_translator=CustomSlingTranslator(),
+    dagster_sling_translator=CustomSlingTranslator(cron_schedule="@daily"),
 )
 def cloud_product_main_user_event_log(context, embedded_elt: SlingResource) -> Iterable[Any]:
     yield from embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
