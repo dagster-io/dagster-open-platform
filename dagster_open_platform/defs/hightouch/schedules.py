@@ -1,5 +1,7 @@
 import dagster as dg
 
+from ..dbt.partitions import insights_partition
+
 hightouch_syncs_schedule = dg.ScheduleDefinition(
     name="hightouch_syncs_schedule",
     target=(
@@ -16,6 +18,7 @@ hightouch_hubspot_syncs_schedule = dg.ScheduleDefinition(
     name="hightouch_hubspot_syncs_schedule",
     job=dg.define_asset_job(
         name="hightouch_hubspot_syncs_job",
+        partition_key=insights_partition.get_last_partition_key(),
         selection=(
             dg.AssetSelection.keys(
                 "hightouch_sync_hubspot_company", "hightouch_sync_hubspot_organization"
