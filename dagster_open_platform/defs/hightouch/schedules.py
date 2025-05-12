@@ -16,7 +16,6 @@ hightouch_syncs_schedule = dg.ScheduleDefinition(
 
 hightouch_hubspot_syncs_job = dg.define_asset_job(
     name="hightouch_hubspot_syncs_job",
-    partitions_def=insights_partition,
     selection=(
         dg.AssetSelection.keys(
             "hightouch_sync_hubspot_company", "hightouch_sync_hubspot_organization"
