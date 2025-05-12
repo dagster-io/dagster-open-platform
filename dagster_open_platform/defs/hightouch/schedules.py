@@ -1,7 +1,5 @@
 import dagster as dg
 
-from ..dbt.partitions import insights_partition
-
 hightouch_syncs_schedule = dg.ScheduleDefinition(
     name="hightouch_syncs_schedule",
     target=(
@@ -39,7 +37,7 @@ def hightouch_hubspot_syncs_schedule(context):
     # Find runs of the same job that are currently running
     run_records = context.instance.get_run_records(
         dg.RunsFilter(
-            job_name="my_job",
+            job_name="hightouch_hubspot_syncs_job",
             statuses=[
                 dg.DagsterRunStatus.QUEUED,
                 dg.DagsterRunStatus.NOT_STARTED,
@@ -53,7 +51,4 @@ def hightouch_hubspot_syncs_schedule(context):
         return dg.SkipReason(
             "Skipping this run because another run of the same job is already running"
         )
-    most_recent_partition = insights_partition.get_last_partition_key()
-    yield dg.RunRequest(
-        partition_key=str(most_recent_partition), run_key=str(most_recent_partition)
-    )
+    yield dg.RunRequest()
