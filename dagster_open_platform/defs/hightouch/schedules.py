@@ -26,6 +26,7 @@ hightouch_hubspot_syncs_job = dg.define_asset_job(
         - dg.AssetSelection.groups("cloud_product_main").upstream()
         - dg.AssetSelection.groups("cloud_product_shard1").upstream()
         - dg.AssetSelection.groups("staging_aws").upstream()
+        - dg.AssetSelection.groups("product").upstream().required_multi_asset_neighbors()
     ),
     tags={"team": "devrel", "dagster/max_retries": 1},
 )
