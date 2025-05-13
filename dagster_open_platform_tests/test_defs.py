@@ -158,15 +158,15 @@ def test_assets_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> 
     # flatten
     specs = sorted(
         itertools.chain.from_iterable(
-            [asset] if isinstance(asset, AssetSpec) else asset.specs
-            for asset in defs.assets
+            asset.specs
+            for asset in defs.get_repository_def().asset_graph.assets_defs
             if isinstance(asset, (AssetsDefinition, AssetSpec))
         ),
         key=lambda x: x.key,
     )
     # Separately validate that the asset keys are stable across test runs, since this is easier to
     # reason about than the full spec data.
-    spec_keys = [spec.key for spec in specs]
+    spec_keys = [spec.key.to_user_string() for spec in specs]
     snapshot.assert_match(spec_keys)
 
     spec_data = [_asset_spec_data(spec) for spec in specs]
