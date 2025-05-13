@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Union
 
 from dagster import DagsterInvariantViolationError
-from dagster._annotations import beta
 from dagster._core.definitions.metadata import with_source_code_references
 from dagster._core.types.loadable_target_origin import LoadableTargetOrigin
 
@@ -76,6 +75,7 @@ def _locate_git_root() -> Optional[Path]:
 
     # get module matching code_origin.module_name
     module_or_pkg_name = code_origin.module_name or code_origin.package_name
+    code_origin_filepath = None
     if module_or_pkg_name:
         module = sys.modules.get(module_or_pkg_name)
         if module:
@@ -92,7 +92,6 @@ def _locate_git_root() -> Optional[Path]:
     return None
 
 
-@beta
 def link_code_references_to_git_if_cloud(
     assets_defs: Sequence[
         Union["AssetsDefinition", "SourceAsset", "CacheableAssetsDefinition", "AssetSpec"]

@@ -38,9 +38,9 @@ dependencies = [
     "pyyaml",
     "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
     "snowflake-connector-python[secure-local-storage,pandas]",
-    "dagster==1.10.10",
+    "dagster==1.10.14",
     "psutil>=7.0.0",
-    "certifi==2025.1.31"
+    "certifi==2025.1.31",
 ]
 
 [project.optional-dependencies]
@@ -49,7 +49,8 @@ dev = [
     "pytest",
     "sqlfluff>=3",
     "sqlfluff-templater-dbt",
-    "sprocketship"
+    "sprocketship",
+    "pyright",
 ]
 
 tests = [
@@ -58,6 +59,7 @@ tests = [
     "syrupy",
     "buildkite-test-collector",
 ]
+
 
 [tool.setuptools.packages.find]
 exclude = ["dagster_open_platform_tests"]
@@ -124,3 +126,19 @@ capitalisation_policy = "lower"
 
 [tool.sqlfluff.rules.capitalisation.types]
 extended_capitalisation_policy = "lower"
+
+
+# ########################
+# ##### PYRIGHT
+# ########################
+
+# separated from the repo root config since we use
+# published dagster modules in the platform
+
+[tool.pyright]
+
+include = ['.']
+exclude = []
+
+reportPrivateImportUsage = false
+useLibraryCodeForTypes = false
