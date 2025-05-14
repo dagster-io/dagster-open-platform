@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
-from dagster import AssetKey, SourceAsset
+from dagster import AssetKey, AssetSpec
 from dagster_open_platform.lib.sling import CustomSlingTranslator
 from dagster_open_platform.utils.environment_helpers import (
     get_environment,
@@ -39,15 +39,15 @@ def cloud_product_main_user_event_log(context, embedded_elt: SlingResource) -> I
 
 cloud_product_main_source_assets = [
     *[
-        SourceAsset(key, group_name="postgres_main")
+        AssetSpec(key, group_name="postgres_main")
         for key in cloud_product_main_high_volume.dependency_keys
     ],
     *[
-        SourceAsset(key, group_name="postgres_main")
+        AssetSpec(key, group_name="postgres_main")
         for key in cloud_product_main_runs.dependency_keys
     ],
     *[
-        SourceAsset(key, group_name="postgres_main")
+        AssetSpec(key, group_name="postgres_main")
         for key in cloud_product_main_user_event_log.dependency_keys
     ],
 ]
@@ -87,15 +87,15 @@ def cloud_product_shard1_user_event_log(context, embedded_elt: SlingResource) ->
 
 cloud_product_shard1_source_assets = [
     *[
-        SourceAsset(key, group_name="postgres_shard1")
+        AssetSpec(key, group_name="postgres_shard1")
         for key in cloud_product_shard1_high_volume.dependency_keys
     ],
     *[
-        SourceAsset(key, group_name="postgres_shard1")
+        AssetSpec(key, group_name="postgres_shard1")
         for key in cloud_product_shard1_runs.dependency_keys
     ],
     *[
-        SourceAsset(key, group_name="postgres_shard1")
+        AssetSpec(key, group_name="postgres_shard1")
         for key in cloud_product_shard1_user_event_log.dependency_keys
     ],
 ]

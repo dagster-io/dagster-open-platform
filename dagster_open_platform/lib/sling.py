@@ -6,10 +6,10 @@ from typing import Annotated, Any, Optional
 import dagster_shared.check as check
 from dagster import (
     AssetKey,
+    AssetSpec,
     AutoMaterializePolicy,
     AutomationCondition,
     Definitions,
-    SourceAsset,
     build_last_update_freshness_checks,
     build_sensor_for_freshness_checks,
 )
@@ -109,7 +109,7 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
         assets = [
             _dop_sling_assets,
             *(
-                SourceAsset(key, group_name=f"postgres_{shard_name}")
+                AssetSpec(key, group_name=f"postgres_{shard_name}")
                 for key in _dop_sling_assets.dependency_keys
             ),
         ]
