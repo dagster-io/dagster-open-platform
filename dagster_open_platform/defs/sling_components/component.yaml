@@ -1,0 +1,15 @@
+type: dagster_open_platform.lib.sling.ProdDbReplicationsComponent
+
+attributes:
+  config_dir: ../sling/configs/cloud_product
+  replications:
+    - name: low_volume
+      shards: [main, shard1]
+      cron_schedule: "0 */2 * * *"
+      last_update_freshness_check:
+        days: 1
+
+    - name: event_log
+      shards: [main, shard1]
+      last_update_freshness_check:
+        minutes: 30
