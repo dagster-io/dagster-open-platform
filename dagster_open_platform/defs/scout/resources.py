@@ -26,10 +26,12 @@ class ScoutosResource(ConfigurableResource):
             "Authorization": f"Bearer {self.api_key}",
         }
 
-    def write_documents(self, collection_id: str, documents: list[dict]) -> dict[str, Any]:
+    def write_documents(
+        self, collection_id: str, table_id: str, documents: list[dict]
+    ) -> dict[str, Any]:
         """Writes documents to the ScoutOS API."""
-        request_url = f"https://api.scoutos.com/v1/collections/{collection_id}/files"
-        payload = json.dumps({"files": documents})
+        request_url = f"https://api.scoutos.com/v2/collections/{collection_id}/tables/{table_id}/documents?await_completion=false"
+        payload = json.dumps(documents)
         response = requests.request("POST", request_url, data=payload, headers=self.headers)
         return response.json()
 

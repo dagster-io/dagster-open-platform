@@ -19,14 +19,14 @@ def test_parse_discussion():
     parsed_discussion = parse_discussion(discussion)
 
     assert parsed_discussion == {
-        "id": "1234",
+        "_key": "1234",
         "type": "text",
-        "text": "DISCUSSION TITLE: Sample Discussion\nQUESTION: This is a sample discussion body.\nANSWER: This is a sample answer.",
+        "content": "DISCUSSION TITLE: Sample Discussion\nQUESTION: This is a sample discussion body.\nANSWER: This is a sample answer.",
         "document_type": "discussion",
         "title": "Sample Discussion",
         "category": "General",
         "created_at": "2023-06-01T00:00:00Z",
-        "closed": "true",
+        "cm8iylanm1rsa09s6i0br86xa": "true",
         "url": "https://example.com/discussion/1234",
         "labels": "label1,label2",
         "state_reason": "SOME_REASON",
@@ -52,9 +52,9 @@ def test_parse_issue():
     parsed_issue = parse_issue(issue)
 
     assert parsed_issue == {
-        "id": "5678",
+        "_key": "5678",
         "type": "text",
-        "text": "ISSUE TITLE: Sample Issue\nBODY: This is a sample issue body.\n---\nCOMMENTS: Comment 1\nComment 2",
+        "content": "ISSUE TITLE: Sample Issue\nBODY: This is a sample issue body.\n---\nCOMMENTS: Comment 1\nComment 2",
         "document_type": "issue",
         "title": "Sample Issue",
         "created_at": "2023-06-01T00:00:00Z",

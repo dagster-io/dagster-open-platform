@@ -29,14 +29,16 @@ def parse_discussion(d: dict) -> dict:
         f"DISCUSSION TITLE: {d['title']}\n" + f"QUESTION: {d['bodyText']}\n" + f"ANSWER: {answer}\n"
     ).strip()
     return {
-        "id": d["id"],
+        "_key": d["id"],
         "type": "text",
-        "text": text,
+        "content": text,
         "document_type": "discussion",
         "title": d["title"],
         "category": d["category"].get("name", "Uncategorized"),
         "created_at": d["createdAt"],
-        "closed": d["closed"],
+        "cm8iylanm1rsa09s6i0br86xa": d[
+            "closed"
+        ],  # column has been renamed in API to be this unique identifier
         "state_reason": d["stateReason"],
         "url": d["url"],
         "labels": ",".join([label["name"] for label in d["labels"]["nodes"]]) or "None",
@@ -51,9 +53,9 @@ def parse_issue(i: dict) -> dict:
         + f"COMMENTS: {extract_comments(i)}"
     ).strip()
     return {
-        "id": i["id"],
+        "_key": i["id"],
         "type": "text",
-        "text": text,
+        "content": text,
         "document_type": "issue",
         "title": i["title"],
         "created_at": i["createdAt"],
@@ -101,10 +103,11 @@ def github_issues(
     context.log.info(f"Found {len(discussions)} discussions")
     parsed_discussions = [parse_discussion(d) for d in discussions]
     context.log.info(f"Found {len(parsed_discussions)} parsed discussions")
-    collection = os.getenv("SCOUTOS_COLLECTION_ID", "")
-    context.log.info(f"Using Collection ID: {collection}")
-    scoutos.write_documents(collection, parsed_issues)
-    scoutos.write_documents(collection, parsed_discussions)
+    collection_id = os.getenv("SCOUTOS_COLLECTION_ID", "")
+    table_id = os.getenv("SCOUTOS_TABLE_ID", "")
+    context.log.info(f"Using Collection ID: {collection_id}")
+    scoutos.write_documents(collection_id, table_id, parsed_issues)
+    scoutos.write_documents(collection_id, table_id, parsed_discussions)
     return dg.MaterializeResult()
 
 
@@ -142,6 +145,11 @@ def scoutos_app_runs(
     table_name = "scout_queries"
     temp_table_name = f"{table_name}_TEMP"
     with snowflake.get_connection() as conn:
+        create_schema_sql = f"""
+        CREATE SCHEMA IF NOT EXISTS {database_name}.{schema_name}
+        """
+        conn.cursor().execute(create_schema_sql)
+
         write_pandas(
             conn,
             df,
