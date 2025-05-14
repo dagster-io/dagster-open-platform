@@ -9,7 +9,21 @@ attributes:
       last_update_freshness_check:
         days: 1
 
+    - name: full_refresh
+      shards: [main]
+      cron_schedule: "0 */2 * * *"
+
+    - name: high_volume
+      shards: [main, shard1]
+
     - name: event_log
       shards: [main, shard1]
       last_update_freshness_check:
         minutes: 30
+
+    - name: user_event_log
+      shards: [main, shard1]
+      cron_schedule: "@daily"
+
+    - name: runs
+      shards: [main, shard1]
