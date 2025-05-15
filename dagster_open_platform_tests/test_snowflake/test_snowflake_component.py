@@ -26,7 +26,7 @@ def test_load_common_room_activities(environment: str) -> None:
         expected_schema = "elementl" if environment == "prod" else "dev"
 
         component, defs = build_component_and_defs(
-            component_context(Path("snowflake_components/common_room")),
+            component_context(Path("snowflake/assets/common_room")),
         )
 
         assets_def = next(iter(defs.assets or []))
@@ -78,7 +78,7 @@ def test_run_common_room_activities(environment: str, does_entity_exist: bool) -
                 return MockCursor()
 
         component, defs = build_component_and_defs(
-            component_context(Path("snowflake_components/common_room")),
+            component_context(Path("snowflake/assets/common_room")),
         )
 
         assets_def = next(iter(defs.assets or []))

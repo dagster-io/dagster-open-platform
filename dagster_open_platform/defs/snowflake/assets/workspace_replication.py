@@ -1,6 +1,7 @@
 import os
 
 import dagster as dg
+from dagster.components import definitions
 from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.aws.assets import workspace_data_json
 from dagster_open_platform.defs.aws.constants import BUCKET_NAME, OUTPUT_PREFIX
@@ -119,3 +120,10 @@ def workspace_replication_aws_external_tables(
             """
             cur.execute(create_table_query)
             log.info(f"Created external table {table_name}")
+
+
+@definitions
+def defs() -> dg.Definitions:
+    return dg.Definitions(
+        assets=[workspace_replication_aws_stages, workspace_replication_aws_external_tables]
+    )
