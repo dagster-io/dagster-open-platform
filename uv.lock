@@ -1,5 +1,4 @@
 version = 1
-revision = 1
 requires-python = ">=3.11, <3.13"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -667,7 +666,6 @@ requires-dist = [
     { name = "statsig" },
     { name = "syrupy", marker = "extra == 'tests'" },
 ]
-provides-extras = ["dev", "tests"]
 
 [[package]]
 name = "dagster-pandas"
