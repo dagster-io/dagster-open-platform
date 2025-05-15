@@ -11,8 +11,38 @@ from dagster_dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
 from dagster_open_platform.defs.dlt.sources.buildkite import buildkite_source_v2, pipelines
 from dagster_open_platform.defs.dlt.sources.github import github_reactions
 from dagster_open_platform.defs.dlt.sources.hubspot import hubspot
+from dagster_open_platform.defs.dlt.sources.thinkific import thinkific
 from dlt import pipeline
 from dlt.extract.resource import DltResource
+
+
+class ThinkificDagsterDltTranslator(DagsterDltTranslator):
+    @public
+    def get_automation_condition(self, resource):
+        return (
+            AutomationCondition.cron_tick_passed("0 0 * * *") & ~AutomationCondition.in_progress()
+        )
+
+
+@dlt_assets(
+    dlt_source=thinkific(),
+    dlt_pipeline=pipeline(
+        pipeline_name="thinkific",
+        dataset_name="thinkific",
+        destination="snowflake",
+        progress="log",
+    ),
+    name="thinkific",
+    group_name="thinkific",
+    dagster_dlt_translator=ThinkificDagsterDltTranslator(),
+)
+def thinkific_assets(context: AssetExecutionContext, dlt: DagsterDltResource):
+    yield from dlt.run(context=context)
+
+
+thinkific_source_assets = [
+    SourceAsset(key, group_name="thinkific") for key in thinkific_assets.dependency_keys
+]
 
 
 class HubspotDagsterDltTranslator(DagsterDltTranslator):
