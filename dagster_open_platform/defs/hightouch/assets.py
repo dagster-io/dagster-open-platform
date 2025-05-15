@@ -8,31 +8,6 @@ from dagster_open_platform.defs.dbt.assets import dbt_non_partitioned_models
 from dagster_open_platform.defs.hightouch.resources import ConfigurableHightouchResource
 from dagster_open_platform.utils.source_code import add_code_references_and_link_to_git
 
-org_activity_monthly = get_asset_key_for_model([dbt_non_partitioned_models], "org_activity_monthly")
-
-
-@asset(
-    deps=[org_activity_monthly],
-    tags={"dagster/kind/hightouch": "", "dagster/kind/salesforce": ""},
-    group_name="hightouch_syncs",
-    internal_freshness_policy=global_freshness_policy,
-)
-def hightouch_org_activity_monthly(
-    hightouch: ConfigurableHightouchResource,
-) -> MaterializeResult:
-    result = hightouch.sync_and_poll(os.getenv("HIGHTOUCH_ORG_ACTIVITY_MONTHLY_SYNC_ID", ""))
-    return MaterializeResult(
-        metadata={
-            "sync_details": result.sync_details,
-            "sync_run_details": result.sync_run_details,
-            "destination_details": result.destination_details,
-            "query_size": result.sync_run_details.get("querySize"),
-            "completion_ratio": result.sync_run_details.get("completionRatio"),
-            "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
-        }
-    )
-
-
 sync_salesforce_account = get_asset_key_for_model(
     [dbt_non_partitioned_models], "sync_salesforce_account"
 )
@@ -242,7 +217,6 @@ def defs() -> Definitions:
     all_assets = [
         hightouch_cloud_users,
         hightouch_null_contact_names,
-        hightouch_org_activity_monthly,
         hightouch_sales_cycles,
         hightouch_sync_hubspot_company,
         hightouch_sync_hubspot_contact,
