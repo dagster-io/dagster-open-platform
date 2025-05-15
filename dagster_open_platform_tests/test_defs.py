@@ -127,7 +127,7 @@ IGNORED_METADATA_PREFIXES = {"dagster_dlt"}
 def _asset_spec_data(asset: AssetSpec) -> dict[str, Any]:
     """Gets formatted, sorted representation of an asset spec for snapshot testing."""
     return {
-        "key": asset.key,
+        "key": asset.key.to_user_string(),
         "deps": sorted(asset.deps, key=lambda x: x.asset_key.to_user_string()),
         "description": asset.description,
         "metadata": {
@@ -164,7 +164,7 @@ def test_assets_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> 
             for asset in defs.get_repository_def().asset_graph.assets_defs
             if isinstance(asset, (AssetsDefinition, AssetSpec))
         ),
-        key=lambda x: x.key,
+        key=lambda x: x.key.to_user_string(),
     )
     # Separately validate that the asset keys are stable across test runs, since this is easier to
     # reason about than the full spec data.
@@ -191,10 +191,42 @@ def test_jobs_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> No
     job_data = [
         {
             "name": job.name,
-            "asset_selection": job.asset_layer.asset_graph.get_all_asset_keys()
+            "asset_selection": sorted(
+                k.to_user_string() for k in job.asset_layer.asset_graph.get_all_asset_keys()
+            )
             if job.asset_layer
             else None,
         }
-        for job in resolved_defs.get_all_jobs()
+        for job in sorted(
+            resolved_defs.get_all_jobs(),
+            key=lambda j: j.name,
+        )
     ]
     snapshot.assert_match(job_data)
+
+
+@pytest.mark.skipif(
+    os.environ.get("DOP_PYTEST_FULL") != "1",
+    reason="Snapshot tests are opt-in using `--run-skipped`",
+)
+@pytest.mark.parametrize("cloud_env", [True])
+def test_schedules_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> None:
+    """Ensures that schedule list and schedule selection are stable across test runs, and don't
+    unexpectedly change.
+    """
+    from dagster_open_platform.definitions import defs
+
+    resolved_defs = defs.get_repository_def()
+    schedule_data = [
+        {
+            "name": schedule.name,
+            "job_name": schedule.job_name,
+            "cron": schedule.cron_schedule,
+        }
+        for schedule in sorted(
+            resolved_defs.schedule_defs,
+            key=lambda s: s.name,
+        )
+    ]
+
+    snapshot.assert_match(schedule_data)
