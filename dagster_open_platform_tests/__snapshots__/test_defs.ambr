@@ -10515,7 +10515,7 @@
       ]),
       'tags': dict({
         'dagster/kind/hightouch': '',
-        'dagster/kind/salesforce': '',
+        'dagster/kind/hubspot': '',
       }),
     }),
     dict({
@@ -10541,7 +10541,7 @@
       ]),
       'tags': dict({
         'dagster/kind/hightouch': '',
-        'dagster/kind/salesforce': '',
+        'dagster/kind/hubspot': '',
       }),
     }),
     dict({
@@ -10567,7 +10567,7 @@
       ]),
       'tags': dict({
         'dagster/kind/hightouch': '',
-        'dagster/kind/salesforce': '',
+        'dagster/kind/hubspot': '',
       }),
     }),
     dict({

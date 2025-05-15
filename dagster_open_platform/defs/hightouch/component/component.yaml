@@ -1,5 +1,4 @@
 type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
-
 attributes:
   asset:
     key: hightouch_org_activity_monthly
@@ -10,3 +9,116 @@ attributes:
       - salesforce
     group_name: hightouch_syncs
   sync_id_env_var: HIGHTOUCH_ORG_ACTIVITY_MONTHLY_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_sync_salesforce_account
+    deps:
+      - "{{ dbt_asset_key('sync_salesforce_account') }}"
+    kinds:
+      - hightouch
+      - salesforce
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_SYNC_SALESFORCE_ACCOUNT_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_null_contact_names
+    deps:
+      - "{{ dbt_asset_key('salesforce_contacts') }}"
+      - "{{ dbt_asset_key('stg_cloud_product__users') }}"
+    kinds:
+      - hightouch
+      - salesforce
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_CONTACT_NAMES_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_cloud_users
+    deps:
+      - "{{ dbt_asset_key('cloud_users') }}"
+    kinds:
+      - hightouch
+      - salesforce
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_CLOUD_USERS_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_user_attribution
+    deps:
+      - "{{ dbt_asset_key('user_attribution') }}"
+    kinds:
+      - hightouch
+      - salesforce
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_USER_ATTRIBUTION_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_sales_cycles
+    deps:
+      - "{{ dbt_asset_key('sales_cycles') }}"
+    kinds:
+      - hightouch
+      - salesforce
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_SALES_CYCLES_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_sync_hubspot_company
+    deps:
+      - "{{ dbt_asset_key('sync_hubspot_company') }}"
+    kinds:
+      - hightouch
+      - hubspot
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_SYNC_HUBSPOT_COMPANY_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_sync_hubspot_contact
+    deps:
+      - "{{ dbt_asset_key('sync_hubspot_contact') }}"
+    kinds:
+      - hightouch
+      - hubspot
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_SYNC_HUBSPOT_CONTACT_SYNC_ID
+
+---
+
+type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_sync_hubspot_organization
+    deps:
+      - "{{ dbt_asset_key('sync_hubspot_organization') }}"
+    kinds:
+      - hightouch
+      - hubspot
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_SYNC_HUBSPOT_ORGANIZATION_SYNC_ID
