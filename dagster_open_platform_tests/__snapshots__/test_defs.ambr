@@ -82609,6 +82609,13 @@
           parts=tuple(
             'main',
             'public',
+            'serverless_agents',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'main',
+            'public',
             'session_tokens',
           ),
         ),
@@ -87694,6 +87701,13 @@
           parts=tuple(
             'main',
             'public',
+            'event_logs_view',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'main',
+            'public',
             'jobs',
           ),
         ),
@@ -87744,6 +87758,13 @@
             'main',
             'public',
             'runs',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'main',
+            'public',
+            'serverless_agents',
           ),
         ),
         AssetKey(
@@ -90756,6 +90777,13 @@
           parts=tuple(
             'shard1',
             'public',
+            'event_logs_view',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'shard1',
+            'public',
             'jobs',
           ),
         ),
@@ -92882,6 +92910,13 @@
           parts=tuple(
             'main',
             'public',
+            'event_logs_view',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'main',
+            'public',
             'jobs',
           ),
         ),
@@ -92932,6 +92967,13 @@
             'main',
             'public',
             'runs',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'main',
+            'public',
+            'serverless_agents',
           ),
         ),
         AssetKey(
@@ -95910,6 +95952,13 @@
             'shard1',
             'public',
             'event_logs_partitioned',
+          ),
+        ),
+        AssetKey(
+          parts=tuple(
+            'shard1',
+            'public',
+            'event_logs_view',
           ),
         ),
         AssetKey(

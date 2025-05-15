@@ -64,10 +64,12 @@ def prepare_dop_environment(
     with environ(
         {
             "FIVETRAN_API_SECRET": check.not_none(
-                os.getenv(FIVETRAN_API_SECRET_ENV_VAR), f"{FIVETRAN_API_SECRET_ENV_VAR} is not set"
+                os.getenv(FIVETRAN_API_SECRET_ENV_VAR),
+                f"{FIVETRAN_API_SECRET_ENV_VAR} is not set",
             ),
             "FIVETRAN_API_KEY": check.not_none(
-                os.getenv(FIVETRAN_API_KEY_ENV_VAR), f"{FIVETRAN_API_KEY_ENV_VAR} is not set"
+                os.getenv(FIVETRAN_API_KEY_ENV_VAR),
+                f"{FIVETRAN_API_KEY_ENV_VAR} is not set",
             ),
             "THINKIFIC_SUBDOMAIN": PLACEHOLDER_ENV_VAR_VALUE,
             "THINKIFIC_API_KEY": PLACEHOLDER_ENV_VAR_VALUE,
