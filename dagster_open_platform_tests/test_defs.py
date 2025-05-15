@@ -99,10 +99,11 @@ def prepare_dop_environment(
 def test_dop_code_location(prepare_dop_environment, cloud_env: bool) -> None:
     from dagster_open_platform.definitions import defs
 
-    assert len(defs.get_asset_graph().get_all_asset_keys()) > 0
-    assert defs.assets is not None
+    resolved_defs = defs()
+    assert len(resolved_defs.get_asset_graph().get_all_asset_keys()) > 0
+    assert resolved_defs.assets is not None
 
-    for asset in defs.assets:
+    for asset in resolved_defs.assets:
         if not isinstance(asset, AssetsDefinition):
             continue
         for key in asset.keys:
@@ -154,14 +155,16 @@ def test_assets_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> 
     """
     from dagster_open_platform.definitions import defs
 
-    assert len(defs.get_asset_graph().get_all_asset_keys()) > 0
-    assert defs.assets is not None
+    resolved_defs = defs()
+
+    assert len(resolved_defs.get_asset_graph().get_all_asset_keys()) > 0
+    assert resolved_defs.assets is not None
 
     # flatten
     specs = sorted(
         itertools.chain.from_iterable(
             asset.specs
-            for asset in defs.get_repository_def().asset_graph.assets_defs
+            for asset in resolved_defs.get_repository_def().asset_graph.assets_defs
             if isinstance(asset, (AssetsDefinition, AssetSpec))
         ),
         key=lambda x: x.key.to_user_string(),
@@ -186,7 +189,7 @@ def test_jobs_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> No
     """
     from dagster_open_platform.definitions import defs
 
-    resolved_defs = defs.get_repository_def()
+    repo_def = defs().get_repository_def()
 
     job_data = [
         {
@@ -198,7 +201,7 @@ def test_jobs_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> No
             else None,
         }
         for job in sorted(
-            resolved_defs.get_all_jobs(),
+            repo_def.get_all_jobs(),
             key=lambda j: j.name,
         )
     ]
@@ -216,7 +219,7 @@ def test_schedules_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) 
     """
     from dagster_open_platform.definitions import defs
 
-    resolved_defs = defs.get_repository_def()
+    repo_def = defs().get_repository_def()
     schedule_data = [
         {
             "name": schedule.name,
@@ -224,7 +227,7 @@ def test_schedules_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) 
             "cron": schedule.cron_schedule,
         }
         for schedule in sorted(
-            resolved_defs.schedule_defs,
+            repo_def.schedule_defs,
             key=lambda s: s.name,
         )
     ]
