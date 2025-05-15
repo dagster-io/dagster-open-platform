@@ -36,6 +36,9 @@
     'aws/cloud_prod/workspace_staging_resources_ext',
     'aws/cloud_prod/workspace_staging_schedules_ext',
     'aws/cloud_prod/workspace_staging_sensors_ext',
+    'aws/dev/ext_common_room_activities',
+    'aws/dev/ext_common_room_community_members',
+    'aws/dev/ext_common_room_groups',
     'aws/dev/user_roles_ext',
     'aws/dev/workspace_staging_asset_checks_ext',
     'aws/dev/workspace_staging_assets_ext',
@@ -1761,6 +1764,48 @@
       'key': 'aws/cloud_prod/workspace_staging_sensors_ext',
       'metadata': dict({
         'dagster/internal_freshness_policy': '{"__class__": "TimeWindowFreshnessPolicy", "fail_window": {"__class__": "SerializableTimeDelta", "days": 0, "microseconds": 0, "seconds": 82800}, "warn_window": null}',
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+      ]),
+      'description': None,
+      'group_name': 'default',
+      'key': 'aws/dev/ext_common_room_activities',
+      'metadata': dict({
+        'dagster/auto_created_stub_asset': True,
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+      ]),
+      'description': None,
+      'group_name': 'default',
+      'key': 'aws/dev/ext_common_room_community_members',
+      'metadata': dict({
+        'dagster/auto_created_stub_asset': True,
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+      }),
+    }),
+    dict({
+      'deps': list([
+      ]),
+      'description': None,
+      'group_name': 'default',
+      'key': 'aws/dev/ext_common_room_groups',
+      'metadata': dict({
+        'dagster/auto_created_stub_asset': True,
       }),
       'owners': list([
       ]),
@@ -42769,7 +42814,7 @@
           asset_key=AssetKey(
             parts=tuple(
               'aws',
-              'elementl',
+              'dev',
               'ext_common_room_activities',
             ),
           ),
@@ -42825,7 +42870,7 @@
           asset_key=AssetKey(
             parts=tuple(
               'aws',
-              'elementl',
+              'dev',
               'ext_common_room_community_members',
             ),
           ),
@@ -42887,7 +42932,7 @@
           asset_key=AssetKey(
             parts=tuple(
               'aws',
-              'elementl',
+              'dev',
               'ext_common_room_groups',
             ),
           ),
@@ -67395,6 +67440,9 @@
         'aws/cloud_prod/workspace_staging_resources_ext',
         'aws/cloud_prod/workspace_staging_schedules_ext',
         'aws/cloud_prod/workspace_staging_sensors_ext',
+        'aws/dev/ext_common_room_activities',
+        'aws/dev/ext_common_room_community_members',
+        'aws/dev/ext_common_room_groups',
         'aws/dev/user_roles_ext',
         'aws/dev/workspace_staging_asset_checks_ext',
         'aws/dev/workspace_staging_assets_ext',
@@ -68464,6 +68512,9 @@
     }),
     dict({
       'asset_selection': list([
+        'aws/dev/ext_common_room_activities',
+        'aws/dev/ext_common_room_community_members',
+        'aws/dev/ext_common_room_groups',
         'aws/dev/user_roles_ext',
         'aws/dev/workspace_staging_asset_checks_ext',
         'aws/dev/workspace_staging_assets_ext',
@@ -68476,12 +68527,6 @@
         'aws/dev/workspace_staging_resources_ext',
         'aws/dev/workspace_staging_schedules_ext',
         'aws/dev/workspace_staging_sensors_ext',
-        'aws/elementl/ext_common_room_activities',
-        'aws/elementl/ext_common_room_community_members',
-        'aws/elementl/ext_common_room_groups',
-        'aws/elementl/stage_common_room_activities',
-        'aws/elementl/stage_common_room_community_members',
-        'aws/elementl/stage_common_room_groups',
         'aws/oss_telemetry/oss_telemetry_prod',
         'aws/oss_telemetry/oss_telemetry_prod_ext',
         'dlt/hubspot/companies',
@@ -69205,6 +69250,9 @@
     }),
     dict({
       'asset_selection': list([
+        'aws/dev/ext_common_room_activities',
+        'aws/dev/ext_common_room_community_members',
+        'aws/dev/ext_common_room_groups',
         'aws/dev/user_roles_ext',
         'aws/dev/workspace_staging_asset_checks_ext',
         'aws/dev/workspace_staging_assets_ext',
@@ -69217,12 +69265,6 @@
         'aws/dev/workspace_staging_resources_ext',
         'aws/dev/workspace_staging_schedules_ext',
         'aws/dev/workspace_staging_sensors_ext',
-        'aws/elementl/ext_common_room_activities',
-        'aws/elementl/ext_common_room_community_members',
-        'aws/elementl/ext_common_room_groups',
-        'aws/elementl/stage_common_room_activities',
-        'aws/elementl/stage_common_room_community_members',
-        'aws/elementl/stage_common_room_groups',
         'aws/oss_telemetry/oss_telemetry_prod',
         'aws/oss_telemetry/oss_telemetry_prod_ext',
         'dlt/hubspot/companies',
@@ -69968,6 +70010,9 @@
     }),
     dict({
       'asset_selection': list([
+        'aws/dev/ext_common_room_activities',
+        'aws/dev/ext_common_room_community_members',
+        'aws/dev/ext_common_room_groups',
         'aws/dev/user_roles_ext',
         'aws/dev/workspace_staging_asset_checks_ext',
         'aws/dev/workspace_staging_assets_ext',
@@ -69980,12 +70025,6 @@
         'aws/dev/workspace_staging_resources_ext',
         'aws/dev/workspace_staging_schedules_ext',
         'aws/dev/workspace_staging_sensors_ext',
-        'aws/elementl/ext_common_room_activities',
-        'aws/elementl/ext_common_room_community_members',
-        'aws/elementl/ext_common_room_groups',
-        'aws/elementl/stage_common_room_activities',
-        'aws/elementl/stage_common_room_community_members',
-        'aws/elementl/stage_common_room_groups',
         'aws/oss_telemetry/oss_telemetry_prod',
         'aws/oss_telemetry/oss_telemetry_prod_ext',
         'dlt/hubspot/companies',

@@ -1,0 +1,63 @@
+type: dagster_open_platform.defs.snowflake_components.custom_component.SnowflakeCreateOrRefreshComponent
+
+attributes:
+  role: AWS_WRITER
+  entities:
+    - entity_name: "aws.{{ schema_from_env() }}.stage_common_room_activities"
+      template_variables:
+        stage_name: "stage_common_room_activities"
+        directory: "Activity"
+    - entity_name: "aws.{{ schema_from_env() }}.stage_common_room_community_members"
+      template_variables:
+        stage_name: "stage_common_room_community_members"
+        directory: "CommunityMember"
+    - entity_name: "aws.{{ schema_from_env() }}.stage_common_room_groups"
+      template_variables:
+        stage_name: "stage_common_room_groups"
+        directory: "Group"
+
+  create_statement:
+    file: "common_room_stage.sql"
+  show_statement: "SHOW STAGES LIKE '{{stage_name}}';"
+  refresh_statement: "ALTER STAGE {{stage_name}} REFRESH;"
+
+  asset_attributes:
+    description: "Snowflake stages for Common Room export data."
+    automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
+    group_name: "aws_stages"
+
+---
+
+type: dagster_open_platform.defs.snowflake_components.custom_component.SnowflakeCreateOrRefreshComponent
+
+attributes:
+  role: AWS_WRITER
+  entities:
+    - entity_name: "aws.{{ schema_from_env() }}.ext_common_room_activities"
+      asset_attributes:
+        deps: ["aws/{{ schema_from_env() }}/stage_common_room_activities"]
+      template_variables:
+        table_name: "ext_common_room_activities"
+        stage_name: "stage_common_room_activities"
+    - entity_name: "aws.{{ schema_from_env() }}.ext_common_room_community_members"
+      asset_attributes:
+        deps: ["aws/{{ schema_from_env() }}/stage_common_room_community_members"]
+      template_variables:
+        table_name: "ext_common_room_community_members"
+        stage_name: "stage_common_room_community_members"
+    - entity_name: "aws.{{ schema_from_env() }}.ext_common_room_groups"
+      asset_attributes:
+        deps: ["aws/{{ schema_from_env() }}/stage_common_room_groups"]
+      template_variables:
+        table_name: "ext_common_room_groups"
+        stage_name: "stage_common_room_groups"
+
+  create_statement:
+    file: "common_room_external_table.sql"
+  show_statement: "SHOW TABLES LIKE '{{table_name}}';"
+  refresh_statement: "ALTER EXTERNAL TABLE {{table_name}} REFRESH;"
+
+  asset_attributes:
+    description: "Snowflake external table for Common Room export data."
+    automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
+    group_name: "aws_external_tables"
