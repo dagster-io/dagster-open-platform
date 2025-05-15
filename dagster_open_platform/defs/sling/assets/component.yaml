@@ -1,7 +1,7 @@
 type: dagster_open_platform.lib.sling.ProdDbReplicationsComponent
 
 attributes:
-  config_dir: ../sling/configs/cloud_product
+  config_dir: ../configs/cloud_product
   replications:
     - name: low_volume
       shards: [main, shard1]

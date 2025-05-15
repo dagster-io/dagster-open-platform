@@ -1,4 +1,5 @@
-from dagster import AssetSelection, ScheduleDefinition, define_asset_job
+from dagster import AssetSelection, Definitions, ScheduleDefinition, define_asset_job
+from dagster.components import definitions
 
 sling_egress_schedule = ScheduleDefinition(
     job=define_asset_job(
@@ -8,3 +9,10 @@ sling_egress_schedule = ScheduleDefinition(
     ),
     cron_schedule="0 3 * * *",
 )
+
+
+@definitions
+def defs():
+    return Definitions(
+        schedules=[sling_egress_schedule],
+    )

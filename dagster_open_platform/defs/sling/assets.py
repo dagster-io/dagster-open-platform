@@ -2,7 +2,8 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
-from dagster import AssetKey
+from dagster import AssetKey, Definitions
+from dagster.components import definitions
 from dagster_open_platform.utils.environment_helpers import (
     get_environment,
     get_schema_for_environment,
@@ -30,3 +31,12 @@ class CustomSlingTranslatorEgress(DagsterSlingTranslator):
 )
 def salesforce_contract_info(context, embedded_elt: SlingResource) -> Iterable[Any]:
     yield from (embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count())
+
+
+@definitions
+def defs():
+    return Definitions(
+        assets=[
+            salesforce_contract_info,
+        ]
+    )

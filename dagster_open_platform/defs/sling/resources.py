@@ -1,4 +1,5 @@
-from dagster import EnvVar
+from dagster import Definitions, EnvVar
+from dagster.components import definitions
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_environment,
@@ -72,3 +73,10 @@ embedded_elt_resource = SlingResource(
         ),
     ]
 )
+
+
+@definitions
+def defs():
+    return Definitions(
+        resources={"embedded_elt": embedded_elt_resource},
+    )
