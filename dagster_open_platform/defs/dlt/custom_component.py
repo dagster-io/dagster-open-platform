@@ -1,4 +1,6 @@
 from collections import defaultdict
+from collections.abc import Mapping
+from typing import Any
 
 import dagster as dg
 from dagster.components.core.context import ComponentLoadContext
@@ -6,6 +8,13 @@ from dagster_dlt.components.dlt_load_collection.component import DltLoadCollecti
 
 
 class CustomDltLoadCollectionComponent(DltLoadCollectionComponent):
+    @classmethod
+    def get_additional_scope(cls) -> Mapping[str, Any]:
+        return {
+            "daily_not_in_progress": dg.AutomationCondition.cron_tick_passed("0 0 * * *")
+            & ~dg.AutomationCondition.in_progress()
+        }
+
     def build_defs(self, context: ComponentLoadContext) -> dg.Definitions:
         defs = super().build_defs(context)
 
