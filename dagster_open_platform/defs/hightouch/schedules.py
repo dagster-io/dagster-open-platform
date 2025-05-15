@@ -1,4 +1,5 @@
 import dagster as dg
+from dagster.components import definitions
 
 hightouch_syncs_schedule = dg.ScheduleDefinition(
     name="hightouch_syncs_schedule",
@@ -52,3 +53,8 @@ def hightouch_hubspot_syncs_schedule(context):
             "Skipping this run because another run of the same job is already running"
         )
     yield dg.RunRequest()
+
+
+@definitions
+def defs() -> dg.Definitions:
+    return dg.Definitions(schedules=[hightouch_hubspot_syncs_schedule, hightouch_syncs_schedule])

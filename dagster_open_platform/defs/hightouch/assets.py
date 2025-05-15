@@ -1,10 +1,12 @@
 import os
 
-from dagster import MaterializeResult, asset
+from dagster import Definitions, MaterializeResult, asset
+from dagster.components import definitions
 from dagster_dbt import get_asset_key_for_model
 from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.dbt.assets import dbt_non_partitioned_models
 from dagster_open_platform.defs.hightouch.resources import ConfigurableHightouchResource
+from dagster_open_platform.utils.source_code import add_code_references_and_link_to_git
 
 org_activity_monthly = get_asset_key_for_model([dbt_non_partitioned_models], "org_activity_monthly")
 
@@ -232,4 +234,22 @@ def hightouch_sync_hubspot_organization(
             "completion_ratio": result.sync_run_details.get("completionRatio"),
             "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
         }
+    )
+
+
+@definitions
+def defs() -> Definitions:
+    all_assets = [
+        hightouch_cloud_users,
+        hightouch_null_contact_names,
+        hightouch_org_activity_monthly,
+        hightouch_sales_cycles,
+        hightouch_sync_hubspot_company,
+        hightouch_sync_hubspot_contact,
+        hightouch_sync_hubspot_organization,
+        hightouch_sync_salesforce_account,
+        hightouch_user_attribution,
+    ]
+    return Definitions(
+        assets=add_code_references_and_link_to_git(all_assets),
     )
