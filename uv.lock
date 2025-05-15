@@ -668,7 +668,6 @@ requires-dist = [
     { name = "statsig" },
     { name = "syrupy", marker = "extra == 'tests'" },
 ]
-provides-extras = ["dev", "tests"]
 
 [[package]]
 name = "dagster-pandas"
