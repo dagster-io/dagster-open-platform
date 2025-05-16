@@ -1,0 +1,7 @@
+type: dagster_open_platform.lib.schedule.ScheduleComponent
+attributes:
+  name: hightouch_syncs_schedule
+  target: group:hightouch_syncs and not (key:hightouch_sync_hubspot_company or key:hightouch_sync_hubspot_organization)
+  tags:
+    team: devrel
+  cron: 0 3 * * *

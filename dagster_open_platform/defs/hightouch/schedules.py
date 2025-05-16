@@ -1,18 +1,6 @@
 import dagster as dg
 from dagster.components import definitions
 
-hightouch_syncs_schedule = dg.ScheduleDefinition(
-    name="hightouch_syncs_schedule",
-    target=(
-        dg.AssetSelection.groups("hightouch_syncs")
-        - dg.AssetSelection.keys(
-            "hightouch_sync_hubspot_company", "hightouch_sync_hubspot_organization"
-        )
-    ),
-    tags={"team": "devrel"},
-    cron_schedule="0 3 * * *",
-)
-
 hightouch_hubspot_syncs_job = dg.define_asset_job(
     name="hightouch_hubspot_syncs_job",
     selection=(
@@ -57,4 +45,4 @@ def hightouch_hubspot_syncs_schedule(context):
 
 @definitions
 def defs() -> dg.Definitions:
-    return dg.Definitions(schedules=[hightouch_hubspot_syncs_schedule, hightouch_syncs_schedule])
+    return dg.Definitions(schedules=[hightouch_hubspot_syncs_schedule])
