@@ -11673,6 +11673,7 @@
             )
         
             select * from unioned
+            qualify row_number() over (partition by hubspot_company_id, event_timestamp, event_name order by event_timestamp) = 1
         ```
       ''',
       'group_name': 'mart_gtm',
