@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from dagster import Definitions
+from dagster.components import definitions
 from dagster_dbt import DbtCliResource, DbtProject
 from dagster_open_platform.utils.environment_helpers import get_dbt_target
 
@@ -10,4 +12,9 @@ dagster_open_platform_dbt_project = DbtProject(
     target=get_dbt_target(),
 )
 
-dbt_resource = DbtCliResource(project_dir=dagster_open_platform_dbt_project)
+
+@definitions
+def defs():
+    return Definitions(
+        resources={"dbt": DbtCliResource(project_dir=dagster_open_platform_dbt_project)}
+    )

@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 import dagster as dg
 import requests
+from dagster.components import definitions
 
 if TYPE_CHECKING:
     from statsig.statsig import StatsigEvent
@@ -43,3 +44,18 @@ class DatadogMetricsResource(dg.ConfigurableResource):
             series["scope"].split(":")[-1]: series["pointlist"][-1][1]
             for series in response.json()["series"]
         }
+
+
+@definitions
+def defs():
+    return dg.Definitions(
+        resources={
+            "statsig": StatsigResource(
+                api_key=dg.EnvVar("STATSIG_API_KEY"),
+            ),
+            "datadog": DatadogMetricsResource(
+                api_key=dg.EnvVar("DATADOG_API_KEY"),
+                app_key=dg.EnvVar("DATADOG_APP_KEY"),
+            ),
+        }
+    )

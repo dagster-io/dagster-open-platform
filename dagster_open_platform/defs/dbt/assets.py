@@ -3,9 +3,11 @@ import json
 import os
 from collections.abc import Mapping
 from datetime import timedelta
+from functools import cache
 from typing import Any, Optional
 
 import dagster as dg
+from dagster.components import definitions
 from dagster_dbt import (
     DagsterDbtTranslator,
     DagsterDbtTranslatorSettings,
@@ -76,76 +78,103 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
         }
 
 
-@dbt_assets(
-    manifest=dagster_open_platform_dbt_project.manifest_path,
-    dagster_dbt_translator=CustomDagsterDbtTranslator(
-        settings=DagsterDbtTranslatorSettings(enable_code_references=True)
-    ),
-    exclude=" ".join([INCREMENTAL_SELECTOR, SNAPSHOT_SELECTOR]),
-    backfill_policy=dg.BackfillPolicy.single_run(),
-    project=dagster_open_platform_dbt_project,
-)
-def dbt_non_partitioned_models(context: dg.AssetExecutionContext, dbt: DbtCliResource):
-    yield from (
-        dbt.cli(["build"], context=context)
-        .stream()
-        # .fetch_row_counts() # removing row counts for now due to performance issues
-        .fetch_column_metadata()
-        .with_insights()
+@cache
+def get_dbt_non_partitioned_models():
+    @dbt_assets(
+        manifest=dagster_open_platform_dbt_project.manifest_path,
+        dagster_dbt_translator=CustomDagsterDbtTranslator(
+            settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+        ),
+        exclude=" ".join([INCREMENTAL_SELECTOR, SNAPSHOT_SELECTOR]),
+        backfill_policy=dg.BackfillPolicy.single_run(),
+        project=dagster_open_platform_dbt_project,
     )
+    def dbt_non_partitioned_models(context: dg.AssetExecutionContext, dbt: DbtCliResource):
+        yield from (
+            dbt.cli(["build"], context=context)
+            .stream()
+            # .fetch_row_counts() # removing row counts for now due to performance issues
+            .fetch_column_metadata()
+            .with_insights()
+        )
+
+    return dbt_non_partitioned_models
 
 
 class DbtConfig(dg.Config):
     full_refresh: bool = False
 
 
-@dbt_assets(
-    manifest=dagster_open_platform_dbt_project.manifest_path,
-    select=INCREMENTAL_SELECTOR,
-    dagster_dbt_translator=CustomDagsterDbtTranslator(
-        settings=DagsterDbtTranslatorSettings(enable_code_references=True)
-    ),
-    partitions_def=insights_partition,
-    backfill_policy=dg.BackfillPolicy.single_run(),
-    project=dagster_open_platform_dbt_project,
-)
-def dbt_partitioned_models(
-    context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
-):
-    dbt_vars = {
-        "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
-        "max_date": context.partition_time_window.end.isoformat(),
-    }
-
-    args = (
-        ["build", "--full-refresh"]
-        if config.full_refresh
-        else ["build", "--vars", json.dumps(dbt_vars)]
+@cache
+def get_dbt_partitioned_models():
+    @dbt_assets(
+        manifest=dagster_open_platform_dbt_project.manifest_path,
+        select=INCREMENTAL_SELECTOR,
+        dagster_dbt_translator=CustomDagsterDbtTranslator(
+            settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+        ),
+        partitions_def=insights_partition,
+        backfill_policy=dg.BackfillPolicy.single_run(),
+        project=dagster_open_platform_dbt_project,
     )
+    def dbt_partitioned_models(
+        context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
+    ):
+        dbt_vars = {
+            "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
+            "max_date": context.partition_time_window.end.isoformat(),
+        }
 
-    yield from (
-        dbt.cli(args, context=context)
-        .stream()
-        # .fetch_row_counts() # removing row counts for now due to performance issues
-        .fetch_column_metadata()
-        .with_insights()
+        args = (
+            ["build", "--full-refresh"]
+            if config.full_refresh
+            else ["build", "--vars", json.dumps(dbt_vars)]
+        )
+
+        yield from (
+            dbt.cli(args, context=context)
+            .stream()
+            # .fetch_row_counts() # removing row counts for now due to performance issues
+            .fetch_column_metadata()
+            .with_insights()
+        )
+
+    return dbt_partitioned_models
+
+
+@cache
+def get_dbt_snapshot_models():
+    @dbt_assets(
+        manifest=dagster_open_platform_dbt_project.manifest_path,
+        select=SNAPSHOT_SELECTOR,
+        dagster_dbt_translator=CustomDagsterDbtTranslator(
+            settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+        ),
+        backfill_policy=dg.BackfillPolicy.single_run(),
+        project=dagster_open_platform_dbt_project,
     )
+    def dbt_snapshot_models(
+        context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
+    ):
+        yield from dbt.cli(["snapshot"], context=context).stream().with_insights()
+
+    return dbt_snapshot_models
 
 
-@dbt_assets(
-    manifest=dagster_open_platform_dbt_project.manifest_path,
-    select=SNAPSHOT_SELECTOR,
-    dagster_dbt_translator=CustomDagsterDbtTranslator(
-        settings=DagsterDbtTranslatorSettings(enable_code_references=True)
-    ),
-    backfill_policy=dg.BackfillPolicy.single_run(),
-    project=dagster_open_platform_dbt_project,
-)
-def dbt_snapshot_models(context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig):
-    yield from dbt.cli(["snapshot"], context=context).stream().with_insights()
+@definitions
+def defs():
+    dbt_snapshot_models = get_dbt_snapshot_models()
+    dbt_partitioned_models = get_dbt_partitioned_models()
+    dbt_non_partitioned_models = get_dbt_non_partitioned_models()
 
-
-snapshots_freshness_checks = dg.build_last_update_freshness_checks(
-    assets=[dbt_snapshot_models],
-    lower_bound_delta=datetime.timedelta(hours=36),
-)
+    return dg.Definitions(
+        assets=[
+            dbt_snapshot_models,
+            dbt_partitioned_models,
+            dbt_non_partitioned_models,
+        ],
+        asset_checks=dg.build_last_update_freshness_checks(
+            assets=[dbt_snapshot_models],
+            lower_bound_delta=datetime.timedelta(hours=36),
+        ),
+    )

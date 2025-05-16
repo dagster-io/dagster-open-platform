@@ -15,12 +15,14 @@ from dagster import (
     AssetsDefinition,
     Config,
     ConfigurableResource,
+    Definitions,
     EnvVar,
     asset,
     get_dagster_logger,
 )
 from dagster._core.definitions.events import CoercibleToAssetKey
 from dagster._core.test_utils import environ
+from dagster.components import definitions
 from dagster_open_platform.definitions import global_freshness_policy
 from pydantic import create_model
 
@@ -328,21 +330,27 @@ def build_sync_snowflake_to_postgres_asset(
     return sync
 
 
-cloud_prod_reporting_sling_resource = CustomSlingResource(
-    postgres_config=SlingPostgresConfig(
-        host=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_TAILSCALE_HOST"),
-        user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
-        database="dagster",
-        password=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_PASSWORD"),
-        ssh_tunnel=None,
-        ssh_private_key=None,
-    ),
-    snowflake_config=SlingSnowflakeConfig(
-        host=EnvVar("SNOWFLAKE_PURINA_ACCOUNT"),
-        user=EnvVar("SNOWFLAKE_PURINA_USER"),
-        password=EnvVar("SNOWFLAKE_PURINA_PASSWORD"),
-        database="purina",
-        warehouse="purina",
-        role="purina",
-    ),
-)
+@definitions
+def defs():
+    return Definitions(
+        resources={
+            "cloud_prod_reporting_sling": CustomSlingResource(
+                postgres_config=SlingPostgresConfig(
+                    host=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_TAILSCALE_HOST"),
+                    user=EnvVar("CLOUD_PROD_POSTGRES_USER"),
+                    database="dagster",
+                    password=EnvVar("CLOUD_PROD_REPORTING_POSTGRES_PASSWORD"),
+                    ssh_tunnel=None,
+                    ssh_private_key=None,
+                ),
+                snowflake_config=SlingSnowflakeConfig(
+                    host=EnvVar("SNOWFLAKE_PURINA_ACCOUNT"),
+                    user=EnvVar("SNOWFLAKE_PURINA_USER"),
+                    password=EnvVar("SNOWFLAKE_PURINA_PASSWORD"),
+                    database="purina",
+                    warehouse="purina",
+                    role="purina",
+                ),
+            )
+        }
+    )

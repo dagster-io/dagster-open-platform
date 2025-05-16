@@ -6,13 +6,13 @@ import dagster as dg
 from dagster.components import Component, Model, Resolvable, ResolvedAssetSpec
 from dagster_dbt import get_asset_key_for_model
 from dagster_open_platform.definitions import global_freshness_policy
-from dagster_open_platform.defs.dbt.assets import dbt_non_partitioned_models
+from dagster_open_platform.defs.dbt.assets import get_dbt_non_partitioned_models
 from dagster_open_platform.defs.hightouch.resources import ConfigurableHightouchResource
 from dagster_shared.record import as_dict
 
 
 def dbt_asset_key(model_name: str) -> dg.AssetKey:
-    return get_asset_key_for_model([dbt_non_partitioned_models], model_name)
+    return get_asset_key_for_model([get_dbt_non_partitioned_models()], model_name)
 
 
 def spec_with_freshness_policy(spec: dg.AssetSpec) -> dg.AssetSpec:

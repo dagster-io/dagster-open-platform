@@ -2,7 +2,6 @@ import itertools
 import os
 import sys
 from collections.abc import Iterator
-from pathlib import Path
 from typing import Any, Callable
 
 import pytest
@@ -42,14 +41,10 @@ def prepare_dop_environment(
     PLACEHOLDER_ENV_VAR_VALUE = "x"
     # Empty values because we don't need to run the pipelines, just load them
 
-    from dagster_open_platform.defs.dbt.resources import dbt_resource
+    from dagster_open_platform.defs.dbt.resources import dagster_open_platform_dbt_project
 
-    dbt_resource.cli(["deps"]).wait()
-    dbt_resource.cli(["parse"], target_path=Path("target")).wait()
-
-    manifest_path = (
-        Path(__file__).parent.parent / "dagster_open_platform_dbt" / "target" / "manifest.json"
-    )
+    dagster_open_platform_dbt_project.preparer.prepare(dagster_open_platform_dbt_project)
+    manifest_path = dagster_open_platform_dbt_project.manifest_path
 
     assert manifest_path.exists()
 
