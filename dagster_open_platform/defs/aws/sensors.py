@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
 
 from dagster import (
+    Definitions,
     SensorEvaluationContext,
     SensorResult,
     _check as check,
     sensor,
 )
+from dagster.components import definitions
 from dagster_aws.s3 import S3Resource
 from dagster_open_platform.defs.aws.constants import BUCKET_NAME, INPUT_PREFIX
 from dagster_open_platform.defs.aws.partitions import org_partitions_def
@@ -67,3 +69,12 @@ def clear_org_partitions(context: SensorEvaluationContext):
             partitions_def_name=check.not_none(org_partitions_def.name),
             partition_key=org_id,
         )
+
+
+@definitions
+def defs():
+    return Definitions(
+        sensors=[
+            organization_sensor,
+        ]
+    )

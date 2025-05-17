@@ -11,6 +11,7 @@ from dagster import (
     AssetSpec,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    Definitions,
     MaterializeResult,
     MonthlyPartitionsDefinition,
     Output,
@@ -18,6 +19,7 @@ from dagster import (
     get_dagster_logger,
     multi_asset,
 )
+from dagster.components import definitions
 from dagster_aws.s3 import S3Resource
 from dagster_cloud.api.dagster_cloud_api import FileFormat
 from dagster_open_platform.definitions import global_freshness_policy
@@ -157,7 +159,10 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
                 extension=".json",
             )
 
-            for dagster_object_key, dagster_object_name in EXTRACTED_DAGSTER_OBJECTS_DICT.items():
+            for (
+                dagster_object_key,
+                dagster_object_name,
+            ) in EXTRACTED_DAGSTER_OBJECTS_DICT.items():
                 dagster_object = external_repository_data.pop(dagster_object_key, []) or []
                 if dagster_object_name not in object_count:
                     object_count[dagster_object_name] = len(dagster_object)
@@ -206,7 +211,7 @@ materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
     auto_materialize_policy=materialize_on_cron_policy,
     internal_freshness_policy=global_freshness_policy,
 )
-def aws_cost_report(context: AssetExecutionContext, snowflake_aws: SnowflakeResource):
+def aws_cost_report(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
     """AWS updates the monthly cost report once an hour, overwriting the existing
     files for the current month.
 
@@ -235,7 +240,7 @@ def aws_cost_report(context: AssetExecutionContext, snowflake_aws: SnowflakeReso
     )
     context.log.info(f"SQL debug {delete_partition}")
 
-    with snowflake_aws.get_connection() as conn:
+    with snowflake_sf.get_connection() as conn:
         conn.autocommit(False)
 
         cur = conn.cursor()
@@ -259,4 +264,11 @@ def aws_cost_report(context: AssetExecutionContext, snowflake_aws: SnowflakeReso
             "snowflake_table": qualified_name,
             "rows_inserted": rows,
         }
+    )
+
+
+@definitions
+def defs():
+    return Definitions(
+        assets=[aws_cost_report, workspace_data_json],
     )
