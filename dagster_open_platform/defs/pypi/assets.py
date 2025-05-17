@@ -1,4 +1,5 @@
 import dagster as dg
+from dagster.components import definitions
 from dagster_cloud.dagster_insights import InsightsBigQueryResource
 from dagster_open_platform.defs.pypi.partitions import oss_analytics_weekly_partition
 from dagster_open_platform.utils.environment_helpers import (
@@ -28,7 +29,7 @@ dagster_pypi_downloads_asset_key = ["purina", "oss_analytics", "dagster_pypi_dow
 def dagster_pypi_downloads(
     context: dg.AssetExecutionContext,
     bigquery: InsightsBigQueryResource,
-    snowflake_pypi: SnowflakeResource,
+    snowflake_sf: SnowflakeResource,
 ) -> dg.MaterializeResult:
     """A table containing the number of PyPi downloads for each package in the Dagster ecosystem, aggregated at the weekly grain. This data is fetched from the public BigQuery dataset `bigquery-public-data.pypi.file_downloads`."""
     start_week = str(context.asset_partitions_time_window_for_output().start.date())
@@ -55,7 +56,7 @@ def dagster_pypi_downloads(
 
     context.log.info(f"Fetched {len(df)} rows from BigQuery")
 
-    with snowflake_pypi.get_connection() as conn:
+    with snowflake_sf.get_connection() as conn:
         # for backfills and re-execution, delete all existing data for the given time window
         delete_query = f"""
             delete from {database}.{schema}.{table_name}
@@ -122,3 +123,13 @@ oss_telemetry_events_raw = dg.SourceAsset(
     description="OSS Telemetry events ingested from S3. The actual asset for this is currently in Purina until we can refactor the logic for it.",
     group_name="telemetry",
 )
+
+
+@definitions
+def defs():
+    return dg.Definitions(
+        assets=[
+            dagster_pypi_downloads,
+            oss_telemetry_events_raw,
+        ]
+    )
