@@ -4,7 +4,8 @@ from typing import Any
 
 import gql
 import requests
-from dagster import ConfigurableResource, EnvVar, get_dagster_logger
+from dagster import ConfigurableResource, Definitions, EnvVar, get_dagster_logger
+from dagster.components import definitions
 from dagster_open_platform.utils.github_gql_queries import (
     GITHUB_DISCUSSIONS_QUERY,
     GITHUB_ISSUES_QUERY,
@@ -115,5 +116,11 @@ class GithubResource(ConfigurableResource):
         return results
 
 
-github_resource = GithubResource(github_token=EnvVar("GITHUB_TOKEN"))
-scoutos_resource = ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY"))
+@definitions
+def defs():
+    return Definitions(
+        resources={
+            "github": GithubResource(github_token=EnvVar("GITHUB_TOKEN")),
+            "scoutos": ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY")),
+        },
+    )

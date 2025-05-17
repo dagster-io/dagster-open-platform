@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from dagster import (
     AssetSelection,
+    Definitions,
     RunRequest,
     ScheduleEvaluationContext,
     define_asset_job,
@@ -11,6 +12,7 @@ from dagster._core.storage.tags import (
     ASSET_PARTITION_RANGE_END_TAG,
     ASSET_PARTITION_RANGE_START_TAG,
 )
+from dagster.components import definitions
 from dagster_open_platform.defs.scout.assets import github_issues
 
 support_bot_job = define_asset_job(
@@ -29,4 +31,11 @@ def support_bot_schedule(context: ScheduleEvaluationContext) -> RunRequest:
             ).strftime("%Y-%m-%d"),
             ASSET_PARTITION_RANGE_END_TAG: context.scheduled_execution_time.strftime("%Y-%m-%d"),
         }
+    )
+
+
+@definitions
+def defs():
+    return Definitions(
+        schedules=[support_bot_schedule],
     )

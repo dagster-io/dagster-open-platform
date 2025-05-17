@@ -3,6 +3,7 @@ import os
 
 import dagster as dg
 import pandas as pd
+from dagster.components import definitions
 from dagster_open_platform.defs.scout.resources import GithubResource, ScoutosResource
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
@@ -124,7 +125,9 @@ scout_queries_daily_partition = dg.DailyPartitionsDefinition(start_date="2024-06
     tags={"dagster/concurrency_key": "scoutos_app_runs"},
 )
 def scoutos_app_runs(
-    context: dg.AssetExecutionContext, snowflake: SnowflakeResource, scoutos: ScoutosResource
+    context: dg.AssetExecutionContext,
+    snowflake: SnowflakeResource,
+    scoutos: ScoutosResource,
 ) -> dg.MaterializeResult:
     start, end = context.partition_time_window
     data = scoutos.get_runs(start, end)
@@ -200,4 +203,11 @@ def scoutos_app_runs(
             "row_count": dg.MetadataValue.int(rows_inserted),
             "preview": dg.MetadataValue.md(df.head(10).to_markdown(index=False)),
         }
+    )
+
+
+@definitions
+def defs():
+    return dg.Definitions(
+        assets=[github_issues, scoutos_app_runs],
     )
