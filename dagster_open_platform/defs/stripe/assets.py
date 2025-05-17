@@ -17,9 +17,9 @@ from dagster import (
 from dagster._core.definitions.asset_selection import AssetSelection
 from dagster._core.definitions.schedule_definition import DefaultScheduleStatus
 from dagster._core.execution.context.compute import AssetExecutionContext
+from dagster.components import definitions
 from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.snowflake.resources import snowflake_resource
-from dagster_open_platform.utils.source_code import add_code_references_and_link_to_git
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
 
@@ -91,19 +91,21 @@ def stripe_data_sync_assets(
             )
 
 
-stripe_data_sync_schedule = ScheduleDefinition(
-    cron_schedule="0 0 * * *",
-    job=define_asset_job(
-        name="stripe_data_sync_observe_job",
-        selection=AssetSelection.keys(*asset_keys_to_table_names.keys()),
-    ),
-    default_status=DefaultScheduleStatus.RUNNING,
-)
+@definitions
+def defs():
+    stripe_data_sync_schedule = ScheduleDefinition(
+        cron_schedule="0 0 * * *",
+        job=define_asset_job(
+            name="stripe_data_sync_observe_job",
+            selection=AssetSelection.keys(*asset_keys_to_table_names.keys()),
+        ),
+        default_status=DefaultScheduleStatus.RUNNING,
+    )
 
-defs = Definitions(
-    assets=add_code_references_and_link_to_git([stripe_data_sync_assets]),
-    schedules=[stripe_data_sync_schedule],
-    resources={
-        "snowflake_stripe": snowflake_resource,
-    },
-)
+    return Definitions(
+        assets=[stripe_data_sync_assets],
+        schedules=[stripe_data_sync_schedule],
+        resources={
+            "snowflake_stripe": snowflake_resource,
+        },
+    )
