@@ -4,12 +4,11 @@ from typing import Union
 
 import dagster as dg
 import pandas as pd
-from dagster_open_platform.defs.snowflake.resources import snowflake_resource
+from dagster.components import definitions
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
 )
-from dagster_open_platform.utils.source_code import add_code_references_and_link_to_git
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
@@ -25,7 +24,7 @@ from snowflake.connector.pandas_tools import write_pandas
     automation_condition=dg.AutomationCondition.on_cron("0 0 * * *"),
 )
 def member_metrics(
-    slack: SlackResource, snowflake_slack: SnowflakeResource
+    slack: SlackResource, snowflake_sf: SnowflakeResource
 ) -> Iterator[Union[dg.MaterializeResult, dg.AssetCheckResult]]:
     client = slack.get_client()
     # The Dagster Slack resource doesn't support setting headers
@@ -44,7 +43,10 @@ def member_metrics(
     unique_ds_check_result = dg.AssetCheckResult(
         check_name="unique_ds_check",
         passed=slack_stats["ds"].is_unique,
-        metadata={"num_unique_ds": slack_stats["ds"].nunique(), "total_rows": len(slack_stats)},
+        metadata={
+            "num_unique_ds": slack_stats["ds"].nunique(),
+            "total_rows": len(slack_stats),
+        },
     )
     yield unique_ds_check_result
 
@@ -52,7 +54,7 @@ def member_metrics(
     schema = get_schema_for_environment("DAGSTER")
     table_name = "MEMBER_METRICS"
 
-    with snowflake_slack.get_connection() as conn:
+    with snowflake_sf.get_connection() as conn:
         # Create a temporary table to stage the new data
         temp_table_name = f"{table_name}_TEMP"
         write_pandas(
@@ -100,15 +102,11 @@ def member_metrics(
         )
 
 
-slack_asset_job = dg.define_asset_job(
-    "slack_members_refresh",
-    selection=dg.AssetSelection.assets(member_metrics),
-    tags={"team": "devrel"},
-)
-
-slack_resource = SlackResource(token=dg.EnvVar("SLACK_ANALYTICS_TOKEN"))
-
-defs = dg.Definitions(
-    assets=add_code_references_and_link_to_git([member_metrics]),
-    resources={"slack": slack_resource, "snowflake_slack": snowflake_resource},
-)
+@definitions
+def defs():
+    return dg.Definitions(
+        assets=[member_metrics],
+        resources={
+            "slack": SlackResource(token=dg.EnvVar("SLACK_ANALYTICS_TOKEN")),
+        },
+    )
