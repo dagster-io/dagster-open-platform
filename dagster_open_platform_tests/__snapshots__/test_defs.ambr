@@ -536,7 +536,6 @@
     'postgres/usage_metrics_daily_jobs_aggregated_reporting',
     'product_operations/insights/reporting_asset_materialization_metrics',
     'public/salesforce_contract_info',
-    'purina/mart_sales/reporting_contract_info',
     'purina/oss_analytics/dagster_pypi_downloads',
     'purina/prod_telemetry/oss_telemetry_events_raw',
     'pylon/pylon/pylon_issues',
@@ -11101,17 +11100,97 @@
           partition_mapping=None,
         ),
       ]),
-      'description': None,
+      'description': '''
+        SELECT
+          ORGANIZATION_ID,
+          AGENT_TYPE,
+          JOB_NAME,
+          REPOSITORY_NAME,
+          JOB_DAY,
+          MATERIALIZATIONS,
+          STEP_DURATION_MINS,
+          STEPS,
+          RUN_DURATION_MINS,
+          RUNS,
+          STEPS_CREDITS,
+          STANDARD_CREDITS,
+          HIGH_VELOCITY_CREDITS
+        FROM purina.product.usage_metrics_daily_jobs_aggregated
+  
+      ''',
       'group_name': 'sling_egress',
       'key': 'postgres/usage_metrics_daily_jobs_aggregated_reporting',
       'metadata': dict({
-        'dagster/internal_freshness_policy': '{"__class__": "TimeWindowFreshnessPolicy", "fail_window": {"__class__": "SerializableTimeDelta", "days": 0, "microseconds": 0, "seconds": 82800}, "warn_window": null}',
+        'dagster/table_name': 'postgres.usage_metrics_daily_jobs_aggregated_reporting',
+        'dagster_sling/dagster_sling_translator': EgressReplicationSlingTranslator(target_prefix='target'),
+        'dagster_sling/sling_replication_config': dict({
+          'defaults': dict({
+            'mode': 'truncate',
+            'object': '{stream_table}',
+          }),
+          'source': 'PURINA_CLOUD_REPORTING',
+          'streams': dict({
+            'purina.product.usage_metrics_daily_jobs_aggregated': dict({
+              'meta': dict({
+                'dagster': dict({
+                  'asset_key': 'postgres.usage_metrics_daily_jobs_aggregated_reporting',
+                }),
+              }),
+              'sql': '''
+                SELECT
+                  ORGANIZATION_ID,
+                  AGENT_TYPE,
+                  JOB_NAME,
+                  REPOSITORY_NAME,
+                  JOB_DAY,
+                  MATERIALIZATIONS,
+                  STEP_DURATION_MINS,
+                  STEPS,
+                  RUN_DURATION_MINS,
+                  RUNS,
+                  STEPS_CREDITS,
+                  STANDARD_CREDITS,
+                  HIGH_VELOCITY_CREDITS
+                FROM purina.product.usage_metrics_daily_jobs_aggregated
+  
+              ''',
+            }),
+          }),
+          'target': 'REPORTING_DB',
+        }),
+        'stream_config': JsonMetadataValue(
+          data=dict({
+            'meta': dict({
+              'dagster': dict({
+                'asset_key': 'postgres.usage_metrics_daily_jobs_aggregated_reporting',
+              }),
+            }),
+            'sql': '''
+              SELECT
+                ORGANIZATION_ID,
+                AGENT_TYPE,
+                JOB_NAME,
+                REPOSITORY_NAME,
+                JOB_DAY,
+                MATERIALIZATIONS,
+                STEP_DURATION_MINS,
+                STEPS,
+                RUN_DURATION_MINS,
+                RUNS,
+                STEPS_CREDITS,
+                STANDARD_CREDITS,
+                HIGH_VELOCITY_CREDITS
+              FROM purina.product.usage_metrics_daily_jobs_aggregated
+  
+            ''',
+          }),
+        ),
       }),
       'owners': list([
       ]),
       'tags': dict({
-        'dagster/kind/postgres': '',
         'dagster/kind/sling': '',
+        'dagster/kind/snowflake': '',
       }),
     }),
     dict({
@@ -11133,8 +11212,8 @@
         AssetDep(
           asset_key=AssetKey(
             parts=tuple(
-              'purina',
-              'mart_sales',
+              'sandbox',
+              '',
               'reporting_contract_info',
             ),
           ),
@@ -11145,7 +11224,8 @@
       'group_name': 'sling_egress',
       'key': 'public/salesforce_contract_info',
       'metadata': dict({
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslatorEgress(target_prefix='target'),
+        'dagster/table_name': 'public.salesforce_contract_info',
+        'dagster_sling/dagster_sling_translator': EgressReplicationSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'full-refresh',
@@ -11180,20 +11260,7 @@
       ]),
       'tags': dict({
         'dagster/kind/sling': '',
-      }),
-    }),
-    dict({
-      'deps': list([
-      ]),
-      'description': None,
-      'group_name': 'default',
-      'key': 'purina/mart_sales/reporting_contract_info',
-      'metadata': dict({
-        'dagster/auto_created_stub_asset': True,
-      }),
-      'owners': list([
-      ]),
-      'tags': dict({
+        'dagster/kind/snowflake': '',
       }),
     }),
     dict({
@@ -60500,7 +60567,7 @@
       'key': 'sling/cloud_product/alert_policies',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.alert_policies',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -60580,7 +60647,7 @@
       'key': 'sling/cloud_product/alerts',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.alerts',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -60820,7 +60887,7 @@
       'key': 'sling/cloud_product/alerts_alert_policies_new',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.alerts_alert_policies_new',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -61077,7 +61144,7 @@
       'key': 'sling/cloud_product/asset_keys',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.asset_keys',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -61336,7 +61403,7 @@
       'key': 'sling/cloud_product/asset_materializations',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.asset_materializations',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -61417,7 +61484,7 @@
       'key': 'sling/cloud_product/asset_observations',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.asset_observations',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -61498,7 +61565,7 @@
       'key': 'sling/cloud_product/catalog_views',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.catalog_views',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -61738,7 +61805,7 @@
       'key': 'sling/cloud_product/customer_info',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.customer_info',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -61978,7 +62045,7 @@
       'key': 'sling/cloud_product/deployments',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.deployments',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -62223,7 +62290,7 @@
       'key': 'sling/cloud_product/event_logs',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.event_logs',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -62291,7 +62358,7 @@
       'key': 'sling/cloud_product/jobs',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.jobs',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -62531,7 +62598,7 @@
       'key': 'sling/cloud_product/notifications',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.notifications',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -62771,7 +62838,7 @@
       'key': 'sling/cloud_product/onboarding_checklist',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.onboarding_checklist',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -63016,7 +63083,7 @@
       'key': 'sling/cloud_product/organizations',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.organizations',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -63257,7 +63324,7 @@
       'key': 'sling/cloud_product/permissions',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.permissions',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -63519,7 +63586,7 @@
       'key': 'sling/cloud_product/repository_locations_data',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.repository_locations_data',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -63782,7 +63849,7 @@
       'key': 'sling/cloud_product/run_tags',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.run_tags',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -63867,7 +63934,7 @@
       'key': 'sling/cloud_product/runs',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.runs',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -63941,7 +64008,7 @@
       'key': 'sling/cloud_product/serverless_agents',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.serverless_agents',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -64182,7 +64249,7 @@
       'key': 'sling/cloud_product/session_tokens',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.session_tokens',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -64423,7 +64490,7 @@
       'key': 'sling/cloud_product/teams',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.teams',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -64664,7 +64731,7 @@
       'key': 'sling/cloud_product/teams_permissions',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.teams_permissions',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -64904,7 +64971,7 @@
       'key': 'sling/cloud_product/teams_users',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.teams_users',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -65155,7 +65222,7 @@
       'key': 'sling/cloud_product/user_events_counts',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.user_events_counts',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -65242,7 +65309,7 @@
       'key': 'sling/cloud_product/users',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.users',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -65482,7 +65549,7 @@
       'key': 'sling/cloud_product/users_organizations',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.users_organizations',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -65726,7 +65793,7 @@
       'key': 'sling/cloud_product/users_organizations_current_state_ids',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.users_organizations_current_state_ids',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'source': 'CLOUD_PRODUCTION_MAIN',
           'streams': dict({
@@ -65789,7 +65856,7 @@
       'key': 'sling/cloud_product/users_permissions',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product.users_permissions',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66029,7 +66096,7 @@
       'key': 'sling/cloud_product_shard1/alert_policies',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.alert_policies',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66109,7 +66176,7 @@
       'key': 'sling/cloud_product_shard1/alerts',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.alerts',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66217,7 +66284,7 @@
       'key': 'sling/cloud_product_shard1/asset_keys',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.asset_keys',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66326,7 +66393,7 @@
       'key': 'sling/cloud_product_shard1/asset_materializations',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.asset_materializations',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66407,7 +66474,7 @@
       'key': 'sling/cloud_product_shard1/asset_observations',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.asset_observations',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66493,7 +66560,7 @@
       'key': 'sling/cloud_product_shard1/event_logs',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.event_logs',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66561,7 +66628,7 @@
       'key': 'sling/cloud_product_shard1/jobs',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.jobs',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66669,7 +66736,7 @@
       'key': 'sling/cloud_product_shard1/notifications',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.notifications',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66799,7 +66866,7 @@
       'key': 'sling/cloud_product_shard1/repository_locations_data',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.repository_locations_data',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -66930,7 +66997,7 @@
       'key': 'sling/cloud_product_shard1/run_tags',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.run_tags',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -67015,7 +67082,7 @@
       'key': 'sling/cloud_product_shard1/runs',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.runs',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -67100,7 +67167,7 @@
       'key': 'sling/cloud_product_shard1/user_events_counts',
       'metadata': dict({
         'dagster/table_name': 'sling.cloud_product_shard1.user_events_counts',
-        'dagster_sling/dagster_sling_translator': CustomSlingTranslator(target_prefix='target'),
+        'dagster_sling/dagster_sling_translator': ProdDbReplicationsSlingTranslator(target_prefix='target'),
         'dagster_sling/sling_replication_config': dict({
           'defaults': dict({
             'mode': 'incremental',
@@ -67941,7 +68008,6 @@
         'postgres/usage_metrics_daily_jobs_aggregated_reporting',
         'product_operations/insights/reporting_asset_materialization_metrics',
         'public/salesforce_contract_info',
-        'purina/mart_sales/reporting_contract_info',
         'purina/oss_analytics/dagster_pypi_downloads',
         'purina/prod_telemetry/oss_telemetry_events_raw',
         'pylon/pylon/pylon_issues',
@@ -70749,8 +70815,10 @@
       'asset_selection': list([
         'postgres/usage_metrics_daily_jobs_aggregated_reporting',
         'public/salesforce_contract_info',
-        'purina/mart_sales/reporting_contract_info',
         'sandbox//fct_runs',
+        'sandbox//reporting_contract_info',
+        'sandbox//salesforce_accounts',
+        'sandbox//stg_cloud_product__organizations',
         'sandbox//usage_metrics_daily',
         'sandbox//usage_metrics_daily_jobs_aggregated',
       ]),
