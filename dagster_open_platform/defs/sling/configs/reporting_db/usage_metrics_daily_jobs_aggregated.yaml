@@ -1,0 +1,27 @@
+source: PURINA_CLOUD_REPORTING
+target: REPORTING_DB
+defaults:
+  mode: truncate
+  object: '{stream_table}'
+
+streams:
+  purina.product.usage_metrics_daily_jobs_aggregated:
+    sql: |
+      SELECT
+        ORGANIZATION_ID,
+        AGENT_TYPE,
+        JOB_NAME,
+        REPOSITORY_NAME,
+        JOB_DAY,
+        MATERIALIZATIONS,
+        STEP_DURATION_MINS,
+        STEPS,
+        RUN_DURATION_MINS,
+        RUNS,
+        STEPS_CREDITS,
+        STANDARD_CREDITS,
+        HIGH_VELOCITY_CREDITS
+      FROM purina.product.usage_metrics_daily_jobs_aggregated
+    meta:
+      dagster:
+        asset_key: postgres.usage_metrics_daily_jobs_aggregated_reporting

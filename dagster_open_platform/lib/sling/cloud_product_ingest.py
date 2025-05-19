@@ -6,26 +6,21 @@ from typing import Annotated, Any, Optional
 import dagster_shared.check as check
 from dagster import (
     AssetKey,
-    AssetSpec,
-    AutoMaterializePolicy,
-    AutomationCondition,
     Definitions,
     build_last_update_freshness_checks,
     build_sensor_for_freshness_checks,
 )
-from dagster.components import (
-    Component,
-    ComponentLoadContext,
-    Model,
-    ResolutionContext,
-    Resolvable,
-    Resolver,
-)
-from dagster_sling import DagsterSlingTranslator, SlingResource, sling_assets
+from dagster.components import Component, ComponentLoadContext, Model, Resolvable, Resolver
+from dagster_open_platform.lib.sling.utils import _resolve_path, build_sling_assets
+from dagster_sling import DagsterSlingTranslator
 
 
-class CustomSlingTranslator(DagsterSlingTranslator):
-    def __init__(self, cron_schedule: str = "*/5 * * * *", shard_name: str = "main"):
+class ProdDbReplicationsSlingTranslator(DagsterSlingTranslator):
+    def __init__(
+        self,
+        cron_schedule: str = "*/5 * * * *",
+        shard_name: str = "main",
+    ):
         super().__init__()
         self.cron_schedule = cron_schedule
         self.shard_name = shard_name
@@ -40,14 +35,6 @@ class CustomSlingTranslator(DagsterSlingTranslator):
             "dagster/table_name": ".".join(key.path),
         }
 
-    def get_auto_materialize_policy(
-        self, stream_definition: Mapping[str, Any]
-    ) -> AutoMaterializePolicy | None:
-        return (
-            AutomationCondition.cron_tick_passed(self.cron_schedule)
-            & ~AutomationCondition.in_progress()
-        ).as_auto_materialize_policy()
-
     def get_group_name(self, stream_definition):
         return f"cloud_product_{self.shard_name}"
 
@@ -61,12 +48,6 @@ class DopReplicationSpec(Resolvable, Model):
     shards: Sequence[str]
     cron_schedule: str = "*/5 * * * *"
     last_update_freshness_check: Optional[Mapping[str, int]] = None
-
-
-def _resolve_path(context: ResolutionContext, val: str):
-    p = context.resolve_source_relative_path(val)
-    check.invariant(p.exists(), f"resolved config_dir Path {p} does not exist")
-    return p
 
 
 class ProdDbReplicationsComponent(Component, Resolvable, Model):
@@ -85,47 +66,9 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
     def get_config_path(self, config_file: str) -> Path:
         return Path(self.config_dir).joinpath(config_file)
 
-    def build_sling_assets(
-        self,
-        name: str,
-        config_path: Path,
-        shard_name: str,
-        cron_schedule: str,
-        last_update_freshness_check: Optional[Mapping[str, int]],
-    ):
-        @sling_assets(
-            name=name,
-            replication_config=str(config_path),
-            dagster_sling_translator=CustomSlingTranslator(
-                cron_schedule=cron_schedule,
-                shard_name=shard_name,
-            ),
-        )
-        def _dop_sling_assets(context, embedded_elt: SlingResource) -> Iterable[Any]:
-            yield from (
-                embedded_elt.replicate(context=context).fetch_column_metadata().fetch_row_count()
-            )
-
-        assets = [
-            _dop_sling_assets,
-            *(
-                AssetSpec(key, group_name=f"postgres_{shard_name}")
-                for key in _dop_sling_assets.dependency_keys
-            ),
-        ]
-        checks = []
-        if last_update_freshness_check:
-            checks = build_last_update_freshness_checks(
-                assets=[_dop_sling_assets],
-                lower_bound_delta=timedelta(**last_update_freshness_check),
-            )
-
-        return assets, checks
-
     def build_defs(self, context: ComponentLoadContext):
         assets = []
         checks = []
-
         for replication in self.replications:
             for shard in replication.shards:
                 name = (
@@ -139,20 +82,31 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
                     f"For replication named {replication.name}, expected file {cfg_path} does not exist.",
                 )
 
-                main_assets, main_checks = self.build_sling_assets(
+                main_assets, deps = build_sling_assets(
                     name=name,
                     config_path=cfg_path,
-                    shard_name=shard,
-                    cron_schedule=replication.cron_schedule,
-                    last_update_freshness_check=replication.last_update_freshness_check,
+                    group_name=f"postgres_{shard}",
+                    translator=ProdDbReplicationsSlingTranslator(
+                        shard_name=shard,
+                        cron_schedule=replication.cron_schedule,
+                    ),
                 )
-                assets.extend(main_assets)
-                checks.extend(main_checks)
 
+                assets.append(main_assets)
+                assets.extend(deps)
+
+                if replication.last_update_freshness_check:
+                    main_checks = build_last_update_freshness_checks(
+                        assets=[main_assets],
+                        lower_bound_delta=timedelta(**replication.last_update_freshness_check),
+                    )
+                    checks.extend(main_checks)
         return Definitions(
             assets=assets,
             asset_checks=checks,
             sensors=[
                 build_sensor_for_freshness_checks(freshness_checks=checks),
-            ],
+            ]
+            if checks
+            else [],
         )

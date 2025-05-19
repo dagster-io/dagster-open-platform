@@ -1,4 +1,4 @@
-type: dagster_open_platform.lib.sling.ProdDbReplicationsComponent
+type: dagster_open_platform.lib.sling.cloud_product_ingest.ProdDbReplicationsComponent
 
 attributes:
   config_dir: ../configs/cloud_product
@@ -27,3 +27,18 @@ attributes:
 
     - name: runs
       shards: [main, shard1]
+
+---
+
+type: dagster_open_platform.lib.sling.egress.EgressReplicationComponent
+
+attributes:
+  config_dir: ../configs/reporting_db
+  replications:
+    - name: usage_metrics_daily_jobs_aggregated
+      deps:
+        - "{{ dbt_asset_key('usage_metrics_daily_jobs_aggregated') }}"
+
+    - name: salesforce_contract_info
+      deps:
+        - "{{ dbt_asset_key('reporting_contract_info') }}"
