@@ -445,6 +445,7 @@
     'fivetran/salesforce/user',
     'fivetran/salesforce/user_role',
     'fivetran/youtube_analytics/channel',
+    'fivetran/youtube_analytics/channel_basic_a_2',
     'fivetran/youtube_analytics/channel_combined_a_2',
     'fivetran/youtube_analytics/playlist',
     'fivetran/youtube_analytics/playlist_combined_a_1',
@@ -904,6 +905,7 @@
     'sandbox//sync_hubspot_contact',
     'sandbox//sync_hubspot_organization',
     'sandbox//sync_salesforce_account',
+    'sandbox//sync_salesforce_opportunity',
     'sandbox//telemetry_events',
     'sandbox//telemetry_example_map',
     'sandbox//time_spine',
@@ -9493,6 +9495,462 @@
           url='https://fivetran.com/dashboard/connectors/youtube_analytics/youtube_analytics',
         ),
         'dagster/table_name': 'fivetran.youtube_analytics.channel',
+      }),
+      'owners': list([
+      ]),
+      'tags': dict({
+        'dagster/kind/fivetran': '',
+        'dagster/kind/snowflake': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+      ]),
+      'description': None,
+      'group_name': 'fivetran_youtube_analytics',
+      'key': 'fivetran/youtube_analytics/channel_basic_a_2',
+      'metadata': dict({
+        'connector_url': UrlMetadataValue(
+          url='https://fivetran.com/dashboard/connectors/youtube_analytics/youtube_analytics',
+        ),
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='annotation_click_through_rate',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='annotation_clickable_impressions',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='annotation_clicks',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='annotation_closable_impressions',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='annotation_close_rate',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='annotation_closes',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='annotation_impressions',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='average_view_duration_percentage',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='average_view_duration_seconds',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='card_click_rate',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='card_clicks',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='card_impressions',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='card_teaser_click_rate',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='card_teaser_clicks',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='card_teaser_impressions',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='channel_id',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='comments',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='country_code',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='date',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='dislikes',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='likes',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='live_or_on_demand',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='red_views',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='red_watch_time_minutes',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='shares',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='subscribed_status',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='subscribers_gained',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='subscribers_lost',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='video_id',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='videos_added_to_playlists',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='videos_removed_from_playlists',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='views',
+              tags=dict({
+              }),
+              type='',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description=None,
+              name='watch_time_minutes',
+              tags=dict({
+              }),
+              type='',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'fivetran.youtube_analytics.channel_basic_a_2',
       }),
       'owners': list([
       ]),
@@ -22384,6 +22842,9 @@
                     opportunities.within_budget,
                     opportunities.current_data_stack,
                     opportunities.is_primary_evaluator_identified,
+                    opportunities.closed_date_historical_avg,
+                    opportunities.arr_historical_avg,
+                    opportunities.opportunity_probability_prediction,
                     accounts.first_day_as_target_account as account_first_day_as_target_account,
                     partners.account_to_id as partner_account_id,
                     partners.account_to_name as partner_account_name,
@@ -30686,6 +31147,9 @@
                     negotiation_review_date,
                     contact_id, 
                     owner_id,
+                    closed_date_historical_avg,
+                    arr_historical_avg,
+                    opportunity_probability_prediction,
                     account_first_day_as_target_account,
                     case  
                         when sal_date >= account_first_day_as_target_account then true
@@ -31451,6 +31915,45 @@
               ),
               description='Identifier for the opportunity owner',
               name='owner_id',
+              tags=dict({
+              }),
+              type='?',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='Historical average number of days taken to close opportunities at the point the opportunity was created. This is written by the sync_salesforce_opportunity model.',
+              name='closed_date_historical_avg',
+              tags=dict({
+              }),
+              type='?',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='Historical average annual recurring revenue (ARR) for opportunities at the point the opportunity was created. This is written by the sync_salesforce_opportunity model.',
+              name='arr_historical_avg',
+              tags=dict({
+              }),
+              type='?',
+            ),
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='Model-predicted probability of winning the opportunity, based on historical data and opportunity attributes. This is determined by an external model from Salesforce.',
+              name='opportunity_probability_prediction',
               tags=dict({
               }),
               type='?',
@@ -50036,7 +50539,10 @@
                 evaluation_date_c as evaluation_date,
                 proposal_date_c as proposal_date,
                 negotiation_review_date_c as negotiation_review_date,
-                sales_engineer_c as sales_engineer_id
+                sales_engineer_c as sales_engineer_id,
+                closed_date_historical_avg_c as closed_date_historical_avg, 
+                arr_historical_avg_c as arr_historical_avg, 
+                opportunity_probability_prediction_c as opportunity_probability_prediction
         
             from {{ source('salesforce', 'opportunity') }}
             where not is_deleted
@@ -55385,6 +55891,143 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.sync_salesforce_account',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas//table/SYNC_SALESFORCE_ACCOUNT',
+        ),
+      }),
+      'owners': list([
+        'nickroach@dagsterlabs.com',
+        'team:data',
+      ]),
+      'tags': dict({
+        'dagster/kind/dbt': '',
+        'dagster/kind/snowflake': '',
+        'model': '',
+      }),
+    }),
+    dict({
+      'deps': list([
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              '',
+              'accounts',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+        AssetDep(
+          asset_key=AssetKey(
+            parts=tuple(
+              'sandbox',
+              '',
+              'opportunities',
+            ),
+          ),
+          partition_mapping=None,
+        ),
+      ]),
+      'description': '''
+        Enriched Salesforce Opportunity information for Hightouch to sync to Salesforce
+        
+        #### Raw SQL:
+        ```sql
+            with accounts as (
+        
+                select * from {{ ref('accounts') }}
+            ),
+        
+            opportunities as (
+        
+                select * from {{ ref('opportunities') }}
+            ),
+        
+            opps_and_accounts as (
+        
+                select 
+                    opportunities.*,
+                    accounts.revenue_segment
+                from opportunities
+                left join accounts on opportunities.account_id = accounts.account_id
+                where opportunity_type = 'New Business'
+            ),
+        
+            opportunity_metrics as (
+        
+                select 
+                    revenue_segment,
+                    avg(datediff('days', created_at, close_date)) as avg_days_open,
+                    avg(new_arr) as avg_new_arr
+                from opps_and_accounts
+                where 
+                    is_won = true 
+                    and is_closed = true
+                    and opportunity_type = 'New Business'
+                    and date(close_date) >= current_date - 180
+                group by all
+            ),
+        
+            new_opps as (
+        
+                select 
+                    * 
+                from opps_and_accounts
+                    --- Adding a 1 day buffer to account for the time it may take to populate the revenue_segment. We will not rewrite if both values are populated.
+                where created_at >= current_date - 1
+                    and (arr_historical_avg is null or closed_date_historical_avg is null)
+            ),
+        
+            final as (
+        
+                select 
+                    new_opps.opportunity_id,
+                    new_opps.opportunity_type,
+                    new_opps.revenue_segment,
+                    date(new_opps.created_at) as created_date,
+                    opportunity_metrics.avg_days_open,
+                    --- Add the average days open to the created date to get the calculated closed date
+                    date(dateadd('day', round(opportunity_metrics.avg_days_open), new_opps.created_at)) as calc_closed_date,
+                    opportunity_metrics.avg_new_arr,
+                    --- Round the average new arr to the nearest 100
+                    round(opportunity_metrics.avg_new_arr, -2) as rounded_avg_new_arr
+                from new_opps
+                left join opportunity_metrics on new_opps.revenue_segment = opportunity_metrics.revenue_segment
+            )
+        
+            select * from final
+        ```
+      ''',
+      'group_name': 'hightouch',
+      'key': 'sandbox//sync_salesforce_opportunity',
+      'metadata': dict({
+        'dagster-dbt/materialization_type': 'table',
+        'dagster/column_schema': TableSchema(
+          columns=list([
+            TableColumn(
+              constraints=TableColumnConstraints(
+                nullable=True,
+                other=list([
+                ]),
+                unique=False,
+              ),
+              description='',
+              name='opportunity_id',
+              tags=dict({
+              }),
+              type='?',
+            ),
+          ]),
+          constraints=TableConstraints(
+            other=list([
+            ]),
+          ),
+        ),
+        'dagster/table_name': 'sandbox.sync_salesforce_opportunity',
+        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
+          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False, enable_source_tests_as_checks=False),
+        ),
+        'dagster_dbt/unique_id': 'model.dagster_open_platform.sync_salesforce_opportunity',
+        'url': UrlMetadataValue(
+          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas//table/SYNC_SALESFORCE_OPPORTUNITY',
         ),
       }),
       'owners': list([
@@ -67917,6 +68560,7 @@
         'fivetran/salesforce/user',
         'fivetran/salesforce/user_role',
         'fivetran/youtube_analytics/channel',
+        'fivetran/youtube_analytics/channel_basic_a_2',
         'fivetran/youtube_analytics/channel_combined_a_2',
         'fivetran/youtube_analytics/playlist',
         'fivetran/youtube_analytics/playlist_combined_a_1',
@@ -68376,6 +69020,7 @@
         'sandbox//sync_hubspot_contact',
         'sandbox//sync_hubspot_organization',
         'sandbox//sync_salesforce_account',
+        'sandbox//sync_salesforce_opportunity',
         'sandbox//telemetry_events',
         'sandbox//telemetry_example_map',
         'sandbox//time_spine',
@@ -68764,6 +69409,7 @@
         'fivetran/salesforce/user',
         'fivetran/salesforce/user_role',
         'fivetran/youtube_analytics/channel',
+        'fivetran/youtube_analytics/channel_basic_a_2',
         'fivetran/youtube_analytics/channel_combined_a_2',
         'fivetran/youtube_analytics/playlist',
         'fivetran/youtube_analytics/playlist_combined_a_1',
@@ -69198,6 +69844,7 @@
         'sandbox//sync_hubspot_contact',
         'sandbox//sync_hubspot_organization',
         'sandbox//sync_salesforce_account',
+        'sandbox//sync_salesforce_opportunity',
         'sandbox//telemetry_events',
         'sandbox//telemetry_example_map',
         'sandbox//time_spine',
@@ -69502,6 +70149,7 @@
         'fivetran/salesforce/user',
         'fivetran/salesforce/user_role',
         'fivetran/youtube_analytics/channel',
+        'fivetran/youtube_analytics/channel_basic_a_2',
         'fivetran/youtube_analytics/channel_combined_a_2',
         'fivetran/youtube_analytics/playlist',
         'fivetran/youtube_analytics/playlist_combined_a_1',
@@ -69936,6 +70584,7 @@
         'sandbox//sync_hubspot_contact',
         'sandbox//sync_hubspot_organization',
         'sandbox//sync_salesforce_account',
+        'sandbox//sync_salesforce_opportunity',
         'sandbox//telemetry_events',
         'sandbox//telemetry_example_map',
         'sandbox//time_spine',
@@ -70262,6 +70911,7 @@
         'fivetran/salesforce/user',
         'fivetran/salesforce/user_role',
         'fivetran/youtube_analytics/channel',
+        'fivetran/youtube_analytics/channel_basic_a_2',
         'fivetran/youtube_analytics/channel_combined_a_2',
         'fivetran/youtube_analytics/playlist',
         'fivetran/youtube_analytics/playlist_combined_a_1',
@@ -70694,6 +71344,7 @@
         'sandbox//sync_hubspot_contact',
         'sandbox//sync_hubspot_organization',
         'sandbox//sync_salesforce_account',
+        'sandbox//sync_salesforce_opportunity',
         'sandbox//telemetry_events',
         'sandbox//telemetry_example_map',
         'sandbox//time_spine',
