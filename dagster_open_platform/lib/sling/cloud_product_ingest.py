@@ -6,6 +6,8 @@ from typing import Annotated, Any, Optional
 import dagster_shared.check as check
 from dagster import (
     AssetKey,
+    AutoMaterializePolicy,
+    AutomationCondition,
     Definitions,
     build_last_update_freshness_checks,
     build_sensor_for_freshness_checks,
@@ -41,6 +43,14 @@ class ProdDbReplicationsSlingTranslator(DagsterSlingTranslator):
     def get_deps_asset_key(self, stream_definition) -> Iterable[AssetKey]:
         stream_asset_key = next(iter(super().get_deps_asset_key(stream_definition)))
         return [AssetKey([self.shard_name, *stream_asset_key.path])]
+
+    def get_auto_materialize_policy(
+        self, stream_definition: Mapping[str, Any]
+    ) -> AutoMaterializePolicy | None:
+        return (
+            AutomationCondition.cron_tick_passed(self.cron_schedule)
+            & ~AutomationCondition.in_progress()
+        ).as_auto_materialize_policy()
 
 
 class DopReplicationSpec(Resolvable, Model):
