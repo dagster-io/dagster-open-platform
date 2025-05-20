@@ -72,14 +72,14 @@ attributes:
 type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
 attributes:
   asset:
-    key: hightouch_sales_cycles
+    key: hightouch_sync_salesforce_opportunity
     deps:
-      - "{{ dbt_asset_key('sales_cycles') }}"
+      - "{{ dbt_asset_key('sync_salesforce_opportunity') }}"
     kinds:
       - hightouch
       - salesforce
     group_name: hightouch_syncs
-  sync_id_env_var: HIGHTOUCH_SALES_CYCLES_SYNC_ID
+  sync_id_env_var: HIGHTOUCH_SYNC_SALESFORCE_OPPORTUNITY_SYNC_ID
 
 ---
 
