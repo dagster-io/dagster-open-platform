@@ -135,6 +135,11 @@ def _asset_spec_data(asset: AssetSpec) -> dict[str, Any]:
         "group_name": asset.group_name,
         "owners": asset.owners,
         "tags": asset.tags,
+        **(
+            {"automation_condition": asset.automation_condition}
+            if asset.automation_condition
+            else {}
+        ),
     }
 
 
