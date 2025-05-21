@@ -1,0 +1,12 @@
+
+type: dagster_open_platform.defs.fivetran.assets.fivetran_component_type.FivetranComponent
+
+attributes:
+  workspace:
+    account_id: "{{ env('FIVETRAN_ACCOUNT_ID') }}"
+    api_key: "{{ env('FIVETRAN_API_KEY') }}"
+    api_secret: "{{ env('FIVETRAN_API_SECRET') }}"
+  translation:
+    key: "fivetran/{{ props.table.replace('.', '/') }}"
+    automation_condition: "{{ hourly_if_not_in_progress }}"
+    group_name: "{{ group_from_db_and_schema(props) }}"

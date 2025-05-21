@@ -1,5 +1,6 @@
+from collections.abc import Mapping
 from functools import cached_property
-from typing import Annotated, Callable, Optional, Union
+from typing import Annotated, Any, Callable, Optional, Union
 
 import dagster as dg
 import dagster.components as dg_components
@@ -77,6 +78,14 @@ class FivetranComponent(Component, Model, Resolvable):
         if self.translation:
             return ProxyDagsterFivetranTranslator(self.translation)
         return DagsterFivetranTranslator()
+
+    @classmethod
+    def get_additional_scope(cls) -> Mapping[str, Any]:
+        return {
+            "hourly_if_not_in_progress": dg.AutomationCondition.cron_tick_passed("0 * * * *")
+            & ~dg.AutomationCondition.in_progress(),
+            "group_from_db_and_schema": lambda props: f"fivetran_{'_'.join(props.table.split('.')[:-1])}",
+        }
 
     def build_defs(self, context: ComponentLoadContext) -> dg.Definitions:
         fivetran_assets = build_fivetran_assets_definitions(
