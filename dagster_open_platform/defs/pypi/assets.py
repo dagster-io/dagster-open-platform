@@ -118,18 +118,11 @@ def dagster_pypi_downloads(
     )
 
 
-oss_telemetry_events_raw = dg.SourceAsset(
-    key=["purina", "prod_telemetry", "oss_telemetry_events_raw"],
-    description="OSS Telemetry events ingested from S3. The actual asset for this is currently in Purina until we can refactor the logic for it.",
-    group_name="telemetry",
-)
-
-
 @definitions
 def defs():
-    return dg.Definitions(
-        assets=[
-            dagster_pypi_downloads,
-            oss_telemetry_events_raw,
-        ]
+    oss_telemetry_events_raw = dg.AssetSpec(
+        key=["purina", "prod_telemetry", "oss_telemetry_events_raw"],
+        description="OSS Telemetry events ingested from S3. The actual asset for this is currently in Purina until we can refactor the logic for it.",
+        group_name="telemetry",
     )
+    return dg.Definitions(assets=[oss_telemetry_events_raw, dagster_pypi_downloads])
