@@ -54,6 +54,7 @@ dev = [
 ]
 
 tests = [
+    "mock>=5.2.0",
     "pytest",
     "responses",
     "syrupy",

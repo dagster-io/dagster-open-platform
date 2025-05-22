@@ -599,9 +599,11 @@ dependencies = [
     { name = "dbt-snowflake" },
     { name = "dlt", extra = ["duckdb", "snowflake"] },
     { name = "gql", extra = ["requests"] },
+    { name = "mock" },
     { name = "psutil" },
     { name = "pydantic" },
     { name = "pyopenssl" },
+    { name = "pytest" },
     { name = "pyyaml" },
     { name = "sling" },
     { name = "snowflake-connector-python", extra = ["pandas", "secure-local-storage"] },
@@ -652,10 +654,12 @@ requires-dist = [
     { name = "dbt-snowflake", specifier = "<1.9" },
     { name = "dlt", extras = ["snowflake", "duckdb"] },
     { name = "gql", extras = ["requests"] },
+    { name = "mock", specifier = ">=5.2.0" },
     { name = "psutil", specifier = ">=7.0.0" },
     { name = "pydantic" },
     { name = "pyopenssl", specifier = ">=23.0.0" },
     { name = "pyright", marker = "extra == 'dev'" },
+    { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest", marker = "extra == 'tests'" },
     { name = "pyyaml" },
@@ -1916,6 +1920,15 @@ dependencies = [
     { name = "six" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/e4/9f/004f810169a48ed5c520279d98327e7793b6491f09d42cb2c5636c994f34/minimal-snowplow-tracker-0.0.2.tar.gz", hash = "sha256:acabf7572db0e7f5cbf6983d495eef54081f71be392330eb3aadb9ccb39daaa4", size = 12542, upload-time = "2018-10-13T12:58:37.368Z" }
+
+[[package]]
+name = "mock"
+version = "5.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/07/8c/14c2ae915e5f9dca5a22edd68b35be94400719ccfa068a03e0fb63d0f6f6/mock-5.2.0.tar.gz", hash = "sha256:4e460e818629b4b173f32d08bf30d3af8123afbb8e04bb5707a1fd4799e503f0", size = 92796, upload-time = "2025-03-03T12:31:42.911Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/d9/617e6af809bf3a1d468e0d58c3997b1dc219a9a9202e650d30c2fc85d481/mock-5.2.0-py3-none-any.whl", hash = "sha256:7ba87f72ca0e915175596069dbbcc7c75af7b5e9b9bc107ad6349ede0819982f", size = 31617, upload-time = "2025-03-03T12:31:41.518Z" },
+]
 
 [[package]]
 name = "more-itertools"
