@@ -7,7 +7,7 @@ from dagster.components import Component, Model, Resolvable, ResolvedAssetSpec
 from dagster_dbt import get_asset_key_for_model
 from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.dbt.assets import get_dbt_non_partitioned_models
-from dagster_open_platform.defs.hightouch.resources import ConfigurableHightouchResource
+from dagster_open_platform.defs.hightouch.py.resources import ConfigurableHightouchResource
 from dagster_shared.record import as_dict
 
 

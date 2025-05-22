@@ -1,4 +1,4 @@
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_org_activity_monthly
@@ -12,7 +12,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_sync_salesforce_account
@@ -26,7 +26,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_null_contact_names
@@ -41,7 +41,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_cloud_users
@@ -55,7 +55,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_user_attribution
@@ -69,7 +69,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_sync_salesforce_opportunity
@@ -83,7 +83,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_sync_hubspot_company
@@ -97,7 +97,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_sync_hubspot_contact
@@ -111,7 +111,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.hightouch.component.dop_hightouch_component.DopHightouchSyncComponent
+type: dagster_open_platform.lib.hightouch.component.DopHightouchSyncComponent
 attributes:
   asset:
     key: hightouch_sync_hubspot_organization
