@@ -1,4 +1,4 @@
-type: dagster_open_platform.defs.snowflake.custom_component.SnowflakeCreateOrRefreshComponent
+type: dagster_open_platform.lib.snowflake.component.SnowflakeCreateOrRefreshComponent
 
 attributes:
   role: AWS_WRITER
@@ -28,7 +28,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.defs.snowflake.custom_component.SnowflakeCreateOrRefreshComponent
+type: dagster_open_platform.lib.snowflake.component.SnowflakeCreateOrRefreshComponent
 
 attributes:
   role: AWS_WRITER

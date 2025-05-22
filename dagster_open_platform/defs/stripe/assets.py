@@ -19,7 +19,7 @@ from dagster._core.definitions.schedule_definition import DefaultScheduleStatus
 from dagster._core.execution.context.compute import AssetExecutionContext
 from dagster.components import definitions
 from dagster_open_platform.definitions import global_freshness_policy
-from dagster_open_platform.defs.snowflake.resources import snowflake_resource
+from dagster_open_platform.defs.snowflake.py.resources import snowflake_resource
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
 
