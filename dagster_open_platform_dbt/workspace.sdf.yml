@@ -29,11 +29,14 @@ workspace:
     - pattern: mixpanel.*.*
     - pattern: gong.*.*
     - pattern: product_operations.*.*
+    - pattern: dwh_science.*.*
     targets:
     - pattern: purina.*.*
       rename-as: sandbox.purina__${1}.${2}
     - pattern: dwh_reporting.*.*
       rename-as: sandbox.dwh_reporting__${1}.${2}
+    - pattern: dwh_science.*.*
+      rename-as: sandbox.dwh_science__${1}.${2}
   defaults:
     environment: dbg
     dialect: snowflake
