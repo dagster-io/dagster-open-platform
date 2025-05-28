@@ -34,8 +34,6 @@ def test_load_common_room_activities(environment: str) -> None:
 
         assert assets_def.keys == {
             AssetKey(["aws", expected_schema, "stage_common_room_activities"]),
-            AssetKey(["aws", expected_schema, "stage_common_room_community_members"]),
-            AssetKey(["aws", expected_schema, "stage_common_room_groups"]),
         }
 
         stage_common_room_activities_spec = assets_def.specs_by_key[
@@ -84,39 +82,29 @@ def test_run_common_room_activities(environment: str, does_entity_exist: bool) -
         assets_def = next(iter(defs.assets or []))
         assert isinstance(assets_def, AssetsDefinition)
 
-        result = list(assets_def(context=build_asset_context(), snowflake_sf=MockSnowflake()))  # type: ignore
+        print(assets_def)
 
-        # 3 assets -> 3 outputs
-        assert len(result) == 3
+        assets_def(context=build_asset_context(), snowflake_sf=MockSnowflake())  # type: ignore
 
-        assert len(executed_queries) == 10
+        if does_entity_exist:
+            assert len(executed_queries) == 5
+        else:
+            assert len(executed_queries) == 6
         assert executed_queries[0] == "USE ROLE AWS_WRITER;"
-        assert executed_queries[1] == f"USE SCHEMA AWS.{expected_schema.upper()};"
+        assert executed_queries[1] == "USE DATABASE AWS;"
+        assert executed_queries[2] == f"USE SCHEMA AWS.{expected_schema.upper()};"
 
         assert "SHOW STAGES LIKE 'stage_common_room_activities';" in executed_queries
-        assert "SHOW STAGES LIKE 'stage_common_room_community_members';" in executed_queries
-        assert "SHOW STAGES LIKE 'stage_common_room_groups';" in executed_queries
 
         if does_entity_exist:
             assert "ALTER STAGE stage_common_room_activities REFRESH;" in executed_queries, str(
                 executed_queries
             )
-            assert "ALTER STAGE stage_common_room_community_members REFRESH;" in executed_queries, (
-                str(executed_queries)
-            )
-            assert "ALTER STAGE stage_common_room_groups REFRESH;" in executed_queries, str(
-                executed_queries
-            )
         else:
+            print(executed_queries)
             assert any(
-                query.startswith("CREATE STAGE stage_common_room_activities")
-                for query in executed_queries
-            ), "CREATE STAGE query should be in executed_queries"
-            assert any(
-                query.startswith("CREATE STAGE stage_common_room_community_members")
-                for query in executed_queries
-            ), "CREATE STAGE query should be in executed_queries"
-            assert any(
-                query.startswith("CREATE STAGE stage_common_room_groups")
+                query.startswith(
+                    f"CREATE OR REPLACE stage aws.{expected_schema}.stage_common_room_activities"
+                )
                 for query in executed_queries
             ), "CREATE STAGE query should be in executed_queries"

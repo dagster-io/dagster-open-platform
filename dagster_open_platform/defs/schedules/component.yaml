@@ -1,4 +1,4 @@
-type: dagster_open_platform.lib.schedule.ScheduleComponent
+type: dagster_open_platform.lib.ScheduleComponent
 attributes:
   name: hightouch_syncs_schedule
   target: group:hightouch_syncs and not (key:hightouch_sync_hubspot_company or key:hightouch_sync_hubspot_organization)

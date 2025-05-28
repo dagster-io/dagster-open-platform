@@ -1,4 +1,4 @@
-type: dagster_open_platform.lib.sling.cloud_product_ingest.ProdDbReplicationsComponent
+type: dagster_open_platform.lib.ProdDbReplicationsComponent
 
 attributes:
   config_dir: ../configs/cloud_product
@@ -30,7 +30,7 @@ attributes:
 
 ---
 
-type: dagster_open_platform.lib.sling.egress.EgressReplicationComponent
+type: dagster_open_platform.lib.EgressReplicationComponent
 
 attributes:
   config_dir: ../configs/reporting_db
