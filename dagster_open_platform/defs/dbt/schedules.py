@@ -19,7 +19,7 @@ def defs():
         name="dbt_analytics_core_job",
         selection=(
             DbtManifestAssetSelection.build(
-                manifest=dagster_open_platform_dbt_project.manifest_path,
+                manifest=dagster_open_platform_dbt_project().manifest_path,
                 dagster_dbt_translator=CustomDagsterDbtTranslator(),
             ).required_multi_asset_neighbors()
             # snapshot models

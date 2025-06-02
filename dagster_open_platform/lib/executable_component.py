@@ -36,7 +36,6 @@ ResolvedPartitionDefinition: TypeAlias = Annotated[
     Resolver(
         resolve_partition_definition,
         model_field_type=DailyPartitionDefinitionModel,
-        can_inject=True,
     ),
 ]
 

@@ -80,14 +80,17 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
 @cache
 def get_dbt_non_partitioned_models():
+    dbt_project = dagster_open_platform_dbt_project()
+    assert dbt_project
+
     @dbt_assets(
-        manifest=dagster_open_platform_dbt_project.manifest_path,
+        manifest=dbt_project.manifest_path,
         dagster_dbt_translator=CustomDagsterDbtTranslator(
             settings=DagsterDbtTranslatorSettings(enable_code_references=True)
         ),
         exclude=" ".join([INCREMENTAL_SELECTOR, SNAPSHOT_SELECTOR]),
         backfill_policy=dg.BackfillPolicy.single_run(),
-        project=dagster_open_platform_dbt_project,
+        project=dbt_project,
     )
     def dbt_non_partitioned_models(context: dg.AssetExecutionContext, dbt: DbtCliResource):
         yield from (
@@ -108,14 +111,14 @@ class DbtConfig(dg.Config):
 @cache
 def get_dbt_partitioned_models():
     @dbt_assets(
-        manifest=dagster_open_platform_dbt_project.manifest_path,
+        manifest=dagster_open_platform_dbt_project().manifest_path,
         select=INCREMENTAL_SELECTOR,
         dagster_dbt_translator=CustomDagsterDbtTranslator(
             settings=DagsterDbtTranslatorSettings(enable_code_references=True)
         ),
         partitions_def=insights_partition,
         backfill_policy=dg.BackfillPolicy.single_run(),
-        project=dagster_open_platform_dbt_project,
+        project=dagster_open_platform_dbt_project(),
     )
     def dbt_partitioned_models(
         context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
@@ -145,13 +148,13 @@ def get_dbt_partitioned_models():
 @cache
 def get_dbt_snapshot_models():
     @dbt_assets(
-        manifest=dagster_open_platform_dbt_project.manifest_path,
+        manifest=dagster_open_platform_dbt_project().manifest_path,
         select=SNAPSHOT_SELECTOR,
         dagster_dbt_translator=CustomDagsterDbtTranslator(
             settings=DagsterDbtTranslatorSettings(enable_code_references=True)
         ),
         backfill_policy=dg.BackfillPolicy.single_run(),
-        project=dagster_open_platform_dbt_project,
+        project=dagster_open_platform_dbt_project(),
     )
     def dbt_snapshot_models(
         context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig

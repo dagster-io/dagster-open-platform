@@ -43,8 +43,9 @@ def prepare_dop_environment(
 
     from dagster_open_platform.defs.dbt.resources import dagster_open_platform_dbt_project
 
-    dagster_open_platform_dbt_project.preparer.prepare(dagster_open_platform_dbt_project)
-    manifest_path = dagster_open_platform_dbt_project.manifest_path
+    dbt_project = dagster_open_platform_dbt_project()
+    dbt_project.preparer.prepare(dbt_project)
+    manifest_path = dbt_project.manifest_path
 
     assert manifest_path.exists()
 
