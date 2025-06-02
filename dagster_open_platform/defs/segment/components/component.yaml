@@ -1,0 +1,29 @@
+type: dagster_open_platform.lib.SegmentComponent
+attributes:
+  keys:
+    segment:
+      dagster_io:
+        - identifies
+        - pages
+        - hubspot_form_submit
+      dagster_cloud:
+        - accounts
+        - identifies
+        - pages
+        - tracks
+        - trial_start
+        - users
+      dagster_university:
+        - certificate_record_downloaded
+        - course_landing_page
+        - identifies
+        - pages
+        - quiz_start_page
+        - signup
+        - tracks
+        - users
+        - viewed_iframe
+  group_name: segment
+  kinds:
+    - segment
+  description: Segment data loaded using a Snowflake integration.

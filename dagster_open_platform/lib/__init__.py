@@ -5,6 +5,7 @@ from dagster_open_platform.lib.hightouch.component import (
     DopHightouchSyncComponent as DopHightouchSyncComponent,
 )
 from dagster_open_platform.lib.schedule import ScheduleComponent as ScheduleComponent
+from dagster_open_platform.lib.segment.component import SegmentComponent as SegmentComponent
 from dagster_open_platform.lib.sling.cloud_product_ingest import (
     ProdDbReplicationsComponent as ProdDbReplicationsComponent,
 )
