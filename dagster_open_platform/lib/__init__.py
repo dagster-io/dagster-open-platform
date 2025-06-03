@@ -1,6 +1,7 @@
 from dagster_open_platform.lib.executable_component import (
     ExecutableComponent as ExecutableComponent,
 )
+from dagster_open_platform.lib.fivetran.component import FivetranComponent as FivetranComponent
 from dagster_open_platform.lib.hightouch.component import (
     DopHightouchSyncComponent as DopHightouchSyncComponent,
 )

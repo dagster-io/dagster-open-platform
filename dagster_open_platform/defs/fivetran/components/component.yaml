@@ -1,5 +1,5 @@
 
-type: dagster_open_platform.defs.fivetran.assets.fivetran_component_type.FivetranComponent
+type: dagster_open_platform.lib.FivetranComponent
 
 attributes:
   workspace:
