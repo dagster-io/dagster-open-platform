@@ -58,20 +58,6 @@ attributes:
 type: dagster_open_platform.lib.DopHightouchSyncComponent
 attributes:
   asset:
-    key: hightouch_user_attribution
-    deps:
-      - "{{ dbt_asset_key('user_attribution') }}"
-    kinds:
-      - hightouch
-      - salesforce
-    group_name: hightouch_syncs
-  sync_id_env_var: HIGHTOUCH_USER_ATTRIBUTION_SYNC_ID
-
----
-
-type: dagster_open_platform.lib.DopHightouchSyncComponent
-attributes:
-  asset:
     key: hightouch_sync_salesforce_opportunity
     deps:
       - "{{ dbt_asset_key('sync_salesforce_opportunity') }}"
@@ -122,3 +108,17 @@ attributes:
       - hubspot
     group_name: hightouch_syncs
   sync_id_env_var: HIGHTOUCH_SYNC_HUBSPOT_ORGANIZATION_SYNC_ID
+
+---
+
+type: dagster_open_platform.lib.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_dagster_university_leads 
+    deps:
+      - "{{ dbt_asset_key('dagster_university_leads') }}"
+    kinds:
+      - hightouch
+      - hubspot
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_DAGSTER_UNIVERSITY_LEADS_SYNC_ID
