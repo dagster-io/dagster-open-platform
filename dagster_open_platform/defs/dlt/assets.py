@@ -35,7 +35,7 @@ class HubspotDagsterDltTranslator(DagsterDltTranslator):
         destination="snowflake",
         progress="log",
     ),
-    name="hubspot",
+    name="dlt_hubspot",
     group_name="hubspot",
     dagster_dlt_translator=HubspotDagsterDltTranslator(),
 )
