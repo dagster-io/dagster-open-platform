@@ -1,9 +1,4 @@
-import datetime
-import json
-from typing import Any
-
 import gql
-import requests
 from dagster import ConfigurableResource, Definitions, EnvVar, get_dagster_logger
 from dagster.components import definitions
 from dagster_open_platform.utils.github_gql_queries import (
@@ -11,57 +6,6 @@ from dagster_open_platform.utils.github_gql_queries import (
     GITHUB_ISSUES_QUERY,
 )
 from gql.transport.requests import RequestsHTTPTransport
-
-
-class ScoutosResource(ConfigurableResource):
-    """Resource for interacting with the ScoutOS API which hosts our Support Bot."""
-
-    api_key: str
-
-    @property
-    def headers(self):
-        return {
-            "Accept": "*/*",
-            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
-        }
-
-    def write_documents(
-        self, collection_id: str, table_id: str, documents: list[dict]
-    ) -> dict[str, Any]:
-        """Writes documents to the ScoutOS API."""
-        request_url = f"https://api.scoutos.com/v2/collections/{collection_id}/tables/{table_id}/documents?await_completion=false"
-        payload = json.dumps(documents)
-        response = requests.request("POST", request_url, data=payload, headers=self.headers)
-        return response.json()
-
-    def get_runs(
-        self, startdate: datetime.datetime, enddate: datetime.datetime
-    ) -> list[dict[str, Any]]:
-        """Returns the runs for a time period for Scout."""
-        startdate_str: str = startdate.strftime("%Y-%m-%d")
-        enddate_str: str = enddate.strftime("%Y-%m-%d")
-        url = "https://api.scoutos.com/v1/apps/runs"
-        params = {
-            "start_date": startdate_str,
-            "end_date": enddate_str,
-            "limit": 50,
-            "status": "completed",
-        }
-        all_runs: list[dict[str, Any]] = []
-
-        while True:
-            response = requests.get(url, params=params, headers=self.headers)
-            response.raise_for_status()
-            data = response.json()
-            all_runs.append(data["records"])
-
-            if data["pagination"]["has_more"]:
-                params["cursor"] = data["pagination"]["next_cursor"]
-            else:
-                break
-        return all_runs
 
 
 class GithubResource(ConfigurableResource):
@@ -121,6 +65,5 @@ def defs():
     return Definitions(
         resources={
             "github": GithubResource(github_token=EnvVar("GITHUB_TOKEN")),
-            "scoutos": ScoutosResource(api_key=EnvVar("SCOUTOS_API_KEY")),
         },
     )

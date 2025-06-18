@@ -13,7 +13,7 @@ from dagster._core.storage.tags import (
     ASSET_PARTITION_RANGE_START_TAG,
 )
 from dagster.components import definitions
-from dagster_open_platform.defs.scout.assets import github_issues
+from dagster_open_platform.defs.scout.assets.github_issues import github_issues
 
 support_bot_job = define_asset_job(
     name="support_bot_job",

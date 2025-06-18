@@ -11,6 +11,7 @@ dependencies = [
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
     "dagster==1.10.15",
+    "dagster-dg",
     "dagster-cloud",
     "dagster-cloud-cli",
     "dagster-webserver",
@@ -34,11 +35,12 @@ dependencies = [
     "sling<1.2.14", # https://github.com/slingdata-io/sling-cli/issues/349
     "statsig",
     "gql[requests]",
-    "dlt[snowflake,duckdb]",
+    "dlt[snowflake,duckdb]==1.11.0",
     "pydantic",
     "pyyaml",
     "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
     "snowflake-connector-python[secure-local-storage,pandas]",
+    "scoutos",
     "psutil>=7.0.0",
     "certifi==2025.1.31",
     "scikit-learn",

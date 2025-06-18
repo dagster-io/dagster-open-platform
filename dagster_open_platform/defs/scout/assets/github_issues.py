@@ -1,16 +1,9 @@
-import json
 import os
 
 import dagster as dg
-import pandas as pd
 from dagster.components import definitions
-from dagster_open_platform.defs.scout.resources import GithubResource, ScoutosResource
-from dagster_open_platform.utils.environment_helpers import (
-    get_database_for_environment,
-    get_schema_for_environment,
-)
-from dagster_snowflake import SnowflakeResource
-from snowflake.connector.pandas_tools import write_pandas
+from dagster_open_platform.defs.scout.resources.github_resource import GithubResource
+from dagster_open_platform.defs.scout.resources.scoutos_resource import ScoutosResource
 
 
 def extract_comments(issue_or_disccusion: dict) -> str:
@@ -112,102 +105,8 @@ def github_issues(
     return dg.MaterializeResult()
 
 
-scout_queries_daily_partition = dg.DailyPartitionsDefinition(start_date="2024-06-01")
-
-
-@dg.asset(
-    partitions_def=scout_queries_daily_partition,
-    group_name="scoutos",
-    description="ScoutOS App Runs",
-    automation_condition=dg.AutomationCondition.on_cron("0 0 * * *"),
-    kinds={"github", "scout", "snowflake"},
-    owners=["team:devrel"],
-    tags={"dagster/concurrency_key": "scoutos_app_runs"},
-)
-def scoutos_app_runs(
-    context: dg.AssetExecutionContext,
-    snowflake: SnowflakeResource,
-    scoutos: ScoutosResource,
-) -> dg.MaterializeResult:
-    start, end = context.partition_time_window
-    data = scoutos.get_runs(start, end)
-
-    df = pd.concat([pd.json_normalize(obj) for obj in data], ignore_index=True)
-    df["partition_date"] = df["timestamp_start"].str[:10]
-    context.log.info(f"Fetched Total records: {len(df)}")
-
-    df["block_id"] = df["blocks"].apply(
-        lambda x: [block["block_id"] for block in x if "block_id" in block]
-    )
-    df["blocks"] = df["blocks"].apply(
-        lambda x: [block["block_output"] for block in x if "block_output" in block]
-    )
-    df["blocks"] = df["blocks"].apply(lambda x: json.dumps(x) if x is not None else None)
-    database_name = get_database_for_environment("SCOUT")
-    schema_name = get_schema_for_environment("QUERIES")
-    table_name = "scout_queries"
-    temp_table_name = f"{table_name}_TEMP"
-    with snowflake.get_connection() as conn:
-        create_schema_sql = f"""
-        CREATE SCHEMA IF NOT EXISTS {database_name}.{schema_name}
-        """
-        conn.cursor().execute(create_schema_sql)
-
-        write_pandas(
-            conn,
-            df,
-            temp_table_name,
-            database=database_name,
-            schema=schema_name,
-            overwrite=True,
-            auto_create_table=True,
-            quote_identifiers=False,
-        )
-
-        create_table_sql = f"""
-        CREATE TABLE {database_name}.{schema_name}.{table_name} IF NOT EXISTS LIKE {database_name}.{schema_name}.{temp_table_name}
-        """
-        conn.cursor().execute(create_table_sql)
-
-        delete_query = f"""
-            delete from {database_name}.{schema_name}.{table_name}
-            where partition_date ='{start.strftime("%Y-%m-%d")}'
-        """
-
-        try:
-            conn.cursor().execute(delete_query)
-            context.log.info(f"Deleted Partition data for {start}")
-
-            success, number_chunks, rows_inserted, output = write_pandas(
-                conn,
-                df,
-                table_name,
-                database=database_name,
-                schema=schema_name,
-                auto_create_table=False,
-                overwrite=False,
-                quote_identifiers=False,
-            )
-
-            context.log.info(
-                f"Inserted {rows_inserted} rows into {database_name}.{schema_name}.{table_name}"
-            )
-        except Exception as e:
-            context.log.error(f"Error inserting data into {table_name}")
-            context.log.error(e)
-            conn.rollback()
-            raise e
-
-    return dg.MaterializeResult(
-        metadata={
-            "row_count": dg.MetadataValue.int(rows_inserted),
-            "preview": dg.MetadataValue.md(df.head(10).to_markdown(index=False)),
-        }
-    )
-
-
 @definitions
 def defs():
     return dg.Definitions(
-        assets=[github_issues, scoutos_app_runs],
+        assets=[github_issues],
     )
