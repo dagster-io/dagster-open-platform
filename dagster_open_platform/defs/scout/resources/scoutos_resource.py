@@ -3,6 +3,7 @@ import json
 from collections.abc import Generator
 from typing import Any, Optional
 
+import requests
 from dagster import ConfigurableResource, Definitions, EnvVar, get_dagster_logger
 from dagster.components import definitions
 from scoutos import Scout, Workflow
@@ -14,9 +15,27 @@ class ScoutosResource(ConfigurableResource):
     api_key: str
     workflow_id: str = ""  # Optional - empty string means get all workflows
 
+    @property
+    def headers(self):
+        return {
+            "Accept": "*/*",
+            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+        }
+
     def _get_client(self) -> Scout:
         """Get the ScoutOS SDK client."""
         return Scout(api_key=self.api_key)
+
+    def write_documents(
+        self, collection_id: str, table_id: str, documents: list[dict]
+    ) -> dict[str, Any]:
+        """Writes documents to the ScoutOS API."""
+        request_url = f"https://api.scoutos.com/v2/collections/{collection_id}/tables/{table_id}/documents?await_completion=false"
+        payload = json.dumps(documents)
+        response = requests.request("POST", request_url, data=payload, headers=self.headers)
+        return response.json()
 
     def get_workflows(self) -> list[Workflow]:
         """Returns all workflows using the ScoutOS SDK."""
