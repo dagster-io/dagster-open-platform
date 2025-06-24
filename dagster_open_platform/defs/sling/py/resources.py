@@ -22,9 +22,9 @@ embedded_elt_resource = SlingResource(
         SlingConnectionResource(
             name="SLING_DB_MAIN",
             type="snowflake",
-            host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
+            host=EnvVar("SLING_SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
-            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            private_key=EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),  # type: ignore
             database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
             schema=get_schema_for_environment("cloud_product"),  # type: ignore
             warehouse="purina",  # type: ignore
@@ -42,9 +42,9 @@ embedded_elt_resource = SlingResource(
         SlingConnectionResource(
             name="SLING_DB_SHARD1",
             type="snowflake",
-            host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
+            host=EnvVar("SLING_SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
-            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            private_key=EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),  # type: ignore
             database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
             schema=get_schema_for_environment("cloud_product_shard1"),  # type: ignore
             warehouse="purina",  # type: ignore
@@ -53,9 +53,9 @@ embedded_elt_resource = SlingResource(
         SlingConnectionResource(
             name="PURINA_CLOUD_REPORTING",
             type="snowflake",
-            host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
+            host=EnvVar("SLING_SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
-            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            private_key=EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),  # type: ignore
             database=get_database_for_environment(),  # type: ignore
             schema=get_schema_for_environment("sales"),  # type: ignore
             warehouse="purina",  # type: ignore
