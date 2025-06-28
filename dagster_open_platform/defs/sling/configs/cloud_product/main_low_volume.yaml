@@ -22,7 +22,7 @@ streams:
         last_planned_materialization_run_id,
         last_observation
       from asset_keys
-      where id > {incremental_value}
+      where {incremental_where_cond}
     update_key: last_materialization_timestamp
     meta:
       dagster: 
