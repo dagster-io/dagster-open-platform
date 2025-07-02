@@ -105,6 +105,7 @@ features = {
 
 # Define columns to exclude from feature preparation
 excluded_columns = [
+    "lead_source_Trade Show"
     # 'meeting_count',
     # 'win_loss_competitor',
     # 'region',
@@ -158,7 +159,7 @@ def prepare_features(df, excluded_columns=None):
         feature_dfs.append(X_binary)
 
     # Combine all features
-    X = pd.concat(feature_dfs, axis=1)
+    X = pd.concat(feature_dfs, axis=1).drop(columns=excluded_columns, errors="ignore")
     y = df["won"].astype(int)
 
     print(X.columns)
