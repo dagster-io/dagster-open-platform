@@ -10,7 +10,7 @@ from dagster import (
     build_asset_context,
     deserialize_value,
 )
-from dagster._core.definitions.asset_spec import (
+from dagster._core.definitions.freshness import (
     INTERNAL_FRESHNESS_POLICY_METADATA_KEY,
     InternalFreshnessPolicy,
 )

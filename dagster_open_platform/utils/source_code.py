@@ -20,7 +20,7 @@ REPOSITORY_ROOT_ABSOLUTE_PATH = (
 
 if TYPE_CHECKING:
     from dagster import SourceAsset
-    from dagster._core.definitions.cacheable_assets import CacheableAssetsDefinition
+    from dagster._core.definitions.definitions_class import CacheableAssetsDefinition
 
 
 def add_code_references_and_link_to_git(
