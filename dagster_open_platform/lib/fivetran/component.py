@@ -4,7 +4,6 @@ from typing import Annotated, Any, Callable, Optional, Union
 
 import dagster as dg
 import dagster.components as dg_components
-from dagster._core.definitions.asset_check_factories.schema_change_checks import BaseModel
 from dagster.components import Component, ComponentLoadContext, Model, Resolvable
 from dagster.components.resolved.base import resolve_fields
 from dagster.components.utils import TranslatorResolvingInfo
@@ -54,7 +53,7 @@ class ProxyDagsterFivetranTranslator(DagsterFivetranTranslator):
         return spec
 
 
-class FivetranWorkspaceModel(BaseModel):
+class FivetranWorkspaceModel(Model):
     api_key: str
     api_secret: str
     account_id: str
