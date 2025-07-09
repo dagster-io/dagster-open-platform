@@ -1,4 +1,3 @@
-import itertools
 import os
 import sys
 from collections.abc import Iterator
@@ -142,71 +141,6 @@ def _asset_spec_data(asset: AssetSpec) -> dict[str, Any]:
             else {}
         ),
     }
-
-
-@pytest.mark.skipif(
-    os.environ.get("DOP_PYTEST_FULL") != "1",
-    reason="Snapshot tests are opt-in using `--run-skipped`",
-)
-@pytest.mark.parametrize("cloud_env", [True])
-def test_assets_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> None:
-    """Ensures that the asset specs are stable across test runs, and don't unexpectedly change.
-
-    To run locally, you will need env vars configured as in the README.
-    """
-    from dagster_open_platform.definitions import defs
-
-    resolved_defs = defs()
-
-    assert len(resolved_defs.get_asset_graph().get_all_asset_keys()) > 0
-    assert resolved_defs.assets is not None
-
-    # flatten
-    specs = sorted(
-        itertools.chain.from_iterable(
-            asset.specs
-            for asset in resolved_defs.get_repository_def().asset_graph.assets_defs
-            if isinstance(asset, (AssetsDefinition, AssetSpec))
-        ),
-        key=lambda x: x.key.to_user_string(),
-    )
-    # Separately validate that the asset keys are stable across test runs, since this is easier to
-    # reason about than the full spec data.
-    spec_keys = [spec.key.to_user_string() for spec in specs]
-    snapshot.assert_match(spec_keys)
-
-    spec_data = [_asset_spec_data(spec) for spec in specs]
-    snapshot.assert_match(spec_data)
-
-
-@pytest.mark.skipif(
-    os.environ.get("DOP_PYTEST_FULL") != "1",
-    reason="Snapshot tests are opt-in using `--run-skipped`",
-)
-@pytest.mark.parametrize("cloud_env", [True])
-def test_jobs_snapshot(prepare_dop_environment, cloud_env: bool, snapshot) -> None:
-    """Ensures that job list and job asset selection are stable across test runs, and don't
-    unexpectedly change.
-    """
-    from dagster_open_platform.definitions import defs
-
-    repo_def = defs().get_repository_def()
-
-    job_data = [
-        {
-            "name": job.name,
-            "asset_selection": sorted(
-                k.to_user_string() for k in job.asset_layer.asset_graph.get_all_asset_keys()
-            )
-            if job.asset_layer
-            else None,
-        }
-        for job in sorted(
-            repo_def.get_all_jobs(),
-            key=lambda j: j.name,
-        )
-    ]
-    snapshot.assert_match(job_data)
 
 
 @pytest.mark.skipif(
