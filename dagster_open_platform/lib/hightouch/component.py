@@ -8,18 +8,10 @@ from dagster_dbt import get_asset_key_for_model
 from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.dbt.assets import get_dbt_non_partitioned_models
 from dagster_open_platform.defs.hightouch.py.resources import ConfigurableHightouchResource
-from dagster_shared.record import as_dict
 
 
 def dbt_asset_key(model_name: str) -> dg.AssetKey:
     return get_asset_key_for_model([get_dbt_non_partitioned_models()], model_name)
-
-
-def spec_with_freshness_policy(spec: dg.AssetSpec) -> dg.AssetSpec:
-    return dg.AssetSpec(
-        internal_freshness_policy=global_freshness_policy,
-        **as_dict(spec),
-    )
 
 
 class DopHightouchSyncComponent(Component, Resolvable, Model):
@@ -31,7 +23,10 @@ class DopHightouchSyncComponent(Component, Resolvable, Model):
         return {"dbt_asset_key": dbt_asset_key}
 
     def build_defs(self, context) -> dg.Definitions:
-        @dg.multi_asset(name=self.asset.key.path[0], specs=[spec_with_freshness_policy(self.asset)])
+        @dg.multi_asset(
+            name=self.asset.key.path[0],
+            specs=[self.asset.replace_attributes(freshness_policy=global_freshness_policy)],
+        )
         def _assets(hightouch: ConfigurableHightouchResource):
             result = hightouch.sync_and_poll(os.getenv(self.sync_id_env_var, ""))
             return dg.MaterializeResult(

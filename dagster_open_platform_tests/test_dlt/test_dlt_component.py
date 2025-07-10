@@ -1,26 +1,22 @@
 from pathlib import Path
 
 import pytest
-from dagster import AssetKey, AssetsDefinition
+from dagster import AssetKey, AssetsDefinition, get_component_defs_within_project
 from dagster._core.test_utils import environ
-from dagster.components.core.context import use_component_load_context
-from dagster_open_platform.utils.components_test import build_component_and_defs
-from dagster_open_platform_tests.utils import component_context
 
 
 @pytest.mark.parametrize("environment", ["dev", "prod"])
 def test_load_dlt_component(environment: str) -> None:
-    ctx = component_context(Path("dlt/component"))
-    with (
-        environ(
-            {
-                "SOURCES__THINKIFIC__THINKIFIC__THINKIFIC_SUBDOMAIN": "foo",
-                "SOURCES__THINKIFIC__THINKIFIC__THINKIFIC_API_KEY": "bar",
-            }
-        ),
-        use_component_load_context(ctx),
+    with environ(
+        {
+            "SOURCES__THINKIFIC__THINKIFIC__THINKIFIC_SUBDOMAIN": "foo",
+            "SOURCES__THINKIFIC__THINKIFIC__THINKIFIC_API_KEY": "bar",
+        }
     ):
-        component, defs = build_component_and_defs(ctx)
+        component, defs = get_component_defs_within_project(
+            project_root=Path(__file__).parent.parent.parent,
+            component_path="dlt/component",
+        )
 
         assets_def = next(iter(defs.assets or []))
         assert isinstance(assets_def, AssetsDefinition)

@@ -10,8 +10,8 @@ dependencies = [
     "boto3",
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
-    "dagster==1.10.15",
-    "dagster-dg",
+    "dagster==1.11.0",
+    "dagster-dg-cli",
     "dagster-cloud",
     "dagster-cloud-cli",
     "dagster-webserver",
@@ -81,11 +81,8 @@ directory_type = "project"
 [tool.dg.project]
 root_module = "dagster_open_platform"
 
-[tool.dg.project.python_environment]
-active = true
-
 [project.entry-points]
-"dagster_dg.plugin" = { dagster_open_platform = "dagster_open_platform.lib"}
+"dagster_dg_cli.registry_modules" = { dagster_open_platform = "dagster_open_platform.lib"}
 
 # ########################
 # ##### SQLFLUFF

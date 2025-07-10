@@ -61,7 +61,7 @@ asset_specs = [
     AssetSpec(
         key=table_names_to_asset_keys[table_name],
         description=f"Stripe {table_name} table (synced using stripe pipeline)",
-        internal_freshness_policy=global_freshness_policy,
+        freshness_policy=global_freshness_policy,
     )
     for table_name in table_names
 ]

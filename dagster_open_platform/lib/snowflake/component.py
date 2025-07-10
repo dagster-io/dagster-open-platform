@@ -134,9 +134,7 @@ class SnowflakeCreateOrRefreshComponent(
         return dg.AssetSpec(
             **(self.asset_attributes or {}),
             key=dg.AssetKey([self.database_name, self.schema_name, self.name]),
-            internal_freshness_policy=InternalFreshnessPolicy.time_window(
-                fail_window=timedelta(hours=23)
-            ),
+            freshness_policy=InternalFreshnessPolicy.time_window(fail_window=timedelta(hours=23)),
         )
 
     def build_defs(self, context: ComponentLoadContext) -> dg.Definitions:
@@ -145,9 +143,7 @@ class SnowflakeCreateOrRefreshComponent(
         @dg.asset(
             **(self.asset_attributes or {}),
             key=dg.AssetKey([self.database_name, self.schema_name, self.name]),
-            internal_freshness_policy=InternalFreshnessPolicy.time_window(
-                fail_window=timedelta(hours=23)
-            ),
+            freshness_policy=InternalFreshnessPolicy.time_window(fail_window=timedelta(hours=23)),
         )
         def _create_or_refresh_object(
             context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource

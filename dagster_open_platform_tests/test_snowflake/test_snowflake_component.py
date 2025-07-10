@@ -3,30 +3,26 @@ from datetime import timedelta
 from pathlib import Path
 
 import pytest
-from dagster import (
-    AssetKey,
-    AssetsDefinition,
-    AutomationCondition,
-    build_asset_context,
-    deserialize_value,
-)
-from dagster._core.definitions.freshness import (
-    INTERNAL_FRESHNESS_POLICY_METADATA_KEY,
-    InternalFreshnessPolicy,
-)
+from dagster import AssetKey, AssetsDefinition, AutomationCondition, build_asset_context
+from dagster._core.definitions.freshness import InternalFreshnessPolicy
 from dagster._core.test_utils import environ
-from dagster_open_platform.utils.components_test import build_component_and_defs
-
-from dagster_open_platform_tests.utils import component_context
+from dagster.components.testing import get_component_defs_within_project
 
 
 @pytest.mark.parametrize("environment", ["dev", "prod"])
 def test_load_common_room_activities(environment: str) -> None:
-    with environ({"DAGSTER_CLOUD_DEPLOYMENT_NAME": "prod" if environment == "prod" else ""}):
+    with environ(
+        {
+            "DAGSTER_CLOUD_DEPLOYMENT_NAME": "prod" if environment == "prod" else "",
+            "COMMON_ROOM_BUCKET": "test",
+            "COMMON_ROOM_STORAGE_INTEGRATION": "test",
+        }
+    ):
         expected_schema = "elementl" if environment == "prod" else "dev"
 
-        component, defs = build_component_and_defs(
-            component_context(Path("snowflake/components/common_room")),
+        component, defs = get_component_defs_within_project(
+            project_root=Path(__file__).parent.parent.parent,
+            component_path="snowflake/components/common_room",
         )
 
         assets_def = next(iter(defs.assets or []))
@@ -39,9 +35,7 @@ def test_load_common_room_activities(environment: str) -> None:
         stage_common_room_activities_spec = assets_def.specs_by_key[
             AssetKey(["aws", expected_schema, "stage_common_room_activities"])
         ]
-        assert deserialize_value(
-            stage_common_room_activities_spec.metadata[INTERNAL_FRESHNESS_POLICY_METADATA_KEY]
-        ) == (
+        assert stage_common_room_activities_spec.freshness_policy == (
             InternalFreshnessPolicy.time_window(
                 fail_window=timedelta(hours=23),
             )
@@ -56,7 +50,13 @@ def test_load_common_room_activities(environment: str) -> None:
 @pytest.mark.parametrize("environment", ["dev", "prod"])
 @pytest.mark.parametrize("does_entity_exist", [True, False])
 def test_run_common_room_activities(environment: str, does_entity_exist: bool) -> None:
-    with environ({"DAGSTER_CLOUD_DEPLOYMENT_NAME": "prod" if environment == "prod" else ""}):
+    with environ(
+        {
+            "DAGSTER_CLOUD_DEPLOYMENT_NAME": "prod" if environment == "prod" else "",
+            "COMMON_ROOM_BUCKET": "test",
+            "COMMON_ROOM_STORAGE_INTEGRATION": "test",
+        }
+    ):
         expected_schema = "elementl" if environment == "prod" else "dev"
         executed_queries = []
 
@@ -75,14 +75,13 @@ def test_run_common_room_activities(environment: str, does_entity_exist: bool) -
             def cursor(self):
                 return MockCursor()
 
-        component, defs = build_component_and_defs(
-            component_context(Path("snowflake/components/common_room")),
+        component, defs = get_component_defs_within_project(
+            project_root=Path(__file__).parent.parent.parent,
+            component_path="snowflake/components/common_room",
         )
 
         assets_def = next(iter(defs.assets or []))
         assert isinstance(assets_def, AssetsDefinition)
-
-        print(assets_def)
 
         assets_def(context=build_asset_context(), snowflake_sf=MockSnowflake())  # type: ignore
 

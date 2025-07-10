@@ -2,8 +2,6 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
-from dagster.components import ComponentLoadContext, ResolutionContext
-
 
 class ExtractionStatus(Enum):
     DISCOVERY = "discovery"
@@ -86,13 +84,3 @@ def sample_extractions_data(jobs: dict[str, ExtractionStatus]) -> dict[str, Any]
 
 def project_root() -> Path:
     return Path(__file__).parent.parent
-
-
-def component_context(path: Path) -> ComponentLoadContext:
-    return ComponentLoadContext(
-        path=project_root() / "dagster_open_platform" / "defs" / path,
-        project_root=project_root(),
-        defs_module_path=project_root() / "dagster_open_platform" / "defs",
-        defs_module_name="dagster_open_platform.defs",
-        resolution_context=ResolutionContext.default(),
-    )

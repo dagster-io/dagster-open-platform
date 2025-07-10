@@ -28,7 +28,7 @@ log = dg.get_dagster_logger()
                     & dg.AutomationCondition.missing()
                 )
             ),
-            internal_freshness_policy=global_freshness_policy,
+            freshness_policy=global_freshness_policy,
         )
         for asset_key in workspace_data_json.keys
     ],
@@ -86,7 +86,7 @@ def workspace_replication_aws_stages(
                     & dg.AutomationCondition.missing()
                 )
             ),
-            internal_freshness_policy=global_freshness_policy,
+            freshness_policy=global_freshness_policy,
         )
         for asset_key in workspace_replication_aws_stages.keys
     ],
