@@ -18,6 +18,10 @@ attributes:
     description: "Snowflake stage for Activity export data."
     automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
     group_name: "aws_stages"
+requirements:
+  env:
+    - COMMON_ROOM_BUCKET
+    - COMMON_ROOM_STORAGE_INTEGRATION
 
 ---
 

@@ -80,9 +80,9 @@ directory_type = "project"
 
 [tool.dg.project]
 root_module = "dagster_open_platform"
-
-[project.entry-points]
-"dagster_dg_cli.registry_modules" = { dagster_open_platform = "dagster_open_platform.lib"}
+registry_modules = [
+    "dagster_open_platform.lib.*",
+]
 
 # ########################
 # ##### SQLFLUFF

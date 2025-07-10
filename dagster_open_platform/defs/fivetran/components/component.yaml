@@ -10,3 +10,8 @@ attributes:
     key: "fivetran/{{ props.table.replace('.', '/') }}"
     automation_condition: "{{ hourly_if_not_in_progress }}"
     group_name: "{{ group_from_db_and_schema(props) }}"
+requirements:
+  env:
+    - FIVETRAN_ACCOUNT_ID
+    - FIVETRAN_API_KEY
+    - FIVETRAN_API_SECRET
