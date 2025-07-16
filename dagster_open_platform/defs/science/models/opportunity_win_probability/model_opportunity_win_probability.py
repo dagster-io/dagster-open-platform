@@ -105,7 +105,8 @@ features = {
 
 # Define columns to exclude from feature preparation
 excluded_columns = [
-    "lead_source_Trade Show"
+    "lead_source_Trade Show",
+    "lead_source_Webinar",
     # 'meeting_count',
     # 'win_loss_competitor',
     # 'region',
