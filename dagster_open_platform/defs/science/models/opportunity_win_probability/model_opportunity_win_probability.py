@@ -107,6 +107,7 @@ features = {
 excluded_columns = [
     "lead_source_Trade Show",
     "lead_source_Webinar",
+    "lead_source_Referral",
     # 'meeting_count',
     # 'win_loss_competitor',
     # 'region',
