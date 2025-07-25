@@ -31,6 +31,7 @@ workspace:
     - pattern: product_operations.*.*
     - pattern: dwh_science.*.*
     - pattern: hubspot.*.*
+    - pattern: google_search_console.*.*
     targets:
     - pattern: purina.*.*
       rename-as: sandbox.purina__${1}.${2}
