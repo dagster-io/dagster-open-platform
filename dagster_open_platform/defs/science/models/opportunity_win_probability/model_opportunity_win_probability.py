@@ -39,7 +39,6 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 features = {
     "categorical": [
         "industry_standardized",
-        "lead_source",
         "region",
         "latest_funding_stage",
         "win_loss_competitor",
@@ -105,9 +104,6 @@ features = {
 
 # Define columns to exclude from feature preparation
 excluded_columns = [
-    "lead_source_Trade Show",
-    "lead_source_Webinar",
-    "lead_source_Referral",
     # 'meeting_count',
     # 'win_loss_competitor',
     # 'region',
@@ -143,9 +139,27 @@ def prepare_features(df, excluded_columns=None):
     # Process features
     feature_dfs = []
 
-    # Process categorical features
+    # Process categorical features with consistent column creation
     if features["categorical"]:
-        X_categorical = pd.get_dummies(df[features["categorical"]])
+        # Define all expected categorical values for consistent column creation
+        expected_categorical_columns = [
+            "industry_standardized_Transportation & Logistics",
+        ]
+
+        categorical_dfs = []
+        for col in features["categorical"]:
+            # Get dummies for each categorical column individually
+            col_dummies = pd.get_dummies(df[col], prefix=col, dummy_na=False)
+            categorical_dfs.append(col_dummies)
+
+        # Combine all categorical dummy variables
+        X_categorical = pd.concat(categorical_dfs, axis=1)
+
+        # Add any missing expected columns with zeros
+        for expected_col in expected_categorical_columns:
+            if expected_col not in X_categorical.columns:
+                X_categorical[expected_col] = 0
+
         feature_dfs.append(X_categorical)
 
     # Process numeric features
@@ -163,6 +177,10 @@ def prepare_features(df, excluded_columns=None):
     # Combine all features
     X = pd.concat(feature_dfs, axis=1).drop(columns=excluded_columns, errors="ignore")
     y = df["won"].astype(int)
+
+    # Ensure consistent column ordering between training and prediction
+    # Sort columns alphabetically to maintain consistent order
+    X = X.reindex(sorted(X.columns), axis=1)
 
     print(X.columns)
 
@@ -278,7 +296,7 @@ def print_feature_importance(model, X, X_test):
 
     print("\nTop 20 Most Important Features:")
     print("=============================")
-    for idx, row in feature_importance.head(20).iterrows():
+    for _, row in feature_importance.head(20).iterrows():
         print(f"{row['feature']} | {row['importance']:.4f}")
 
     # SHAP analysis
@@ -305,7 +323,7 @@ def print_feature_importance(model, X, X_test):
 
         print("\nTop 20 Most Important Features (SHAP Values):")
         print("===========================================")
-        for idx, row in shap_df.head(20).iterrows():
+        for _, row in shap_df.head(20).iterrows():
             print(f"{row['feature']} | {row['mean_shap']:.4f}")
     except Exception as e:
         print(f"Error calculating SHAP values: {e!s}")
