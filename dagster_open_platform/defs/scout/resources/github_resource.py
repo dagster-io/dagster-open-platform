@@ -64,6 +64,8 @@ class GithubResource(ConfigurableResource):
 def defs():
     return Definitions(
         resources={
-            "github": GithubResource(github_token=EnvVar("GITHUB_TOKEN")),
+            "github": GithubResource(
+                github_token=EnvVar("GITHUB_TOKEN")
+            ),  # Token defined in the Devtools Github account
         },
     )
