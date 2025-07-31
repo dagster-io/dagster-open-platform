@@ -1,3 +1,4 @@
+import json
 from collections.abc import Mapping
 from functools import cached_property
 from typing import Annotated, Any, Callable, Optional, Union
@@ -71,6 +72,7 @@ class FivetranComponent(Component, Model, Resolvable):
         ),
     ]
     translation: Optional[ResolvedTranslationFn] = None
+    connection_setup_tests_schedule: Optional[str] = None
 
     @cached_property
     def translator(self) -> DagsterFivetranTranslator:
@@ -91,4 +93,63 @@ class FivetranComponent(Component, Model, Resolvable):
             workspace=self.workspace,
             dagster_fivetran_translator=self.translator,
         )
-        return dg.Definitions(assets=fivetran_assets, resources={"fivetran": self.workspace})
+
+        schedules = []
+        if self.connection_setup_tests_schedule:
+            schedules.append(_connection_setup_tests_schedule(self.connection_setup_tests_schedule))
+
+        return dg.Definitions(
+            assets=fivetran_assets,
+            resources={"fivetran": self.workspace},
+            schedules=schedules,
+        )
+
+
+def _connection_setup_tests_schedule(
+    schedule_cron_expression: str,
+) -> dg.ScheduleDefinition:
+    @dg.op
+    def run_connection_setup_tests(context: dg.OpExecutionContext, fivetran: FivetranWorkspace):
+        _execute_connection_setup_tests(context, fivetran)
+
+    @dg.job
+    def fivetran_connection_setup_tests():
+        run_connection_setup_tests()
+
+    return dg.ScheduleDefinition(
+        job=fivetran_connection_setup_tests,
+        cron_schedule=schedule_cron_expression,
+    )
+
+
+def _execute_connection_setup_tests(
+    context: dg.OpExecutionContext,
+    workspace: FivetranWorkspace,
+):
+    data = workspace.get_or_fetch_workspace_data()
+    client = workspace.get_client()
+    body = json.dumps(
+        {"trust_certificates": True, "trust_fingerprints": True},
+    )
+    for connector_id, connector in data.connectors_by_id.items():
+        response = client._make_request(  # noqa: SLF001
+            method="POST",
+            endpoint=f"connections/{connector_id}/test",
+            data=body,
+        )
+        response.raise_for_status()
+        test_result = response.json()
+        if setup_tests := test_result.get("data", {}).get("setup_tests"):
+            for test in setup_tests:
+                test_name = test.get("title", "Unknown test")
+                test_status = test.get("status", "Unknown")
+
+                if test_status in ("FAILED", "JOB_FAILED"):
+                    details = test["details"] if test.get("details") else ""
+                    raise dg.Failure(
+                        f"Connection {connector.name} ({connector_id}) setup test '{test_name}' {test_status}: {test['message']} {details}"
+                    )
+
+                context.log.info(
+                    f"Connection {connector.name} ({connector_id}) setup test '{test_name}': {test_status}"
+                )
