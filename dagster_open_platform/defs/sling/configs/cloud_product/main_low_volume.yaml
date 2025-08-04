@@ -149,3 +149,8 @@ streams:
     meta:
       dagster:
         asset_key: sling.cloud_product.repository_locations_data
+  
+  public.enterprise_user_managed_expansions:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.enterprise_user_managed_expansions
