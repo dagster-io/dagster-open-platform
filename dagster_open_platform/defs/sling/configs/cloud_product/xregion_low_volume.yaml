@@ -1,0 +1,12 @@
+source: CLOUD_PRODUCTION_XREGION
+target: SLING_DB_MAIN
+defaults: 
+  mode: incremental
+  object: '{stream_table}'
+  primary_key: [id]
+
+public.organizations: 
+  update_key: update_timestamp
+  meta:
+    dagster:
+      asset_key: sling.cloud_product.organizations

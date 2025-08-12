@@ -45,12 +45,6 @@ streams:
         dagster:
           asset_key: sling.cloud_product.onboarding_checklist
   
-  public.organizations: 
-    update_key: update_timestamp
-    meta:
-      dagster:
-        asset_key: sling.cloud_product.organizations
-  
   public.permissions: 
     meta:
       dagster:

@@ -4,7 +4,7 @@ attributes:
   config_dir: ../configs/cloud_product
   replications:
     - name: low_volume
-      shards: [main, shard1]
+      shards: [xregion, main, shard1]
       cron_schedule: "0 */2 * * *"
       last_update_freshness_check:
         days: 1
