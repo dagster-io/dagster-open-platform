@@ -5,7 +5,10 @@
 {% macro is_internal_user(email) -%}
 
     case 
-        when {{email}} ilike any ('%@elementl.%', '%@dagsterlabs.%', '%@dagster.io', '%@dagster.info') then true
+        when {{ parse_domain_from_email(email) }} in (
+            select email_domain 
+            from {{ ref('internal_email_domains') }}
+        ) then true
         when {{email}} = 'pedram@pedramnavid.com' then true
         when {{email}} = 'justin@novotta.com' then true
         else false
