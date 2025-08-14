@@ -24,7 +24,7 @@ embedded_elt_resource = SlingResource(
             type="postgres",
             host=EnvVar("CLOUD_PROD_XREGION_REPLICA_TAILSCALE_HOST"),  # type: ignore
             user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
-            database="dagster",  # type: ignore
+            database="xregion",  # type: ignore
             password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
             sslmode="require",  # type: ignore
         ),
