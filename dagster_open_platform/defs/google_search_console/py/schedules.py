@@ -15,8 +15,10 @@ def google_search_console_schedule_function(context: ScheduleEvaluationContext):
         tags={
             ASSET_PARTITION_RANGE_START_TAG: (
                 context.scheduled_execution_time - timedelta(days=4)
-            ).strftime("%Y-%m-%d"),
-            ASSET_PARTITION_RANGE_END_TAG: context.scheduled_execution_time.strftime("%Y-%m-%d"),
+            ).strftime("%Y-%m-%d-00:00"),
+            ASSET_PARTITION_RANGE_END_TAG: context.scheduled_execution_time.strftime(
+                "%Y-%m-%d-00:00"
+            ),
         }
     )
 
