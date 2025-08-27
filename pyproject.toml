@@ -46,6 +46,8 @@ dependencies = [
     "scikit-learn",
     "shap>=0.47.0",
     "xgboost",
+    "sling-mac-arm64; sys_platform == 'darwin'",
+    "sling_linux_arm64; sys_platform == 'linux'",
 ]
 
 [project.optional-dependencies]
