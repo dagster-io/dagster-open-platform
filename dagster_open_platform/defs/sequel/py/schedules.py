@@ -4,29 +4,29 @@ from dagster import AssetSelection, ScheduleDefinition
 
 sequel_events_schedule = ScheduleDefinition(
     name="sequel_events_schedule",
-    cron_schedule="0 */6 * * *",  # Run every 6 hours
+    cron_schedule="0 1 * * *",  # Run once daily at 1 AM EST
     target=AssetSelection.assets(
         ("sequel", "full_refresh", "events")
     ),  # Use composite key as tuple
-    description="Schedule that processes Sequel events data since last sync every 6 hours",
+    description="Schedule that processes Sequel events data once daily at 1 AM EST",
 )
 
 
 sequel_registrants_schedule = ScheduleDefinition(
     name="sequel_registrants_schedule",
-    cron_schedule="30 */6 * * *",  # Run every 6 hours, 30 minutes after events
+    cron_schedule="15 1 * * *",  # Run once daily at 1:15 AM EST
     target=AssetSelection.assets(
         ("sequel", "full_refresh", "registrants")
     ),  # Use composite key as tuple
-    description="Schedule that processes Sequel registrants data since last sync every 6 hours",
+    description="Schedule that processes Sequel registrants data once daily at 1:15 AM EST",
 )
 
 
-sequel_event_logs_schedule = ScheduleDefinition(
-    name="sequel_event_logs_schedule",
-    cron_schedule="0 2 * * 0",  # Run once weekly on Sunday at 2 AM
+sequel_user_activity_logs_schedule = ScheduleDefinition(
+    name="sequel_user_activity_logs_schedule",
+    cron_schedule="30 1 * * *",  # Run once daily at 1:30 AM EST
     target=AssetSelection.assets(
         ("sequel", "full_refresh", "user_activity")
     ),  # Use composite key as tuple
-    description="Weekly full refresh of Sequel event user activity logs for data consistency",
+    description="Daily processing of Sequel event user activity logs at 1:30 AM EST",
 )

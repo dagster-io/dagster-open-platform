@@ -11,7 +11,7 @@ from .assets import (
 )
 from .resources import SequelResource
 from .schedules import (
-    sequel_event_logs_schedule,
+    sequel_user_activity_logs_schedule,
     sequel_events_schedule,
     sequel_registrants_schedule,
 )
@@ -28,7 +28,7 @@ def defs() -> Definitions:
         schedules=[
             sequel_events_schedule,
             sequel_registrants_schedule,
-            sequel_event_logs_schedule,
+            sequel_user_activity_logs_schedule,
         ],
         resources={
             "sequel": SequelResource(
