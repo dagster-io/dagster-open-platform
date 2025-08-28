@@ -42,10 +42,10 @@ def defs() -> Definitions:
                 role=os.getenv("SNOWFLAKE_ROLE", "PURINA"),
                 warehouse=os.getenv("SNOWFLAKE_WAREHOUSE", "PURINA"),
                 # Comment this line in production
-                authenticator="externalbrowser",
+                # authenticator="externalbrowser",
                 # Uncomment these lines in production
-                # password=EnvVar("SNOWFLAKE_PASSWORD"),
-                # additional_snowflake_connection_args={"authenticator": "username_password_mfa"},
+                password=EnvVar("SNOWFLAKE_PASSWORD"),
+                additional_snowflake_connection_args={"authenticator": "username_password_mfa"},
             ),
         },
     )
