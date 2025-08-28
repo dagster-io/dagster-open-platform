@@ -11,9 +11,9 @@ from .assets import (
 )
 from .resources import SequelResource
 from .schedules import (
-    sequel_user_activity_logs_schedule,
     sequel_events_schedule,
     sequel_registrants_schedule,
+    sequel_user_activity_logs_schedule,
 )
 
 
