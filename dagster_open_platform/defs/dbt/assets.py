@@ -1,10 +1,9 @@
 import datetime
 import json
-import os
-from collections.abc import Mapping
+from collections.abc import Sequence
 from datetime import timedelta
 from functools import cache
-from typing import Any, Optional
+from typing import Optional
 
 import dagster as dg
 from dagster.components import definitions
@@ -14,80 +13,32 @@ from dagster_dbt import (
     DbtCliResource,
     dbt_assets,
 )
+from dagster_dbt.asset_utils import DBT_DEFAULT_SELECT
 from dagster_open_platform.defs.dbt.partitions import insights_partition
 from dagster_open_platform.defs.dbt.resources import dagster_open_platform_dbt_project
-
-SNOWFLAKE_ACCOUNT_BASE, *_ = os.getenv("SNOWFLAKE_ACCOUNT", ".").split(".")
-PURINA_DATABASE_NAME = (
-    f"PURINA_CLONE_{os.environ['DAGSTER_CLOUD_PULL_REQUEST_ID']}"
-    if os.getenv("DAGSTER_CLOUD_IS_BRANCH_DEPLOYMENT") == "1"
-    else "PURINA"
-)
-SNOWFLAKE_URL = f"https://app.snowflake.com/ax61354/{SNOWFLAKE_ACCOUNT_BASE}/#/data/databases/{PURINA_DATABASE_NAME}/schemas"
+from dagster_open_platform.lib.dbt.translator import CustomDagsterDbtTranslator
 
 INCREMENTAL_SELECTOR = "config.materialized:incremental"
 SNAPSHOT_SELECTOR = "resource_type:snapshot"
 
 
-class CustomDagsterDbtTranslator(DagsterDbtTranslator):
-    def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
-        if dbt_resource_props["resource_type"] == "snapshot":
-            return "snapshots"
-        # Same logic that sets the custom schema in macros/get_custom_schema.sql
-        asset_path = dbt_resource_props["fqn"][2:-1]
-        if asset_path:
-            return "_".join(asset_path)
-        return "default"
-
-    def get_asset_key(self, dbt_resource_props: Mapping[str, Any]) -> dg.AssetKey:
-        resource_database = dbt_resource_props["database"]
-        resource_schema = dbt_resource_props["schema"]
-        resource_name = dbt_resource_props["name"]
-        resource_type = dbt_resource_props["resource_type"]
-
-        # if metadata has been provided in the yaml use that, otherwise construct key
-        if (
-            resource_type == "source"
-            and "meta" in dbt_resource_props
-            and "dagster" in dbt_resource_props["meta"]
-            and "asset_key" in dbt_resource_props["meta"]["dagster"]
-        ):
-            return dg.AssetKey(dbt_resource_props["meta"]["dagster"]["asset_key"])
-
-        return dg.AssetKey([resource_database, resource_schema, resource_name])
-
-    def get_metadata(self, dbt_resource_props: Mapping[str, Any]) -> Mapping[str, Any]:
-        url_metadata = {}
-        if dbt_resource_props["resource_type"] == "model":
-            url_metadata = {
-                "url": dg.MetadataValue.url(
-                    "/".join(
-                        [
-                            SNOWFLAKE_URL,
-                            dbt_resource_props["schema"].upper(),
-                            "table",
-                            dbt_resource_props["name"].upper(),
-                        ]
-                    )
-                )
-            }
-
-        return {
-            **super().get_metadata(dbt_resource_props),
-            **url_metadata,
-        }
-
-
 @cache
-def get_dbt_non_partitioned_models():
+def get_dbt_non_partitioned_models(
+    custom_translator: Optional[DagsterDbtTranslator] = None,
+    additional_selectors: Optional[Sequence[str]] = None,
+):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
 
     @dbt_assets(
         manifest=dbt_project.manifest_path,
-        dagster_dbt_translator=CustomDagsterDbtTranslator(
-            settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+        dagster_dbt_translator=(
+            custom_translator
+            or CustomDagsterDbtTranslator(
+                settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+            )
         ),
+        select=",".join(additional_selectors or [DBT_DEFAULT_SELECT]),
         exclude=" ".join([INCREMENTAL_SELECTOR, SNAPSHOT_SELECTOR]),
         backfill_policy=dg.BackfillPolicy.single_run(),
         project=dbt_project,
@@ -109,12 +60,18 @@ class DbtConfig(dg.Config):
 
 
 @cache
-def get_dbt_partitioned_models():
+def get_dbt_partitioned_models(
+    custom_translator: Optional[DagsterDbtTranslator] = None,
+    additional_selectors: Optional[Sequence[str]] = None,
+):
     @dbt_assets(
         manifest=dagster_open_platform_dbt_project().manifest_path,
-        select=INCREMENTAL_SELECTOR,
-        dagster_dbt_translator=CustomDagsterDbtTranslator(
-            settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+        select=",".join([INCREMENTAL_SELECTOR, *(additional_selectors or [])]),
+        dagster_dbt_translator=(
+            custom_translator
+            or CustomDagsterDbtTranslator(
+                settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+            )
         ),
         partitions_def=insights_partition,
         backfill_policy=dg.BackfillPolicy.single_run(),
@@ -146,12 +103,18 @@ def get_dbt_partitioned_models():
 
 
 @cache
-def get_dbt_snapshot_models():
+def get_dbt_snapshot_models(
+    custom_translator: Optional[DagsterDbtTranslator] = None,
+    additional_selectors: Optional[Sequence[str]] = None,
+):
     @dbt_assets(
         manifest=dagster_open_platform_dbt_project().manifest_path,
-        select=SNAPSHOT_SELECTOR,
-        dagster_dbt_translator=CustomDagsterDbtTranslator(
-            settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+        select=",".join([SNAPSHOT_SELECTOR, *(additional_selectors or [])]),
+        dagster_dbt_translator=(
+            custom_translator
+            or CustomDagsterDbtTranslator(
+                settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+            )
         ),
         backfill_policy=dg.BackfillPolicy.single_run(),
         project=dagster_open_platform_dbt_project(),

@@ -22,10 +22,12 @@ class ProdDbReplicationsSlingTranslator(DagsterSlingTranslator):
         self,
         cron_schedule: str = "*/5 * * * *",
         shard_name: str = "main",
+        asset_key_prefix: Optional[str] = None,
     ):
         super().__init__()
         self.cron_schedule = cron_schedule
         self.shard_name = shard_name
+        self.asset_key_prefix = asset_key_prefix
 
     def get_tags(self, stream_definition: Mapping[str, Any]) -> Mapping[str, Any]:
         return {"dagster/kind/snowflake": ""}
@@ -40,9 +42,18 @@ class ProdDbReplicationsSlingTranslator(DagsterSlingTranslator):
     def get_group_name(self, stream_definition):
         return f"cloud_product_{self.shard_name}"
 
+    def get_asset_key(self, stream_definition: Mapping[str, Any]) -> AssetKey:
+        asset_key = super().get_asset_key(stream_definition)
+        return asset_key.with_prefix(self.asset_key_prefix) if self.asset_key_prefix else asset_key
+
     def get_deps_asset_key(self, stream_definition) -> Iterable[AssetKey]:
         stream_asset_key = next(iter(super().get_deps_asset_key(stream_definition)))
-        return [AssetKey([self.shard_name, *stream_asset_key.path])]
+        default_asset_key = AssetKey([self.shard_name, *stream_asset_key.path])
+        return [
+            default_asset_key.with_prefix(self.asset_key_prefix)
+            if self.asset_key_prefix
+            else default_asset_key
+        ]
 
     def get_auto_materialize_policy(
         self, stream_definition: Mapping[str, Any]
@@ -58,6 +69,7 @@ class DopReplicationSpec(Resolvable, Model):
     shards: Sequence[str]
     cron_schedule: str = "*/5 * * * *"
     last_update_freshness_check: Optional[Mapping[str, int]] = None
+    asset_key_prefix: Optional[str] = None
 
 
 class ProdDbReplicationsComponent(Component, Resolvable, Model):
@@ -97,6 +109,7 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
                     config_path=cfg_path,
                     group_name=f"postgres_{shard}",
                     translator=ProdDbReplicationsSlingTranslator(
+                        asset_key_prefix=replication.asset_key_prefix,
                         shard_name=shard,
                         cron_schedule=replication.cron_schedule,
                     ),

@@ -3,6 +3,7 @@
 {{
     config(
       target_schema='snapshots',
+      tags=["eu"],
       unique_key='unique_key',
       strategy='check',
       check_cols=['organization_id', 'user_id', 'relationship_created_at'],

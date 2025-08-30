@@ -22,8 +22,12 @@ models:
     purina:
       staging:
         +materialized: view
+        cloud_product:
+          +tags: ["eu"]
       model:
         +materialized: table
+        cloud_product:
+          +tags: ["eu"]
       metrics:
         +materialized: table
       intermediate:
@@ -36,9 +40,15 @@ models:
         +materialized: table
       hightouch:
         +materialized: table
+      utils:
+        +tags: ["eu"]
 
 seeds:
-  +tags: seed
+  +tags: "seed"
+  purina:
+    public:
+      fiscal_quarter_lookup:
+        +tags: ["eu"]
 
 vars:
   session_threshold_seconds: 1800

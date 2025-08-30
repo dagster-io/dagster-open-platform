@@ -3,6 +3,7 @@
 {{
     config(
       target_schema='snapshots',
+      tags=["eu"],
       unique_key='organization_id',
       strategy='timestamp',
       updated_at='snapshot_date',
