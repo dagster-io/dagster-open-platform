@@ -42,3 +42,7 @@ attributes:
     - name: salesforce_contract_info
       deps:
         - "{{ dbt_asset_key('reporting_contract_info') }}"
+    
+    - name: current_credit_utilization
+      deps:
+        - "{{ dbt_asset_key('current_credit_utilization') }}"

@@ -1,0 +1,21 @@
+source: PURINA_CLOUD_REPORTING
+target: REPORTING_DB
+defaults:
+  mode: truncate
+  object: '{stream_table}'
+
+streams:
+  purina.product.current_credit_utilization:
+    sql: |
+      SELECT
+        ORGANIZATION_ID,
+        CREDITS_DATE,
+        CUME_CREDITS_USED AS CUMULATIVE_CREDITS_USED,
+        ANNUAL_CLOUD_CREDITS_CONTRACT,
+        CLOUD_CREDITS_CONTRACTED_WITH_ROLLOVER,
+        CONTRACT_START_DATE,
+        CONTRACT_END_DATE,
+        LAUNCHER_SEATS,
+        CONTRACTED_PER_CREDIT_PRICE AS PER_CREDIT_PRICE_USD,
+        CONTRACTED_PER_SEAT_PRICE AS PER_SEAT_PRICE_USD
+      FROM purina.product.current_credit_utilization
