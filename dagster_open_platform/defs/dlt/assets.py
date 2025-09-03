@@ -1,3 +1,5 @@
+import os
+
 import yaml
 from dagster import (
     AssetExecutionContext,
@@ -59,12 +61,19 @@ class GithubDagsterDltTranslator(DagsterDltTranslator):
         )
 
 
+# It's possible to perform a full backfill by setting the `DLT_GITHUB_REACTION_LOOKBACK_SIZE` to "None"
+github_reaction_lookback = os.environ.get("DLT_GITHUB_REACTION_LOOKBACK_SIZE", "500")
+github_reaction_lookback = (
+    None if github_reaction_lookback == "None" else int(github_reaction_lookback)
+)
+
+
 @dlt_assets(
     dlt_source=github_reactions(
         dlt_configuration["sources"]["github"]["repositories"],
         items_per_page=100,
-        max_items=500,
-    ).with_resources("issues", "stargazers"),
+        max_items=github_reaction_lookback,
+    ).with_resources("issues", "stargazers", "pull_requests"),
     dlt_pipeline=pipeline(
         pipeline_name="github_issues",
         dataset_name="github",

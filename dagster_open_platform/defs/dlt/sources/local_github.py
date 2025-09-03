@@ -2,8 +2,7 @@
 
 USAGE
 
-    python -m dagster_open_platform.dlt.sources.local_github
-
+    python -m dagster_open_platform.defs.dlt.sources.local_github
 
 """
 
@@ -18,11 +17,19 @@ if __name__ == "__main__":
     dlt_configuration_path = os.path.join(cwd, "configuration.yaml")
     dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
 
+    # Backfill of `1000` items for all resources
     dlt_source = github_reactions(
         dlt_configuration["sources"]["github"]["repositories"],
         items_per_page=100,
         max_items=1000,
     )
+
+    # Full backfill of a single resource specified with `with_resources`
+    #
+    # dlt_source = github_reactions(
+    #     dlt_configuration["sources"]["github"]["repositories"],
+    #     items_per_page=100,
+    # ).with_resources("pull_requests")
 
     dlt_pipeline = pipeline(
         pipeline_name="github_issues",
