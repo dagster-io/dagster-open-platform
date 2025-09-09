@@ -62,6 +62,11 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             **url_metadata,
         }
 
+    def get_automation_condition(
+        self, dbt_resource_props: Mapping[str, Any]
+    ) -> Optional[dg.AutomationCondition]:
+        return ~dg.AutomationCondition.in_progress() & dg.AutomationCondition.code_version_changed()
+
 
 class RegionPrefixedDbtTranslator(CustomDagsterDbtTranslator):
     """Adds the region to the start of the default AssetKey."""
