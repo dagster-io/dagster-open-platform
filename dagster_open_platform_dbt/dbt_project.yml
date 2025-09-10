@@ -15,6 +15,9 @@ models:
   +meta:
     dagster:
       owners: ["nickroach@dagsterlabs.com", "team:data"]
+  +persist_docs:
+    relation: true
+    columns: true
 
   dagster_open_platform:
     dwh_reporting:
