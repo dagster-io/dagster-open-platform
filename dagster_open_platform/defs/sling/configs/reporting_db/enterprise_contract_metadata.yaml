@@ -19,3 +19,7 @@ streams:
         CONTRACTED_PER_CREDIT_PRICE AS PER_CREDIT_PRICE_USD,
         CONTRACTED_PER_SEAT_PRICE AS PER_SEAT_PRICE_USD
       FROM purina.product.current_credit_utilization
+    object: public.enterprise_contract_metadata
+    meta:
+      dagster:
+        asset_key: public.enterprise_contract_metadata

@@ -43,6 +43,6 @@ attributes:
       deps:
         - "{{ dbt_asset_key('reporting_contract_info') }}"
     
-    - name: current_credit_utilization
+    - name: enterprise_contract_metadata
       deps:
         - "{{ dbt_asset_key('current_credit_utilization') }}"
