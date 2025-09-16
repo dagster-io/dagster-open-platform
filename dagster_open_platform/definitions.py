@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore", category=BetaWarning)
 
 import dagster as dg
 
-global_freshness_policy = InternalFreshnessPolicy.time_window(fail_window=timedelta(hours=23))
+global_freshness_policy = InternalFreshnessPolicy.time_window(fail_window=timedelta(hours=36))
 
 
 @dg.components.definitions
