@@ -1,7 +1,7 @@
 import dagster as dg
 from dagster.components import definitions
 from dagster_cloud.dagster_insights import InsightsBigQueryResource
-from dagster_open_platform.defs.pypi.partitions import oss_analytics_weekly_partition
+from dagster_open_platform.defs.pypi.partitions import oss_analytics_daily_partition
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
@@ -19,7 +19,7 @@ dagster_pypi_downloads_asset_key = ["purina", "oss_analytics", "dagster_pypi_dow
     tags={"dagster/kind/snowflake": ""},
     key=dagster_pypi_downloads_asset_key,
     group_name="oss_analytics",
-    partitions_def=oss_analytics_weekly_partition,
+    partitions_def=oss_analytics_daily_partition,
     automation_condition=dg.AutomationCondition.eager(),
     check_specs=[
         dg.AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
