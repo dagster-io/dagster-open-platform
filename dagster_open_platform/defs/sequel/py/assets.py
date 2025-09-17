@@ -104,9 +104,6 @@ def fetch_sequel_event_user_activity(
     response.raise_for_status()
     user_activity = response.json()
     print("Ran fetch_sequel_event_user_activity")
-
-    log.info(f"User activity: {user_activity}")
-
     # Add event_id to the response
     user_activity["event_id"] = event_id
 
@@ -399,7 +396,6 @@ def sequel_user_activity_full_refresh(
     with snowflake_sequel.get_connection() as conn:
         with conn.cursor() as cursor:
             if all_user_activity:
-                # Convert user activity to pandas DataFrame
                 user_activity_df = pd.DataFrame(
                     [
                         {
@@ -438,6 +434,11 @@ def sequel_user_activity_full_refresh(
                         for log in all_user_activity
                     ]
                 )
+
+                # This field causes issues in pyarrow as a dictionary-type field. Converting to string and will parse as json in snowflake.
+                user_activity_df["lead_score_details"] = user_activity_df[
+                    "lead_score_details"
+                ].astype(str)
 
                 # Write the new data directly to the target table
                 context.log.info(
