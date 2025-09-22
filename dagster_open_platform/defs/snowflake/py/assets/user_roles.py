@@ -13,13 +13,13 @@ log = dg.get_dagster_logger()
     key=["aws", "cloud-prod", "user_roles"],
     automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
 )
-def user_roles_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource):
+def user_roles_aws_stage(context: dg.AssetExecutionContext, snowflake: SnowflakeResource):
     integration_prefix = (
         "CLOUD_PROD"
         if os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", "") == "cloud-prod"
         else "DOGFOOD"
     )
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:
@@ -52,10 +52,8 @@ def user_roles_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: Snowfl
     deps=[user_roles_aws_stage],
     automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
 )
-def user_roles_aws_external_table(
-    context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
-):
-    with snowflake_sf.get_connection() as conn:
+def user_roles_aws_external_table(context: dg.AssetExecutionContext, snowflake: SnowflakeResource):
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         table_name = context.asset_key.path[-1]

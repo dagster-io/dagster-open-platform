@@ -18,7 +18,7 @@ from .resources import GoogleSearchConsoleResource
 )
 def google_search_console_search_analytics(
     context: AssetExecutionContext,
-    snowflake_sf: SnowflakeResource,
+    snowflake: SnowflakeResource,
     google_search_console: GoogleSearchConsoleResource,
 ) -> None:
     """Fetch Google Search Console search analytics data for a single day
@@ -92,7 +92,7 @@ def google_search_console_search_analytics(
     table_name = "QUERY_METRICS"
 
     # Write to Snowflake
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         with conn.cursor() as cursor:
             # Create table if it doesn't exist
             create_table_sql = f"""

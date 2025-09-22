@@ -9,6 +9,6 @@ def defs():
         resources={
             "bigquery": InsightsBigQueryResource(
                 gcp_credentials=EnvVar("GCP_CREDENTIALS"),
-            )
+            ),
         }
     )

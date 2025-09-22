@@ -83,7 +83,7 @@ def test_run_common_room_activities(environment: str, does_entity_exist: bool) -
         assets_def = next(iter(defs.assets or []))
         assert isinstance(assets_def, AssetsDefinition)
 
-        assets_def(context=build_asset_context(), snowflake_sf=MockSnowflake())  # type: ignore
+        assets_def(context=build_asset_context(), snowflake=MockSnowflake())  # type: ignore
 
         if does_entity_exist:
             assert len(executed_queries) == 5

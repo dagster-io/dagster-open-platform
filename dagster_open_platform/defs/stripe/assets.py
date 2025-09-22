@@ -19,7 +19,6 @@ from dagster._core.definitions.schedule_definition import DefaultScheduleStatus
 from dagster._core.execution.context.compute import AssetExecutionContext
 from dagster.components import definitions
 from dagster_open_platform.definitions import global_freshness_policy
-from dagster_open_platform.defs.snowflake.py.resources import snowflake_resource
 from dagster_snowflake import SnowflakeResource
 from dagster_snowflake.resources import fetch_last_updated_timestamps
 
@@ -69,13 +68,13 @@ asset_specs = [
 
 @multi_observable_source_asset(specs=asset_specs, can_subset=True, group_name="stripe_pipeline")
 def stripe_data_sync_assets(
-    context: AssetExecutionContext, snowflake_stripe: SnowflakeResource
+    context: AssetExecutionContext, snowflake: SnowflakeResource
 ) -> Iterator[ObserveResult]:
     """Assets representing stripe's data sync process."""
     subsetted_table_names = [
         asset_keys_to_table_names[asset_key] for asset_key in context.selected_asset_keys
     ]
-    with snowflake_stripe.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         freshness_results = fetch_last_updated_timestamps(
             snowflake_connection=conn,
             schema=STRIPE_SYNC_SCHEMA,
@@ -105,7 +104,5 @@ def defs():
     return Definitions(
         assets=[stripe_data_sync_assets],
         schedules=[stripe_data_sync_schedule],
-        resources={
-            "snowflake_stripe": snowflake_resource,
-        },
+        resources={},
     )

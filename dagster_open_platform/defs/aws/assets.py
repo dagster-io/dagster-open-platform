@@ -211,7 +211,7 @@ materialize_on_cron_policy = AutoMaterializePolicy.eager().with_rules(
     auto_materialize_policy=materialize_on_cron_policy,
     freshness_policy=global_freshness_policy,
 )
-def aws_cost_report(context: AssetExecutionContext, snowflake_sf: SnowflakeResource):
+def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource):
     """AWS updates the monthly cost report once an hour, overwriting the existing
     files for the current month.
 
@@ -240,7 +240,7 @@ def aws_cost_report(context: AssetExecutionContext, snowflake_sf: SnowflakeResou
     )
     context.log.info(f"SQL debug {delete_partition}")
 
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         conn.autocommit(False)
 
         cur = conn.cursor()

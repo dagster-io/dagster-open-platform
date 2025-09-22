@@ -11,10 +11,10 @@ log = dg.get_dagster_logger()
     key=["aws", "oss_telemetry", "oss_telemetry_prod"],
     automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
 )
-def oss_telemetry_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource):
+def oss_telemetry_aws_stage(context: dg.AssetExecutionContext, snowflake: SnowflakeResource):
     integration_suffix = "prod" if get_environment() == "PROD" else "dev"
     schema = "OSS_TELEMETRY" if get_environment() == "PROD" else "DEV"
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:
@@ -46,10 +46,10 @@ def oss_telemetry_aws_stage(context: dg.AssetExecutionContext, snowflake_sf: Sno
     automation_condition=dg.AutomationCondition.on_cron("0 3 * * *"),
 )
 def oss_telemetry_aws_external_table(
-    context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
+    context: dg.AssetExecutionContext, snowflake: SnowflakeResource
 ):
     schema = "OSS_TELEMETRY" if get_environment() == "PROD" else "DEV"
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         table_name = context.asset_key.path[-1]

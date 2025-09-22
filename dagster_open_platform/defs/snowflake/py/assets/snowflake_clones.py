@@ -8,8 +8,8 @@ log = dg.get_dagster_logger()
     name="inactive_snowflake_clones",
     description="Drops clone purina databases after 14 days of inactivity.",
 )
-def inactive_snowflake_clones(snowflake_sf: SnowflakeResource) -> dg.MaterializeResult:
-    with snowflake_sf.get_connection() as conn:
+def inactive_snowflake_clones(snowflake: SnowflakeResource) -> dg.MaterializeResult:
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute(r"""
             with

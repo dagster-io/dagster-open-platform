@@ -24,7 +24,7 @@ from snowflake.connector.pandas_tools import write_pandas
     automation_condition=dg.AutomationCondition.on_cron("0 0 * * *"),
 )
 def member_metrics(
-    slack: SlackResource, snowflake_sf: SnowflakeResource
+    slack: SlackResource, snowflake: SnowflakeResource
 ) -> Iterator[Union[dg.MaterializeResult, dg.AssetCheckResult]]:
     client = slack.get_client()
     # The Dagster Slack resource doesn't support setting headers
@@ -54,7 +54,7 @@ def member_metrics(
     schema = get_schema_for_environment("DAGSTER")
     table_name = "MEMBER_METRICS"
 
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         # Create a temporary table to stage the new data
         temp_table_name = f"{table_name}_TEMP"
         write_pandas(

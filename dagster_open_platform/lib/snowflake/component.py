@@ -146,9 +146,9 @@ class SnowflakeCreateOrRefreshComponent(
             freshness_policy=InternalFreshnessPolicy.time_window(fail_window=timedelta(hours=23)),
         )
         def _create_or_refresh_object(
-            context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
+            context: dg.AssetExecutionContext, snowflake: SnowflakeResource
         ):
-            self.execute(context, load_context, snowflake_sf)
+            self.execute(context, load_context, snowflake)
 
         # Explicitly cast to AssetsDefinition for type checking
         asset_def: dg.AssetsDefinition = _create_or_refresh_object  # type: ignore
@@ -158,9 +158,9 @@ class SnowflakeCreateOrRefreshComponent(
         self,
         context: dg.AssetExecutionContext,
         load_context: ComponentLoadContext,
-        snowflake_sf,
+        snowflake: SnowflakeResource,
     ) -> None:
-        with snowflake_sf.get_connection() as conn:
+        with snowflake.get_connection() as conn:
             cur = conn.cursor()
 
             log.info(f"Using role {self.role}")

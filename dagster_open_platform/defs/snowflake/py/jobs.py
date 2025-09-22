@@ -1,5 +1,5 @@
 from dagster import Config, In, Nothing, OpExecutionContext, ResourceParam, job, op
-from dagster_snowflake import SnowflakeConnection, snowflake_resource
+from dagster_snowflake import SnowflakeConnection
 
 
 class DatabaseCloneConfig(Config):
@@ -43,21 +43,7 @@ def clone_database(
 
 
 @job(
-    resource_defs={
-        "snowflake": snowflake_resource,
-    },
     config={
-        "resources": {
-            "snowflake": {
-                "config": {
-                    "account": {"env": "SNOWFLAKE_PURINA_ACCOUNT"},
-                    "user": {"env": "SNOWFLAKE_PURINA_USER"},
-                    "password": {"env": "SNOWFLAKE_PURINA_PASSWORD"},
-                    "database": {"env": "SNOWFLAKE_PURINA_DATABASE"},
-                    "schema": {"env": "SNOWFLAKE_PURINA_SCHEMA"},
-                }
-            }
-        },
         "ops": {
             "drop_database_clone": {
                 "config": {
@@ -79,21 +65,7 @@ def clone_databases() -> None:
 
 
 @job(
-    resource_defs={
-        "snowflake": snowflake_resource,
-    },
     config={
-        "resources": {
-            "snowflake": {
-                "config": {
-                    "account": {"env": "SNOWFLAKE_PURINA_ACCOUNT"},
-                    "user": {"env": "SNOWFLAKE_PURINA_USER"},
-                    "password": {"env": "SNOWFLAKE_PURINA_PASSWORD"},
-                    "database": {"env": "SNOWFLAKE_PURINA_DATABASE"},
-                    "schema": {"env": "SNOWFLAKE_PURINA_SCHEMA"},
-                }
-            }
-        },
         "ops": {
             "drop_database_clone": {
                 "config": {

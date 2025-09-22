@@ -4,7 +4,7 @@ import dagster as dg
 from dagster.components import definitions
 from dagster_snowflake import SnowflakeResource
 
-snowflake_resource = SnowflakeResource(
+snowflake = SnowflakeResource(
     user=dg.EnvVar("SNOWFLAKE_USER"),
     account=dg.EnvVar("SNOWFLAKE_ACCOUNT"),
     password=dg.EnvVar("SNOWFLAKE_PASSWORD"),
@@ -17,5 +17,5 @@ snowflake_resource = SnowflakeResource(
 @definitions
 def defs() -> dg.Definitions:
     return dg.Definitions(
-        resources={"snowflake_sf": snowflake_resource},
+        resources={"snowflake": snowflake},
     )

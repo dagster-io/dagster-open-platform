@@ -34,14 +34,14 @@ log = dg.get_dagster_logger()
     ],
 )
 def workspace_replication_aws_stages(
-    context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
+    context: dg.AssetExecutionContext, snowflake: SnowflakeResource
 ):
     integration_prefix = (
         "CLOUD_PROD"
         if os.getenv("AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME", "") == "cloud-prod"
         else "DOGFOOD"
     )
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:
@@ -92,9 +92,9 @@ def workspace_replication_aws_stages(
     ],
 )
 def workspace_replication_aws_external_tables(
-    context: dg.AssetExecutionContext, snowflake_sf: SnowflakeResource
+    context: dg.AssetExecutionContext, snowflake: SnowflakeResource
 ):
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
         for key in context.selected_asset_keys:

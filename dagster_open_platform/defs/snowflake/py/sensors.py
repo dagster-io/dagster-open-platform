@@ -22,9 +22,9 @@ PREFIX = "PURINA_CLONE_"
 
 
 @sensor(job_name="drop_database_clones", minimum_interval_seconds=86400)
-def drop_old_database_clones(ctx: SensorEvaluationContext, snowflake_sf: SnowflakeResource):
+def drop_old_database_clones(ctx: SensorEvaluationContext, snowflake: SnowflakeResource):
     # fetch list Snowflake DBs with prefix "PURINA_CLONE_"
-    with snowflake_sf.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         databases = cast(
             "list[tuple[str, ...]]",
             conn.cursor().execute(

@@ -4,8 +4,8 @@ from dagster_snowflake import SnowflakeResource
 
 
 @asset_check(asset=["fivetran", "salesforce", "account"])
-def account_has_valid_org_id(snowflake_sf: SnowflakeResource) -> AssetCheckResult:
-    with snowflake_sf.get_connection() as conn:
+def account_has_valid_org_id(snowflake: SnowflakeResource) -> AssetCheckResult:
+    with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("""
             select organization_id_c as org_id

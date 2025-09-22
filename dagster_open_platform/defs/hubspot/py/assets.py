@@ -4,11 +4,11 @@ import requests
 from dagster import AssetExecutionContext, AutomationCondition, Definitions, asset
 from dagster.components import definitions
 from dagster_open_platform.defs.hubspot.py.resources import HubSpotResource
-from dagster_open_platform.defs.snowflake.py.resources import SnowflakeResource
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
 )
+from dagster_snowflake import SnowflakeResource
 
 HUBSPOT_BASE_URL = "https://api.hubapi.com/crm/v3/objects/contacts"
 

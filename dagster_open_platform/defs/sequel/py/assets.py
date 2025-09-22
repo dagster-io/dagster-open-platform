@@ -7,11 +7,11 @@ import pandas as pd
 import requests
 from dagster import AssetExecutionContext, asset, get_dagster_logger
 from dagster_open_platform.defs.sequel.py.resources import SequelResource
-from dagster_open_platform.defs.snowflake.py.resources import SnowflakeResource
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
     get_schema_for_environment,
 )
+from dagster_snowflake import SnowflakeResource
 from snowflake.connector.pandas_tools import write_pandas
 
 log = get_dagster_logger()
@@ -155,7 +155,7 @@ def fetch_all_sequel_event_user_activity(access_token: str, event_id: str) -> li
 )
 def sequel_events_full_refresh(
     context: AssetExecutionContext,
-    snowflake_sequel: SnowflakeResource,
+    snowflake: SnowflakeResource,
     sequel: SequelResource,
 ) -> None:
     """Fetch all events from Sequel.io API and load into Snowflake (full refresh)."""
@@ -173,7 +173,7 @@ def sequel_events_full_refresh(
     events = fetch_sequel_events(access_token, sequel.company_id)
     context.log.info(f"Retrieved {len(events)} events for full refresh.")
 
-    with snowflake_sequel.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         with conn.cursor() as cursor:
             if events:
                 # Convert events to pandas DataFrame
@@ -263,7 +263,7 @@ def sequel_events_full_refresh(
 )
 def sequel_registrants_full_refresh(
     context: AssetExecutionContext,
-    snowflake_sequel: SnowflakeResource,
+    snowflake: SnowflakeResource,
     sequel: SequelResource,
 ) -> None:
     """Fetch all registrants from Sequel.io API and load into Snowflake (full refresh)."""
@@ -301,7 +301,7 @@ def sequel_registrants_full_refresh(
 
     context.log.info(f"Total registrants retrieved: {len(all_registrants)}")
 
-    with snowflake_sequel.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         with conn.cursor() as cursor:
             if all_registrants:
                 # Convert registrants to pandas DataFrame
@@ -353,7 +353,7 @@ def sequel_registrants_full_refresh(
 )
 def sequel_user_activity_full_refresh(
     context: AssetExecutionContext,
-    snowflake_sequel: SnowflakeResource,
+    snowflake: SnowflakeResource,
     sequel: SequelResource,
 ) -> None:
     """Fetch all event user activity logs from Sequel.io API and load into Snowflake (full refresh)."""
@@ -393,7 +393,7 @@ def sequel_user_activity_full_refresh(
 
     context.log.info(f"Total user activity records retrieved: {len(all_user_activity)}")
 
-    with snowflake_sequel.get_connection() as conn:
+    with snowflake.get_connection() as conn:
         with conn.cursor() as cursor:
             if all_user_activity:
                 user_activity_df = pd.DataFrame(
