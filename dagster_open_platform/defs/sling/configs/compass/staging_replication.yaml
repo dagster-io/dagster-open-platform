@@ -1,0 +1,9 @@
+source: COMPASS_STAGING_POSTGRES
+target: SNOWFLAKE
+
+
+streams:
+  public.analytics:
+    mode: incremental
+    primary_key: 'id'
+    object: 'sling.compass_staging.analytics'

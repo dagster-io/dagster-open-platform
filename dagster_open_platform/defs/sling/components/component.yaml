@@ -46,3 +46,51 @@ attributes:
     - name: enterprise_contract_metadata
       deps:
         - "{{ dbt_asset_key('current_credit_utilization') }}"
+
+---
+
+type: dagster_sling.SlingReplicationCollectionComponent
+template_vars_module: dagster_open_platform.defs.sling.py.template_vars
+
+attributes:
+  connections:
+    COMPASS_STAGING_POSTGRES:
+      type: postgres
+      host: '{{ env.COMPASS_STAGING_POSTGRES_HOST }}'
+      user: '{{ env.COMPASS_STAGING_POSTGRES_USER }}'
+      password: '{{ env.COMPASS_STAGING_POSTGRES_PASSWORD }}'
+      database: 'compass_bot_db'
+      sslmode: 'require'
+    COMPASS_POSTGRES:
+      type: postgres
+      host: '{{ env.COMPASS_POSTGRES_HOST }}'
+      user: '{{ env.COMPASS_POSTGRES_USER }}'
+      password: '{{ env.COMPASS_POSTGRES_PASSWORD }}'
+      database: 'compass_bot_db_65gu'
+      sslmode: 'require'
+    SNOWFLAKE:
+      type: snowflake
+      host: '{{ env.SNOWFLAKE_ACCOUNT }}'
+      user: '{{ env.SNOWFLAKE_SLING_USER }}'
+      password: '{{ env.SNOWFLAKE_SLING_PASSWORD }}'
+      database: 'sling'
+      schema: 'compass'
+      warehouse: 'purina'
+      role: 'sling_writer'
+
+  replications:
+    - path: ../configs/compass/prod_replication.yaml
+      translation:
+        group_name: 'compass_analytics'
+        kinds: ['sling', 'snowflake']
+        key: '{{ stream_definition.config.object.replace(".", "/") }}'
+        metadata:
+          dagster/table_name: '{{ stream_definition.config.object }}'
+
+    - path: ../configs/compass/staging_replication.yaml
+      translation:
+        group_name: 'staging_compass_analytics'
+        kinds: ['sling', 'snowflake']
+        key: '{{ stream_definition.config.object.replace(".", "/") }}'
+        metadata:
+          dagster/table_name: '{{ stream_definition.config.object }}'
