@@ -32,14 +32,17 @@ def linear_issues_partition_sensor(context: SensorEvaluationContext, snowflake: 
         log.info(f"Current partition keys count: {len(current_partition_keys)}")
 
         # Query for all issues in the target project that are not deleted
-        # and get their IDs and completion status
+        # and get their IDs and completion status. We only want issues that have the 'ready-to-draft' label.
         query = """
         SELECT
-            id,
-            completed_at IS NOT NULL as is_completed
+            issue.id,
+            completed_at IS NOT NULL as is_completed,
+            label.name as label_name
         FROM fivetran.linear.issue
-        WHERE project_id = %s
-        AND NOT _fivetran_deleted
+            LEFT JOIN fivetran.linear.issue_label on issue.id = issue_label.issue_id
+            LEFT JOIN fivetran.linear.label on issue_label.label_id = label.id
+        WHERE project_id = %s AND label.name = 'ready-to-draft'
+        AND NOT issue._fivetran_deleted
         """
 
         cursor.execute(query, (LINEAR_PROJECT_ID,))
