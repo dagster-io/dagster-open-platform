@@ -11,11 +11,13 @@ streams:
   public.bot_to_connections:
     mode: incremental
     primary_key: 'id'
+    update_key: 'updated_at'
     object: 'sling.compass_staging.bot_to_connections'
   
   public.connections:
     mode: incremental
     primary_key: 'id'
+    update_key: 'updated_at'
     object: 'sling.compass_staging.connections'
   
   public.organizations:
@@ -26,9 +28,11 @@ streams:
   public.plan_limits:
     mode: incremental
     primary_key: 'id'
+    update_key: 'updated_at'
     object: 'sling.compass_staging.plan_limits'
   
   public.usage_tracking:
     mode: incremental
     primary_key: 'id'
+    update_key: 'updated_at'
     object: 'sling.compass_staging.usage_tracking'
