@@ -398,8 +398,29 @@ def predict_and_write_to_snowflake(output_table="model_opportunity_win_probabili
         with open(model_path, "rb") as f:
             model = pickle.load(f)
 
+        # Filter features to match those the model was trained on
+        # Get the feature names the model was trained on
+        if hasattr(model, "feature_names_in_"):
+            trained_features = list(model.feature_names_in_)
+        else:
+            # Fallback: get feature names from the model's booster
+            trained_features = model.get_booster().feature_names
+
+        # Filter X to only include features that were in training data
+        available_features = [col for col in trained_features if col in X.columns]
+        missing_features = [col for col in trained_features if col not in X.columns]
+        extra_features = [col for col in X.columns if col not in trained_features]
+
+        if missing_features:
+            print(f"Warning: Missing features from training data: {missing_features}")
+        if extra_features:
+            print(f"Info: Removing extra features not in training data: {extra_features}")
+
+        # Filter X to only include trained features
+        X_filtered = X[available_features]
+
         # Make predictions and confidence scores
-        base_pred, confidence_scores = get_confidence_score(model, X)
+        base_pred, confidence_scores = get_confidence_score(model, X_filtered)
 
         # Prepare results DataFrame
         results = pd.DataFrame(
