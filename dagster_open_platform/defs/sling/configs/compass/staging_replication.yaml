@@ -7,3 +7,28 @@ streams:
     mode: incremental
     primary_key: 'id'
     object: 'sling.compass_staging.analytics'
+  
+  public.bot_to_connections:
+    mode: incremental
+    primary_key: 'id'
+    object: 'sling.compass_staging.bot_to_connections'
+  
+  public.connections:
+    mode: incremental
+    primary_key: 'id'
+    object: 'sling.compass_staging.connections'
+  
+  public.organizations:
+    mode: incremental
+    primary_key: 'organization_id'
+    object: 'sling.compass_staging.organizations'
+  
+  public.plan_limits:
+    mode: incremental
+    primary_key: 'id'
+    object: 'sling.compass_staging.plan_limits'
+  
+  public.usage_tracking:
+    mode: incremental
+    primary_key: 'id'
+    object: 'sling.compass_staging.usage_tracking'
