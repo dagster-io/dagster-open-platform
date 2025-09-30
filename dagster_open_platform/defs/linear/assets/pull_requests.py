@@ -59,6 +59,8 @@ def compass_pull_requests(context: AssetExecutionContext, snowflake: SnowflakeRe
         setup_commands = [
             f"git clone https://x-access-token:{EnvVar('GITHUB_PR_TOKEN').get_value()}@github.com/dagster-io/internal {tmp}/internal-{context.partition_key}",
             f"cd {tmp}/internal-{context.partition_key}/python_modules/dagster-open-platform",
+            "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash",
+            "nvm install 24.9.0",
             "npm install -g @anthropic-ai/claude-code",
             "npm install -g @withgraphite/graphite-cli@stable",
             f"gt auth --token {EnvVar('GRAPHITE_TOKEN').get_value()}",

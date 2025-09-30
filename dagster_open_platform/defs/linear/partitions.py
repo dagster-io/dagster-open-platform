@@ -54,7 +54,7 @@ def linear_issues_partition_sensor(context: SensorEvaluationContext, snowflake: 
         active_issue_ids = set()
         completed_issue_ids = set()
 
-        for issue_id, is_completed in issues_data:
+        for issue_id, is_completed, label_name in issues_data:
             if is_completed:
                 completed_issue_ids.add(issue_id)
             else:
