@@ -11,6 +11,7 @@ clean-targets:
   - "dbt_packages"
 
 models:
+  +copy_grants: true
   +tags: ["model"]
   +meta:
     dagster:
