@@ -3,7 +3,7 @@ target: SLING_DB_MAIN
 
 streams:
   public.users_organizations: 
-    mode: full-refresh
+    mode: truncate
     sql: |
       select id
       from users_organizations
