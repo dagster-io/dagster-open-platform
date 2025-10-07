@@ -19,7 +19,7 @@ dependencies = [
     "dagster-pipes",
     # integrations
     "dagster-aws",
-    "dagster-dbt",
+    "dagster-dbt==0.27.0", # synced with dagster above, backtracked when unpinned
     "dagster-dlt",
     "dagster-fivetran",
     "dagster-gcp",
