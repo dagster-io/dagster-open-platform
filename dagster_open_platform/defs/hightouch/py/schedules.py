@@ -11,8 +11,6 @@ hightouch_syncs_job = dg.define_asset_job(
         "hightouch_sync_salesforce_opportunity",
         "hightouch_sync_hubspot_company",
         "hightouch_sync_hubspot_organization",
-        "hightouch_sync_hubspot_compass_organizations",
-        "hightouch_sync_hubspot_contact_compass",
     ).upstream()
     & (
         dg.AssetSelection.groups(
