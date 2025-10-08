@@ -13,6 +13,17 @@ PURINA_DATABASE_NAME = (
 )
 SNOWFLAKE_URL = f"https://app.snowflake.com/ax61354/{SNOWFLAKE_ACCOUNT_BASE}/#/data/databases/{PURINA_DATABASE_NAME}/schemas"
 
+asset_is_new_or_updated = ~dg.AutomationCondition.in_progress() & (
+    dg.AutomationCondition.code_version_changed() | dg.AutomationCondition.missing()
+)
+
+
+asset_is_new_or_updated_or_deps_updated = ~dg.AutomationCondition.in_progress() & (
+    dg.AutomationCondition.code_version_changed()
+    | dg.AutomationCondition.missing()
+    | dg.AutomationCondition.any_deps_updated()
+)
+
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
@@ -65,7 +76,11 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     def get_automation_condition(
         self, dbt_resource_props: Mapping[str, Any]
     ) -> Optional[dg.AutomationCondition]:
-        return ~dg.AutomationCondition.in_progress() & dg.AutomationCondition.code_version_changed()
+        return (
+            asset_is_new_or_updated_or_deps_updated
+            if dbt_resource_props["database"].lower() == "dwh_reporting"
+            else asset_is_new_or_updated
+        )
 
 
 class RegionPrefixedDbtTranslator(CustomDagsterDbtTranslator):
