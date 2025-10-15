@@ -34,10 +34,7 @@ class EgressReplicationSlingTranslator(DagsterSlingTranslator):
         return asset_key.with_prefix(self.asset_key_prefix) if self.asset_key_prefix else asset_key
 
     def get_deps_asset_key(self, stream_definition) -> Iterable[AssetKey]:
-        return [
-            dep.with_prefix(self.asset_key_prefix) if self.asset_key_prefix else dep
-            for dep in self.deps
-        ]
+        return self.deps
 
 
 class EgressReplicationSpec(Resolvable, Model):
