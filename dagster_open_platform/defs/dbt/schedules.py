@@ -42,7 +42,8 @@ def defs():
     dbt_analytics_snapshot_schedule = dg.ScheduleDefinition(
         job=dg.define_asset_job(
             name="dbt_analytics_snapshot_job",
-            selection=dg.AssetSelection.assets(get_dbt_snapshot_models()).downstream(),
+            selection=dg.AssetSelection.assets(get_dbt_snapshot_models()).downstream()
+            - dg.AssetSelection.kind("omni", include_sources=True),
         ),
         cron_schedule="0 7 * * *",
     )

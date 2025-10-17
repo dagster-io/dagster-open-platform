@@ -19,7 +19,6 @@ from typing_extensions import TypeAlias
 
 def resolve_translation(context: dg_components.ResolutionContext, model):
     info = TranslatorResolvingInfo(
-        "props",
         asset_attributes=model,
         resolution_context=context,
         model_key="translation",

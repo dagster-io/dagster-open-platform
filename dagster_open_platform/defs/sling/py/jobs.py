@@ -6,7 +6,10 @@ from dagster.components import definitions
 compass_analytics_job = dg.define_asset_job(
     name="compass_analytics_hourly_job",
     selection=(
-        dg.AssetSelection.groups("compass_analytics", "staging_compass_analytics").downstream()
+        dg.AssetSelection.groups("compass_analytics", "staging_compass_analytics")
+        .downstream()
+        .required_multi_asset_neighbors()
+        .materializable()
     ),
     tags={"team": "devrel"},
 )

@@ -6,7 +6,6 @@ import dagster_shared.check as check
 from dagster import AssetKey, AssetSpec
 from dagster.components import ResolutionContext
 from dagster_dbt import get_asset_key_for_model
-from dagster_open_platform.defs.dbt.assets import get_dbt_non_partitioned_models
 from dagster_sling import DagsterSlingTranslator, SlingResource, sling_assets
 
 
@@ -46,4 +45,6 @@ def _resolve_path(context: ResolutionContext, val: str):
 
 
 def dbt_asset_key(model_name: str) -> AssetKey:
+    from dagster_open_platform.defs.dbt.assets import get_dbt_non_partitioned_models
+
     return get_asset_key_for_model([get_dbt_non_partitioned_models()], model_name)

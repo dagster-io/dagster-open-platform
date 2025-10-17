@@ -10,7 +10,7 @@ dependencies = [
     "boto3",
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
-    "dagster==1.11.0",
+    "dagster==1.11.13",
     "dagster-dg-cli",
     "dagster-cloud",
     "dagster-cloud-cli",
@@ -19,7 +19,7 @@ dependencies = [
     "dagster-pipes",
     # integrations
     "dagster-aws",
-    "dagster-dbt==0.27.0", # synced with dagster above, backtracked when unpinned
+    "dagster-dbt==0.27.13", # synced with dagster above, backtracked when unpinned
     "dagster-dlt",
     "dagster-fivetran",
     "dagster-gcp",
@@ -28,6 +28,7 @@ dependencies = [
     "dagster-slack",
     "dagster-sling",
     "dagster-snowflake",
+    "dagster-omni",
     # community integrations
     "dagster-hightouch",
     "dagster-anthropic",
@@ -36,6 +37,7 @@ dependencies = [
     "statsig",
     "gql[requests]",
     "dlt[snowflake,duckdb]==1.11.0",
+    "protobuf==4.25.3",
     "pydantic",
     "pyyaml",
     "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
