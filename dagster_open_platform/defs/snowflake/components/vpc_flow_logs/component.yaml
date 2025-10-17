@@ -1,0 +1,51 @@
+type: dagster_open_platform.lib.SnowflakeCreateOrRefreshComponent
+attributes:
+  name: stage_vpc_flow_logs
+  database_name: "aws"
+  schema_name: "{{ schema_from_env() }}"
+  type: "stage"
+  role: AWS_WRITER
+  options:
+    url: "s3://{{ env('VPC_FLOW_LOGS_BUCKET') }}"
+    storage_integration: "{{ env('VPC_FLOW_LOGS_STORAGE_INTEGRATION') }}"
+    directory:
+      enable: true
+    file_format:
+      type: PARQUET
+  asset_attributes:
+    description: "Snowflake stage for VPC flow logs data."
+    automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
+    group_name: "aws_stages"
+
+---
+
+type: dagster_open_platform.lib.SnowflakeCreateOrRefreshComponent
+attributes:
+  name: ext_vpc_flow_logs
+  database_name: "aws"
+  schema_name: "{{ schema_from_env() }}"
+  type: "external table"
+  role: AWS_WRITER
+  partition_by: REPLICATION_DATE
+  columns:
+    - name: FILENAME
+      type: VARCHAR
+      as: METADATA$FILENAME
+    - name: REPLICATION_DATE
+      type: DATE
+      as: "cast(split_part(METADATA$FILENAME, '/', 5) || '-' || split_part(METADATA$FILENAME, '/', 6) || '-' || split_part(METADATA$FILENAME, '/', 7) as date)"
+  options:
+    location: "@stage_vpc_flow_logs"
+    file_format:
+      type: PARQUET
+    pattern: ".*[.]log.parquet"
+    auto_refresh: false
+    refresh_on_create: true
+    comment: "External table for stage stage_vpc_flow_logs"
+  asset_attributes:
+    description: "Snowflake external table for VPC flow logs data."
+    automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
+    group_name: "aws_external_tables"
+    deps:
+      - "aws/{{ schema_from_env() }}/stage_vpc_flow_logs"
+

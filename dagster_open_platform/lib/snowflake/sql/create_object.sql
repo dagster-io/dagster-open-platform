@@ -17,7 +17,7 @@ PARTITION BY ({{ partition_by }})
         {{ sub_name }} = {{ sub_value|tojson }}{% if not loop.last %}, {% endif %}
         {%- endfor %}
     )
-    {%- elif option_name == "location" %}
+    {%- elif option_name == "location" and type|upper != "STAGE" %}
     {{ option_name }} = {{ option_value }}
     {%- elif option_value is not none %}
     {{ option_name }} = {{ option_value|tojson }}
