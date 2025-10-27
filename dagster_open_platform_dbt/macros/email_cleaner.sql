@@ -1,5 +1,5 @@
 {% macro email_cleaner(email) -%}
 
-        trim(lower({{email}}))
+        nullif(trim(lower({{email}})), 'null')
 
 {%- endmacro %}

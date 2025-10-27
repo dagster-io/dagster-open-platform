@@ -1,13 +1,23 @@
 {% macro get_domain_from_website(website) -%}
-    --    Retrieves the domain.com portion of a website
-    --       │Optionally capture http(s)://  and discard
-    --       │
-    --       │             Optionally capture www. and discard
-    --       │             │
-    --       │             │      Capture the domain.tld portion
-    --       │             │      │Matching as many letters before a dot
-    --       │             │      │And 2 or more letters after the dot (the tld)
-    --       ▼             ▼      ▼
-    --    (http[s]:\/\/)?(w*\.)?(\w*\.\w{2,})
-    regexp_substr({{website}}, $$(http[s]:\/\/)?(w*\.)?(\w*\.\w{2,})$$, 1, 1, 'e', 3)
+    --    Retrieves the full domain including subdomains from a website URL
+    --    Examples:
+    --      https://compass.dagster.io/path -> compass.dagster.io
+    --      https://www.dagster.io -> dagster.io
+    --      https://dagster.io -> dagster.io
+    --      https://docs.dagster.io/some/path -> docs.dagster.io
+    --
+    --    Strategy:
+    --      1. Strip protocol (http:// or https://)
+    --      2. Strip www. if present
+    --      3. Extract domain (everything before first / or ?)
+    regexp_replace(
+        split_part(
+            regexp_replace(
+                regexp_replace({{website}}, $$^https?://$$, '', 1, 1, 'i'),
+                $$^www\.$$, '', 1, 1, 'i'
+            ),
+            '/', 1
+        ),
+        '\\?.*$', '', 1, 1
+    )
 {%- endmacro %}
