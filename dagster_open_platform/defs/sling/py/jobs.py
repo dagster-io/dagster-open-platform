@@ -1,8 +1,14 @@
 import dagster as dg
 from dagster.components import definitions
+from dagster_dbt import get_asset_key_for_model
+from dagster_open_platform.defs.dbt.assets import get_dbt_non_partitioned_models
 
 # Job that materializes assets from compass_analytics and staging_compass_analytics groups
 # and everything downstream of those assets
+
+compass_organizations_asset_key = get_asset_key_for_model(
+    [get_dbt_non_partitioned_models()], "compass_organizations"
+)
 compass_analytics_job = dg.define_asset_job(
     name="compass_analytics_hourly_job",
     selection=(
@@ -10,6 +16,10 @@ compass_analytics_job = dg.define_asset_job(
         .downstream()
         .required_multi_asset_neighbors()
         .materializable()
+        | (
+            dg.AssetSelection.keys(compass_organizations_asset_key).upstream()
+            & dg.AssetSelection.from_string('key:"*stg_segment_compass*"').downstream()
+        )
     ),
     tags={"team": "devrel"},
 )
