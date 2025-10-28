@@ -49,7 +49,11 @@ def compass_analytics_hourly_schedule(context):
         return dg.SkipReason(
             "Skipping this run because another run of the same job is already running"
         )
-    yield dg.RunRequest()
+    insights_partition_key = insights_partition.get_last_partition_key()
+    yield dg.RunRequest(
+        partition_key=str(insights_partition_key),
+        run_key=str(insights_partition_key),
+    )
 
 
 @definitions
