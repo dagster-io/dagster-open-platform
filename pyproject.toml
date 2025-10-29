@@ -87,6 +87,10 @@ root_module = "dagster_open_platform"
 registry_modules = [
     "dagster_open_platform.lib.*",
 ]
+[tool.dg.cli]
+suppress_warnings = [
+    "project_and_activated_venv_mismatch",
+]
 
 # ########################
 # ##### SQLFLUFF
