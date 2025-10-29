@@ -136,3 +136,17 @@ attributes:
       - hubspot
     group_name: hightouch_syncs
   sync_id_env_var: HIGHTOUCH_SYNC_HUBSPOT_COMPASS_ORGANIZATIONS_SYNC_ID
+
+---
+
+type: dagster_open_platform.lib.DopHightouchSyncComponent
+attributes:
+  asset:
+    key: hightouch_sync_hubspot_compass_organizations
+    deps:
+      - "{{ dbt_asset_key('org_activity_monthly') }}"
+    kinds:
+      - hightouch
+      - hubspot
+    group_name: hightouch_syncs
+  sync_id_env_var: HIGHTOUCH_ORG_ACTIVITY_MONTHLY_SYNC_ID
