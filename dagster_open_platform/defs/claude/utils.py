@@ -87,7 +87,7 @@ def load_dataframe_to_snowflake(
         cursor = conn.cursor()
 
         # Use sandbox database if environment is not prod
-        current_db = "SANDBOX" if get_environment() != "PROD" else "CLAUDE"
+        current_db = "SANDBOX" if get_environment() != "PROD" else "ANTHROPIC"
         cursor.execute(f"USE DATABASE {current_db}")
         cursor.execute("USE SCHEMA RAW")
 
