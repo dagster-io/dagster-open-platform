@@ -33,6 +33,7 @@ workspace:
     - pattern: hubspot.*.*
     - pattern: google_search_console.*.*
     - pattern: sequel.*.*
+    - pattern: snowflake.*.*
     targets:
     - pattern: purina.*.*
       rename-as: sandbox.purina__${1}.${2}
