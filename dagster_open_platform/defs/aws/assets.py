@@ -216,8 +216,8 @@ def aws_cost_report(context: AssetExecutionContext, snowflake: SnowflakeResource
     files for the current month.
 
     """
-    database = get_database_for_environment()
-    schema = get_schema_for_environment("FINANCE")
+    database = get_database_for_environment("AWS")
+    schema = get_schema_for_environment("ELEMENTL")
     table_name = "aws_cost_report"
     qualified_name = ".".join([database, schema, table_name])
 
