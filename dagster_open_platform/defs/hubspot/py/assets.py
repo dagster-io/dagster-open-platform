@@ -75,8 +75,18 @@ def hubspot_contacts(
             insert_query = f"INSERT INTO {database_name}.{schema_name}.{table_name} (hubspot_contact_id) VALUES (%s)"
             contact_data = [(cid,) for cid in contact_ids]
 
-            context.log.info(f"Inserting {len(contact_data)} records...")
-            cursor.executemany(insert_query, contact_data)
+            # Batch insert in chunks of 100,000
+            batch_size = 100_000
+            total_records = len(contact_data)
+            context.log.info(f"Inserting {total_records} records in batches of {batch_size}...")
+
+            for i in range(0, total_records, batch_size):
+                batch = contact_data[i : i + batch_size]
+                context.log.info(
+                    f"Inserting batch {i // batch_size + 1}/{(total_records + batch_size - 1) // batch_size} "
+                    f"({len(batch)} records)..."
+                )
+                cursor.executemany(insert_query, batch)
 
     context.log.info("Snowflake load complete.")
 
