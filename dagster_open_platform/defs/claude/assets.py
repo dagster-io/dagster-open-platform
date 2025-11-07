@@ -2,12 +2,12 @@ from datetime import datetime, timezone
 
 import pandas as pd
 from dagster import AssetExecutionContext, AutomationCondition, BackfillPolicy, asset
+from dagster_open_platform.defs.claude.partitions import claude_daily_partition
 from dagster_open_platform.defs.claude.resources import AnthropicAdminResource
 from dagster_open_platform.defs.claude.utils import (
     fetch_paginated_data,
     load_dataframe_to_snowflake,
 )
-from dagster_open_platform.defs.dbt.partitions import insights_partition
 from dagster_snowflake import SnowflakeResource
 
 
@@ -15,7 +15,7 @@ from dagster_snowflake import SnowflakeResource
     group_name="anthropic_metrics",
     compute_kind="python",
     description="Fetches Anthropic usage data and loads into Snowflake",
-    partitions_def=insights_partition,
+    partitions_def=claude_daily_partition,
     backfill_policy=BackfillPolicy.single_run(),
     automation_condition=AutomationCondition.cron_tick_passed("0 0 * * *")
     & ~AutomationCondition.in_progress(),
@@ -110,7 +110,7 @@ def anthropic_usage_report(
     group_name="anthropic_metrics",
     compute_kind="python",
     description="Fetches Anthropic cost data and loads into Snowflake",
-    partitions_def=insights_partition,
+    partitions_def=claude_daily_partition,
     backfill_policy=BackfillPolicy.single_run(),
     automation_condition=AutomationCondition.cron_tick_passed("0 0 * * *")
     & ~AutomationCondition.in_progress(),
