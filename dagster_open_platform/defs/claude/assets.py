@@ -10,8 +10,12 @@ from dagster_open_platform.defs.claude.utils import (
 )
 from dagster_snowflake import SnowflakeResource
 
+daily_cron_tick_passed = (
+    AutomationCondition.cron_tick_passed("0 0 * * *")
+    & ~AutomationCondition.in_progress()
+    & AutomationCondition.in_latest_time_window()
+)
 
-daily_cron_tick_passed = AutomationCondition.cron_tick_passed("0 0 * * *") & ~AutomationCondition.in_progress() & AutomationCondition.in_latest_time_window()
 
 @asset(
     group_name="anthropic_metrics",

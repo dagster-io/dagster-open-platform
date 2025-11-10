@@ -33,7 +33,6 @@ def reload_dop_modules() -> Callable[[], None]:
 
 
 @pytest.fixture
-@pytest.mark.parametrize("cloud_env", [True, False])
 def prepare_dop_environment(
     reload_dop_modules: Callable[[], None], cloud_env: bool
 ) -> Iterator[None]:
