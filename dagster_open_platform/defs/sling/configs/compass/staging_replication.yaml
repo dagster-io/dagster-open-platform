@@ -36,9 +36,3 @@ streams:
     primary_key: 'id'
     update_key: 'updated_at'
     object: 'sling.compass_staging.usage_tracking'
-
-  public.referral_tokens:
-    mode: incremental
-    primary_key: 'id'
-    update_key: 'created_at'
-    object: 'sling.compass_staging.referral_tokens'
