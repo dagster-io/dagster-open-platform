@@ -11,14 +11,15 @@ from dagster_open_platform.defs.claude.utils import (
 from dagster_snowflake import SnowflakeResource
 
 
+daily_cron_tick_passed = AutomationCondition.cron_tick_passed("0 0 * * *") & ~AutomationCondition.in_progress() & AutomationCondition.in_latest_time_window()
+
 @asset(
     group_name="anthropic_metrics",
     compute_kind="python",
     description="Fetches Anthropic usage data and loads into Snowflake",
     partitions_def=claude_daily_partition,
     backfill_policy=BackfillPolicy.single_run(),
-    automation_condition=AutomationCondition.cron_tick_passed("0 0 * * *")
-    & ~AutomationCondition.in_progress(),
+    automation_condition=daily_cron_tick_passed,
     tags={"dagster/kind/claude": ""},
 )
 def anthropic_usage_report(
@@ -112,8 +113,7 @@ def anthropic_usage_report(
     description="Fetches Anthropic cost data and loads into Snowflake",
     partitions_def=claude_daily_partition,
     backfill_policy=BackfillPolicy.single_run(),
-    automation_condition=AutomationCondition.cron_tick_passed("0 0 * * *")
-    & ~AutomationCondition.in_progress(),
+    automation_condition=daily_cron_tick_passed,
     tags={"dagster/kind/claude": ""},
 )
 def anthropic_cost_report(
