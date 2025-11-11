@@ -1,0 +1,16 @@
+type: dagster_open_platform.lib.ExecutableComponent
+
+attributes:
+  execute_fn: dagster_open_platform.defs.datadog.component.datadog_usage.datadog_usage
+  partitions_def:
+    type: monthly
+    start_date: 2025-01-01
+  assets:
+    - key: datadog/raw/usage
+      group_name: datadog
+      description: "Datadog Billing and Usage Data"
+      kinds:
+        - snowflake
+        - datadog
+      owners:
+        - team:data
