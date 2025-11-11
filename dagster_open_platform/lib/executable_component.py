@@ -1,6 +1,6 @@
 import importlib
 import inspect
-from typing import Annotated, Callable, Literal, Optional
+from typing import Annotated, Callable, Literal, Optional, Union
 
 import dagster as dg
 from dagster.components import (
@@ -22,20 +22,37 @@ class DailyPartitionDefinitionModel(Resolvable, Model):
     end_offset: int = 0
 
 
+class MonthlyPartitionDefinitionModel(Resolvable, Model):
+    type: Literal["monthly"] = "monthly"
+    start_date: str
+    end_offset: int = 0
+
+
+PartitionDefinitionModel = Union[DailyPartitionDefinitionModel, MonthlyPartitionDefinitionModel]
+
+
 def resolve_partition_definition(
-    context: ResolutionContext, model: DailyPartitionDefinitionModel
+    context: ResolutionContext, model: PartitionDefinitionModel
 ) -> dg.PartitionsDefinition:
-    return dg.DailyPartitionsDefinition(
-        start_date=model.start_date,
-        end_offset=model.end_offset,
-    )
+    if model.type == "daily":
+        return dg.DailyPartitionsDefinition(
+            start_date=model.start_date,
+            end_offset=model.end_offset,
+        )
+    elif model.type == "monthly":
+        return dg.MonthlyPartitionsDefinition(
+            start_date=model.start_date,
+            end_offset=model.end_offset,
+        )
+    else:
+        raise ValueError(f"Unsupported partition type: {model.type}")
 
 
 ResolvedPartitionDefinition: TypeAlias = Annotated[
-    dg.DailyPartitionsDefinition,
+    Union[dg.DailyPartitionsDefinition, dg.MonthlyPartitionsDefinition],
     Resolver(
         resolve_partition_definition,
-        model_field_type=DailyPartitionDefinitionModel,
+        model_field_type=PartitionDefinitionModel,  # type: ignore
     ),
 ]
 
