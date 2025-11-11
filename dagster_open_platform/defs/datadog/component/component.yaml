@@ -5,7 +5,6 @@ attributes:
   partitions_def:
     type: monthly
     start_date: 2025-01-01
-  backfill_policy: single_run
   assets:
     - key: datadog/raw/usage
       group_name: datadog
