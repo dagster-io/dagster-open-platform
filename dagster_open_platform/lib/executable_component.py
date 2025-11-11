@@ -31,6 +31,28 @@ class MonthlyPartitionDefinitionModel(Resolvable, Model):
 PartitionDefinitionModel = Union[DailyPartitionDefinitionModel, MonthlyPartitionDefinitionModel]
 
 
+class BackfillPolicyModel(Resolvable, Model):
+    type: Literal["single_run"] = "single_run"
+
+
+def resolve_backfill_policy(
+    context: ResolutionContext, model: BackfillPolicyModel
+) -> dg.BackfillPolicy:
+    if model.type == "single_run":
+        return dg.BackfillPolicy.single_run()
+    else:
+        raise ValueError(f"Unsupported backfill policy type: {model.type}")
+
+
+ResolvedBackfillPolicy: TypeAlias = Annotated[
+    dg.BackfillPolicy,
+    Resolver(
+        resolve_backfill_policy,
+        model_field_type=BackfillPolicyModel,
+    ),
+]
+
+
 def resolve_partition_definition(
     context: ResolutionContext, model: PartitionDefinitionModel
 ) -> dg.PartitionsDefinition:
@@ -91,6 +113,7 @@ class ExecutableComponent(Component, Resolvable, Model):
     partitions_def: Optional[ResolvedPartitionDefinition] = None
     assets: Optional[list[ResolvedAssetSpec]] = None
     execute_fn: ResolvableCallable
+    backfill_policy: Optional[ResolvedBackfillPolicy] = None
 
     def get_resource_keys(self) -> set[str]:
         return set(get_resources_from_callable(self.execute_fn))
@@ -105,6 +128,7 @@ class ExecutableComponent(Component, Resolvable, Model):
             specs=self.assets,
             partitions_def=self.partitions_def,
             required_resource_keys=required_resource_keys,
+            backfill_policy=self.backfill_policy,
         )
         def _assets_def(context: dg.AssetExecutionContext, **kwargs):
             rd = context.resources.original_resource_dict
