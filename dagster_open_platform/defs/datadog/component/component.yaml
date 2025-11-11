@@ -14,3 +14,19 @@ attributes:
         - datadog
       owners:
         - team:data
+
+---
+
+type: dagster_open_platform.lib.ExecutableComponent
+
+attributes:
+  execute_fn: dagster_open_platform.defs.datadog.component.datadog_usage.datadog_estimated_usage
+  assets:
+    - key: datadog/raw/estimated_usage
+      group_name: datadog
+      description: "Datadog Estimated Usage Data (Current and Previous Month)"
+      kinds:
+        - snowflake
+        - datadog
+      owners:
+        - team:data
