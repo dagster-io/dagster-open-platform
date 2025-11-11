@@ -31,24 +31,20 @@ class MonthlyPartitionDefinitionModel(Resolvable, Model):
 PartitionDefinitionModel = Union[DailyPartitionDefinitionModel, MonthlyPartitionDefinitionModel]
 
 
-class BackfillPolicyModel(Resolvable, Model):
-    type: Literal["single_run"] = "single_run"
-
-
-def resolve_backfill_policy(
-    context: ResolutionContext, model: BackfillPolicyModel
-) -> dg.BackfillPolicy:
-    if model.type == "single_run":
+def resolve_backfill_policy(context: ResolutionContext, model: str) -> dg.BackfillPolicy:
+    if model == "single_run":
         return dg.BackfillPolicy.single_run()
     else:
-        raise ValueError(f"Unsupported backfill policy type: {model.type}")
+        raise ValueError(
+            f"Unsupported backfill policy type: {model}. Only 'single_run' is supported."
+        )
 
 
 ResolvedBackfillPolicy: TypeAlias = Annotated[
     dg.BackfillPolicy,
     Resolver(
         resolve_backfill_policy,
-        model_field_type=BackfillPolicyModel,
+        model_field_type=str,
     ),
 ]
 
