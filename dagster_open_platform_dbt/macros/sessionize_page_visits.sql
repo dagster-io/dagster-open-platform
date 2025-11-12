@@ -62,11 +62,30 @@ session_attribution as (
     where page_number_in_session = 1
 ),
 
+session_utm_data as (
+    select
+        session_id,
+        campaign_source as session_campaign_source,
+        campaign_medium as session_campaign_medium,
+        campaign_name as session_campaign_name,
+        campaign_content as session_campaign_content,
+        utm_term as session_utm_term,
+        referrer as session_referrer
+    from page_sessions_numbered
+    where page_number_in_session = 1
+),
+
 {% if include_campaign_logic %}
 add_campaign_logic as (
     select 
         ps.* exclude (previous_tstamp, period_of_inactivity, new_session),
         sa.session_attribution_category,
+        su.session_campaign_source,
+        su.session_campaign_medium,
+        su.session_campaign_name,
+        su.session_campaign_content,
+        su.session_utm_term,
+        su.session_referrer,
         case 
             -- Check if utm_campaign is numeric-only and use it if so
             when utm_campaign is not null and try_to_number(utm_campaign) is not null then utm_campaign
@@ -102,6 +121,7 @@ add_campaign_logic as (
         end as paid_campaign_platform
     from page_sessions_numbered ps
     left join session_attribution sa on ps.session_id = sa.session_id
+    left join session_utm_data su on ps.session_id = su.session_id
 )
 
 select * from add_campaign_logic
@@ -110,9 +130,16 @@ select * from add_campaign_logic
 final as (
     select 
         ps.* exclude (previous_tstamp, period_of_inactivity, new_session),
-        sa.session_attribution_category
+        sa.session_attribution_category,
+        su.session_campaign_source,
+        su.session_campaign_medium,
+        su.session_campaign_name,
+        su.session_campaign_content,
+        su.session_utm_term,
+        su.session_referrer
     from page_sessions_numbered ps
     left join session_attribution sa on ps.session_id = sa.session_id
+    left join session_utm_data su on ps.session_id = su.session_id
 )
 
 select * from final
