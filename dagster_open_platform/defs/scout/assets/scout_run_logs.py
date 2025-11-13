@@ -60,7 +60,7 @@ def scoutos_app_runs(
     required_columns = list(table_schema.keys())
 
     # Batch processing parameters
-    batch_size = 1000
+    batch_size = 500
     batch_data = []
     rows_loaded = 0
     total_rows = 0
