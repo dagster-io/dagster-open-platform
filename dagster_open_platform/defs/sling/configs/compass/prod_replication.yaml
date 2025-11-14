@@ -42,3 +42,9 @@ streams:
     primary_key: 'id'
     update_key: 'created_at'
     object: 'sling.compass.referral_tokens'
+
+  public.org_users:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'created_at'
+    object: 'sling.compass.org_users'
