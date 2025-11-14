@@ -10,6 +10,9 @@ from dagster_open_platform.defs.dbt.partitions import insights_partition
 compass_organizations_asset_key = get_asset_key_for_model(
     [get_dbt_non_partitioned_models()], "compass_organizations"
 )
+compass_customer_id_exclusion_asset_key = get_asset_key_for_model(
+    [get_dbt_non_partitioned_models()], "stg_google_sheets__compass_customer_id_exclusion"
+)
 compass_analytics_job = dg.define_asset_job(
     name="compass_analytics_hourly_job",
     partitions_def=insights_partition,
@@ -24,6 +27,7 @@ compass_analytics_job = dg.define_asset_job(
             dg.AssetSelection.keys(compass_organizations_asset_key).upstream()
             & dg.AssetSelection.from_string('key:"*stg_segment_compass*"').downstream()
         )
+        | dg.AssetSelection.keys(compass_customer_id_exclusion_asset_key).upstream()
     ),
     tags={"team": "devrel"},
 )
