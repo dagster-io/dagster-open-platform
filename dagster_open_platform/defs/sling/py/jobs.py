@@ -17,9 +17,7 @@ compass_analytics_job = dg.define_asset_job(
     name="compass_analytics_hourly_job",
     partitions_def=insights_partition,
     selection=(
-        dg.AssetSelection.groups(
-            "compass_analytics"
-        )  # TODO: add staging_compass_analytics back in when migration is complete
+        dg.AssetSelection.groups("compass_analytics", "staging_compass_analytics")
         .downstream()
         .required_multi_asset_neighbors()
         .materializable()
