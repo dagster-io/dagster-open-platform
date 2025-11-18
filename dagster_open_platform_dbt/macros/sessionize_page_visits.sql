@@ -70,7 +70,7 @@ session_utm_data as (
         campaign_name as session_campaign_name,
         campaign_content as session_campaign_content,
         utm_term as session_utm_term,
-        referrer as session_referrer
+        {{ get_domain_from_website('referrer') }} as session_referrer
     from page_sessions_numbered
     where page_number_in_session = 1
 ),

@@ -5,15 +5,16 @@
     --      https://www.dagster.io -> dagster.io
     --      https://dagster.io -> dagster.io
     --      https://docs.dagster.io/some/path -> docs.dagster.io
+    --      android-app://com.linkedin.android/ -> com.linkedin.android
     --
     --    Strategy:
-    --      1. Strip protocol (http:// or https://)
+    --      1. Strip any protocol (anything before ://)
     --      2. Strip www. if present
     --      3. Extract domain (everything before first / or ?)
     regexp_replace(
         split_part(
             regexp_replace(
-                regexp_replace({{website}}, $$^https?://$$, '', 1, 1, 'i'),
+                regexp_replace({{website}}, $$^[a-zA-Z0-9+.-]+://$$, '', 1, 1, 'i'),
                 $$^www\.$$, '', 1, 1, 'i'
             ),
             '/', 1
