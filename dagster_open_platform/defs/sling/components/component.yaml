@@ -59,14 +59,14 @@ attributes:
       host: '{{ env.COMPASS_STAGING_POSTGRES_HOST }}'
       user: '{{ env.COMPASS_STAGING_POSTGRES_USER }}'
       password: '{{ env.COMPASS_STAGING_POSTGRES_PASSWORD }}'
-      database: 'compass_bot_db'
+      database: '{{ env.COMPASS_STAGING_POSTGRES_DBNAME }}'
       sslmode: 'require'
     COMPASS_POSTGRES:
       type: postgres
       host: '{{ env.COMPASS_POSTGRES_HOST }}'
       user: '{{ env.COMPASS_POSTGRES_USER }}'
       password: '{{ env.COMPASS_POSTGRES_PASSWORD }}'
-      database: 'compass_bot_db_65gu'
+      database: '{{ env.COMPASS_POSTGRES_DBNAME }}'      
       sslmode: 'require'
     SNOWFLAKE:
       type: snowflake
