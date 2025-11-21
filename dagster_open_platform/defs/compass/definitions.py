@@ -5,6 +5,7 @@ from dagster.components import definitions
 from dagster_gcp import BigQueryResource
 
 from .py.assets import (
+    compass_bigquery_service_accounts,
     compass_dagster_plus_tables_bigquery_load,
     compass_dagster_plus_tables_gcs_export,
 )
@@ -17,6 +18,7 @@ def defs() -> Definitions:
         assets=[
             compass_dagster_plus_tables_gcs_export,
             compass_dagster_plus_tables_bigquery_load,
+            compass_bigquery_service_accounts,
         ],
         resources={
             "bigquery_compass_prospector": BigQueryResource(

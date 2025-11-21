@@ -24,6 +24,7 @@ dependencies = [
     "dagster-fivetran",
     "dagster-gcp",
     "dagster-pandas",
+    "google-cloud-iam",
     "dagster-shared",
     "dagster-slack",
     "dagster-sling",
