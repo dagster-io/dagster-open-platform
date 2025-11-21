@@ -107,7 +107,11 @@ def compass_dagster_plus_tables_gcs_export(
                 # Remove old files from the stage path first
                 remove_sql = f"REMOVE {gcs_path}"
                 context.log.info(f"Removing old files from {gcs_path}")
-                cursor.execute(remove_sql)
+                try:
+                    cursor.execute(remove_sql)
+                    context.log.info(f"Cleared stage path {gcs_path}")
+                except Exception as e:
+                    context.log.info(f"No files to remove or error clearing stage: {e}")
 
                 # Build the COPY INTO command
                 copy_sql = f"""
@@ -237,7 +241,11 @@ def compass_dagster_plus_tables_bigquery_load(
                 context.log.info(f"Loading {table_name} for org {org_id} from {gcs_uri}")
 
                 # Drop existing table if it exists to ensure schema changes are picked up
-                bq_client.delete_table(table_id, not_found_ok=True)
+                try:
+                    bq_client.delete_table(table_id, not_found_ok=True)
+                    context.log.info(f"Dropped existing table {table_id}")
+                except Exception as e:
+                    context.log.warning(f"Could not drop table {table_id}: {e}")
 
                 # Configure the load job
                 from google.cloud.bigquery import LoadJobConfig, SourceFormat
@@ -279,127 +287,5 @@ def compass_dagster_plus_tables_bigquery_load(
             "total_rows_loaded": dg.MetadataValue.int(total_rows_loaded),
             "organizations": dg.MetadataValue.text(", ".join(map(str, org_ids))),
             "bigquery_project": dg.MetadataValue.text(project_id),
-        }
-    )
-
-
-@dg.asset(
-    key=["compass", "bigquery_service_accounts"],
-    deps=[dg.AssetKey(["compass", "dagster_plus_tables_bigquery_load"])],
-    group_name="compass_exports",
-    compute_kind="gcp",
-    description=(
-        "Creates service accounts for each organization's BigQuery dataset "
-        "and grants read-only access to all tables in that dataset."
-    ),
-    automation_condition=dg.AutomationCondition.on_cron("0 4 * * *"),  # Daily at 4 AM
-    tags={"dagster/kind/bigquery": "", "dagster/kind/iam": ""},
-    owners=["team:data"],
-)
-def compass_bigquery_service_accounts(
-    context: dg.AssetExecutionContext,
-    bigquery_compass_prospector: BigQueryResource,
-    snowflake: SnowflakeResource,
-) -> dg.MaterializeResult:
-    """Create service accounts with read access to BigQuery datasets.
-
-    For each organization:
-    1. Creates a service account named dagster-plus-org-{org_id}@{project}.iam.gserviceaccount.com
-    2. Grants BigQuery Data Viewer role at the dataset level
-    """
-    from google.api_core.exceptions import AlreadyExists
-    from google.cloud import iam_admin_v1
-    from google.cloud.bigquery import AccessEntry
-
-    database = "COMPASS_DAGSTER_PLUS_TABLES"
-    schema = "PUBLIC"
-    service_accounts_created = 0
-    permissions_granted = 0
-
-    with bigquery_compass_prospector.get_client() as bq_client:
-        project_id = bq_client.project
-
-        # Get organization IDs
-        with snowflake.get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(f"USE DATABASE {database}")
-            cursor.execute(f"USE SCHEMA {schema}")
-
-            org_query = """
-            SELECT DISTINCT organization_id
-            FROM PURINA.PUBLIC.dagster_plus_organization_ids_compass_context
-            ORDER BY organization_id
-            """
-
-            cursor.execute(org_query)
-            org_ids = [row[0] for row in cursor.fetchall()]
-
-        context.log.info(f"Creating service accounts for {len(org_ids)} organizations")
-
-        # Initialize IAM client (will use same credentials as BigQuery via GOOGLE_APPLICATION_CREDENTIALS)
-        iam_client = iam_admin_v1.IAMClient()
-        project_name = f"projects/{project_id}"
-
-        for org_id in org_ids:
-            dataset_id = f"dagster_operational_data_org_{org_id}"
-            dataset_ref = f"{project_id}.{dataset_id}"
-            service_account_id = f"dagster-plus-org-{org_id}"
-            service_account_email = f"{service_account_id}@{project_id}.iam.gserviceaccount.com"
-
-            # Create service account if it doesn't exist
-            try:
-                request = iam_admin_v1.CreateServiceAccountRequest(
-                    name=project_name,
-                    account_id=service_account_id,
-                    service_account=iam_admin_v1.ServiceAccount(
-                        display_name=f"Dagster Plus Org {org_id} Reader",
-                        description=f"Read-only access to BigQuery dataset for organization {org_id}",
-                    ),
-                )
-                iam_client.create_service_account(request=request)
-                context.log.info(f"Created service account: {service_account_email}")
-                service_accounts_created += 1
-            except AlreadyExists:
-                context.log.info(f"Service account already exists: {service_account_email}")
-
-            # Grant BigQuery Data Viewer access to the dataset
-            dataset = bq_client.get_dataset(dataset_ref)
-
-            # Create access entry for service account
-            access_entry = AccessEntry(
-                role="READER",
-                entity_type="userByEmail",
-                entity_id=service_account_email,
-            )
-
-            # Check if access already exists
-            existing_access = [
-                entry
-                for entry in dataset.access_entries
-                if entry.entity_id == service_account_email
-            ]
-
-            if not existing_access:
-                dataset.access_entries = list(dataset.access_entries) + [access_entry]
-                bq_client.update_dataset(dataset, ["access_entries"])
-                context.log.info(f"Granted read access to {service_account_email} on {dataset_id}")
-                permissions_granted += 1
-            else:
-                context.log.info(
-                    f"Access already granted for {service_account_email} on {dataset_id}"
-                )
-
-    context.log.info(
-        f"Complete: {service_accounts_created} service accounts created, "
-        f"{permissions_granted} permissions granted"
-    )
-
-    return dg.MaterializeResult(
-        metadata={
-            "total_organizations": dg.MetadataValue.int(len(org_ids)),
-            "service_accounts_created": dg.MetadataValue.int(service_accounts_created),
-            "permissions_granted": dg.MetadataValue.int(permissions_granted),
-            "organizations": dg.MetadataValue.text(", ".join(map(str, org_ids))),
-            "project_id": dg.MetadataValue.text(project_id),
         }
     )
