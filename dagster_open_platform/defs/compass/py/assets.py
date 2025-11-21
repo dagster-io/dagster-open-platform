@@ -315,7 +315,6 @@ def compass_bigquery_service_accounts(
     schema = "PUBLIC"
     service_accounts_created = 0
     permissions_granted = 0
-    keys_created = 0
 
     with bigquery_compass_prospector.get_client() as bq_client:
         project_id = bq_client.project
