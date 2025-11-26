@@ -1,4 +1,4 @@
-from dagster import Config, In, Nothing, OpExecutionContext, ResourceParam, job, op
+from dagster import Config, ResourceParam, job, op
 from dagster_snowflake import SnowflakeConnection
 
 
@@ -14,54 +14,14 @@ def drop_database_clone(
     """Drops a clone of the Purina Snowflake database associated with a Pull Request,
     based on the pull request id provided in the config.
     """
-    snowflake.execute_queries(
-        sql_queries=[
-            f"CALL UTIL_DB.PUBLIC.CLEANUP_DATABASE_CLONE('PURINA', '{config.pull_request_id}')",
-            f"CALL UTIL_DB.PUBLIC.CLEANUP_DATABASE_CLONE('DWH_REPORTING', '{config.pull_request_id}')",
-        ],
-        fetch_results=True,
-    )
-
-
-@op(ins={"start": In(Nothing)})
-def clone_database(
-    context: OpExecutionContext,
-    config: DatabaseCloneConfig,
-    snowflake: ResourceParam[SnowflakeConnection],
-):
-    """Creates a copy-on-write of the Purina Snowflake database associated with a Pull Request,
-    based on the pull request id provided in the config. This process is powered by a stored
-    procedure defined in DOP under the procedures/admin directory.
-    """
-    snowflake.execute_queries(
-        sql_queries=[
-            f"CALL UTIL_DB.PUBLIC.CLONE_DATABASE('PURINA', '{config.pull_request_id}')",
-            f"CALL UTIL_DB.PUBLIC.CLONE_DATABASE('DWH_REPORTING', '{config.pull_request_id}')",
-        ],
-        fetch_results=True,
-    )
-
-
-@job(
-    config={
-        "ops": {
-            "drop_database_clone": {
-                "config": {
-                    "pull_request_id": {"env": "DAGSTER_CLOUD_PULL_REQUEST_ID"},
-                }
-            },
-            "clone_database": {
-                "config": {
-                    "pull_request_id": {"env": "DAGSTER_CLOUD_PULL_REQUEST_ID"},
-                }
-            },
-        },
-    },
-    description="""Creates a copy-on-write of the Purina Snowflake database associated with a Pull Request.
-This is automatically run when a Pull Request is opened via GitHub Action.""",
-)
-def clone_databases() -> None:
-    clone_database(start=drop_database_clone())
+    with snowflake.get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            f"CALL UTIL_DB.PUBLIC.CLEANUP_DATABASE_CLONE('PURINA', '{config.pull_request_id}')"
+        )
+        cursor.execute(
+            f"CALL UTIL_DB.PUBLIC.CLEANUP_DATABASE_CLONE('DWH_REPORTING', '{config.pull_request_id}')"
+        )
 
 
 @job(
