@@ -74,7 +74,7 @@ def workspace_replication_aws_stages(
             while current_date <= today:
                 date_str = current_date.strftime("%Y-%m-%d")
                 date_path = f"{object_name}/{date_str}/"
-                refresh_query = f"ALTER STAGE {stage_name} REFRESH PATH = '{date_path}';"
+                refresh_query = f"ALTER STAGE {stage_name} REFRESH SUBPATH = '{date_path}';"
                 cur.execute(refresh_query)
                 log.info(f"Stage {stage_name} refreshed for path {date_path}")
                 current_date += timedelta(days=1)
