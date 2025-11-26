@@ -1,4 +1,5 @@
 import os
+from datetime import date, timedelta
 
 import dagster as dg
 from dagster.components import definitions
@@ -64,8 +65,19 @@ def workspace_replication_aws_stages(
                 cur.execute(create_stage_query)
                 log.info(f"Created stage {stage_name}")
                 continue
-            cur.execute(f"ALTER STAGE {stage_name} REFRESH;")
-            log.info(f"Stage {stage_name} refreshed")
+
+            # Refresh only the last month's worth of data
+            today = date.today()
+            thirty_days_ago = today - timedelta(days=30)
+            current_date = thirty_days_ago
+
+            while current_date <= today:
+                date_str = current_date.strftime("%Y-%m-%d")
+                date_path = f"{object_name}/{date_str}/"
+                refresh_query = f"ALTER STAGE {stage_name} REFRESH PATH = '{date_path}';"
+                cur.execute(refresh_query)
+                log.info(f"Stage {stage_name} refreshed for path {date_path}")
+                current_date += timedelta(days=1)
 
 
 @dg.multi_asset(
