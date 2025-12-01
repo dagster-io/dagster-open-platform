@@ -112,6 +112,7 @@ def workspace_replication_aws_external_tables(
         for key in context.selected_asset_keys:
             table_name = key.path[-1]
             stage_name = table_name[:-4]  # Remove the "_ext" suffix
+            object_name = stage_name.replace("workspace_staging_", "")
             cur.execute(
                 f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"
             )
@@ -130,8 +131,25 @@ def workspace_replication_aws_external_tables(
                 AUTO_REFRESH = FALSE
                 COMMENT = 'External table for stage {stage_name} from workspace replication';
             """
-            cur.execute(create_table_query)
-            log.info(f"Created external table {table_name}")
+            cur.execute(f"SHOW EXTERNAL TABLES LIKE '{table_name}';")
+            tables = cur.fetchall()
+            if not tables:
+                cur.execute(create_table_query)
+                log.info(f"Created external table {table_name}")
+                continue
+
+            # Refresh only the last month's worth of data
+            today = date.today()
+            thirty_days_ago = today - timedelta(days=30)
+            current_date = thirty_days_ago
+
+            while current_date <= today:
+                date_str = current_date.strftime("%Y-%m-%d")
+                date_path = f"{object_name}/{date_str}/"
+                refresh_query = f"ALTER EXTERNAL TABLE {table_name} REFRESH '{date_path}';"
+                cur.execute(refresh_query)
+                log.info(f"External table {table_name} refreshed for path {date_path}")
+                current_date += timedelta(days=1)
 
 
 @definitions
