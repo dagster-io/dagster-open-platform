@@ -9,9 +9,13 @@ streams:
   public.event_logs_view:
     sql: >
       with candidates as (
-        select * from public.event_logs_partitioned where id > {incremental_value} and id <= {incremental_value} + 500000
+        select * 
+        from public.event_logs_partitioned 
+        where id > {incremental_value} and dagster_event_type is not null
+        order by timestamp
+        limit 500000
       )
-      select * from candidates where dagster_event_type is not null
+      select * from candidates
     meta:
       dagster: 
         asset_key: sling.cloud_product.event_logs
