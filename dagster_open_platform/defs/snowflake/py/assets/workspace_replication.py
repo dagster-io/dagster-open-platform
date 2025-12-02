@@ -73,7 +73,7 @@ def workspace_replication_aws_stages(
 
             while current_date <= today:
                 date_str = current_date.strftime("%Y-%m-%d")
-                date_path = f"{object_name}/{date_str}/"
+                date_path = f"{date_str}/"
                 refresh_query = f"ALTER STAGE {stage_name} REFRESH SUBPATH = '{date_path}';"
                 cur.execute(refresh_query)
                 log.info(f"Stage {stage_name} refreshed for path {date_path}")
@@ -112,7 +112,6 @@ def workspace_replication_aws_external_tables(
         for key in context.selected_asset_keys:
             table_name = key.path[-1]
             stage_name = table_name[:-4]  # Remove the "_ext" suffix
-            object_name = stage_name.replace("workspace_staging_", "")
             cur.execute(
                 f"USE SCHEMA AWS.{os.getenv('AWS_WORKSPACE_REPLICATION_ACCOUNT_NAME', '').replace('-', '_')};"
             )
@@ -145,7 +144,7 @@ def workspace_replication_aws_external_tables(
 
             while current_date <= today:
                 date_str = current_date.strftime("%Y-%m-%d")
-                date_path = f"{object_name}/{date_str}/"
+                date_path = f"{date_str}/"
                 refresh_query = f"ALTER EXTERNAL TABLE {table_name} REFRESH '{date_path}';"
                 cur.execute(refresh_query)
                 log.info(f"External table {table_name} refreshed for path {date_path}")
