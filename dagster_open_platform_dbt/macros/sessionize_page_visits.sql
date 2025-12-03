@@ -1,10 +1,15 @@
-{% macro sessionize_page_visits(source_ref, include_campaign_logic=false) %}
+{% macro sessionize_page_visits(source_ref, include_campaign_logic=false, include_ip_in_session=false) %}
 
 with pages as (
     select
         *,
+        {% if include_ip_in_session %}
+        row_number() over (partition by context_ip order by timestamp) as page_view_number,
+        lag(timestamp) over (partition by context_ip order by timestamp) as previous_tstamp
+        {% else %}
         row_number() over (partition by anonymous_id order by timestamp) as page_view_number,
         lag(timestamp) over (partition by anonymous_id order by timestamp) as previous_tstamp
+        {% endif %}
     from {{ source_ref }}
 ),
 
@@ -20,11 +25,19 @@ page_sessions as (
         referrer.medium as referrer_medium,
 
         {{ get_page_attribution_category() }} as page_attribution_category,
+        {% if include_ip_in_session %}
+        sum(new_session)
+            over (
+                partition by context_ip
+                order by page_view_number rows between unbounded preceding and current row
+            ) as session_number
+        {% else %}
         sum(new_session)
             over (
                 partition by anonymous_id
                 order by page_view_number rows between unbounded preceding and current row
             ) as session_number
+        {% endif %}
     from pages
     left join referrer on pages.referrer_host = referrer.host
 ),
@@ -32,7 +45,11 @@ page_sessions as (
 add_session_id as (
     select
         *,
+        {% if include_ip_in_session %}
+        md5(coalesce(context_ip, '') || session_number) as session_id
+        {% else %}
         md5(anonymous_id || session_number) as session_id
+        {% endif %}
     from page_sessions
 ),
 
