@@ -3,8 +3,14 @@ from datetime import timedelta
 from pathlib import Path
 
 import pytest
-from dagster import AssetKey, AssetsDefinition, AutomationCondition, build_asset_context
-from dagster._core.definitions.freshness import InternalFreshnessPolicy
+from dagster import (
+    AssetKey,
+    AssetsDefinition,
+    AutomationCondition,
+    FreshnessPolicy,
+    apply_freshness_policy,
+    build_asset_context,
+)
 from dagster._core.test_utils import environ
 from dagster.components.testing import get_component_defs_within_project
 
@@ -25,6 +31,12 @@ def test_load_common_room_activities(environment: str) -> None:
             component_path="snowflake/components/common_room",
         )
 
+        # Apply freshness policy as done in definitions.py
+        global_freshness_policy = FreshnessPolicy.time_window(fail_window=timedelta(hours=23))
+        defs = defs.map_asset_specs(
+            func=lambda spec: apply_freshness_policy(spec, global_freshness_policy)
+        )
+
         assets_def = next(iter(defs.assets or []))
         assert isinstance(assets_def, AssetsDefinition)
 
@@ -36,7 +48,7 @@ def test_load_common_room_activities(environment: str) -> None:
             AssetKey(["aws", expected_schema, "stage_common_room_activities"])
         ]
         assert stage_common_room_activities_spec.freshness_policy == (
-            InternalFreshnessPolicy.time_window(
+            FreshnessPolicy.time_window(
                 fail_window=timedelta(hours=23),
             )
         )

@@ -3,7 +3,6 @@ from datetime import date, timedelta
 
 import dagster as dg
 from dagster.components import definitions
-from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.aws.assets import workspace_data_json
 from dagster_open_platform.defs.aws.constants import BUCKET_NAME, OUTPUT_PREFIX
 from dagster_snowflake import SnowflakeResource
@@ -29,7 +28,6 @@ log = dg.get_dagster_logger()
                     & dg.AutomationCondition.missing()
                 )
             ),
-            freshness_policy=global_freshness_policy,
         )
         for asset_key in workspace_data_json.keys
     ],
@@ -98,7 +96,6 @@ def workspace_replication_aws_stages(
                     & dg.AutomationCondition.missing()
                 )
             ),
-            freshness_policy=global_freshness_policy,
         )
         for asset_key in workspace_replication_aws_stages.keys
     ],

@@ -36,7 +36,7 @@ class CustomDltLoadCollectionComponent(DltLoadCollectionComponent):
                 dlt_source=load.source,
                 dlt_pipeline=load.pipeline,
                 name=f"dlt_assets_{load.source.name}_{load.pipeline.dataset_name}",
-                dagster_dlt_translator=load.translator,
+                dagster_dlt_translator=getattr(load, "translator", None),
             )
             def dlt_assets_def(context: dg.AssetExecutionContext):
                 yield from self._temp_execute(context, self.dlt_pipeline_resource)

@@ -1,5 +1,4 @@
 import dagster as dg
-from dagster_open_platform.definitions import global_freshness_policy
 
 
 class SegmentComponent(dg.components.Component, dg.components.Model, dg.components.Resolvable):
@@ -21,7 +20,6 @@ class SegmentComponent(dg.components.Component, dg.components.Model, dg.componen
                     key=key,
                     group_name=self.group_name,
                     description=self.description,
-                    freshness_policy=global_freshness_policy,
                     kinds=set(self.kinds),
                 )
                 for key in asset_keys

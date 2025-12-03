@@ -1,12 +1,10 @@
 import os
-from datetime import timedelta
 from pathlib import Path
 from typing import Annotated, Any, Optional, Union
 
 import dagster as dg
 import dagster.components as dg_components
 import pydantic
-from dagster._core.definitions.freshness import InternalFreshnessPolicy
 from dagster.components.core.context import ComponentLoadContext
 from dagster.components.resolved.core_models import ResolvedAssetAttributes
 from dagster_open_platform.utils.environment_helpers import get_environment
@@ -134,7 +132,6 @@ class SnowflakeCreateOrRefreshComponent(
         return dg.AssetSpec(
             **(self.asset_attributes or {}),
             key=dg.AssetKey([self.database_name, self.schema_name, self.name]),
-            freshness_policy=InternalFreshnessPolicy.time_window(fail_window=timedelta(hours=23)),
         )
 
     def build_defs(self, context: ComponentLoadContext) -> dg.Definitions:
@@ -143,7 +140,6 @@ class SnowflakeCreateOrRefreshComponent(
         @dg.asset(
             **(self.asset_attributes or {}),
             key=dg.AssetKey([self.database_name, self.schema_name, self.name]),
-            freshness_policy=InternalFreshnessPolicy.time_window(fail_window=timedelta(hours=23)),
         )
         def _create_or_refresh_object(
             context: dg.AssetExecutionContext, snowflake: SnowflakeResource

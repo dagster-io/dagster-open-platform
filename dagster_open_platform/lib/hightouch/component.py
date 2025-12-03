@@ -5,7 +5,6 @@ from typing import Any
 import dagster as dg
 from dagster.components import Component, Model, Resolvable, ResolvedAssetSpec
 from dagster_dbt import get_asset_key_for_model
-from dagster_open_platform.definitions import global_freshness_policy
 from dagster_open_platform.defs.hightouch.py.resources import ConfigurableHightouchResource
 
 
@@ -24,13 +23,19 @@ class DopHightouchSyncComponent(Component, Resolvable, Model):
         return {"dbt_asset_key": dbt_asset_key}
 
     def build_defs(self, context) -> dg.Definitions:
+        # Create a unique function name based on the asset key to avoid conflicts
+        # when multiple Hightouch components are loaded
+        asset_key_str = "_".join(self.asset.key.path)
+        function_name = f"hightouch_sync_{asset_key_str}"
+
         @dg.multi_asset(
-            name=self.asset.key.path[0],
-            specs=[self.asset.replace_attributes(freshness_policy=global_freshness_policy)],
+            name=function_name,
+            specs=[self.asset],
         )
         def _assets(hightouch: ConfigurableHightouchResource):
             result = hightouch.sync_and_poll(os.getenv(self.sync_id_env_var, ""))
-            return dg.MaterializeResult(
+            yield dg.MaterializeResult(
+                asset_key=self.asset.key,
                 metadata={
                     "sync_details": result.sync_details,
                     "sync_run_details": result.sync_run_details,
@@ -38,7 +43,7 @@ class DopHightouchSyncComponent(Component, Resolvable, Model):
                     "query_size": result.sync_run_details.get("querySize"),
                     "completion_ratio": result.sync_run_details.get("completionRatio"),
                     "failed_rows": result.sync_run_details.get("failedRows", {}).get("addedCount"),
-                }
+                },
             )
 
         return dg.Definitions(assets=[_assets])

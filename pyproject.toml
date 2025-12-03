@@ -10,7 +10,7 @@ dependencies = [
     "boto3",
     "dbt-core<1.9",
     "dbt-snowflake<1.9",
-    "dagster==1.11.13",
+    "dagster==1.12.3",
     "dagster-dg-cli",
     "dagster-cloud",
     "dagster-cloud-cli",
@@ -19,7 +19,7 @@ dependencies = [
     "dagster-pipes",
     # integrations
     "dagster-aws",
-    "dagster-dbt==0.27.13", # synced with dagster above, backtracked when unpinned
+    "dagster-dbt==0.28.3", # synced with dagster above, backtracked when unpinned
     "dagster-dlt",
     "dagster-fivetran",
     "dagster-gcp",
