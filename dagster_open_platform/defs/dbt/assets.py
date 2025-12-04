@@ -21,6 +21,8 @@ from dagster_open_platform.lib.dbt.translator import CustomDagsterDbtTranslator
 INCREMENTAL_SELECTOR = "config.materialized:incremental"
 SNAPSHOT_SELECTOR = "resource_type:snapshot"
 
+logger = dg.get_dagster_logger()
+
 
 @cache
 def get_dbt_non_partitioned_models(
@@ -29,6 +31,8 @@ def get_dbt_non_partitioned_models(
 ):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
+
+    logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
 
     @dbt_assets(
         manifest=dbt_project.manifest_path,
@@ -64,8 +68,13 @@ def get_dbt_partitioned_models(
     custom_translator: Optional[DagsterDbtTranslator] = None,
     additional_selectors: Optional[Sequence[str]] = None,
 ):
+    dbt_project = dagster_open_platform_dbt_project()
+    assert dbt_project
+
+    logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
+
     @dbt_assets(
-        manifest=dagster_open_platform_dbt_project().manifest_path,
+        manifest=dbt_project.manifest_path,
         select=",".join([INCREMENTAL_SELECTOR, *(additional_selectors or [])]),
         dagster_dbt_translator=(
             custom_translator
@@ -75,7 +84,7 @@ def get_dbt_partitioned_models(
         ),
         partitions_def=insights_partition,
         backfill_policy=dg.BackfillPolicy.single_run(),
-        project=dagster_open_platform_dbt_project(),
+        project=dbt_project,
     )
     def dbt_partitioned_models(
         context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
