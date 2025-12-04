@@ -21,6 +21,6 @@ def dagster_open_platform_dbt_project() -> DbtProject:
 
 @definitions
 def defs():
-    return Definitions(
-        resources={"dbt": DbtCliResource(project_dir=dagster_open_platform_dbt_project())}
-    )
+    dbt_project = dagster_open_platform_dbt_project()
+    assert dbt_project
+    return Definitions(resources={"dbt": DbtCliResource(project_dir=dbt_project.project_dir)})
