@@ -46,7 +46,7 @@ def get_dbt_non_partitioned_models(
         project=dbt_project,
     )
     def dbt_non_partitioned_models(context: dg.AssetExecutionContext, dbt: DbtCliResource):
-        logger.info(f"dbt_project.project_dir: {dbt.project.project_dir}")
+        logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
         yield from (
             dbt.cli(["build"], context=context)
             .stream()
@@ -86,7 +86,7 @@ def get_dbt_partitioned_models(
     def dbt_partitioned_models(
         context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
     ):
-        logger.info(f"dbt_project.project_dir: {dbt.project.project_dir}")
+        logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
         dbt_vars = {
             "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
             "max_date": context.partition_time_window.end.isoformat(),
