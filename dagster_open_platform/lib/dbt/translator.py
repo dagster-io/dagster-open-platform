@@ -1,5 +1,6 @@
 import os
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any, Optional
 
 import dagster as dg
@@ -26,6 +27,13 @@ asset_is_new_or_updated_or_deps_updated = ~dg.AutomationCondition.in_progress() 
 
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
+    def get_asset_spec(self, manifest: Any, unique_id: str, project: Any) -> Any:
+        """Override to ensure project.project_dir is a Path object."""
+        # Fix project_dir if it's a string instead of a Path
+        if hasattr(project, "project_dir") and isinstance(project.project_dir, str):
+            project.project_dir = Path(project.project_dir)
+        return super().get_asset_spec(manifest, unique_id, project)
+
     def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
         if dbt_resource_props["resource_type"] == "snapshot":
             return "snapshots"
