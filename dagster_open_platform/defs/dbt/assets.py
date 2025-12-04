@@ -37,7 +37,7 @@ def get_dbt_non_partitioned_models(
         dagster_dbt_translator=(
             custom_translator
             or CustomDagsterDbtTranslator(
-                settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+                settings=DagsterDbtTranslatorSettings(enable_code_references=False)
             )
         ),
         select=",".join(additional_selectors or [DBT_DEFAULT_SELECT]),
@@ -76,7 +76,7 @@ def get_dbt_partitioned_models(
         dagster_dbt_translator=(
             custom_translator
             or CustomDagsterDbtTranslator(
-                settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+                settings=DagsterDbtTranslatorSettings(enable_code_references=False)
             )
         ),
         partitions_def=insights_partition,
@@ -120,7 +120,7 @@ def get_dbt_snapshot_models(
         dagster_dbt_translator=(
             custom_translator
             or CustomDagsterDbtTranslator(
-                settings=DagsterDbtTranslatorSettings(enable_code_references=True)
+                settings=DagsterDbtTranslatorSettings(enable_code_references=False)
             )
         ),
         backfill_policy=dg.BackfillPolicy.single_run(),
