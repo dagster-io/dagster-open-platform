@@ -25,7 +25,8 @@ hightouch_syncs_job = dg.define_asset_job(
     - dg.AssetSelection.groups("product")
     - dg.AssetSelection.groups("business_activity_logs")
     - dg.AssetSelection.from_string('key:"*/*/dim_accounts_by_day"')
-    - dg.AssetSelection.groups("mart_gtm"),
+    - dg.AssetSelection.groups("mart_gtm")
+    - dg.AssetSelection.from_string('key:"sling/compass/*"'),
     tags={"team": "devrel", "dagster/max_retries": 1},
 )
 
