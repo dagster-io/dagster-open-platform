@@ -5,7 +5,10 @@ from typing import Any
 import dagster as dg
 import dagster.components as dg_components
 from dagster_dlt import DagsterDltResource, dlt_assets
-from dagster_dlt.components.dlt_load_collection.component import DltLoadCollectionComponent
+from dagster_dlt.components.dlt_load_collection.component import (
+    DltComponentTranslator,
+    DltLoadCollectionComponent,
+)
 
 
 class CustomDltLoadCollectionComponent(DltLoadCollectionComponent):
@@ -31,12 +34,13 @@ class CustomDltLoadCollectionComponent(DltLoadCollectionComponent):
     def _temp_build_defs_base(self, context: dg_components.ComponentLoadContext) -> dg.Definitions:
         output = []
         for load in self.loads:
+            translator = DltComponentTranslator(self, load)
 
             @dlt_assets(
                 dlt_source=load.source,
                 dlt_pipeline=load.pipeline,
                 name=f"dlt_assets_{load.source.name}_{load.pipeline.dataset_name}",
-                dagster_dlt_translator=getattr(load, "translator", None),
+                dagster_dlt_translator=translator,
             )
             def dlt_assets_def(context: dg.AssetExecutionContext):
                 yield from self._temp_execute(context, self.dlt_pipeline_resource)
