@@ -44,16 +44,22 @@ def connect_to_snowflake(database, schema):
                 "SNOWFLAKE_DBT_PRIVATE_KEY environment variable is required for key-pair authentication"
             )
 
+        # Handle escaped newlines that may occur when key is stored in environment variables
+        # Replace literal \n strings with actual newline characters
+        private_key_str = private_key_str.replace("\\n", "\n")
+
         # Parse the private key from PEM string
+        # Supports both PKCS#8 (-----BEGIN PRIVATE KEY-----) and traditional RSA (-----BEGIN RSA PRIVATE KEY-----) formats
         private_key = serialization.load_pem_private_key(
             private_key_str.encode("utf-8"),
             password=None,
             backend=default_backend(),
         )
 
-        # Convert to PKCS8 format for Snowflake
-        private_key_pem = private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
+        # Convert to PKCS8 format in DER encoding for Snowflake
+        # Snowflake requires unencrypted RSA private key in DER format as bytes
+        private_key_der = private_key.private_bytes(
+            encoding=serialization.Encoding.DER,
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption(),
         )
@@ -61,7 +67,7 @@ def connect_to_snowflake(database, schema):
         return snowflake.connector.connect(
             account=os.environ.get("SNOWFLAKE_ACCOUNT"),
             user=os.environ.get("SNOWFLAKE_USER"),
-            private_key=private_key_pem,
+            private_key=private_key_der,
             warehouse="purina",
             database=database,
             schema=schema,
