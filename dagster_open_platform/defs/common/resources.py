@@ -8,10 +8,10 @@ from dagster_snowflake import SnowflakeResource
 snowflake = SnowflakeResource(
     user=dg.EnvVar("SNOWFLAKE_USER"),
     account=dg.EnvVar("SNOWFLAKE_ACCOUNT"),
-    password=None if get_environment() == "LOCAL" else dg.EnvVar("SNOWFLAKE_PASSWORD"),
+    private_key=None if get_environment() == "LOCAL" else dg.EnvVar("SNOWFLAKE_DBT_PRIVATE_KEY"),
     role=os.getenv("SNOWFLAKE_ROLE", "PURINA"),
     warehouse=os.getenv("SNOWFLAKE_WAREHOUSE", "PURINA"),
-    authenticator="externalbrowser" if get_environment() == "LOCAL" else "username_password_mfa",
+    authenticator="externalbrowser" if get_environment() == "LOCAL" else None,
 )
 
 
