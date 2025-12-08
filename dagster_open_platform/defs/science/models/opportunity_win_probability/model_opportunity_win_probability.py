@@ -8,6 +8,8 @@ import pandas as pd
 import shap
 import snowflake.connector
 import xgboost as xgb
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
 from dagster_open_platform.defs.science.models.opportunity_win_probability.utils import (
     _database_from_env,
     _model_data_schema_from_env,
@@ -21,16 +23,50 @@ from sklearn.preprocessing import StandardScaler
 
 def connect_to_snowflake(database, schema):
     """Establish connection to Snowflake."""
-    return snowflake.connector.connect(
-        account=os.environ.get("SNOWFLAKE_ACCOUNT"),
-        authenticator="externalbrowser" if get_environment() == "LOCAL" else "snowflake",
-        user=os.environ.get("SNOWFLAKE_USER"),
-        password=os.environ.get("SNOWFLAKE_PASSWORD"),
-        warehouse="purina",
-        database=database,
-        schema=schema,
-        role=os.environ.get("SNOWFLAKE_ROLE"),
-    )
+    is_local = get_environment() == "LOCAL"
+
+    if is_local:
+        # Use external browser authentication for local development
+        return snowflake.connector.connect(
+            account=os.environ.get("SNOWFLAKE_ACCOUNT"),
+            authenticator="externalbrowser",
+            user=os.environ.get("SNOWFLAKE_USER"),
+            warehouse="purina",
+            database=database,
+            schema=schema,
+            role=os.environ.get("SNOWFLAKE_ROLE"),
+        )
+    else:
+        # Use key-pair authentication for non-local environments
+        private_key_str = os.environ.get("SNOWFLAKE_DBT_PRIVATE_KEY")
+        if not private_key_str:
+            raise ValueError(
+                "SNOWFLAKE_DBT_PRIVATE_KEY environment variable is required for key-pair authentication"
+            )
+
+        # Parse the private key from PEM string
+        private_key = serialization.load_pem_private_key(
+            private_key_str.encode("utf-8"),
+            password=None,
+            backend=default_backend(),
+        )
+
+        # Convert to PKCS8 format for Snowflake
+        private_key_pem = private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption(),
+        )
+
+        return snowflake.connector.connect(
+            account=os.environ.get("SNOWFLAKE_ACCOUNT"),
+            user=os.environ.get("SNOWFLAKE_USER"),
+            private_key=private_key_pem,
+            warehouse="purina",
+            database=database,
+            schema=schema,
+            role=os.environ.get("SNOWFLAKE_ROLE"),
+        )
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
