@@ -43,3 +43,8 @@ ruff:
 
 pyright:
 	uv run --extra dev pyright
+
+update_erk:
+	uv lock --upgrade-package erk --upgrade-package dot-agent-kit
+	uv sync --extra dev --prerelease=allow
+	erk kit sync -f
