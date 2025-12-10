@@ -33,7 +33,10 @@ embedded_elt_resource = SlingResource(
             type="snowflake",
             host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
-            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            authenticator="externalbrowser" if get_environment() == "LOCAL" else "snowflake_jwt",  # type: ignore
+            private_key=None  # type: ignore
+            if get_environment() == "LOCAL"
+            else EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),
             database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
             schema=get_schema_for_environment("cloud_product"),  # type: ignore
             warehouse="purina",  # type: ignore
@@ -53,7 +56,10 @@ embedded_elt_resource = SlingResource(
             type="snowflake",
             host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
-            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            authenticator="externalbrowser" if get_environment() == "LOCAL" else "snowflake_jwt",  # type: ignore
+            private_key=None  # type: ignore
+            if get_environment() == "LOCAL"
+            else EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),
             database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
             schema=get_schema_for_environment("cloud_product_shard1"),  # type: ignore
             warehouse="purina",  # type: ignore
@@ -64,7 +70,10 @@ embedded_elt_resource = SlingResource(
             type="snowflake",
             host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
             user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
-            password=EnvVar("SNOWFLAKE_SLING_PASSWORD"),  # type: ignore
+            authenticator="externalbrowser" if get_environment() == "LOCAL" else "snowflake_jwt",  # type: ignore
+            private_key=None  # type: ignore
+            if get_environment() == "LOCAL"
+            else EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),
             database=get_database_for_environment(),  # type: ignore
             schema=get_schema_for_environment("sales"),  # type: ignore
             warehouse="purina",  # type: ignore

@@ -6,9 +6,6 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 
-[options]
-prerelease-mode = "allow"
-
 [[package]]
 name = "absql"
 version = "0.6.2"
@@ -901,7 +898,7 @@ requires-dist = [
     { name = "scikit-learn" },
     { name = "scoutos" },
     { name = "shap", specifier = ">=0.47.0" },
-    { name = "sling", specifier = "==1.2.13" },
+    { name = "sling", specifier = "==1.5.1" },
     { name = "sling-linux-arm64", marker = "sys_platform == 'linux'" },
     { name = "sling-mac-arm64", marker = "sys_platform == 'darwin'" },
     { name = "snowflake-connector-python", extras = ["secure-local-storage", "pandas"] },
@@ -3712,12 +3709,12 @@ wheels = [
 
 [[package]]
 name = "sling"
-version = "1.2.13"
+version = "1.5.1"
 source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "sling-mac-arm64" },
+sdist = { url = "https://files.pythonhosted.org/packages/5d/a2/004be8b473689e99e11439710211cee0eebec6c469961a99fd39df71f579/sling-1.5.1.tar.gz", hash = "sha256:4639c4b7f21c4d99844c77d73015c72ae294fc54e9bcada4d550a6a8c7d71e80", size = 41095, upload-time = "2025-12-07T11:19:09.302Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e1/8e/66fafca08d2810428c2433e86c3db11bbf8896ee3c8814a54a8ebb8b1760/sling-1.5.1-py3-none-any.whl", hash = "sha256:101dfac15bd4de0f5265f53653087f02a69321010fd1141f3e532cd1cd2b7049", size = 24893, upload-time = "2025-12-07T11:19:07.774Z" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/11/08/792a27c82570a5592143a4c99aebc919404eedd202cb5c9c354d82dca05b/sling-1.2.13.tar.gz", hash = "sha256:40c77d0cf4ade41618b33c46704fbe85f6ebec0c1119decfee43125591d8bce0", size = 6677, upload-time = "2024-06-29T16:24:22.714Z" }
 
 [[package]]
 name = "sling-linux-arm64"
@@ -3730,9 +3727,9 @@ wheels = [
 
 [[package]]
 name = "sling-mac-arm64"
-version = "1.2.13"
+version = "1.3.4"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/83/61/3a0cf8510f0503e8fdeb5e156d52f02848d99970257ff94a8118492022dd/sling-mac-arm64-1.2.13.tar.gz", hash = "sha256:45796cfd9e365da1aec7ec98780466dd1dc7c1c50639b3268d4e67293f8b68b0", size = 53253836, upload-time = "2024-06-29T16:23:20.825Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/9f/3bf5dc598f75ee63bc720e7c2f2102d9acf3288ac0777c3db22f69b30f50/sling-mac-arm64-1.3.4.tar.gz", hash = "sha256:fba67974653e61c023f4428d45305b656b11b9c4f04074d9302720b1e5ec3600", size = 60327181, upload-time = "2024-12-27T16:27:02.991Z" }
 
 [[package]]
 name = "smmap"

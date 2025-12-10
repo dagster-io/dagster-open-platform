@@ -33,7 +33,7 @@ dependencies = [
     "dagster-hightouch",
     "dagster-anthropic",
     # additional dependencies
-    "sling==1.2.13",
+    "sling==1.5.1",
     "statsig",
     "gql[requests]",
     "dlt[snowflake,duckdb]==1.11.0",

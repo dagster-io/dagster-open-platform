@@ -72,7 +72,8 @@ attributes:
       type: snowflake
       host: '{{ env.SNOWFLAKE_ACCOUNT }}'
       user: '{{ env.SNOWFLAKE_SLING_USER }}'
-      password: '{{ env.SNOWFLAKE_SLING_PASSWORD }}'
+      authenticator: 'snowflake_jwt'
+      private_key: '{{ env.SNOWFLAKE_SLING_PRIVATE_KEY }}'
       database: 'sling'
       schema: 'compass'
       warehouse: 'purina'
