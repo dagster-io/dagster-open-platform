@@ -45,6 +45,5 @@ pyright:
 	uv run --extra dev pyright
 
 update_erk:
-	uv lock --upgrade-package erk --upgrade-package dot-agent-kit
-	uv sync --extra dev --prerelease=allow
+	uv tool install erk --from git+https://github.com/dagster-io/erk.git
 	erk kit sync -f
