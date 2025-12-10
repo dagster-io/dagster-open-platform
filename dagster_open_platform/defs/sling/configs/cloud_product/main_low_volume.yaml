@@ -6,27 +6,6 @@ defaults:
   primary_key: [id]
 
 streams: 
-  public.asset_keys: 
-    sql: |
-      select
-        asset_key,
-        last_materialization,
-        last_run_id,
-        create_timestamp,
-        organization_id,
-        deployment_id,
-        last_materialization_timestamp,
-        wipe_timestamp,
-        id,
-        last_planned_materialization_event_id,
-        last_planned_materialization_run_id,
-        last_observation
-      from asset_keys
-      where {incremental_where_cond}
-    update_key: last_materialization_timestamp
-    meta:
-      dagster: 
-        asset_key: sling.cloud_product.asset_keys
   
   public.customer_info: 
     meta:
