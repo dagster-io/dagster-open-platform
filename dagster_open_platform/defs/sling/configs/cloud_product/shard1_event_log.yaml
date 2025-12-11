@@ -11,7 +11,7 @@ streams:
       with candidates as (
         select * 
         from public.event_logs_partitioned 
-        where id > {incremental_value} and dagster_event_type is not null
+        where id > coalesce({incremental_value}, 0) and dagster_event_type is not null
         order by timestamp
         limit 500000
       )
