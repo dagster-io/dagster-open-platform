@@ -38,7 +38,7 @@ embedded_elt_resource = SlingResource(
             if get_environment() == "LOCAL"
             else EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),
             database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
-            schema=get_schema_for_environment("cloud_product"),  # type: ignore
+            schema=get_schema_for_environment("CLOUD_PRODUCT"),  # type: ignore
             warehouse="purina",  # type: ignore
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
@@ -61,7 +61,7 @@ embedded_elt_resource = SlingResource(
             if get_environment() == "LOCAL"
             else EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),
             database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
-            schema=get_schema_for_environment("cloud_product_shard1"),  # type: ignore
+            schema=get_schema_for_environment("CLOUD_PRODUCT_SHARD1"),  # type: ignore
             warehouse="purina",  # type: ignore
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
@@ -75,7 +75,7 @@ embedded_elt_resource = SlingResource(
             if get_environment() == "LOCAL"
             else EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),
             database=get_database_for_environment(),  # type: ignore
-            schema=get_schema_for_environment("sales"),  # type: ignore
+            schema=get_schema_for_environment("SALES"),  # type: ignore
             warehouse="purina",  # type: ignore
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
