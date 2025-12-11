@@ -6,11 +6,6 @@ defaults:
   primary_key: [id]
 
 streams:
-  public.asset_keys:
-    update_key: last_materialization_timestamp
-    meta:
-      dagster:
-        asset_key: sling.cloud_product_shard1.asset_keys
 
   public.jobs:
     meta:
