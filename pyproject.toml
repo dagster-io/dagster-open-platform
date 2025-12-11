@@ -69,7 +69,6 @@ tests = [
     "pytest",
     "responses",
     "syrupy",
-    "buildkite-test-collector",
     "flaky",
 ]
 
