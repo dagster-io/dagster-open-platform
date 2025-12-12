@@ -8,7 +8,7 @@ defaults:
 streams: 
   
   purina.mart_sales.reporting_contract_info:
-    object: reporting_contract_info
+    object: public.reporting_contract_info
     meta:
       dagster:
         asset_key: public.salesforce_contract_info
