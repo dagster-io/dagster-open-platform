@@ -2,10 +2,10 @@ source: PURINA_CLOUD_REPORTING
 target: REPORTING_DB
 defaults:
   mode: truncate
-  object: '{stream_table}'
 
 streams:
   purina.product.usage_metrics_daily_jobs_aggregated:
+    object: usage_metrics_daily_jobs_aggregated
     sql: |
       SELECT
         ORGANIZATION_ID,
