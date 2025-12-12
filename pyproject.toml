@@ -60,8 +60,6 @@ dev = [
     "sqlfluff-templater-dbt",
     "sprocketship",
     "pyright",
-    "erk; python_version >= '3.12'",
-    "dot-agent-kit; python_version >= '3.12'",
 ]
 
 tests = [
@@ -78,7 +76,6 @@ exclude = ["dagster_open_platform_tests"]
 
 [tool.uv.sources]
 erk = { git = "https://github.com/dagster-io/erk.git", rev = "master" }
-dot-agent-kit = { git = "https://github.com/dagster-io/erk.git", subdirectory = "packages/dot-agent-kit", rev = "master" }
 
 # ########################
 # ##### DAGSTER
