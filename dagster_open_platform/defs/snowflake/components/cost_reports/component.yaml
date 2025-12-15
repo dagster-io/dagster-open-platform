@@ -1,0 +1,54 @@
+type: dagster_open_platform.lib.SnowflakeCreateOrRefreshComponent
+attributes:
+  name: stage_aws_cost_report_compass
+  database_name: "aws"
+  schema_name: "compass"
+  type: "stage"
+  role: AWS_WRITER
+  options:
+    url: "s3://{{ env('COMPASS_COST_REPORT_BUCKET') }}/CostStandardExport/CostStandardExport/data"
+    storage_integration: "{{ env('COMPASS_COST_REPORT_STORAGE_INTEGRATION') }}"
+    directory:
+      enable: true
+    file_format:
+      type: PARQUET
+  asset_attributes:
+    description: "Snowflake stage for AWS Compass account cost report data."
+    automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
+    group_name: "aws_stages"
+requirements:
+  env:
+    - COMPASS_COST_REPORT_BUCKET
+    - COMPASS_COST_REPORT_STORAGE_INTEGRATION
+
+---
+
+type: dagster_open_platform.lib.SnowflakeCreateOrRefreshComponent
+attributes:
+  name: ext_aws_cost_report_compass
+  database_name: "aws"
+  schema_name: "compass"
+  type: "external table"
+  role: AWS_WRITER
+  partition_by: BILLING_PERIOD
+  columns:
+    - name: FILENAME
+      type: VARCHAR
+      as: METADATA$FILENAME
+    - name: BILLING_PERIOD
+      type: VARCHAR
+      as: "split_part(split_part(METADATA$FILENAME, '=', 2), '/', 1)"
+  options:
+    location: "@stage_aws_cost_report_compass"
+    file_format:
+      type: PARQUET
+    pattern: ".*CostStandardExport.*[.]parquet"
+    auto_refresh: false
+    refresh_on_create: true
+    comment: "External table for AWS Compass account cost reports from stage stage_aws_cost_report_compass"
+  asset_attributes:
+    description: "Snowflake external table for AWS Compass account cost report data."
+    automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
+    group_name: "aws_external_tables"
+    deps:
+      - "aws/compass/stage_aws_cost_report_compass"
