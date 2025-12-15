@@ -13,7 +13,8 @@ streams:
       where
         update_timestamp > coalesce({incremental_value}, to_timestamp('2025-09-20 03:07:35.929', 'YYYY-MM-DD HH24:MI:SS'))
       order by update_timestamp
-      limit 500000    primary_key: [id]
+      limit 500000
+    primary_key: [id]
     update_key: update_timestamp
     meta:
       dagster:
