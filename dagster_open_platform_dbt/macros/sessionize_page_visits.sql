@@ -92,6 +92,16 @@ session_utm_data as (
     where page_number_in_session = 1
 ),
 
+session_stats as (
+    select
+        session_id,
+        min(timestamp) as session_start_at,
+        max(timestamp) as session_end_at,
+        count(distinct domain) as number_domains_in_session
+    from page_sessions_numbered
+    group by session_id
+),
+
 {% if include_campaign_logic %}
 add_campaign_logic as (
     select 
@@ -103,6 +113,9 @@ add_campaign_logic as (
         su.session_campaign_content,
         su.session_utm_term,
         su.session_referrer,
+        ss.session_start_at,
+        ss.session_end_at,
+        ss.number_domains_in_session,
         case 
             -- Check if utm_campaign is numeric-only and use it if so
             when utm_campaign is not null and try_to_number(utm_campaign) is not null then utm_campaign
@@ -139,6 +152,7 @@ add_campaign_logic as (
     from page_sessions_numbered ps
     left join session_attribution sa on ps.session_id = sa.session_id
     left join session_utm_data su on ps.session_id = su.session_id
+    left join session_stats ss on ps.session_id = ss.session_id
 )
 
 select * from add_campaign_logic
@@ -153,10 +167,14 @@ final as (
         su.session_campaign_name,
         su.session_campaign_content,
         su.session_utm_term,
-        su.session_referrer
+        su.session_referrer,
+        ss.session_start_at,
+        ss.session_end_at,
+        ss.number_domains_in_session
     from page_sessions_numbered ps
     left join session_attribution sa on ps.session_id = sa.session_id
     left join session_utm_data su on ps.session_id = su.session_id
+    left join session_stats ss on ps.session_id = ss.session_id
 )
 
 select * from final
