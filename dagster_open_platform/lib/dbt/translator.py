@@ -79,7 +79,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
         schema = dbt_props["schema"].upper()
         name = dbt_props["name"].upper()
         url = f"{SNOWFLAKE_URL}/{schema}/table/{name}"
-        return {"url": dg.MetadataValue.url(url)}
+        return {"dagster/uri": dg.MetadataValue.url(url)}
 
     def _get_automation_condition_for_resource(
         self, dbt_props: Mapping[str, Any]
