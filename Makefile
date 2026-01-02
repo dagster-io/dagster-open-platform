@@ -43,7 +43,3 @@ ruff:
 
 pyright:
 	uv run --extra dev pyright
-
-update_erk:
-	uv tool install erk --from git+https://github.com/dagster-io/erk.git
-	erk kit sync -f
