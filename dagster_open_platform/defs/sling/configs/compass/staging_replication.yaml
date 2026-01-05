@@ -42,3 +42,15 @@ streams:
     primary_key: 'id'
     update_key: 'created_at'
     object: 'sling.compass_staging.referral_tokens'
+
+  public.org_channels:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'created_at'
+    object: 'sling.compass_staging.org_channels'
+  
+  public.bot_instances:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'updated_at'
+    object: 'sling.compass_staging.bot_instances'

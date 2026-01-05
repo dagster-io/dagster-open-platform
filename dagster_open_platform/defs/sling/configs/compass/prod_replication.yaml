@@ -48,3 +48,15 @@ streams:
     primary_key: 'id'
     update_key: 'created_at'
     object: 'sling.compass.org_users'
+
+  public.org_channels:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'created_at'
+    object: 'sling.compass.org_channels'
+  
+  public.bot_instances:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'updated_at'
+    object: 'sling.compass.bot_instances'
