@@ -42,6 +42,7 @@ dependencies = [
     "pyyaml",
     "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
     "snowflake-connector-python[secure-local-storage,pandas]",
+    "psycopg2-binary",
     "scoutos",
     "psutil>=7.0.0",
     "certifi==2025.1.31",
