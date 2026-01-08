@@ -25,7 +25,7 @@ log = dg.get_dagster_logger()
         "Note: The Snowflake table is replicated from Postgres via Sling."
     ),
     key=["snowflake", "py", "postgres_snowflake_comparison"],
-    automation_condition=dg.AutomationCondition.cron_tick_passed("0 2 * * *"),
+    automation_condition=dg.AutomationCondition.cron_tick_passed("0 6 * * *"),
 )
 def postgres_snowflake_comparison(
     context: dg.AssetExecutionContext,
