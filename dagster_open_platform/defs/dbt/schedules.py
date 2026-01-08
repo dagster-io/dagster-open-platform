@@ -1,3 +1,4 @@
+from calendar import monthrange
 from datetime import timedelta
 
 import dagster as dg
@@ -84,10 +85,18 @@ def defs():
         partitions_def=insights_partition,
     )
 
-    @dg.schedule(cron_schedule="0 2 1,15 * *", job=bimonthly_backfill_job)
+    @dg.schedule(cron_schedule="0 21 15,28-31 * *", job=bimonthly_backfill_job)
     def bimonthly_usage_org_backfill_schedule(context: dg.ScheduleEvaluationContext):
-        """Backfills usage_metrics_daily and organizations_by_day (with dependencies) for the last 31 days on the 1st and 15th of each month at 2am."""
-        end_date = context.scheduled_execution_time
+        """Backfills usage_metrics_daily and organizations_by_day (with dependencies) for the last 31 days on the 15th and last day of each month at 9pm."""
+        scheduled_time = context.scheduled_execution_time
+        day = scheduled_time.day
+        last_day_of_month = monthrange(scheduled_time.year, scheduled_time.month)[1]
+
+        # Only run on the 15th or the last day of the month
+        if day != 15 and day != last_day_of_month:
+            return
+
+        end_date = scheduled_time
         start_date = end_date - timedelta(days=31)
 
         yield dg.RunRequest(
