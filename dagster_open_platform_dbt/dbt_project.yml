@@ -23,6 +23,8 @@ models:
   dagster_open_platform:
     compass_dagster_plus_tables:
       +materialized: table
+    dwh_operations:
+      +materialized: table
     dwh_reporting:
       +materialized: table
     purina:
