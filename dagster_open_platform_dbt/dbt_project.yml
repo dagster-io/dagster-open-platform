@@ -23,6 +23,7 @@ models:
   dagster_open_platform:
     compass_dagster_plus_tables:
       +materialized: table
+      +snowflake_warehouse: product_operations_small_wh
     dwh_operations:
       +materialized: table
     dwh_reporting:
