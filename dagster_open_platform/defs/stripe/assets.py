@@ -94,7 +94,7 @@ def defs():
         cron_schedule="0 0 * * *",
         job=define_asset_job(
             name="stripe_data_sync_observe_job",
-            selection=AssetSelection.keys(*asset_keys_to_table_names.keys()),
+            selection=AssetSelection.assets(*asset_keys_to_table_names.keys()),
         ),
         default_status=DefaultScheduleStatus.RUNNING,
     )

@@ -41,7 +41,7 @@ def drop_old_database_clones(ctx: SensorEvaluationContext, snowflake: SnowflakeR
     last_cursor_time = (
         datetime.datetime.fromisoformat(ctx.cursor) if ctx.cursor else datetime.datetime(2012, 1, 1)
     )
-    now_time = datetime.datetime.utcnow()
+    now_time = datetime.datetime.now(datetime.UTC)
 
     recently_closed_prs = []
     pr_ids_to_drop = []

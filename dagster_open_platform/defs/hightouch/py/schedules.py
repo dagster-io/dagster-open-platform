@@ -6,7 +6,7 @@ from dagster.components import definitions
 # for more real time insights. All other assets will be synced via the daily dbt run.
 hightouch_syncs_job = dg.define_asset_job(
     name="hourly_hightouch_syncs_job",
-    selection=dg.AssetSelection.keys(
+    selection=dg.AssetSelection.assets(
         "hightouch_sync_salesforce_account",
         "hightouch_sync_salesforce_opportunity",
         "hightouch_sync_hubspot_company",

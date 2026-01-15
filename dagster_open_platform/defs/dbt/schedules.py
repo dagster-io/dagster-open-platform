@@ -78,8 +78,8 @@ def defs():
     bimonthly_backfill_job = dg.define_asset_job(
         name="bimonthly_usage_org_backfill_job",
         selection=(
-            dg.AssetSelection.keys(event_log_key).downstream()
-            & dg.AssetSelection.keys(usage_metrics_key, organizations_by_day_key).upstream()
+            dg.AssetSelection.assets(event_log_key).downstream()
+            & dg.AssetSelection.assets(usage_metrics_key, organizations_by_day_key).upstream()
             & dg.AssetSelection.kind("dbt")
         ),
         partitions_def=insights_partition,

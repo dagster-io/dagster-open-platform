@@ -22,10 +22,10 @@ compass_analytics_job = dg.define_asset_job(
         .required_multi_asset_neighbors()
         .materializable()
         | (
-            dg.AssetSelection.keys(compass_organizations_asset_key).upstream()
+            dg.AssetSelection.assets(compass_organizations_asset_key).upstream()
             & dg.AssetSelection.from_string('key:"*stg_segment_compass*"').downstream()
         )
-        | dg.AssetSelection.keys(compass_customer_id_exclusion_asset_key).upstream()
+        | dg.AssetSelection.assets(compass_customer_id_exclusion_asset_key).upstream()
     ),
     tags={"team": "devrel"},
 )
