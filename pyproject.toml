@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dagster-open-platform"
 version = "0.0.1"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "boto3",
-    "dbt-core<1.9",
-    "dbt-snowflake<1.9",
-    "dagster==1.12.3",
+    "dbt-core==1.11.1",
+    "dbt-snowflake==1.11.1",
+    "dagster==1.12.11",
     "dagster-dg-cli",
     "dagster-cloud",
     "dagster-cloud-cli",
@@ -19,7 +19,7 @@ dependencies = [
     "dagster-pipes",
     # integrations
     "dagster-aws",
-    "dagster-dbt==0.28.3", # synced with dagster above, backtracked when unpinned
+    "dagster-dbt==0.28.11", # synced with dagster above, backtracked when unpinned
     "dagster-dlt",
     "dagster-fivetran",
     "dagster-gcp",
@@ -37,7 +37,7 @@ dependencies = [
     "statsig",
     "gql[requests]",
     "dlt[snowflake,duckdb]==1.11.0",
-    "protobuf==4.25.3",
+    "protobuf==6.33.4",
     "pydantic",
     "pyyaml",
     "pyOpenSSL>=23.0.0", # https://dagsterlabs.slack.com/archives/C082K86U53Q/p1732735564080519
