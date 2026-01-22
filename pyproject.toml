@@ -51,6 +51,11 @@ dependencies = [
     "xgboost",
     "sling-mac-arm64; sys_platform == 'darwin'",
     "sling_linux_arm64; sys_platform == 'linux'",
+    "deepdiff>=8.6.1", # https://github.com/dagster-io/internal/security/dependabot/609
+    "urllib3>=2.6.3",
+    "aiohttp>=3.13.3",
+    "pyasn1>=0.6.2",
+    "filelock>=3.20.3",
 ]
 
 [project.optional-dependencies]
@@ -157,5 +162,3 @@ exclude = []
 
 reportPrivateImportUsage = false
 useLibraryCodeForTypes = false
-
-
