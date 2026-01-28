@@ -14,7 +14,7 @@ def get_environment() -> str:
 def get_database_for_environment(default_database: str = "PURINA") -> str:
     env = get_environment()
     if env == "BRANCH":
-        return f"PURINA_CLONE_{os.getenv('DAGSTER_CLOUD_PULL_REQUEST_ID')}"
+        return f"{default_database}_CLONE_{os.getenv('DAGSTER_CLOUD_PULL_REQUEST_ID')}"
     if env == "PROD":
         return default_database
     return "SANDBOX"
