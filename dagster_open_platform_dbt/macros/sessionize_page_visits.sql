@@ -97,7 +97,8 @@ session_stats as (
         session_id,
         min(timestamp) as session_start_at,
         max(timestamp) as session_end_at,
-        count(distinct domain) as number_domains_in_session
+        count(distinct domain) as number_domains_in_session,
+        array_agg(distinct domain) as domains_in_session
     from page_sessions_numbered
     group by session_id
 ),
@@ -116,6 +117,7 @@ add_campaign_logic as (
         ss.session_start_at,
         ss.session_end_at,
         ss.number_domains_in_session,
+        ss.domains_in_session,
         case 
             -- Check if utm_campaign is numeric-only and use it if so
             when utm_campaign is not null and try_to_number(utm_campaign) is not null then utm_campaign
@@ -170,7 +172,8 @@ final as (
         su.session_referrer,
         ss.session_start_at,
         ss.session_end_at,
-        ss.number_domains_in_session
+        ss.number_domains_in_session,
+        ss.domains_in_session
     from page_sessions_numbered ps
     left join session_attribution sa on ps.session_id = sa.session_id
     left join session_utm_data su on ps.session_id = su.session_id
