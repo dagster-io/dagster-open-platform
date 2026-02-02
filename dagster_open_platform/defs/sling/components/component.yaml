@@ -28,6 +28,11 @@ attributes:
     - name: runs
       shards: [main, shard1]
 
+    - name: audit_log
+      shards: [main, shard1]
+      last_update_freshness_check:
+        minutes: 30
+
 ---
 
 type: dagster_open_platform.lib.EgressReplicationComponent

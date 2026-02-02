@@ -1,0 +1,15 @@
+source: CLOUD_PRODUCTION_MAIN
+target: SLING_DB_MAIN
+defaults:
+  mode: incremental
+  object: '{stream_table}'
+  update_key: create_timestamp
+  source_options:
+    limit: 500000
+
+streams:
+  public.audit_log:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.audit_log
+    object: cloud_product.audit_log
