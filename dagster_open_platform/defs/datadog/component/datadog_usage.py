@@ -38,18 +38,18 @@ def datadog_usage(
     start_date = partition_window.start.date()
     end_date = partition_window.end.date()
 
-    # Format dates as YYYY-MM-DD for API (first day of month for start, last day for end)
-    start_month = start_date.strftime("%Y-%m-01")
-    end_month = end_date.strftime("%Y-%m-%d")
+    # Format dates as YYYY-MM-DD for API
+    start_date_str = start_date.strftime("%Y-%m-%d")
+    end_date_str = end_date.strftime("%Y-%m-%d")
 
-    context.log.info(f"Fetching Datadog billing data from {start_month} to {end_month}")
+    context.log.info(f"Fetching Datadog billing data from {start_date_str} to {end_date_str}")
 
     all_rows = []
 
     # Fetch historical cost data
     try:
         context.log.info("Fetching historical cost data...")
-        historical_data = datadog_billing.get_historical_cost(start_month, end_month)
+        historical_data = datadog_billing.get_historical_cost(start_date_str, end_date_str)
         context.log.info(f"Received historical cost data: {historical_data}")
 
         # Process historical cost data
