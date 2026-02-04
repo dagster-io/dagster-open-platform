@@ -1,5 +1,0 @@
-type: dagster_open_platform.lib.omni.component.DOPOmniComponent
-attributes:
-  workspace:
-    base_url: https://dagster.omniapp.co/
-    api_key: "{{ env('OMNI_API_KEY') }}"
