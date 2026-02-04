@@ -1,7 +1,7 @@
 import json
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from functools import cached_property
-from typing import Annotated, Any, Callable, Optional, Union
+from typing import Annotated, Any, Optional, TypeAlias, Union
 
 import dagster as dg
 import dagster.components as dg_components
@@ -14,7 +14,6 @@ from dagster_fivetran import (
     FivetranWorkspace,
     build_fivetran_assets_definitions,
 )
-from typing_extensions import TypeAlias
 
 
 def resolve_translation(context: dg_components.ResolutionContext, model):

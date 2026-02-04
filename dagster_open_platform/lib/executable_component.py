@@ -1,6 +1,7 @@
 import importlib
 import inspect
-from typing import Annotated, Callable, Literal, Optional, Union
+from collections.abc import Callable
+from typing import Annotated, Literal, Optional, TypeAlias, Union
 
 import dagster as dg
 from dagster.components import (
@@ -13,7 +14,6 @@ from dagster.components import (
     Resolver,
 )
 from dagster_shared import check
-from typing_extensions import TypeAlias
 
 
 class DailyPartitionDefinitionModel(Resolvable, Model):
