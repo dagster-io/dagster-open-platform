@@ -32,7 +32,7 @@ models:
       staging:
         +materialized: view
         cloud_product:
-          +tags: ["eu"]
+          +materialized: view
       model:
         +materialized: table
       metrics:
