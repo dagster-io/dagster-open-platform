@@ -94,7 +94,7 @@ def dagster_pypi_downloads(
                     f"Table {database}.{schema}.{table_name} does not exist yet, skipping delete"
                 )
 
-            success, number_chunks, rows_inserted, output = write_pandas(
+            _success, _number_chunks, rows_inserted, _output = write_pandas(
                 conn,
                 df,
                 table_name,

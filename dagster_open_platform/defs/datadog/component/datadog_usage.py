@@ -159,7 +159,7 @@ def datadog_usage(
         # Insert new data using pandas
         from snowflake.connector.pandas_tools import write_pandas
 
-        success, nchunks, nrows, _ = write_pandas(
+        success, _nchunks, nrows, _ = write_pandas(
             conn,
             df,
             table_name,
@@ -342,7 +342,7 @@ def datadog_estimated_usage(
         # Insert new data using pandas
         from snowflake.connector.pandas_tools import write_pandas
 
-        success, nchunks, nrows, _ = write_pandas(
+        success, _nchunks, nrows, _ = write_pandas(
             conn,
             df,
             table_name,

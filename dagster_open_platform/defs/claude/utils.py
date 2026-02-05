@@ -105,7 +105,7 @@ def load_dataframe_to_snowflake(
         # Write DataFrame to temp table
         from snowflake.connector.pandas_tools import write_pandas
 
-        success, nchunks, nrows, _ = write_pandas(
+        _success, _nchunks, nrows, _ = write_pandas(
             conn,
             df,
             temp_table_name,

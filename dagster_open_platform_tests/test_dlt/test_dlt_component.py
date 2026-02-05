@@ -13,7 +13,7 @@ def test_load_dlt_component(environment: str) -> None:
             "SOURCES__THINKIFIC__THINKIFIC__THINKIFIC_API_KEY": "bar",
         }
     ):
-        component, defs = get_component_defs_within_project(
+        _component, defs = get_component_defs_within_project(
             project_root=Path(__file__).parent.parent.parent,
             component_path="dlt/component",
         )

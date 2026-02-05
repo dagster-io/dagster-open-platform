@@ -69,7 +69,7 @@ def dagster_pypi_downloads(
 
             context.log.info(f"Deleted existing data between {start_week} and {end_week}")
 
-            success, number_chunks, rows_inserted, output = write_pandas(
+            _success, _number_chunks, rows_inserted, _output = write_pandas(
                 conn,
                 df,
                 table_name,
