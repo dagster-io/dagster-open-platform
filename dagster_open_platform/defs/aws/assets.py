@@ -173,7 +173,7 @@ def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource)
                     dagster_object,
                     dagster_object_output_base_path,
                     encode="utf-8",
-                    preprocess=lambda x: json.dumps(x),
+                    preprocess=json.dumps,
                     chunk_size=DAGSTER_OBJECT_CHUNK_SIZE,
                     extension=".json",
                 )
