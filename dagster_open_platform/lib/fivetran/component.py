@@ -83,7 +83,9 @@ class FivetranComponent(Component, Model, Resolvable):
         return {
             "hourly_if_not_in_progress": dg.AutomationCondition.cron_tick_passed("0 * * * *")
             & ~dg.AutomationCondition.in_progress(),
-            "group_from_db_and_schema": lambda props: f"fivetran_{'_'.join(props.table.split('.')[:-1])}",
+            "group_from_db_and_schema": lambda props: (
+                f"fivetran_{'_'.join(props.table.split('.')[:-1])}"
+            ),
         }
 
     def build_defs(self, context: ComponentLoadContext) -> dg.Definitions:
