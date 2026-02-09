@@ -80,6 +80,16 @@ tests = [
 [tool.setuptools.packages.find]
 exclude = ["dagster_open_platform_tests"]
 
+# setuptools 82 removed pkg_resources, breaking third-party deps that still use it
+# at build time (flatdict via sprocketship->absql) or runtime. Pin until they migrate.
+[tool.uv]
+constraint-dependencies = ["setuptools<82"]
+build-constraint-dependencies = ["setuptools<82"]
+# Override flatdict version to avoid build issues with 4.0.1
+# flatdict 4.0.1 has a broken build system that doesn't declare setuptools as a build dependency
+# Pin to 4.0.0 which might have proper build system
+override-dependencies = ["flatdict==4.0.0"]
+
 [tool.uv.sources]
 erk = { git = "https://github.com/dagster-io/erk.git", rev = "master" }
 

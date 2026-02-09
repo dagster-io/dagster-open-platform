@@ -6,6 +6,14 @@ resolution-markers = [
     "python_full_version < '3.13'",
 ]
 
+[options]
+prerelease-mode = "allow"
+
+[manifest]
+constraints = [{ name = "setuptools", specifier = "<82" }]
+overrides = [{ name = "flatdict", specifier = "==4.0.0" }]
+build-constraints = [{ name = "setuptools", specifier = "<82" }]
+
 [[package]]
 name = "absql"
 version = "0.6.2"
@@ -1277,9 +1285,9 @@ wheels = [
 
 [[package]]
 name = "flatdict"
-version = "4.0.1"
+version = "4.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/3e/0d/424de6e5612f1399ff69bf86500d6a62ff0a4843979701ae97f120c7f1fe/flatdict-4.0.1.tar.gz", hash = "sha256:cd32f08fd31ed21eb09ebc76f06b6bd12046a24f77beb1fd0281917e47f26742", size = 8341, upload-time = "2020-02-13T19:16:14.3Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1c/b9/d230fe2bc5d14322fdf9b8df53b4e2902230d8a66e24cc48eeb46b29fe29/flatdict-4.0.0.tar.gz", hash = "sha256:214eb3904d932d0b1809223249ee46b74e3b31fd49ee1cbe81987a7b27733d02", size = 8160, upload-time = "2020-02-12T16:28:40.62Z" }
 
 [[package]]
 name = "frozenlist"
