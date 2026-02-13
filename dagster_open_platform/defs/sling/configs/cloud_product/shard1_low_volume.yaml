@@ -8,6 +8,8 @@ defaults:
 streams:
 
   public.jobs:
+    columns:
+      job_body: json
     meta:
       dagster:
         asset_key: sling.cloud_product_shard1.jobs
