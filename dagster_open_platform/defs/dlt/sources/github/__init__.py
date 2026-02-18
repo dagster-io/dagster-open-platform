@@ -2,7 +2,6 @@
 
 import urllib.parse
 from collections.abc import Iterator, Mapping, Sequence
-from typing import Optional
 
 import dlt
 from dlt.common.typing import TDataItems
@@ -16,7 +15,7 @@ def github_reactions(
     repos: Mapping[str, Sequence[str]],
     access_token: str = dlt.secrets.value,
     items_per_page: int = 100,
-    max_items: Optional[int] = None,
+    max_items: int | None = None,
 ) -> Sequence[DltResource]:
     """Get reactions associated with issues, pull requests and comments in the repo `name` with owner `owner`.
 
@@ -87,7 +86,7 @@ def github_reactions(
 
 
 @dlt.source(max_table_nesting=2)
-def github_repo_events(owner: str, name: str, access_token: Optional[str] = None) -> DltResource:
+def github_repo_events(owner: str, name: str, access_token: str | None = None) -> DltResource:
     """Gets events for repository `name` with owner `owner` incrementally.
 
     This source contains a single resource `repo_events` that gets given repository's events and dispatches them to separate tables with names based on event type.

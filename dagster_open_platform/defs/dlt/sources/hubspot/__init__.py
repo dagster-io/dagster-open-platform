@@ -19,7 +19,7 @@ The source also supports enabling Web Analytics Events for each endpoint by sett
 
 import datetime
 from collections.abc import Iterator, Sequence
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 from urllib.parse import quote
 
 import dlt
@@ -48,7 +48,7 @@ def crm_objects(
     object_type: str,
     api_key: str = dlt.secrets.value,
     include_history: bool = False,
-    props: Optional[Sequence[str]] = None,
+    props: Sequence[str] | None = None,
     include_custom_props: bool = True,
 ) -> Iterator[TDataItems]:
     """Building blocks for CRM resources."""

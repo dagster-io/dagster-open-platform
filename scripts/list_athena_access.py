@@ -30,7 +30,6 @@ import argparse
 import json
 import os
 import sys
-from typing import Optional
 
 import boto3
 
@@ -125,7 +124,7 @@ class AthenaAccessChecker:
         except (IndexError, AttributeError):
             return arn
 
-    def list_databases(self, prefix: Optional[str] = None) -> list[str]:
+    def list_databases(self, prefix: str | None = None) -> list[str]:
         """List all accessible databases.
 
         Args:
@@ -171,7 +170,7 @@ class AthenaAccessChecker:
 
         return sorted(tables)
 
-    def get_table_info(self, database: str, table: str) -> Optional[dict]:
+    def get_table_info(self, database: str, table: str) -> dict | None:
         """Get detailed information about a table.
 
         Args:
@@ -196,7 +195,7 @@ class AthenaAccessChecker:
             return None
 
 
-def print_text_output(checker: AthenaAccessChecker, database_prefix: Optional[str], verbose: bool):
+def print_text_output(checker: AthenaAccessChecker, database_prefix: str | None, verbose: bool):
     """Print database and table information in human-readable format.
 
     Args:
@@ -261,7 +260,7 @@ def print_text_output(checker: AthenaAccessChecker, database_prefix: Optional[st
     print(f"Summary: {len(databases)} database(s), {total_tables} table(s)")
 
 
-def print_json_output(checker: AthenaAccessChecker, database_prefix: Optional[str], verbose: bool):
+def print_json_output(checker: AthenaAccessChecker, database_prefix: str | None, verbose: bool):
     """Print database and table information in JSON format.
 
     Args:

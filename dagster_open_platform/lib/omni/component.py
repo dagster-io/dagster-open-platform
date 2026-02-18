@@ -1,5 +1,3 @@
-from typing import Optional
-
 import dagster as dg
 from dagster_dbt import get_asset_key_for_model
 from dagster_omni import OmniComponent
@@ -12,7 +10,7 @@ class DOPOmniComponent(OmniComponent):
 
     def get_asset_spec(
         self, context: dg.ComponentLoadContext, data: OmniTranslatorData
-    ) -> Optional[dg.AssetSpec]:
+    ) -> dg.AssetSpec | None:
         from dagster_open_platform.defs.dbt.assets import get_dbt_non_partitioned_models
 
         base_spec = super().get_asset_spec(context, data)

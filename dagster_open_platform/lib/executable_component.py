@@ -1,7 +1,7 @@
 import importlib
 import inspect
 from collections.abc import Callable
-from typing import Annotated, Literal, Optional, TypeAlias
+from typing import Annotated, Literal, TypeAlias
 
 import dagster as dg
 from dagster.components import (
@@ -107,11 +107,11 @@ class ExecutableComponent(Component, Resolvable, Model):
     """
 
     # inferred from the function name if not provided
-    name: Optional[str] = None
-    partitions_def: Optional[ResolvedPartitionDefinition] = None
-    assets: Optional[list[ResolvedAssetSpec]] = None
+    name: str | None = None
+    partitions_def: ResolvedPartitionDefinition | None = None
+    assets: list[ResolvedAssetSpec] | None = None
     execute_fn: ResolvableCallable
-    backfill_policy: Optional[ResolvedBackfillPolicy] = None
+    backfill_policy: ResolvedBackfillPolicy | None = None
 
     def get_resource_keys(self) -> set[str]:
         return set(get_resources_from_callable(self.execute_fn))

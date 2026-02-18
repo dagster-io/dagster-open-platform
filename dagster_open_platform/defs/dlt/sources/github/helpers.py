@@ -1,5 +1,4 @@
 from collections.abc import Iterator, Mapping, Sequence
-from typing import Optional
 
 from dlt.common.typing import DictStrAny, StrAny
 from dlt.common.utils import chunks
@@ -23,7 +22,7 @@ session = Client(
 ).session
 
 
-def _get_auth_header(access_token: Optional[str]) -> StrAny:
+def _get_auth_header(access_token: str | None) -> StrAny:
     if access_token:
         return {"Authorization": f"Bearer {access_token}"}
     else:
@@ -31,7 +30,7 @@ def _get_auth_header(access_token: Optional[str]) -> StrAny:
         return {}
 
 
-def get_rest_pages(access_token: Optional[str], query: str) -> Iterator[list[StrAny]]:
+def get_rest_pages(access_token: str | None, query: str) -> Iterator[list[StrAny]]:
     def _request(page_url: str) -> requests.Response:
         r = session.get(page_url, headers=_get_auth_header(access_token))
         print(f"got page {page_url}, requests left: " + r.headers["x-ratelimit-remaining"])
@@ -54,7 +53,7 @@ def get_reactions_data(
     repos: Mapping[str, Sequence[str]],
     access_token: str,
     items_per_page: int,
-    max_items: Optional[int],
+    max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
     for owner, repo_list in repos.items():
         for name in repo_list:
@@ -96,7 +95,7 @@ def get_stargazers_data(
     repos: Mapping[str, Sequence[str]],
     access_token: str,
     items_per_page: int,
-    max_items: Optional[int],
+    max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
     for owner, repo_list in repos.items():
         for name in repo_list:
@@ -122,7 +121,7 @@ def get_forks_data(
     repos: Mapping[str, Sequence[str]],
     access_token: str,
     items_per_page: int,
-    max_items: Optional[int],
+    max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
     for owner, repo_list in repos.items():
         for name in repo_list:
@@ -196,7 +195,7 @@ def _get_graphql_pages(
     query: str,
     variables: DictStrAny,
     node_type: str,
-    max_items: Optional[int],
+    max_items: int | None,
     top_level: str,
 ) -> Iterator[list[DictStrAny]]:
     items_count = 0

@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Annotated, Any, Optional
+from typing import Annotated, Any
 
 import dagster as dg
 import dagster.components as dg_components
@@ -49,25 +49,25 @@ ResolvedStatement = Annotated[
 
 
 class SnowflakeObjectOptions(pydantic.BaseModel, dg_components.Resolvable):
-    location: Annotated[Optional[str], Field(default=None, description="Location of the object")]
-    url: Annotated[Optional[str], Field(default=None, description="URL of the object")]
+    location: Annotated[str | None, Field(default=None, description="Location of the object")]
+    url: Annotated[str | None, Field(default=None, description="URL of the object")]
     storage_integration: Annotated[
-        Optional[str], Field(default=None, description="Storage integration of the object")
+        str | None, Field(default=None, description="Storage integration of the object")
     ]
     directory_enabled: Annotated[
-        Optional[bool], Field(default=None, description="Directory enabled of the object")
+        bool | None, Field(default=None, description="Directory enabled of the object")
     ]
     file_format: Annotated[dict[str, Any], Field(..., description="File format of the object")]
     directory: Annotated[
-        Optional[dict[str, Any]], Field(default=None, description="Directory of the object")
+        dict[str, Any] | None, Field(default=None, description="Directory of the object")
     ]
     auto_refresh: Annotated[
-        Optional[bool], Field(default=None, description="Auto refresh of the object")
+        bool | None, Field(default=None, description="Auto refresh of the object")
     ]
-    comment: Annotated[Optional[str], Field(default=None, description="Comment of the object")]
-    pattern: Annotated[Optional[str], Field(default=None, description="Pattern of the object")]
+    comment: Annotated[str | None, Field(default=None, description="Comment of the object")]
+    pattern: Annotated[str | None, Field(default=None, description="Pattern of the object")]
     refresh_on_create: Annotated[
-        Optional[bool], Field(default=None, description="Refresh on create of the object")
+        bool | None, Field(default=None, description="Refresh on create of the object")
     ]
 
     # add dictionary .items() function, return all attributes
@@ -84,17 +84,17 @@ class SnowflakeCreateOrRefreshComponent(
     type: Annotated[str, Field(..., description="Type of the object")]
     role: Annotated[str, Field(..., description="Role of the object")]
     columns: Annotated[
-        Optional[list[dict[str, Any]]], Field(default=None, description="Columns of the object")
+        list[dict[str, Any]] | None, Field(default=None, description="Columns of the object")
     ]
     partition_by: Annotated[
-        Optional[str], Field(default=None, description="Partition by of the object")
+        str | None, Field(default=None, description="Partition by of the object")
     ]
     asset_attributes: Annotated[
-        Optional[ResolvedAssetAttributes],
+        ResolvedAssetAttributes | None,
         Field(default=None, description="Asset attributes to apply to the created assets"),
     ]
     options: Annotated[
-        Optional[SnowflakeObjectOptions],
+        SnowflakeObjectOptions | None,
         Field(
             default=None,
             description="Configuration options for the Snowflake object being created or refreshed",
@@ -203,7 +203,7 @@ class SnowflakeCreateOrRefreshComponent(
         context: ComponentLoadContext,
         template_variables: dict[str, str],
         statement_text: str | None = None,
-        statement_file: Optional[str] = None,
+        statement_file: str | None = None,
     ) -> str:
         query_text = (
             statement_text

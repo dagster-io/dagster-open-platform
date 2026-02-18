@@ -1,6 +1,6 @@
 from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
-from typing import Annotated, Any, Optional
+from typing import Annotated, Any
 
 import dagster_shared.check as check
 from dagster import AssetKey, Definitions
@@ -11,7 +11,7 @@ from dagster_sling import DagsterSlingTranslator
 
 
 class EgressReplicationSlingTranslator(DagsterSlingTranslator):
-    def __init__(self, deps: Sequence[AssetKey], asset_key_prefix: Optional[str] = None):
+    def __init__(self, deps: Sequence[AssetKey], asset_key_prefix: str | None = None):
         super().__init__()
         self.deps = deps
         self.asset_key_prefix = asset_key_prefix
@@ -40,7 +40,7 @@ class EgressReplicationSlingTranslator(DagsterSlingTranslator):
 class EgressReplicationSpec(Resolvable, Model):
     name: str
     deps: Sequence[ResolvedAssetKey]
-    asset_key_prefix: Optional[str] = None
+    asset_key_prefix: str | None = None
 
 
 class EgressReplicationComponent(Component, Resolvable, Model):

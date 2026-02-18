@@ -3,7 +3,6 @@ import json
 from collections.abc import Sequence
 from datetime import timedelta
 from functools import cache
-from typing import Optional
 
 import dagster as dg
 from dagster.components import definitions
@@ -26,8 +25,8 @@ logger = dg.get_dagster_logger()
 
 @cache
 def get_dbt_non_partitioned_models(
-    custom_translator: Optional[DagsterDbtTranslator] = None,
-    additional_selectors: Optional[Sequence[str]] = None,
+    custom_translator: DagsterDbtTranslator | None = None,
+    additional_selectors: Sequence[str] | None = None,
 ):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
@@ -64,8 +63,8 @@ class DbtConfig(dg.Config):
 
 @cache
 def get_dbt_partitioned_models(
-    custom_translator: Optional[DagsterDbtTranslator] = None,
-    additional_selectors: Optional[Sequence[str]] = None,
+    custom_translator: DagsterDbtTranslator | None = None,
+    additional_selectors: Sequence[str] | None = None,
 ):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
@@ -111,8 +110,8 @@ def get_dbt_partitioned_models(
 
 @cache
 def get_dbt_snapshot_models(
-    custom_translator: Optional[DagsterDbtTranslator] = None,
-    additional_selectors: Optional[Sequence[str]] = None,
+    custom_translator: DagsterDbtTranslator | None = None,
+    additional_selectors: Sequence[str] | None = None,
 ):
     @dbt_assets(
         manifest=dagster_open_platform_dbt_project().manifest_path,

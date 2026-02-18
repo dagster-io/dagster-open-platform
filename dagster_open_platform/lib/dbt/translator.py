@@ -1,6 +1,6 @@
 import os
 from collections.abc import Mapping
-from typing import Any, Optional
+from typing import Any
 
 import dagster as dg
 from dagster_dbt import DagsterDbtTranslator, DagsterDbtTranslatorSettings, DbtProject
@@ -98,7 +98,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
         self,
         manifest: Mapping[str, Any],
         unique_id: str,
-        project: Optional[DbtProject],
+        project: DbtProject | None,
     ) -> dg.AssetSpec:
         """Build the asset spec by applying all customizations via helper methods."""
         base_spec = super().get_asset_spec(manifest, unique_id, project)
@@ -133,7 +133,7 @@ class RegionPrefixedDbtTranslator(CustomDagsterDbtTranslator):
         self,
         manifest: Mapping[str, Any],
         unique_id: str,
-        project: Optional[DbtProject],
+        project: DbtProject | None,
     ) -> dg.AssetSpec:
         base_spec = super().get_asset_spec(manifest, unique_id, project)
 

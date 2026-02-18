@@ -1,13 +1,13 @@
 import datetime
 import os
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 import requests
 from dagster import RunRequest, SensorEvaluationContext, SkipReason, sensor
 from dagster_snowflake import SnowflakeResource
 
 
-def _query_gh_api(method: str, endpoint: str, data: Optional[Any] = None) -> Any:
+def _query_gh_api(method: str, endpoint: str, data: Any | None = None) -> Any:
     """Queries the GitHub API with the given method and endpoint, and returns the JSON response."""
     headers = {
         "Accept": "application/vnd.github.v3+json",

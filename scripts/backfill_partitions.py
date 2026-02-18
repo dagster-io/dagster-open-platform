@@ -44,7 +44,7 @@ import argparse
 import json
 import os
 import sys
-from typing import Any, Optional
+from typing import Any
 from urllib.parse import urljoin
 
 import requests
@@ -53,7 +53,7 @@ import requests
 class DagsterAPIClient:
     """Client for interacting with Dagster's GraphQL API."""
 
-    def __init__(self, host: str, port: int = 3000, api_token: Optional[str] = None):
+    def __init__(self, host: str, port: int = 3000, api_token: str | None = None):
         """Initialize the Dagster API client.
 
         Args:
@@ -65,9 +65,7 @@ class DagsterAPIClient:
         self.graphql_url = urljoin(self.base_url, "/graphql")
         self.api_token = api_token
 
-    def execute_query(
-        self, query: str, variables: Optional[dict[str, Any]] = None
-    ) -> dict[str, Any]:
+    def execute_query(self, query: str, variables: dict[str, Any] | None = None) -> dict[str, Any]:
         """Execute a GraphQL query against the Dagster API.
 
         Args:
@@ -156,7 +154,7 @@ class DagsterAPIClient:
         self,
         asset_key: list[str],
         partition_keys: list[str],
-        title: Optional[str] = None,
+        title: str | None = None,
     ) -> str:
         """Launch a backfill run for specific partitions of an asset.
 

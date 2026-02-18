@@ -1,6 +1,6 @@
 from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import dagster_shared.check as check
 from dagster import AssetKey, AssetSpec
@@ -14,7 +14,7 @@ def build_sling_assets(
     config_path: Path,
     build_deps: bool = True,
     group_name: str | None = None,
-    translator: Optional[DagsterSlingTranslator] = None,
+    translator: DagsterSlingTranslator | None = None,
 ):
     @sling_assets(
         name=name,

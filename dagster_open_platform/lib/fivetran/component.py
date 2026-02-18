@@ -1,7 +1,7 @@
 import json
 from collections.abc import Callable, Mapping
 from functools import cached_property
-from typing import Annotated, Any, Optional, TypeAlias
+from typing import Annotated, Any, TypeAlias
 
 import dagster as dg
 import dagster.components as dg_components
@@ -69,8 +69,8 @@ class FivetranComponent(Component, Model, Resolvable):
             )
         ),
     ]
-    translation: Optional[ResolvedTranslationFn] = None
-    connection_setup_tests_schedule: Optional[str] = None
+    translation: ResolvedTranslationFn | None = None
+    connection_setup_tests_schedule: str | None = None
 
     @cached_property
     def translator(self) -> DagsterFivetranTranslator:

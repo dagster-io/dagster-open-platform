@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 
 class ExtractionStatus(Enum):
@@ -12,7 +12,7 @@ class ExtractionStatus(Enum):
     TARGET_ERROR = "target_error"
     COMPLETE = "complete"
 
-    def discovery_status(self) -> Optional[int]:
+    def discovery_status(self) -> int | None:
         if self in {
             ExtractionStatus.TAP,
             ExtractionStatus.TAP_ERROR,
@@ -26,7 +26,7 @@ class ExtractionStatus(Enum):
         else:
             return None
 
-    def tap_status(self) -> Optional[int]:
+    def tap_status(self) -> int | None:
         if self in {
             ExtractionStatus.TARGET,
             ExtractionStatus.TARGET_ERROR,
@@ -38,7 +38,7 @@ class ExtractionStatus(Enum):
         else:
             return None
 
-    def target_status(self) -> Optional[int]:
+    def target_status(self) -> int | None:
         if self in {
             ExtractionStatus.COMPLETE,
         }:

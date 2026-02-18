@@ -1,7 +1,7 @@
 from collections.abc import Iterable, Mapping, Sequence
 from datetime import timedelta
 from pathlib import Path
-from typing import Annotated, Any, Optional
+from typing import Annotated, Any
 
 import dagster_shared.check as check
 from dagster import (
@@ -22,7 +22,7 @@ class ProdDbReplicationsSlingTranslator(DagsterSlingTranslator):
         self,
         cron_schedule: str = "*/5 * * * *",
         shard_name: str = "main",
-        asset_key_prefix: Optional[str] = None,
+        asset_key_prefix: str | None = None,
     ):
         super().__init__()
         self.cron_schedule = cron_schedule
@@ -68,8 +68,8 @@ class DopReplicationSpec(Resolvable, Model):
     name: str
     shards: Sequence[str]
     cron_schedule: str = "*/5 * * * *"
-    last_update_freshness_check: Optional[Mapping[str, int]] = None
-    asset_key_prefix: Optional[str] = None
+    last_update_freshness_check: Mapping[str, int] | None = None
+    asset_key_prefix: str | None = None
 
 
 class ProdDbReplicationsComponent(Component, Resolvable, Model):

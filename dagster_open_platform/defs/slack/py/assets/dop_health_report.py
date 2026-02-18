@@ -5,7 +5,7 @@ asset health reports to the #bot-purina Slack channel when materialized.
 """
 
 from collections import defaultdict
-from typing import Any, Optional
+from typing import Any
 
 import dagster as dg
 import requests
@@ -98,7 +98,7 @@ class DagsterHealthReportConfig(ConfigurableResource):
     deployment_url: str | None = dg.EnvVar("DOP_HEALTH_REPORT_DEPLOYMENT_URL").get_value()
     dagster_token: str | None = dg.EnvVar("DOP_HEALTH_REPORT_DAGSTER_TOKEN").get_value()
     slack_webhook_url: str | None = dg.EnvVar("DOP_HEALTH_REPORT_SLACK_WEBHOOK_URL").get_value()
-    code_location: Optional[str] = dg.EnvVar("DOP_HEALTH_REPORT_CODE_LOCATION").get_value()
+    code_location: str | None = dg.EnvVar("DOP_HEALTH_REPORT_CODE_LOCATION").get_value()
 
 
 def create_dagster_client(deployment_url: str, token: str) -> DagsterGraphQLClient:
@@ -121,9 +121,7 @@ def fetch_asset_health_data(client: DagsterGraphQLClient) -> dict[str, Any]:
         raise Exception(f"Failed to fetch asset health data: {e}")
 
 
-def analyze_asset_health(
-    data: dict[str, Any], code_location: Optional[str] = None
-) -> dict[str, Any]:
+def analyze_asset_health(data: dict[str, Any], code_location: str | None = None) -> dict[str, Any]:
     """Analyze the asset health data and return summary statistics."""
     if "assetsOrError" not in data:
         raise Exception("Invalid response format")
@@ -246,7 +244,7 @@ def analyze_asset_health(
 
 
 def format_slack_report(
-    stats: dict[str, Any], code_location: Optional[str] = None, deployment_url: Optional[str] = None
+    stats: dict[str, Any], code_location: str | None = None, deployment_url: str | None = None
 ) -> dict[str, Any]:
     """Format the asset health statistics into a Slack message."""
     # Build blocks for the message

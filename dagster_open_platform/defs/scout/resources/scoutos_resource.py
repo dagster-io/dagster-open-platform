@@ -1,7 +1,7 @@
 import datetime
 import json
 from collections.abc import Generator
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from dagster import ConfigurableResource, Definitions, EnvVar, get_dagster_logger
@@ -73,7 +73,7 @@ class ScoutosResource(ConfigurableResource):
         workflow_id: str,
         startdate: datetime.datetime,
         enddate: datetime.datetime,
-        cursor: Optional[str] = None,
+        cursor: str | None = None,
     ) -> Generator[dict[str, Any], None, None]:
         """Get runs for a specific workflow using the ScoutOS SDK."""
         client = self._get_client()
