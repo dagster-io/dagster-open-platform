@@ -102,12 +102,11 @@ def osi_yaml_to_snowflake_semantic_view_ddl(
 
     def _field_referenced_in_metrics(alias: str, fname: str) -> bool:
         """Return True only if fname appears as a qualified column ref (alias.fname)
-        or unqualified word-boundary match in any metric expression."""
+        or unqualified word-boundary match in any metric expression.
+        """
         qualified = re.compile(rf"\b{re.escape(alias)}\.{re.escape(fname)}\b")
         unqualified = re.compile(rf"\b{re.escape(fname)}\b")
-        return any(
-            qualified.search(mex) or unqualified.search(mex) for mex in metric_expressions
-        )
+        return any(qualified.search(mex) or unqualified.search(mex) for mex in metric_expressions)
 
     fact_lines: list[str] = []
     dimension_lines: list[str] = []
