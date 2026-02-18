@@ -1,6 +1,5 @@
 import os
 from collections.abc import Iterator
-from typing import Union
 
 import dagster as dg
 import pandas as pd
@@ -25,7 +24,7 @@ from snowflake.connector.pandas_tools import write_pandas
 )
 def member_metrics(
     slack: SlackResource, snowflake: SnowflakeResource
-) -> Iterator[Union[dg.MaterializeResult, dg.AssetCheckResult]]:
+) -> Iterator[dg.MaterializeResult | dg.AssetCheckResult]:
     client = slack.get_client()
     # The Dagster Slack resource doesn't support setting headers
     client.headers = {"cookie": os.getenv("SLACK_ANALYTICS_COOKIE")}

@@ -1,7 +1,7 @@
 import json
 from collections.abc import Callable, Mapping
 from functools import cached_property
-from typing import Annotated, Any, Optional, TypeAlias, Union
+from typing import Annotated, Any, Optional, TypeAlias
 
 import dagster as dg
 import dagster.components as dg_components
@@ -36,7 +36,7 @@ ResolvedTranslationFn: TypeAlias = Annotated[
     TranslationFn,
     dg_components.Resolver(
         resolve_translation,
-        model_field_type=Union[str, dg_components.AssetAttributesModel],  # type: ignore
+        model_field_type=str | dg_components.AssetAttributesModel,  # type: ignore
     ),
 ]
 

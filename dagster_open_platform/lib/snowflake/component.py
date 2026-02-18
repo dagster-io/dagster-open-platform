@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Annotated, Any, Optional, Union
+from typing import Annotated, Any, Optional
 
 import dagster as dg
 import dagster.components as dg_components
@@ -43,8 +43,8 @@ class StatementFile(dg_components.Model):
 
 
 ResolvedStatement = Annotated[
-    Union[str, StatementFile],
-    dg_components.Resolver(lambda ctx, stmt: stmt, model_field_type=Union[str, StatementFile]),  # type: ignore
+    str | StatementFile,
+    dg_components.Resolver(lambda ctx, stmt: stmt, model_field_type=str | StatementFile),  # type: ignore
 ]
 
 

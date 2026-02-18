@@ -1,7 +1,7 @@
 import importlib
 import inspect
 from collections.abc import Callable
-from typing import Annotated, Literal, Optional, TypeAlias, Union
+from typing import Annotated, Literal, Optional, TypeAlias
 
 import dagster as dg
 from dagster.components import (
@@ -28,7 +28,9 @@ class MonthlyPartitionDefinitionModel(Resolvable, Model):
     end_offset: int = 0
 
 
-PartitionDefinitionModel = Union[DailyPartitionDefinitionModel, MonthlyPartitionDefinitionModel]
+PartitionDefinitionModel: TypeAlias = (
+    DailyPartitionDefinitionModel | MonthlyPartitionDefinitionModel
+)
 
 
 def resolve_backfill_policy(context: ResolutionContext, model: str) -> dg.BackfillPolicy:
@@ -67,7 +69,7 @@ def resolve_partition_definition(
 
 
 ResolvedPartitionDefinition: TypeAlias = Annotated[
-    Union[dg.DailyPartitionsDefinition, dg.MonthlyPartitionsDefinition],
+    dg.DailyPartitionsDefinition | dg.MonthlyPartitionsDefinition,
     Resolver(
         resolve_partition_definition,
         model_field_type=PartitionDefinitionModel,  # type: ignore
