@@ -6,9 +6,6 @@ resolution-markers = [
     "python_full_version < '3.13'",
 ]
 
-[options]
-prerelease-mode = "allow"
-
 [manifest]
 constraints = [{ name = "setuptools", specifier = "<82" }]
 overrides = [{ name = "flatdict", specifier = "==4.0.0" }]

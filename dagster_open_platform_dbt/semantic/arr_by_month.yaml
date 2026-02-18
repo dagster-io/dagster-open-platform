@@ -1,0 +1,195 @@
+version: "1.0"
+
+semantic_model:
+  - name: arr_by_month
+    description: >
+      One row per contract per month showing Annual Recurring Revenue (ARR).
+      Use this model to analyze ARR trends, contract lifecycles, and revenue
+      by account, pricing model, opportunity type, or fiscal period.
+
+    datasets:
+      - name: arr_by_month
+        source: DWH_REPORTING.BUSINESS_BY_DAY.ARR_BY_MONTH
+        primary_key:
+          - contract_id
+          - arr_month
+
+        fields:
+          # ── Identifiers ───────────────────────────────────────────────────
+          - name: contract_id
+            description: Unique identifier for the contract
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "contract_id"
+
+          - name: account_id
+            description: Salesforce account identifier associated with this contract
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "account_id"
+
+          - name: opportunity_id
+            description: Salesforce opportunity identifier associated with this contract
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "opportunity_id"
+
+          - name: contract_number
+            description: Human-readable contract number from Salesforce
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "contract_number"
+
+          # ── Time dimensions ───────────────────────────────────────────────
+          - name: arr_month
+            description: Month (truncated to first of month) for which this ARR row applies
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "arr_month"
+            dimension:
+              is_time: true
+
+          # ── Categorical dimensions ─────────────────────────────────────────
+          - name: account_name
+            description: Name of the Salesforce account
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "account_name"
+            ai_context:
+              synonyms: ["customer", "company", "organization"]
+
+          - name: opportunity_name
+            description: Name of the associated Salesforce opportunity
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "opportunity_name"
+
+          - name: opportunity_type
+            description: "Type of opportunity: new business, expansion, renewal, etc."
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "opportunity_type"
+            ai_context:
+              synonyms: ["deal type", "contract type"]
+
+          - name: billed_thru
+            description: Date through which the contract has been billed
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "billed_thru"
+
+          - name: fiscal_year
+            description: Fiscal year corresponding to arr_month
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "fiscal_year"
+            ai_context:
+              synonyms: ["FY", "financial year"]
+
+          - name: fiscal_quarter
+            description: Fiscal quarter number (1–4) corresponding to arr_month
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "fiscal_quarter"
+            ai_context:
+              synonyms: ["FQ", "quarter"]
+
+          - name: fiscal_quarter_name
+            description: "Fiscal quarter label (e.g., Q1 FY2025)"
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "fiscal_quarter_name"
+
+          # ── Numeric fields ─────────────────────────────────────────────────
+          - name: arr
+            description: Annual recurring revenue for this contract in this month (USD)
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "arr"
+            ai_context:
+              synonyms: ["annual recurring revenue", "revenue", "MRR * 12"]
+
+          - name: cloud_credits_contracted
+            description: Number of cloud credits included in this contract
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "cloud_credits_contracted"
+
+          - name: contract_term
+            description: Contract term length in months
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "contract_term"
+
+          # ── Boolean flags ─────────────────────────────────────────────────
+          - name: is_active_contract
+            description: True if the contract is currently active
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "is_active_contract"
+
+          - name: is_first_contract
+            description: True if this is the earliest contract for the account
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "is_first_contract"
+
+          - name: is_first_month_of_contract
+            description: True if arr_month is the first month of this contract
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "is_first_month_of_contract"
+
+          - name: is_last_month_of_contract
+            description: True if arr_month is the final month of this contract
+            expression:
+              dialects:
+                - dialect: Snowflake
+                  expression: "is_last_month_of_contract"
+
+    # ── Metrics ──────────────────────────────────────────────────────────────
+    metrics:
+      - name: total_arr
+        description: Sum of ARR across all contracts in the period
+        expression:
+          dialects:
+            - dialect: Snowflake
+              expression: "SUM(arr_by_month.arr)"
+        ai_context:
+          synonyms: ["total annual recurring revenue", "total revenue", "ARR"]
+
+      - name: contract_count
+        description: Number of distinct contracts contributing ARR in the period
+        expression:
+          dialects:
+            - dialect: Snowflake
+              expression: "COUNT(DISTINCT arr_by_month.contract_id)"
+        ai_context:
+          synonyms: ["number of contracts", "contract volume"]
+
+      - name: account_count
+        description: Number of distinct accounts with ARR in the period
+        expression:
+          dialects:
+            - dialect: Snowflake
+              expression: "COUNT(DISTINCT arr_by_month.account_id)"
+        ai_context:
+          synonyms: ["customer count", "number of customers"]
