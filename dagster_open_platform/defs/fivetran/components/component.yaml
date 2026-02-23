@@ -11,6 +11,8 @@ attributes:
     automation_condition: "{{ hourly_if_not_in_progress }}"
     group_name: "{{ group_from_db_and_schema(props) }}"
   connection_setup_tests_schedule: "0 0 * * *"
+  excluded_connector_ids:
+    - "appellant_unseated"
 requirements:
   env:
     - FIVETRAN_ACCOUNT_ID

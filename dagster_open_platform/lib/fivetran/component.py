@@ -71,6 +71,7 @@ class FivetranComponent(Component, Model, Resolvable):
     ]
     translation: ResolvedTranslationFn | None = None
     connection_setup_tests_schedule: str | None = None
+    excluded_connector_ids: list[str] | None = None
 
     @cached_property
     def translator(self) -> DagsterFivetranTranslator:
@@ -89,9 +90,13 @@ class FivetranComponent(Component, Model, Resolvable):
         }
 
     def build_defs(self, context: ComponentLoadContext) -> dg.Definitions:
+        excluded = set(self.excluded_connector_ids or [])
         fivetran_assets = build_fivetran_assets_definitions(
             workspace=self.workspace,
             dagster_fivetran_translator=self.translator,
+            connector_selector_fn=(
+                (lambda connector: connector.id not in excluded) if excluded else None
+            ),
         )
 
         schedules = []
