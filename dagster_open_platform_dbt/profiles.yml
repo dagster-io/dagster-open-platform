@@ -86,7 +86,7 @@ dagster_open_platform:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
 
-      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', '<unset>') }}"
       role: "{{ env_var('SNOWFLAKE_ROLE', '') }}"
       authenticator: externalbrowser
 
