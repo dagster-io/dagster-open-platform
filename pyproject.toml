@@ -50,7 +50,8 @@ dependencies = [
     "shap>=0.47.0",
     "xgboost",
     "sling-mac-arm64; sys_platform == 'darwin'",
-    "sling_linux_arm64; sys_platform == 'linux'",
+    "sling-linux-amd64; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sling-linux-arm64; sys_platform == 'linux' and platform_machine == 'aarch64'",
     "deepdiff>=8.6.1", # https://github.com/dagster-io/internal/security/dependabot/609
     "urllib3>=2.6.3",
     "aiohttp>=3.13.3",
