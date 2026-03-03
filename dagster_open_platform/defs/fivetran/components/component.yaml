@@ -14,7 +14,7 @@ attributes:
     - "appellant_unseated"
   connector_schedules:
     unfamiliar_eye: "0 * * * *"  # salesforce
-    sobs_pall: "0 * * * *"  # github
+    museum_odious: "0 * * * *"  # hubspot
     crushed_subsector: "0 * * * *"  # google drive
 requirements:
   env:
