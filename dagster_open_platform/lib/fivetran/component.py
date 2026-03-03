@@ -41,15 +41,23 @@ ResolvedTranslationFn: TypeAlias = Annotated[
 ]
 
 
+_DEFAULT_CRON = "0 0 * * *"
+
+
 class ProxyDagsterFivetranTranslator(DagsterFivetranTranslator):
-    def __init__(self, fn: TranslationFn):
+    def __init__(self, fn: TranslationFn, connector_schedules: dict[str, str]):
         self.fn = fn
+        self.connector_schedules = connector_schedules
 
     def get_asset_spec(self, props: FivetranConnectorTableProps) -> dg.AssetSpec:
         base_asset_spec = super().get_asset_spec(props)
         spec = self.fn(base_asset_spec, props)
 
-        return spec
+        cron = self.connector_schedules.get(props.connector_id, _DEFAULT_CRON)
+        return spec.replace_attributes(
+            automation_condition=dg.AutomationCondition.cron_tick_passed(cron)
+            & ~dg.AutomationCondition.in_progress(),
+        )
 
 
 class FivetranWorkspaceModel(Model):
@@ -72,18 +80,19 @@ class FivetranComponent(Component, Model, Resolvable):
     translation: ResolvedTranslationFn | None = None
     connection_setup_tests_schedule: str | None = None
     excluded_connector_ids: list[str] | None = None
+    connector_schedules: dict[str, str] | None = None
 
     @cached_property
     def translator(self) -> DagsterFivetranTranslator:
-        if self.translation:
-            return ProxyDagsterFivetranTranslator(self.translation)
-        return DagsterFivetranTranslator()
+        schedules = self.connector_schedules or {}
+        fn = (
+            self.translation if self.translation else lambda base_asset_spec, props: base_asset_spec
+        )
+        return ProxyDagsterFivetranTranslator(fn, schedules)
 
     @classmethod
     def get_additional_scope(cls) -> Mapping[str, Any]:
         return {
-            "hourly_if_not_in_progress": dg.AutomationCondition.cron_tick_passed("0 * * * *")
-            & ~dg.AutomationCondition.in_progress(),
             "group_from_db_and_schema": lambda props: (
                 f"fivetran_{'_'.join(props.table.split('.')[:-1])}"
             ),
@@ -107,6 +116,12 @@ class FivetranComponent(Component, Model, Resolvable):
             assets=fivetran_assets,
             resources={"fivetran": self.workspace},
             schedules=schedules,
+            sensors=[
+                dg.AutomationConditionSensorDefinition(
+                    name="fivetran_automation_sensor",
+                    target=dg.AssetSelection.key_prefixes(["fivetran"]),
+                )
+            ],
         )
 
 

@@ -24,4 +24,14 @@ def defs() -> dg.Definitions:
         selection=AssetSelection.all().materializable(),
     )
 
-    return link_defs_code_references_to_git(defs)
+    return dg.Definitions.merge(
+        link_defs_code_references_to_git(defs),
+        dg.Definitions(
+            sensors=[
+                dg.AutomationConditionSensorDefinition(
+                    name="default_automation_sensor",
+                    target=AssetSelection.all() - AssetSelection.key_prefixes(["fivetran"]),
+                )
+            ]
+        ),
+    )
