@@ -11,6 +11,7 @@ from dagster import (
     AssetSpec,
     AutoMaterializePolicy,
     AutoMaterializeRule,
+    Config,
     Definitions,
     MaterializeResult,
     MonthlyPartitionsDefinition,
@@ -35,7 +36,7 @@ from dagster_open_platform.defs.aws.constants import (
     INPUT_PREFIX,
     OUTPUT_PREFIX,
 )
-from dagster_open_platform.defs.aws.partitions import org_daily_partition_def
+from dagster_open_platform.defs.aws.partitions import daily_partition_def
 from dagster_open_platform.defs.aws.utils import S3Mailman
 from dagster_open_platform.utils.environment_helpers import (
     get_database_for_environment,
@@ -44,6 +45,11 @@ from dagster_open_platform.utils.environment_helpers import (
 from dagster_snowflake import SnowflakeResource
 
 log = get_dagster_logger()
+
+
+class WorkspaceReplicationConfig(Config):
+    org_ids: list[str]
+
 
 # metdata, repo_metadata, external_repo_metadata
 dagster_metadata_asset_specs = [
@@ -74,119 +80,130 @@ dagster_object_asset_specs = [
     group_name="aws",
     specs=dagster_metadata_asset_specs + dagster_object_asset_specs,
     description="Assets for AWS workspace replication data",
-    partitions_def=org_daily_partition_def,
+    partitions_def=daily_partition_def,
     op_tags={"dagster/concurrency_key": "workspace-replication"},
 )
-def workspace_data_json(context: AssetExecutionContext, s3_resource: S3Resource):
+def workspace_data_json(
+    context: AssetExecutionContext,
+    config: WorkspaceReplicationConfig,
+    s3_resource: S3Resource,
+):
     s3_client = s3_resource.get_client()
-    date, org = context.partition_key.split("|")
-    s3_mailman = S3Mailman(
-        bucket_name=BUCKET_NAME,
-        input_prefix=f"{INPUT_PREFIX}/{date}/{org}",
-        output_prefix=OUTPUT_PREFIX,
-        s3_client=s3_client,
-    )
+    date = context.partition_key
+    log.info(f"Processing {len(config.org_ids)} orgs for date {date}")
 
-    bucket_contents = s3_mailman.get_contents(get_all=True)
-    log.info(f"Found {len(bucket_contents)} objects in {BUCKET_NAME}/{INPUT_PREFIX}/{date}")
-
-    object_count = {}
-    for obj_info in bucket_contents:
-        key = obj_info.get("Key", "")
-        log.info(f"Processing {key}")
-
-        output_key_ending = "/".join(key.split("/")[2:])
-
-        obj_dict = json.loads(s3_mailman.get_body(key, decode="utf-8"))
-
-        # Pull the repo datas out of the object
-
-        # Legacy full json blob
-        if "repository_datas" in obj_dict:
-            repository_datas = obj_dict["repository_datas"]
-
-        # New pointers to S3 copies
-        elif "repositories" in obj_dict:
-            repository_datas = []
-            repository_manifests = obj_dict["repositories"]
-            for repo_manifest in repository_manifests:
-                s3_uri = repo_manifest["stored_snapshot"]["uri"]
-                fmt = repo_manifest["stored_snapshot"]["format"]
-                parsed_s3 = urlparse(s3_uri)
-                buffer = BytesIO()
-                s3_client.download_fileobj(
-                    Bucket=parsed_s3.netloc,
-                    Key=parsed_s3.path.lstrip("/"),
-                    Fileobj=buffer,
-                )
-                if fmt == FileFormat.JSON:
-                    json_bytes = buffer.getvalue()
-                elif fmt == FileFormat.GZIPPED_JSON:
-                    json_bytes = zlib.decompress(buffer.getvalue())
-                else:
-                    raise Exception(f"Unknown snapshot format {fmt}")
-                json_str = json_bytes.decode("utf-8")
-                repo_snap_obj = json.loads(json_str)
-                repository_datas.append(
-                    {
-                        "external_repository_data": repo_snap_obj,
-                        "repo_name": repo_manifest["name"],
-                    }
-                )
-        else:
-            raise Exception(
-                f"Unknown structure in workspace replication bucket, top level keys {list(obj_dict.keys())}"
-            )
-
-        metadata_output_key = os.path.join("metadata", output_key_ending)
-        s3_mailman.send(
-            json.dumps(obj_dict), metadata_output_key, encode="utf-8", extension=".json"
+    object_count: dict[str, int] = {}
+    for org in config.org_ids:
+        s3_mailman = S3Mailman(
+            bucket_name=BUCKET_NAME,
+            input_prefix=f"{INPUT_PREFIX}/{date}/{org}",
+            output_prefix=OUTPUT_PREFIX,
+            s3_client=s3_client,
         )
 
-        for _index, repository_data in enumerate(repository_datas):
-            # Pull external repo datas out of the repository data
-            external_repository_data = repository_data.pop("external_repository_data")
+        bucket_contents = s3_mailman.get_contents(get_all=True)
+        log.info(
+            f"Found {len(bucket_contents)} objects in {BUCKET_NAME}/{INPUT_PREFIX}/{date}/{org}"
+        )
 
-            repo_name = repository_data.get("repo_name", f"__UNKNOWN_{_index}__")
-            repo_metadata_output_key = os.path.join("repo_metadata", output_key_ending, repo_name)
+        for obj_info in bucket_contents:
+            key = obj_info.get("Key", "")
+            log.info(f"Processing {key}")
+
+            output_key_ending = "/".join(key.split("/")[2:])
+
+            obj_dict = json.loads(s3_mailman.get_body(key, decode="utf-8"))
+
+            # Pull the repo datas out of the object
+
+            # Legacy full json blob
+            if "repository_datas" in obj_dict:
+                repository_datas = obj_dict["repository_datas"]
+
+            # New pointers to S3 copies
+            elif "repositories" in obj_dict:
+                repository_datas = []
+                repository_manifests = obj_dict["repositories"]
+                for repo_manifest in repository_manifests:
+                    s3_uri = repo_manifest["stored_snapshot"]["uri"]
+                    fmt = repo_manifest["stored_snapshot"]["format"]
+                    parsed_s3 = urlparse(s3_uri)
+                    buffer = BytesIO()
+                    s3_client.download_fileobj(
+                        Bucket=parsed_s3.netloc,
+                        Key=parsed_s3.path.lstrip("/"),
+                        Fileobj=buffer,
+                    )
+                    if fmt == FileFormat.JSON:
+                        json_bytes = buffer.getvalue()
+                    elif fmt == FileFormat.GZIPPED_JSON:
+                        json_bytes = zlib.decompress(buffer.getvalue())
+                    else:
+                        raise Exception(f"Unknown snapshot format {fmt}")
+                    json_str = json_bytes.decode("utf-8")
+                    repo_snap_obj = json.loads(json_str)
+                    repository_datas.append(
+                        {
+                            "external_repository_data": repo_snap_obj,
+                            "repo_name": repo_manifest["name"],
+                        }
+                    )
+            else:
+                raise Exception(
+                    f"Unknown structure in workspace replication bucket, top level keys {list(obj_dict.keys())}"
+                )
+
+            metadata_output_key = os.path.join("metadata", output_key_ending)
             s3_mailman.send(
-                json.dumps(repository_data),
-                repo_metadata_output_key,
-                encode="utf-8",
-                extension=".json",
+                json.dumps(obj_dict), metadata_output_key, encode="utf-8", extension=".json"
             )
 
-            for (
-                dagster_object_key,
-                dagster_object_name,
-            ) in EXTRACTED_DAGSTER_OBJECTS_DICT.items():
-                dagster_object = external_repository_data.pop(dagster_object_key, []) or []
-                if dagster_object_name not in object_count:
-                    object_count[dagster_object_name] = len(dagster_object)
-                else:
-                    object_count[dagster_object_name] += len(dagster_object)
+            for _index, repository_data in enumerate(repository_datas):
+                # Pull external repo datas out of the repository data
+                external_repository_data = repository_data.pop("external_repository_data")
 
-                dagster_object_output_base_path = os.path.join(
-                    dagster_object_name, output_key_ending, repo_name
+                repo_name = repository_data.get("repo_name", f"__UNKNOWN_{_index}__")
+                repo_metadata_output_key = os.path.join(
+                    "repo_metadata", output_key_ending, repo_name
                 )
-                s3_mailman.send_all(
-                    dagster_object,
-                    dagster_object_output_base_path,
+                s3_mailman.send(
+                    json.dumps(repository_data),
+                    repo_metadata_output_key,
                     encode="utf-8",
-                    preprocess=json.dumps,
-                    chunk_size=DAGSTER_OBJECT_CHUNK_SIZE,
                     extension=".json",
                 )
 
-            external_repo_metadata_output_key = os.path.join(
-                "external_repo_metadata", output_key_ending, repo_name
-            )
-            s3_mailman.send(
-                json.dumps(external_repository_data),
-                external_repo_metadata_output_key,
-                encode="utf-8",
-                extension=".json",
-            )
+                for (
+                    dagster_object_key,
+                    dagster_object_name,
+                ) in EXTRACTED_DAGSTER_OBJECTS_DICT.items():
+                    dagster_object = external_repository_data.pop(dagster_object_key, []) or []
+                    if dagster_object_name not in object_count:
+                        object_count[dagster_object_name] = len(dagster_object)
+                    else:
+                        object_count[dagster_object_name] += len(dagster_object)
+
+                    dagster_object_output_base_path = os.path.join(
+                        dagster_object_name, output_key_ending, repo_name
+                    )
+                    s3_mailman.send_all(
+                        dagster_object,
+                        dagster_object_output_base_path,
+                        encode="utf-8",
+                        preprocess=json.dumps,
+                        chunk_size=DAGSTER_OBJECT_CHUNK_SIZE,
+                        extension=".json",
+                    )
+
+                external_repo_metadata_output_key = os.path.join(
+                    "external_repo_metadata", output_key_ending, repo_name
+                )
+                s3_mailman.send(
+                    json.dumps(external_repository_data),
+                    external_repo_metadata_output_key,
+                    encode="utf-8",
+                    extension=".json",
+                )
 
     for asset_key in context.selected_asset_keys:
         yield Output(
