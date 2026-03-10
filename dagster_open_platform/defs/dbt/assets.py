@@ -13,6 +13,7 @@ from dagster_dbt import (
     dbt_assets,
 )
 from dagster_dbt.asset_utils import DBT_DEFAULT_SELECT
+
 from dagster_open_platform.defs.dbt.partitions import insights_partition
 from dagster_open_platform.defs.dbt.resources import dagster_open_platform_dbt_project
 from dagster_open_platform.lib.dbt.translator import CustomDagsterDbtTranslator

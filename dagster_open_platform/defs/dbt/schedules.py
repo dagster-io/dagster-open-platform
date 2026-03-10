@@ -8,6 +8,7 @@ from dagster._core.storage.tags import (
 )
 from dagster.components import definitions
 from dagster_dbt import DbtManifestAssetSelection, get_asset_key_for_model
+
 from dagster_open_platform.defs.dbt.assets import (
     CustomDagsterDbtTranslator,
     get_dbt_non_partitioned_models,

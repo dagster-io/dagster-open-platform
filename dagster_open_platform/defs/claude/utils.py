@@ -1,8 +1,9 @@
 import pandas as pd
 import requests
 from dagster import AssetExecutionContext, file_relative_path
-from dagster_open_platform.utils.environment_helpers import get_environment
 from dagster_snowflake import SnowflakeResource
+
+from dagster_open_platform.utils.environment_helpers import get_environment
 
 
 def fetch_paginated_data(

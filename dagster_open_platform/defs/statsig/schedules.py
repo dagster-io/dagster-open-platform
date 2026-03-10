@@ -1,5 +1,6 @@
 import dagster as dg
 from dagster.components import definitions
+
 from dagster_open_platform.defs.dbt.partitions import insights_partition
 from dagster_open_platform.defs.statsig.assets import (
     get_org_performance_metrics,

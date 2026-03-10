@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.19.0"]
+build-backend = "hatchling.build"
 
 [project]
 name = "dagster-open-platform"
@@ -78,8 +78,6 @@ tests = [
 ]
 
 
-[tool.setuptools.packages.find]
-exclude = ["dagster_open_platform_tests"]
 
 # setuptools 82 removed pkg_resources, breaking third-party deps that still use it
 # at build time (flatdict via sprocketship->absql) or runtime. Pin until they migrate.

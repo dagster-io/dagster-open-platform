@@ -4,6 +4,7 @@ from pathlib import Path
 from dagster import Definitions
 from dagster.components import definitions
 from dagster_dbt import DbtCliResource, DbtProject
+
 from dagster_open_platform.utils.environment_helpers import get_dbt_target
 
 

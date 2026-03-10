@@ -5,6 +5,10 @@ import dagster as dg
 import pandas as pd
 from dagster.components import definitions
 from dagster_dbt import get_asset_key_for_model
+from dagster_snowflake import SnowflakeResource
+from statsig import StatsigEnvironmentTier
+from statsig.statsig import StatsigEvent, StatsigUser
+
 from dagster_open_platform.defs.dbt.assets import (
     get_dbt_non_partitioned_models,
     get_dbt_partitioned_models,
@@ -16,9 +20,6 @@ from dagster_open_platform.utils.environment_helpers import (
     get_environment,
     get_schema_for_environment,
 )
-from dagster_snowflake import SnowflakeResource
-from statsig import StatsigEnvironmentTier
-from statsig.statsig import StatsigEvent, StatsigUser
 
 
 def _get_statsig_environment() -> str:

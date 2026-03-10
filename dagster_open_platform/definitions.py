@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from dagster import AssetSelection, FreshnessPolicy, apply_freshness_policy
 from dagster._utils.warnings import BetaWarning, PreviewWarning
+
 from dagster_open_platform.utils.source_code import link_defs_code_references_to_git
 
 warnings.filterwarnings("ignore", category=PreviewWarning)

@@ -2,6 +2,8 @@ from datetime import datetime, timedelta, timezone
 
 import dagster as dg
 from dagster_anthropic import AnthropicResource
+from dagster_slack import SlackResource
+
 from dagster_open_platform.defs.buildkite.prompt import BUILDKITE_ANALYSIS_SYSTEM_PROMPT
 from dagster_open_platform.defs.buildkite.resources import BuildkiteResource
 from dagster_open_platform.defs.buildkite.utils import (
@@ -12,7 +14,6 @@ from dagster_open_platform.defs.buildkite.utils import (
     summarize_builds,
 )
 from dagster_open_platform.utils.environment_helpers import get_environment
-from dagster_slack import SlackResource
 
 PIPELINES_TO_MONITOR = ["internal"]
 

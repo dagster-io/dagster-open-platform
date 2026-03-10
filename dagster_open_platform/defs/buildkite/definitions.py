@@ -1,9 +1,10 @@
 import dagster as dg
 from dagster.components import definitions
+from dagster_slack import SlackResource
+
 from dagster_open_platform.defs.buildkite.assets import buildkite_daily_analysis
 from dagster_open_platform.defs.buildkite.resources import BuildkiteResource
 from dagster_open_platform.defs.claude.resources import claude_resource
-from dagster_slack import SlackResource
 
 
 @definitions

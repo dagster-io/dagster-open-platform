@@ -2,13 +2,14 @@ from datetime import datetime, timezone
 
 import pandas as pd
 from dagster import AssetExecutionContext, AutomationCondition, BackfillPolicy, asset
+from dagster_snowflake import SnowflakeResource
+
 from dagster_open_platform.defs.claude.partitions import claude_daily_partition
 from dagster_open_platform.defs.claude.resources import AnthropicAdminResource
 from dagster_open_platform.defs.claude.utils import (
     fetch_paginated_data,
     load_dataframe_to_snowflake,
 )
-from dagster_snowflake import SnowflakeResource
 
 daily_cron_tick_passed = (
     AutomationCondition.cron_tick_passed("0 0 * * *")
