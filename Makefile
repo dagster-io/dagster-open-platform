@@ -24,7 +24,7 @@ test_snapshot: test_install
 	@DOP_PYTEST_FULL=1 uv run pytest dagster_open_platform_tests -k "snapshot" --disable-warnings -vvvx
 
 manifest: uv_venv
-	cd dagster_open_platform_dbt && uv run dbt parse && cd ..
+	cd dagster_open_platform_dbt && uv run dbt deps && uv run dbt parse && cd ..
 
 dev:
 	uv run dg dev

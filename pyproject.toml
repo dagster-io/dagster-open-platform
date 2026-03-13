@@ -10,7 +10,7 @@ dependencies = [
     "boto3",
     "dbt-core==1.11.1",
     "dbt-snowflake==1.11.1",
-    "dagster==1.12.17",
+    "dagster>=1.12.17",
     "dagster-dg-cli",
     "dagster-cloud",
     "dagster-cloud-cli",
@@ -19,7 +19,7 @@ dependencies = [
     "dagster-pipes",
     # integrations
     "dagster-aws",
-    "dagster-dbt==0.28.17", # synced with dagster above, backtracked when unpinned
+    "dagster-dbt>=0.28.17", # without this resolver can backtrack
     "dagster-dlt",
     "dagster-fivetran",
     "dagster-gcp",
