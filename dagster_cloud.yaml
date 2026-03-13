@@ -1,0 +1,27 @@
+locations:
+  - location_name: dagster_open_platform
+    code_source:
+      module_name: dagster_open_platform.definitions
+    working_directory: /opt/dagster/app
+    container_context:
+      k8s:
+        env_secrets:
+          - cloud-ops-slack-token
+          - linear-access-token
+        image_pull_policy: IfNotPresent
+    build:
+      registry: 764506304434.dkr.ecr.us-west-2.amazonaws.com/dagster-open-platform
+
+  - location_name: dagster_open_platform_eu
+    agent_queue: dagster-cloud-eu
+    code_source:
+      module_name: dagster_open_platform_eu.definitions
+    working_directory: /opt/dagster/app
+    container_context:
+      k8s:
+        env_secrets:
+          - cloud-ops-slack-token
+          - linear-access-token
+        image_pull_policy: IfNotPresent
+    build:
+      registry: 764506304434.dkr.ecr.us-west-2.amazonaws.com/dagster-open-platform
