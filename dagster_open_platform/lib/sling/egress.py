@@ -17,7 +17,7 @@ class EgressReplicationSlingTranslator(DagsterSlingTranslator):
         self.asset_key_prefix = asset_key_prefix
 
     def get_tags(self, stream_definition: Mapping[str, Any]) -> Mapping[str, Any]:
-        return {"dagster/kind/snowflake": ""}
+        return {"dagster/kind/snowflake": "", "dagster/kind/sling": ""}
 
     def get_metadata(self, stream_definition: Mapping[str, Any]) -> Mapping[str, Any]:
         key: AssetKey = self.get_asset_key(stream_definition)

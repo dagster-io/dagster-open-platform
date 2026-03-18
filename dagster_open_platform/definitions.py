@@ -31,8 +31,14 @@ def defs() -> dg.Definitions:
             sensors=[
                 dg.AutomationConditionSensorDefinition(
                     name="default_automation_sensor",
-                    target=AssetSelection.all() - AssetSelection.key_prefixes(["fivetran"]),
-                )
+                    target=AssetSelection.all()
+                    - AssetSelection.key_prefixes(["fivetran"])
+                    - dg.AssetSelection.kind("sling"),
+                ),
+                dg.AutomationConditionSensorDefinition(
+                    name="sling_automation_sensor",
+                    target=dg.AssetSelection.kind("sling"),
+                ),
             ]
         ),
     )
