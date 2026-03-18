@@ -33,8 +33,22 @@ models:
         +materialized: view
         cloud_product:
           +materialized: view
+        salesforce:
+          +tags: ["eu"]
+        hubspot:
+          +tags: ["eu"]
+        segment:
+          +tags: ["eu"]
       model:
         +materialized: table
+        salesforce:
+          +tags: ["eu"]
+        cloud_product:
+          +tags: ["eu"]
+        hubspot:
+          +tags: ["eu"]
+        segment:
+          +tags: ["eu"]
       metrics:
         +materialized: table
       intermediate:
