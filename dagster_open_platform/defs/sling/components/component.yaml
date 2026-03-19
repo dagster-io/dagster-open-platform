@@ -50,7 +50,7 @@ attributes:
     
     - name: enterprise_contract_metadata
       deps:
-        - "{{ dbt_asset_key('current_credit_utilization') }}"
+        - "{{ dbt_asset_key('enterprise_contract_metadata') }}"
 
 ---
 
