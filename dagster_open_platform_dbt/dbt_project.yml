@@ -50,7 +50,7 @@ models:
 
 seeds:
   +tags: "seed"
-  dagster_open_platform_dbt:
+  dagster_open_platform:
     purina:
       public:
         opportunity_exclusions:
