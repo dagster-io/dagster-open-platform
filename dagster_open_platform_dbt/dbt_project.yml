@@ -50,6 +50,13 @@ models:
 
 seeds:
   +tags: "seed"
+  dagster_open_platform_dbt:
+    purina:
+      public:
+        opportunity_exclusions:
+          +tags: ["eu"]
+        business_units:
+          +tags: ["eu"]
 
 vars:
   session_threshold_seconds: 1800
