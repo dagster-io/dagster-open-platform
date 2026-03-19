@@ -57,6 +57,8 @@ seeds:
           +tags: ["eu"]
         business_units:
           +tags: ["eu"]
+        salesforce_opp_stage_mapping:
+          +tags: ["eu"]
 
 vars:
   session_threshold_seconds: 1800
