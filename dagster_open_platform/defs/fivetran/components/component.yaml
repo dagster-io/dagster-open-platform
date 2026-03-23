@@ -12,6 +12,7 @@ attributes:
   connection_setup_tests_schedule: "0 0 * * *"
   excluded_connector_ids:
     - "appellant_unseated"
+    - "supplement_crystallization"
   connector_schedules:
     unfamiliar_eye: "0 * * * *"  # salesforce
     museum_odious: "0 * * * *"  # hubspot
