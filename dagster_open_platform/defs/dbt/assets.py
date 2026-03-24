@@ -89,7 +89,7 @@ def get_dbt_partitioned_models(
         logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
         dbt_vars = {
             "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
-            "max_date": context.partition_time_window.end.isoformat(),
+            "max_date": (context.partition_time_window.end + timedelta(days=1)).isoformat(),
         }
 
         args = (
