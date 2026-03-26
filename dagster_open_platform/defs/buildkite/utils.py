@@ -1,9 +1,16 @@
 import json
 import logging
-from datetime import datetime, timedelta, timezone
+from collections.abc import Generator
+from contextlib import contextmanager
+from datetime import datetime
 from typing import Any
 
+from dagster_snowflake import SnowflakeResource
+from snowflake.connector.cursor import SnowflakeCursor
+
+from dagster_open_platform.defs.buildkite.models import Build, Job
 from dagster_open_platform.defs.buildkite.resources import BuildkiteResource
+from dagster_open_platform.utils.environment_helpers import get_environment
 
 logger = logging.getLogger(__name__)
 
@@ -11,30 +18,309 @@ MAX_FAILED_JOBS_TO_FETCH = 15
 MAX_LOG_CHARS = 4000
 
 
-def fetch_build_data(
-    buildkite: BuildkiteResource,
-    pipelines: list[str],
-    lookback_hours: int = 24,
-    branch: str | None = None,
-) -> dict[str, list[dict[str, Any]]]:
-    """Fetch builds from the last N hours for the given pipelines.
+class BuildkiteSQL:
+    __snowflake: SnowflakeResource
+    __database: str
 
-    Returns:
-        Dict mapping pipeline slug to list of build dicts.
-    """
-    created_from = (datetime.now(tz=timezone.utc) - timedelta(hours=lookback_hours)).isoformat()
-    builds_by_pipeline: dict[str, list[dict[str, Any]]] = {}
-    for pipeline in pipelines:
-        builds = buildkite.get_builds(
-            pipeline_slug=pipeline, created_from=created_from, branch=branch
+    __BUILDS_TABLE_NAME: str = "buildkite_builds"
+    __BUILDS_ID_COLUMN_NAME: str = "build_id"
+    __JOBS_TABLE_NAME: str = "buildkite_jobs"
+    __JOBS_ID_COLUMN_NAME: str = "job_id"
+
+    def __init__(self, snowflake: SnowflakeResource):
+        self.__database = "BUILDKITE" if get_environment() == "PROD" else "SANDBOX"
+        self.__snowflake = snowflake
+
+    @contextmanager
+    def __get_cursor(self) -> Generator[SnowflakeCursor, None, None]:
+        with self.__snowflake.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(f"USE DATABASE {self.__database}")
+
+            try:
+                cursor.execute("BEGIN")
+                yield cursor
+                cursor.execute("COMMIT")
+            except Exception:
+                cursor.execute("ROLLBACK")
+                raise
+            finally:
+                cursor.close()
+
+    def __create_builds_table(self) -> str:
+        return f"""
+            CREATE TABLE IF NOT EXISTS {self.__BUILDS_TABLE_NAME} (
+                build_id VARCHAR(100) PRIMARY KEY,
+                extracted_at TIMESTAMP_TZ,
+                pipeline__id VARCHAR(100),
+                pipeline__slug VARCHAR(200),
+                pipeline__name VARCHAR(200),
+                url VARCHAR(500),
+                web_url VARCHAR(500),
+                build_number NUMBER,
+                state VARCHAR(50),
+                blocked BOOLEAN,
+                cancel_reason VARCHAR(1000),
+                message VARCHAR(65536),
+                commit VARCHAR(100),
+                branch VARCHAR(500),
+                source VARCHAR(100),
+                created_at TIMESTAMP_TZ,
+                scheduled_at TIMESTAMP_TZ,
+                started_at TIMESTAMP_TZ,
+                finished_at TIMESTAMP_TZ
+            )
+        """
+
+    def __create_jobs_table(self) -> str:
+        return f"""
+            CREATE TABLE IF NOT EXISTS {self.__JOBS_TABLE_NAME} (
+                job_id VARCHAR(100) PRIMARY KEY,
+                build_id VARCHAR(100) REFERENCES buildkite_builds(build_id),
+                extracted_at TIMESTAMP_TZ,
+                type VARCHAR(100),
+                name VARCHAR(1000),
+                step_key VARCHAR(500),
+                state VARCHAR(50),
+                command VARCHAR(65536),
+                soft_failed BOOLEAN,
+                exit_status NUMBER,
+                retried BOOLEAN,
+                retries_count NUMBER,
+                created_at TIMESTAMP_TZ,
+                scheduled_at TIMESTAMP_TZ,
+                runnable_at TIMESTAMP_TZ,
+                started_at TIMESTAMP_TZ,
+                finished_at TIMESTAMP_TZ,
+                expired_at TIMESTAMP_TZ
+            )
+        """
+
+    def __delete_builds_table_old_rows(self, ids: list[str]) -> tuple[str, list[str]]:
+        return (
+            f"""
+                DELETE FROM {self.__BUILDS_TABLE_NAME} WHERE {self.__BUILDS_ID_COLUMN_NAME} IN ({",".join(["%s"] * len(ids))})
+            """,
+            ids,
         )
-        builds_by_pipeline[pipeline] = builds
-    return builds_by_pipeline
+
+    def __delete_jobs_table_old_rows(self, ids: list[str]) -> tuple[str, list[str]]:
+        return (
+            f"""
+                DELETE FROM {self.__JOBS_TABLE_NAME} WHERE {self.__JOBS_ID_COLUMN_NAME} IN ({",".join(["%s"] * len(ids))})
+            """,
+            ids,
+        )
+
+    def __insert_builds_table_new_rows(
+        self, rows: list[tuple[Any]]
+    ) -> tuple[str, list[tuple[Any]]]:
+        return (
+            f"""
+                INSERT INTO {self.__BUILDS_TABLE_NAME} (
+                    build_id, extracted_at, pipeline__id, pipeline__slug, pipeline__name, url, web_url, build_number, state,
+                    blocked, cancel_reason, message, commit, branch, source, created_at, scheduled_at, started_at, finished_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            rows,
+        )
+
+    def __insert_jobs_table_new_rows(self, rows: list[tuple[Any]]) -> tuple[str, list[tuple[Any]]]:
+        return (
+            f"""
+                INSERT INTO {self.__JOBS_TABLE_NAME} (
+                    job_id, build_id, extracted_at, type, name, step_key, state, command, soft_failed, exit_status,
+                    retried, retries_count, created_at, scheduled_at, runnable_at, started_at, finished_at, expired_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            rows,
+        )
+
+    def insert_builds(self, builds: list[Build]) -> None:
+        if not builds:
+            return
+
+        rows = [BuildkiteSQL.__build_to_insert_row(b) for b in builds]
+        with self.__get_cursor() as cursor:
+            cursor.execute(self.__create_builds_table())
+            cursor.execute(*self.__delete_builds_table_old_rows([b.id for b in builds]))
+            cursor.executemany(*self.__insert_builds_table_new_rows(rows))
+
+    def insert_jobs(self, jobs: list[Job]) -> None:
+        if not jobs:
+            return
+
+        rows = [BuildkiteSQL.__job_to_insert_row(j) for j in jobs]
+        with self.__get_cursor() as cursor:
+            cursor.execute(self.__create_jobs_table())
+            cursor.execute(*self.__delete_jobs_table_old_rows([j.id for j in jobs]))
+            cursor.executemany(*self.__insert_jobs_table_new_rows(rows))
+
+    def get_builds(
+        self,
+        *,
+        pipelines: list[str] | None = None,
+        branch: str | None = None,
+        window_start: datetime | None = None,
+        window_end: datetime | None = None,
+    ) -> list[Build]:
+        conditions: list[str] = []
+        build_params: list[Any] = []
+
+        if pipelines:
+            conditions.append(f"pipeline__slug IN ({','.join(['%s'] * len(pipelines))})")
+            build_params.extend(pipelines)
+        if branch:
+            conditions.append("branch = %s")
+            build_params.append(branch)
+        if window_start:
+            conditions.append("created_at >= %s")
+            build_params.append(window_start.isoformat())
+        if window_end:
+            conditions.append("created_at < %s")
+            build_params.append(window_end.isoformat())
+
+        where_clause = ("WHERE " + " AND ".join(conditions)) if conditions else ""
+
+        with self.__get_cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT build_id, extracted_at, pipeline__id, pipeline__slug, pipeline__name,
+                    url, web_url, build_number, state, blocked, cancel_reason, message, commit,
+                    branch, source, created_at, scheduled_at, started_at, finished_at
+                FROM buildkite_builds
+                {where_clause}
+                """,
+                build_params,
+            )
+            build_columns = [col[0].lower() for col in cursor.description]
+            build_rows = [dict(zip(build_columns, row)) for row in cursor.fetchall()]
+            if not build_rows:
+                return []
+
+            build_ids = [r["build_id"] for r in build_rows]
+            cursor.execute(
+                f"""
+                SELECT job_id, build_id, extracted_at, type, name, step_key, state, command, soft_failed, exit_status,
+                    retried, retries_count, created_at, scheduled_at, runnable_at, started_at, finished_at, expired_at
+                FROM buildkite_jobs
+                WHERE build_id IN ({",".join(["%s"] * len(build_ids))})
+                """,
+                build_ids,
+            )
+            job_columns = [col[0].lower() for col in cursor.description]
+            job_rows = [dict(zip(job_columns, row)) for row in cursor.fetchall()]
+
+            jobs_by_build: dict[str, list[Job]] = {id: [] for id in build_ids}
+            for row in job_rows:
+                job = BuildkiteSQL.__job_from_row(row)
+                jobs_by_build[job.build_id].append(job)
+
+            return [
+                BuildkiteSQL.__build_from_row(r, jobs_by_build[r["build_id"]]) for r in build_rows
+            ]
+
+    @staticmethod
+    def __build_to_insert_row(build: Build) -> tuple:
+        # Order must match INSERT INTO buildkite_builds column list
+        return (
+            build.id,
+            build.extracted_at,
+            build.pipeline__id,
+            build.pipeline__slug,
+            build.pipeline__name,
+            build.url,
+            build.web_url,
+            build.number,
+            build.state,
+            build.blocked,
+            build.cancel_reason,
+            build.message,
+            build.commit,
+            build.branch,
+            build.source,
+            build.created_at,
+            build.scheduled_at,
+            build.started_at,
+            build.finished_at,
+        )
+
+    @staticmethod
+    def __job_to_insert_row(job: Job) -> tuple:
+        # Order must match INSERT INTO buildkite_jobs column list
+        return (
+            job.id,
+            job.build_id,
+            job.extracted_at,
+            job.type,
+            job.name,
+            job.step_key,
+            job.state,
+            job.command,
+            job.soft_failed,
+            job.exit_status,
+            job.retried,
+            job.retries_count,
+            job.created_at,
+            job.scheduled_at,
+            job.runnable_at,
+            job.started_at,
+            job.finished_at,
+            job.expired_at,
+        )
+
+    @staticmethod
+    def __build_from_row(row: dict[str, Any], jobs: list[Job]) -> Build:
+        return Build(
+            id=row["build_id"],
+            extracted_at=row["extracted_at"],
+            pipeline__id=row["pipeline__id"],
+            pipeline__slug=row["pipeline__slug"],
+            pipeline__name=row["pipeline__name"],
+            url=row["url"],
+            web_url=row["web_url"],
+            number=row["build_number"],
+            state=row["state"],
+            blocked=row["blocked"],
+            cancel_reason=row.get("cancel_reason"),
+            message=row["message"],
+            commit=row["commit"],
+            branch=row["branch"],
+            source=row["source"],
+            created_at=row.get("created_at"),
+            scheduled_at=row.get("scheduled_at"),
+            started_at=row.get("started_at"),
+            finished_at=row.get("finished_at"),
+            jobs=jobs,
+        )
+
+    @staticmethod
+    def __job_from_row(row: dict[str, Any]) -> Job:
+        return Job(
+            id=row["job_id"],
+            build_id=row["build_id"],
+            extracted_at=row["extracted_at"],
+            type=row["type"],
+            name=row.get("name"),
+            step_key=row.get("step_key"),
+            state=row.get("state"),
+            command=row.get("command"),
+            soft_failed=row.get("soft_failed"),
+            exit_status=row.get("exit_status"),
+            retried=row.get("retried"),
+            retries_count=row.get("retries_count"),
+            created_at=row.get("created_at"),
+            scheduled_at=row.get("scheduled_at"),
+            runnable_at=row.get("runnable_at"),
+            started_at=row.get("started_at"),
+            finished_at=row.get("finished_at"),
+            expired_at=row.get("expired_at"),
+        )
 
 
 def extract_failed_job_logs(
     buildkite: BuildkiteResource,
-    builds_by_pipeline: dict[str, list[dict[str, Any]]],
+    builds: list[Build],
 ) -> list[dict[str, str]]:
     """Fetch logs for failed jobs, capped at MAX_FAILED_JOBS_TO_FETCH jobs.
 
@@ -43,23 +329,19 @@ def extract_failed_job_logs(
     """
     failed_jobs: list[dict[str, str]] = []
 
-    for pipeline, builds in builds_by_pipeline.items():
-        for build in builds:
-            build_number = build.get("number")
-            for job in build.get("jobs", []):
-                if job.get("state") == "failed" and job.get("type") == "script":
-                    failed_jobs.append(
-                        {
-                            "pipeline": pipeline,
-                            "build_number": str(build_number),
-                            "job_name": job.get("name", "unknown"),
-                            "job_id": job.get("id", ""),
-                        }
-                    )
-                    if len(failed_jobs) >= MAX_FAILED_JOBS_TO_FETCH:
-                        break
-            if len(failed_jobs) >= MAX_FAILED_JOBS_TO_FETCH:
-                break
+    for build in builds:
+        for job in build.jobs:
+            if job.state == "failed" and job.type == "script":
+                failed_jobs.append(
+                    {
+                        "pipeline": build.pipeline__slug,
+                        "build_number": str(build.number),
+                        "job_name": job.name or "unknown",
+                        "job_id": job.id,
+                    }
+                )
+                if len(failed_jobs) >= MAX_FAILED_JOBS_TO_FETCH:
+                    break
         if len(failed_jobs) >= MAX_FAILED_JOBS_TO_FETCH:
             break
 
@@ -71,7 +353,6 @@ def extract_failed_job_logs(
                 build_number=int(job_info["build_number"]),
                 job_id=job_info["job_id"],
             )
-            # Take the tail of the log to capture the failure output
             log_tail = log_text[-MAX_LOG_CHARS:] if log_text else "(no log output)"
         except Exception:
             logger.warning(
@@ -88,43 +369,41 @@ def extract_failed_job_logs(
 
 
 def summarize_builds(
-    builds_by_pipeline: dict[str, list[dict[str, Any]]],
-) -> dict[str, Any]:
+    builds: list[Build],
+) -> tuple[
+    dict[str, int],
+    dict[str, dict[str, int]],
+]:
     """Compute pass/fail stats for builds.
 
     Returns:
-        Dict with total, passed, failed counts and per-pipeline breakdown.
+        Overall totals and a per-pipeline breakdown.
     """
-    total = 0
-    passed = 0
-    failed = 0
+    total: dict[str, int] = {"total": 0, "passed": 0, "failed": 0}
     per_pipeline: dict[str, dict[str, int]] = {}
 
-    for pipeline, builds in builds_by_pipeline.items():
-        p_total = len(builds)
-        p_passed = sum(1 for b in builds if b.get("state") == "passed")
-        p_failed = sum(1 for b in builds if b.get("state") == "failed")
-        per_pipeline[pipeline] = {
-            "total": p_total,
-            "passed": p_passed,
-            "failed": p_failed,
-        }
-        total += p_total
-        passed += p_passed
-        failed += p_failed
+    for build in builds:
+        slug = build.pipeline__slug
+        if slug not in per_pipeline:
+            per_pipeline[slug] = {"total": 0, "passed": 0, "failed": 0}
 
-    return {
-        "total": total,
-        "passed": passed,
-        "failed": failed,
-        "per_pipeline": per_pipeline,
-    }
+        total["total"] += 1
+        per_pipeline[slug]["total"] += 1
+        if build.state == "passed":
+            total["passed"] += 1
+            per_pipeline[slug]["passed"] += 1
+        elif build.state == "failed":
+            total["failed"] += 1
+            per_pipeline[slug]["failed"] += 1
+
+    return total, per_pipeline
 
 
 def build_claude_context(
-    summary: dict[str, Any],
+    total: dict[str, int],
+    per_pipeline: dict[str, dict[str, int]],
     failed_job_logs: list[dict[str, str]],
-    builds_by_pipeline: dict[str, list[dict[str, Any]]],
+    builds: list[Build],
 ) -> str:
     """Assemble the markdown context string for Claude.
 
@@ -133,13 +412,11 @@ def build_claude_context(
     lines: list[str] = []
     lines.append("# Buildkite Build Analysis - Last 24 Hours\n")
 
-    # Overall stats
-    lines.append(f"**Total builds**: {summary['total']}")
-    lines.append(f"**Passed**: {summary['passed']}")
-    lines.append(f"**Failed**: {summary['failed']}\n")
+    lines.append(f"**Total builds**: {total['total']}")
+    lines.append(f"**Passed**: {total['passed']}")
+    lines.append(f"**Failed**: {total['failed']}\n")
 
-    # Per-pipeline stats
-    for pipeline, stats in summary["per_pipeline"].items():
+    for pipeline, stats in per_pipeline.items():
         lines.append(f"## Pipeline: {pipeline}")
         lines.append(
             f"  Builds: {stats['total']} | Passed: {stats['passed']} | Failed: {stats['failed']}"
@@ -147,25 +424,22 @@ def build_claude_context(
 
     # Job-level pass/fail for flakiness detection
     job_results: dict[str, dict[str, int]] = {}
-    for builds in builds_by_pipeline.values():
-        for build in builds:
-            for job in build.get("jobs", []):
-                if job.get("type") != "script":
-                    continue
-                name = job.get("name", "unknown")
-                if name not in job_results:
-                    job_results[name] = {"passed": 0, "failed": 0}
-                state = job.get("state", "")
-                if state == "passed":
-                    job_results[name]["passed"] += 1
-                elif state == "failed":
-                    job_results[name]["failed"] += 1
+    for build in builds:
+        for job in build.jobs:
+            if job.type != "script":
+                continue
+            name = job.name or "unknown"
+            if name not in job_results:
+                job_results[name] = {"passed": 0, "failed": 0}
+            if job.state == "passed":
+                job_results[name]["passed"] += 1
+            elif job.state == "failed":
+                job_results[name]["failed"] += 1
 
     lines.append("\n## Job-Level Results")
     for name, counts in sorted(job_results.items()):
         lines.append(f"- **{name}**: {counts['passed']} passed, {counts['failed']} failed")
 
-    # Failed job logs
     if failed_job_logs:
         lines.append("\n## Failed Job Logs (tail)\n")
         for entry in failed_job_logs:
