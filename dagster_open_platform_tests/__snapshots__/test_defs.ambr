@@ -5279,7 +5279,7 @@
       'key': 'fivetran/bingads/account_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5329,7 +5329,7 @@
       'key': 'fivetran/bingads/ad_group_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5379,7 +5379,7 @@
       'key': 'fivetran/bingads/ad_group_performance_daily_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5429,7 +5429,7 @@
       'key': 'fivetran/bingads/ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5479,7 +5479,7 @@
       'key': 'fivetran/bingads/asset_group_attribute_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5529,7 +5529,7 @@
       'key': 'fivetran/bingads/asset_group_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5579,7 +5579,7 @@
       'key': 'fivetran/bingads/campaign_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5629,7 +5629,7 @@
       'key': 'fivetran/bingads/product_dimension_impression_performance_max_daily_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5679,7 +5679,7 @@
       'key': 'fivetran/bingads/product_dimension_impression_performance_max_hourly_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5729,7 +5729,7 @@
       'key': 'fivetran/bingads/product_dimension_performance_max_daily_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5779,7 +5779,7 @@
       'key': 'fivetran/bingads/product_dimension_performance_max_hourly_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/perkiness_parsley',
+          url='https://fivetran.com/dashboard/connections/perkiness_parsley',
         ),
         'dagster-fivetran/connector_id': 'perkiness_parsley',
         'dagster-fivetran/connector_name': 'bingads',
@@ -5829,7 +5829,7 @@
       'key': 'fivetran/fivetran_metadata/account',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -5879,7 +5879,7 @@
       'key': 'fivetran/fivetran_metadata/column_lineage',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -5929,7 +5929,7 @@
       'key': 'fivetran/fivetran_metadata/connection',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -5979,7 +5979,7 @@
       'key': 'fivetran/fivetran_metadata/connector',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6029,7 +6029,7 @@
       'key': 'fivetran/fivetran_metadata/connector_sdk_log',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6079,7 +6079,7 @@
       'key': 'fivetran/fivetran_metadata/connector_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6129,7 +6129,7 @@
       'key': 'fivetran/fivetran_metadata/credits_used',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6179,7 +6179,7 @@
       'key': 'fivetran/fivetran_metadata/destination',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6229,7 +6229,7 @@
       'key': 'fivetran/fivetran_metadata/destination_column_change_event',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6279,7 +6279,7 @@
       'key': 'fivetran/fivetran_metadata/destination_column_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6329,7 +6329,7 @@
       'key': 'fivetran/fivetran_metadata/destination_schema_change_event',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6379,7 +6379,7 @@
       'key': 'fivetran/fivetran_metadata/destination_schema_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6429,7 +6429,7 @@
       'key': 'fivetran/fivetran_metadata/destination_table_change_event',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6479,7 +6479,7 @@
       'key': 'fivetran/fivetran_metadata/destination_table_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6529,7 +6529,7 @@
       'key': 'fivetran/fivetran_metadata/incremental_mar',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6579,7 +6579,7 @@
       'key': 'fivetran/fivetran_metadata/log',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6629,7 +6629,7 @@
       'key': 'fivetran/fivetran_metadata/resource_membership',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6679,7 +6679,7 @@
       'key': 'fivetran/fivetran_metadata/role',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6729,7 +6729,7 @@
       'key': 'fivetran/fivetran_metadata/role_connector_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6779,7 +6779,7 @@
       'key': 'fivetran/fivetran_metadata/role_permission',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6829,7 +6829,7 @@
       'key': 'fivetran/fivetran_metadata/schema_lineage',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6879,7 +6879,7 @@
       'key': 'fivetran/fivetran_metadata/source_column_change_event',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6929,7 +6929,7 @@
       'key': 'fivetran/fivetran_metadata/source_column_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -6979,7 +6979,7 @@
       'key': 'fivetran/fivetran_metadata/source_foreign_key_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7029,7 +7029,7 @@
       'key': 'fivetran/fivetran_metadata/source_schema_change_event',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7079,7 +7079,7 @@
       'key': 'fivetran/fivetran_metadata/source_schema_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7129,7 +7129,7 @@
       'key': 'fivetran/fivetran_metadata/source_table_change_event',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7179,7 +7179,7 @@
       'key': 'fivetran/fivetran_metadata/source_table_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7229,7 +7229,7 @@
       'key': 'fivetran/fivetran_metadata/table_lineage',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7279,7 +7279,7 @@
       'key': 'fivetran/fivetran_metadata/team',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7329,7 +7329,7 @@
       'key': 'fivetran/fivetran_metadata/team_membership',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7379,7 +7379,7 @@
       'key': 'fivetran/fivetran_metadata/transformation_runs',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7429,7 +7429,7 @@
       'key': 'fivetran/fivetran_metadata/usage_cost',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7479,7 +7479,7 @@
       'key': 'fivetran/fivetran_metadata/user',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/aqueous_assessed',
+          url='https://fivetran.com/dashboard/connections/aqueous_assessed',
         ),
         'dagster-fivetran/connector_id': 'aqueous_assessed',
         'dagster-fivetran/connector_name': 'fivetran_metadata',
@@ -7529,7 +7529,7 @@
       'key': 'fivetran/google_ads/account_stats',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7579,7 +7579,7 @@
       'key': 'fivetran/google_ads/ad_custom_parameter_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7629,7 +7629,7 @@
       'key': 'fivetran/google_ads/ad_group_bid_modifier_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7679,7 +7679,7 @@
       'key': 'fivetran/google_ads/ad_group_bidding_strategy_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7729,7 +7729,7 @@
       'key': 'fivetran/google_ads/ad_group_custom_parameter_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7779,7 +7779,7 @@
       'key': 'fivetran/google_ads/ad_group_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7829,7 +7829,7 @@
       'key': 'fivetran/google_ads/ad_group_label_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7879,7 +7879,7 @@
       'key': 'fivetran/google_ads/ad_group_stats',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7929,7 +7929,7 @@
       'key': 'fivetran/google_ads/ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -7979,7 +7979,7 @@
       'key': 'fivetran/google_ads/ad_label_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8029,7 +8029,7 @@
       'key': 'fivetran/google_ads/ad_policy_topic_constraint_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8079,7 +8079,7 @@
       'key': 'fivetran/google_ads/ad_policy_topic_evidence_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8129,7 +8129,7 @@
       'key': 'fivetran/google_ads/ad_policy_topic_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8179,7 +8179,7 @@
       'key': 'fivetran/google_ads/ad_stats',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8229,7 +8229,7 @@
       'key': 'fivetran/google_ads/app_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8279,7 +8279,7 @@
       'key': 'fivetran/google_ads/app_engagement_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8329,7 +8329,7 @@
       'key': 'fivetran/google_ads/call_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8379,7 +8379,7 @@
       'key': 'fivetran/google_ads/campaign_app_campaign_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8429,7 +8429,7 @@
       'key': 'fivetran/google_ads/campaign_bid_modifier_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8479,7 +8479,7 @@
       'key': 'fivetran/google_ads/campaign_bidding_strategy_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8529,7 +8529,7 @@
       'key': 'fivetran/google_ads/campaign_budget_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8579,7 +8579,7 @@
       'key': 'fivetran/google_ads/campaign_conversion_goal_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8629,7 +8629,7 @@
       'key': 'fivetran/google_ads/campaign_dynamic_search_ads_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8679,7 +8679,7 @@
       'key': 'fivetran/google_ads/campaign_geo_target_type_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8729,7 +8729,7 @@
       'key': 'fivetran/google_ads/campaign_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8779,7 +8779,7 @@
       'key': 'fivetran/google_ads/campaign_hotel_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8829,7 +8829,7 @@
       'key': 'fivetran/google_ads/campaign_label_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8879,7 +8879,7 @@
       'key': 'fivetran/google_ads/campaign_local_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8929,7 +8929,7 @@
       'key': 'fivetran/google_ads/campaign_network_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -8979,7 +8979,7 @@
       'key': 'fivetran/google_ads/campaign_optimization_goal_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9029,7 +9029,7 @@
       'key': 'fivetran/google_ads/campaign_real_time_bidding_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9079,7 +9079,7 @@
       'key': 'fivetran/google_ads/campaign_shopping_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9129,7 +9129,7 @@
       'key': 'fivetran/google_ads/campaign_stats',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9179,7 +9179,7 @@
       'key': 'fivetran/google_ads/campaign_targeting_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9229,7 +9229,7 @@
       'key': 'fivetran/google_ads/campaign_tracking_setting_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9279,7 +9279,7 @@
       'key': 'fivetran/google_ads/demand_gen_carousel_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9329,7 +9329,7 @@
       'key': 'fivetran/google_ads/demand_gen_multi_asset_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9379,7 +9379,7 @@
       'key': 'fivetran/google_ads/demand_gen_product_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9429,7 +9429,7 @@
       'key': 'fivetran/google_ads/display_upload_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9479,7 +9479,7 @@
       'key': 'fivetran/google_ads/expanded_dynamic_search_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9529,7 +9529,7 @@
       'key': 'fivetran/google_ads/expanded_text_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9579,7 +9579,7 @@
       'key': 'fivetran/google_ads/hotel_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9629,7 +9629,7 @@
       'key': 'fivetran/google_ads/image_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9679,7 +9679,7 @@
       'key': 'fivetran/google_ads/lead_form_submission_data',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9729,7 +9729,7 @@
       'key': 'fivetran/google_ads/legacy_app_install_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9779,7 +9779,7 @@
       'key': 'fivetran/google_ads/legacy_responsive_display_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9829,7 +9829,7 @@
       'key': 'fivetran/google_ads/local_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9879,7 +9879,7 @@
       'key': 'fivetran/google_ads/local_services_lead',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9929,7 +9929,7 @@
       'key': 'fivetran/google_ads/local_services_lead_conversations',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -9979,7 +9979,7 @@
       'key': 'fivetran/google_ads/responsive_display_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10029,7 +10029,7 @@
       'key': 'fivetran/google_ads/responsive_search_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10079,7 +10079,7 @@
       'key': 'fivetran/google_ads/search_keyword_stats',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10129,7 +10129,7 @@
       'key': 'fivetran/google_ads/search_term_keyword_stats',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10179,7 +10179,7 @@
       'key': 'fivetran/google_ads/search_term_stats',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10229,7 +10229,7 @@
       'key': 'fivetran/google_ads/shopping_comparison_listing_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10279,7 +10279,7 @@
       'key': 'fivetran/google_ads/shopping_product_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10329,7 +10329,7 @@
       'key': 'fivetran/google_ads/shopping_smart_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10379,7 +10379,7 @@
       'key': 'fivetran/google_ads/smart_campaign_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10429,7 +10429,7 @@
       'key': 'fivetran/google_ads/text_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10479,7 +10479,7 @@
       'key': 'fivetran/google_ads/video_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10529,7 +10529,7 @@
       'key': 'fivetran/google_ads/video_responsive_ad_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/flee_plea',
+          url='https://fivetran.com/dashboard/connections/flee_plea',
         ),
         'dagster-fivetran/connector_id': 'flee_plea',
         'dagster-fivetran/connector_name': 'google_ads',
@@ -10579,7 +10579,7 @@
       'key': 'fivetran/google_analytics_4/pages_path_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/riot_native',
+          url='https://fivetran.com/dashboard/connections/riot_native',
         ),
         'dagster-fivetran/connector_id': 'riot_native',
         'dagster-fivetran/connector_name': 'google_analytics_4',
@@ -10629,7 +10629,7 @@
       'key': 'fivetran/google_analytics_4/pages_title_and_screen_class_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/riot_native',
+          url='https://fivetran.com/dashboard/connections/riot_native',
         ),
         'dagster-fivetran/connector_id': 'riot_native',
         'dagster-fivetran/connector_name': 'google_analytics_4',
@@ -10679,7 +10679,7 @@
       'key': 'fivetran/google_analytics_4/properties',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/riot_native',
+          url='https://fivetran.com/dashboard/connections/riot_native',
         ),
         'dagster-fivetran/connector_id': 'riot_native',
         'dagster-fivetran/connector_name': 'google_analytics_4',
@@ -10729,7 +10729,7 @@
       'key': 'fivetran/google_analytics_4/traffic_acquisition_session_default_channel_grouping_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/riot_native',
+          url='https://fivetran.com/dashboard/connections/riot_native',
         ),
         'dagster-fivetran/connector_id': 'riot_native',
         'dagster-fivetran/connector_name': 'google_analytics_4',
@@ -10779,7 +10779,7 @@
       'key': 'fivetran/google_analytics_4/traffic_acquisition_session_source_medium_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/riot_native',
+          url='https://fivetran.com/dashboard/connections/riot_native',
         ),
         'dagster-fivetran/connector_id': 'riot_native',
         'dagster-fivetran/connector_name': 'google_analytics_4',
@@ -10829,7 +10829,7 @@
       'key': 'fivetran/google_sheets/allowable_top_level_domains',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/transmitting_nationalist',
+          url='https://fivetran.com/dashboard/connections/transmitting_nationalist',
         ),
         'dagster-fivetran/connector_id': 'transmitting_nationalist',
         'dagster-fivetran/connector_name': 'google_sheets.allowable_top_level_domains',
@@ -10879,7 +10879,7 @@
       'key': 'fivetran/google_sheets/nb_sales_rep_quotas',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/promotion_secretory',
+          url='https://fivetran.com/dashboard/connections/promotion_secretory',
         ),
         'dagster-fivetran/connector_id': 'promotion_secretory',
         'dagster-fivetran/connector_name': 'google_sheets.nb_sales_rep_quotas',
@@ -10929,7 +10929,7 @@
       'key': 'fivetran/google_sheets/paid_ads_mapping',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/counteract_wretched',
+          url='https://fivetran.com/dashboard/connections/counteract_wretched',
         ),
         'dagster-fivetran/connector_id': 'counteract_wretched',
         'dagster-fivetran/connector_name': 'google_sheets.paid_ads_mapping',
@@ -10987,7 +10987,7 @@
       'key': 'fivetran/google_sheets/sales_rep_quotas',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/penpal_barricade',
+          url='https://fivetran.com/dashboard/connections/penpal_barricade',
         ),
         'dagster-fivetran/connector_id': 'penpal_barricade',
         'dagster-fivetran/connector_name': 'google_sheets.sales_rep_quotas',
@@ -11037,7 +11037,7 @@
       'key': 'fivetran/google_sheets/search_console_sheets_import',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/crawling_stooge',
+          url='https://fivetran.com/dashboard/connections/crawling_stooge',
         ),
         'dagster-fivetran/connector_id': 'crawling_stooge',
         'dagster-fivetran/connector_name': 'google_sheets.search_console_sheets_import',
@@ -11087,7 +11087,7 @@
       'key': 'fivetran/hubspot/association_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11137,7 +11137,7 @@
       'key': 'fivetran/hubspot/company',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11187,7 +11187,7 @@
       'key': 'fivetran/hubspot/company_company',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11237,7 +11237,7 @@
       'key': 'fivetran/hubspot/contact',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11287,7 +11287,7 @@
       'key': 'fivetran/hubspot/contact_company',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11337,7 +11337,7 @@
       'key': 'fivetran/hubspot/contact_contact',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11387,7 +11387,7 @@
       'key': 'fivetran/hubspot/contact_form_submission',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11437,7 +11437,7 @@
       'key': 'fivetran/hubspot/form',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11487,7 +11487,7 @@
       'key': 'fivetran/hubspot/organizations',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11537,7 +11537,7 @@
       'key': 'fivetran/hubspot/organizations_to_company',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11587,7 +11587,7 @@
       'key': 'fivetran/hubspot/users',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/museum_odious',
+          url='https://fivetran.com/dashboard/connections/museum_odious',
         ),
         'dagster-fivetran/connector_id': 'museum_odious',
         'dagster-fivetran/connector_name': 'hubspot',
@@ -11637,7 +11637,7 @@
       'key': 'fivetran/incidentio/action',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -11687,7 +11687,7 @@
       'key': 'fivetran/incidentio/catalog_entry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -11737,7 +11737,7 @@
       'key': 'fivetran/incidentio/catalog_entry_aliases',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -11787,7 +11787,7 @@
       'key': 'fivetran/incidentio/catalog_entry_attribute_array_value',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -11837,7 +11837,7 @@
       'key': 'fivetran/incidentio/catalog_entry_attribute_value',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -11887,7 +11887,7 @@
       'key': 'fivetran/incidentio/catalog_resource',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -11937,7 +11937,7 @@
       'key': 'fivetran/incidentio/catalog_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -11987,7 +11987,7 @@
       'key': 'fivetran/incidentio/catalog_type_annotation',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12037,7 +12037,7 @@
       'key': 'fivetran/incidentio/catalog_type_required_integration',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12087,7 +12087,7 @@
       'key': 'fivetran/incidentio/catalog_type_schema_attribute',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12137,7 +12137,7 @@
       'key': 'fivetran/incidentio/custom_field',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12187,7 +12187,7 @@
       'key': 'fivetran/incidentio/custom_field_option',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12237,7 +12237,7 @@
       'key': 'fivetran/incidentio/follow_up_incident',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12287,7 +12287,7 @@
       'key': 'fivetran/incidentio/identity_utility_role',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12337,7 +12337,7 @@
       'key': 'fivetran/incidentio/incident',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12387,7 +12387,7 @@
       'key': 'fivetran/incidentio/incident_attachment',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12437,7 +12437,7 @@
       'key': 'fivetran/incidentio/incident_custom_field_entry_value',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12487,7 +12487,7 @@
       'key': 'fivetran/incidentio/incident_role',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12537,7 +12537,7 @@
       'key': 'fivetran/incidentio/incident_role_assignment',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12587,7 +12587,7 @@
       'key': 'fivetran/incidentio/incident_status',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12637,7 +12637,7 @@
       'key': 'fivetran/incidentio/incident_timestamp',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12687,7 +12687,7 @@
       'key': 'fivetran/incidentio/incident_timestamp_value',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12737,7 +12737,7 @@
       'key': 'fivetran/incidentio/incident_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12787,7 +12787,7 @@
       'key': 'fivetran/incidentio/incident_update',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12837,7 +12837,7 @@
       'key': 'fivetran/incidentio/severity',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12887,7 +12887,7 @@
       'key': 'fivetran/incidentio/users',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/contrast_mulberry',
+          url='https://fivetran.com/dashboard/connections/contrast_mulberry',
         ),
         'dagster-fivetran/connector_id': 'contrast_mulberry',
         'dagster-fivetran/connector_name': 'incidentio',
@@ -12951,7 +12951,7 @@
       'key': 'fivetran/linear/attachment',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13001,7 +13001,7 @@
       'key': 'fivetran/linear/attachment_metadata',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13051,7 +13051,7 @@
       'key': 'fivetran/linear/comment',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13101,7 +13101,7 @@
       'key': 'fivetran/linear/cycle',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13151,7 +13151,7 @@
       'key': 'fivetran/linear/cycle_uncompleted_issue',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13201,7 +13201,7 @@
       'key': 'fivetran/linear/document',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13251,7 +13251,7 @@
       'key': 'fivetran/linear/external_user',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13301,7 +13301,7 @@
       'key': 'fivetran/linear/initiative',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13351,7 +13351,7 @@
       'key': 'fivetran/linear/initiative_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13401,7 +13401,7 @@
       'key': 'fivetran/linear/initiative_to_project',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13451,7 +13451,7 @@
       'key': 'fivetran/linear/integration',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13501,7 +13501,7 @@
       'key': 'fivetran/linear/issue',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13551,7 +13551,7 @@
       'key': 'fivetran/linear/issue_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13601,7 +13601,7 @@
       'key': 'fivetran/linear/issue_label',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13651,7 +13651,7 @@
       'key': 'fivetran/linear/issue_subscriber',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13701,7 +13701,7 @@
       'key': 'fivetran/linear/label',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13751,7 +13751,7 @@
       'key': 'fivetran/linear/label_children',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13801,7 +13801,7 @@
       'key': 'fivetran/linear/organization',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13851,7 +13851,7 @@
       'key': 'fivetran/linear/project',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13901,7 +13901,7 @@
       'key': 'fivetran/linear/project_member',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -13951,7 +13951,7 @@
       'key': 'fivetran/linear/project_milestone',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14001,7 +14001,7 @@
       'key': 'fivetran/linear/project_status',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14051,7 +14051,7 @@
       'key': 'fivetran/linear/project_team',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14101,7 +14101,7 @@
       'key': 'fivetran/linear/project_update',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14151,7 +14151,7 @@
       'key': 'fivetran/linear/project_update_comment',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14201,7 +14201,7 @@
       'key': 'fivetran/linear/project_update_reaction',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14251,7 +14251,7 @@
       'key': 'fivetran/linear/roadmap',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14301,7 +14301,7 @@
       'key': 'fivetran/linear/roadmap_to_project',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14351,7 +14351,7 @@
       'key': 'fivetran/linear/team',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14401,7 +14401,7 @@
       'key': 'fivetran/linear/team_member',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14451,7 +14451,7 @@
       'key': 'fivetran/linear/team_membership',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14501,7 +14501,7 @@
       'key': 'fivetran/linear/team_project',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14551,7 +14551,7 @@
       'key': 'fivetran/linear/users',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14601,7 +14601,7 @@
       'key': 'fivetran/linear/workflow_state',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/zookeeper_intuitive',
+          url='https://fivetran.com/dashboard/connections/zookeeper_intuitive',
         ),
         'dagster-fivetran/connector_id': 'zookeeper_intuitive',
         'dagster-fivetran/connector_name': 'linear',
@@ -14651,7 +14651,7 @@
       'key': 'fivetran/linkedin_ads/account_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -14701,7 +14701,7 @@
       'key': 'fivetran/linkedin_ads/account_user_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -14751,7 +14751,7 @@
       'key': 'fivetran/linkedin_ads/ad_analytics_by_campaign',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -14801,7 +14801,7 @@
       'key': 'fivetran/linkedin_ads/ad_analytics_by_creative',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -14851,7 +14851,7 @@
       'key': 'fivetran/linkedin_ads/campaign_group_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -14901,7 +14901,7 @@
       'key': 'fivetran/linkedin_ads/campaign_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -14951,7 +14951,7 @@
       'key': 'fivetran/linkedin_ads/creative_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15001,7 +15001,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_consent',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15051,7 +15051,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_hidden_field',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15101,7 +15101,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15151,7 +15151,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_multiple_choice_question_option',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15201,7 +15201,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_question',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15251,7 +15251,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_rejection_reason',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15301,7 +15301,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_response',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15351,7 +15351,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_response_answer',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15401,7 +15401,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_response_consent',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15451,7 +15451,7 @@
       'key': 'fivetran/linkedin_ads/lead_form_response_multiple_choice_answers',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15501,7 +15501,7 @@
       'key': 'fivetran/linkedin_ads/sponsored_message_option',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sublimity_inoculated',
+          url='https://fivetran.com/dashboard/connections/sublimity_inoculated',
         ),
         'dagster-fivetran/connector_id': 'sublimity_inoculated',
         'dagster-fivetran/connector_name': 'linkedin_ads',
@@ -15551,7 +15551,7 @@
       'key': 'fivetran/linkedin_company_pages/brand',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15601,7 +15601,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_alternative_names',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15651,7 +15651,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_followers_by_association_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15701,7 +15701,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_followers_by_function',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15751,7 +15751,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_followers_by_geo',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15801,7 +15801,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_followers_by_geo_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15851,7 +15851,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_followers_by_industry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15901,7 +15901,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_followers_by_seniority',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -15951,7 +15951,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_followers_by_staff_count_range',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16001,7 +16001,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_industries',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16051,7 +16051,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_localized_specialties',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16101,7 +16101,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16151,7 +16151,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_function',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16201,7 +16201,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_geo',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16251,7 +16251,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_geo_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16301,7 +16301,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_industry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16351,7 +16351,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_region',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16401,7 +16401,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_seniority',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16451,7 +16451,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_page_statistic_by_staff_count_range',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16501,7 +16501,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_share',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16551,7 +16551,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_time_bound_follower_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16601,7 +16601,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_time_bound_page_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16651,7 +16651,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_time_bound_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16701,7 +16701,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_total_follower_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16751,7 +16751,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_total_page_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16801,7 +16801,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_total_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16851,7 +16851,7 @@
       'key': 'fivetran/linkedin_company_pages/brand_ugc_post',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16901,7 +16901,7 @@
       'key': 'fivetran/linkedin_company_pages/comment_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -16951,7 +16951,7 @@
       'key': 'fivetran/linkedin_company_pages/comment_on_comment',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17001,7 +17001,7 @@
       'key': 'fivetran/linkedin_company_pages/comment_on_share',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17051,7 +17051,7 @@
       'key': 'fivetran/linkedin_company_pages/comment_on_ugc_post',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17101,7 +17101,7 @@
       'key': 'fivetran/linkedin_company_pages/comment_social_metadata_summary',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17151,7 +17151,7 @@
       'key': 'fivetran/linkedin_company_pages/country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17201,7 +17201,7 @@
       'key': 'fivetran/linkedin_company_pages/followers_by_association_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17251,7 +17251,7 @@
       'key': 'fivetran/linkedin_company_pages/followers_by_function',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17301,7 +17301,7 @@
       'key': 'fivetran/linkedin_company_pages/followers_by_geo',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17351,7 +17351,7 @@
       'key': 'fivetran/linkedin_company_pages/followers_by_geo_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17401,7 +17401,7 @@
       'key': 'fivetran/linkedin_company_pages/followers_by_industry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17451,7 +17451,7 @@
       'key': 'fivetran/linkedin_company_pages/followers_by_seniority',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17501,7 +17501,7 @@
       'key': 'fivetran/linkedin_company_pages/followers_by_staff_count_range',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17551,7 +17551,7 @@
       'key': 'fivetran/linkedin_company_pages/function',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17601,7 +17601,7 @@
       'key': 'fivetran/linkedin_company_pages/geo',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17651,7 +17651,7 @@
       'key': 'fivetran/linkedin_company_pages/industry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17701,7 +17701,7 @@
       'key': 'fivetran/linkedin_company_pages/organization',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17751,7 +17751,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_alternative_names',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17801,7 +17801,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_followers_by_association_type',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17851,7 +17851,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_followers_by_function',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17901,7 +17901,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_followers_by_geo',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -17951,7 +17951,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_followers_by_geo_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18001,7 +18001,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_followers_by_industry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18051,7 +18051,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_followers_by_seniority',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18101,7 +18101,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_followers_by_staff_count_range',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18151,7 +18151,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_groups',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18201,7 +18201,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_industries',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18251,7 +18251,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_localized_specialties',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18301,7 +18301,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_locations',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18351,7 +18351,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18401,7 +18401,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_function',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18451,7 +18451,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_geo',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18501,7 +18501,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_geo_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18551,7 +18551,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_industry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18601,7 +18601,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_region',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18651,7 +18651,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_seniority',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18701,7 +18701,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_page_statistic_by_staff_count_range',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18751,7 +18751,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_share',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18801,7 +18801,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_time_bound_follower_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18851,7 +18851,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_time_bound_page_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18901,7 +18901,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_time_bound_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -18951,7 +18951,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_total_follower_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19001,7 +19001,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_total_page_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19051,7 +19051,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_total_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19101,7 +19101,7 @@
       'key': 'fivetran/linkedin_company_pages/organization_ugc_post',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19151,7 +19151,7 @@
       'key': 'fivetran/linkedin_company_pages/page_statistic_by_function',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19201,7 +19201,7 @@
       'key': 'fivetran/linkedin_company_pages/page_statistic_by_geo',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19251,7 +19251,7 @@
       'key': 'fivetran/linkedin_company_pages/page_statistic_by_geo_country',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19301,7 +19301,7 @@
       'key': 'fivetran/linkedin_company_pages/page_statistic_by_industry',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19351,7 +19351,7 @@
       'key': 'fivetran/linkedin_company_pages/page_statistic_by_seniority',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19401,7 +19401,7 @@
       'key': 'fivetran/linkedin_company_pages/page_statistic_by_staff_count_range',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19451,7 +19451,7 @@
       'key': 'fivetran/linkedin_company_pages/post_carousel_card',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19501,7 +19501,7 @@
       'key': 'fivetran/linkedin_company_pages/post_content',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19551,7 +19551,7 @@
       'key': 'fivetran/linkedin_company_pages/post_content_poll_option',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19601,7 +19601,7 @@
       'key': 'fivetran/linkedin_company_pages/post_distribution_target_industries',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19651,7 +19651,7 @@
       'key': 'fivetran/linkedin_company_pages/post_distribution_target_interface_locales',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19701,7 +19701,7 @@
       'key': 'fivetran/linkedin_company_pages/post_distribution_target_job_functions',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19751,7 +19751,7 @@
       'key': 'fivetran/linkedin_company_pages/post_distribution_target_locations',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19801,7 +19801,7 @@
       'key': 'fivetran/linkedin_company_pages/post_distribution_target_seniorities',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19851,7 +19851,7 @@
       'key': 'fivetran/linkedin_company_pages/post_distribution_target_staff_count_ranges',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19901,7 +19901,7 @@
       'key': 'fivetran/linkedin_company_pages/post_multi_image',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -19951,7 +19951,7 @@
       'key': 'fivetran/linkedin_company_pages/region',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20001,7 +20001,7 @@
       'key': 'fivetran/linkedin_company_pages/seniority',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20051,7 +20051,7 @@
       'key': 'fivetran/linkedin_company_pages/share_carousel_card',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20101,7 +20101,7 @@
       'key': 'fivetran/linkedin_company_pages/share_content',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20151,7 +20151,7 @@
       'key': 'fivetran/linkedin_company_pages/share_content_poll_option',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20201,7 +20201,7 @@
       'key': 'fivetran/linkedin_company_pages/share_distribution_target_industries',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20251,7 +20251,7 @@
       'key': 'fivetran/linkedin_company_pages/share_distribution_target_interface_locales',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20301,7 +20301,7 @@
       'key': 'fivetran/linkedin_company_pages/share_distribution_target_job_functions',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20351,7 +20351,7 @@
       'key': 'fivetran/linkedin_company_pages/share_distribution_target_locations',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20401,7 +20401,7 @@
       'key': 'fivetran/linkedin_company_pages/share_distribution_target_seniorities',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20451,7 +20451,7 @@
       'key': 'fivetran/linkedin_company_pages/share_distribution_target_staff_count_ranges',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20501,7 +20501,7 @@
       'key': 'fivetran/linkedin_company_pages/share_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20551,7 +20551,7 @@
       'key': 'fivetran/linkedin_company_pages/share_multi_image',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20601,7 +20601,7 @@
       'key': 'fivetran/linkedin_company_pages/share_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20651,7 +20651,7 @@
       'key': 'fivetran/linkedin_company_pages/share_social_metadata_summary',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20701,7 +20701,7 @@
       'key': 'fivetran/linkedin_company_pages/share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20751,7 +20751,7 @@
       'key': 'fivetran/linkedin_company_pages/social_metadata_summary',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20801,7 +20801,7 @@
       'key': 'fivetran/linkedin_company_pages/time_bound_follower_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20851,7 +20851,7 @@
       'key': 'fivetran/linkedin_company_pages/time_bound_page_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20901,7 +20901,7 @@
       'key': 'fivetran/linkedin_company_pages/time_bound_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -20951,7 +20951,7 @@
       'key': 'fivetran/linkedin_company_pages/total_follower_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -21001,7 +21001,7 @@
       'key': 'fivetran/linkedin_company_pages/total_page_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -21051,7 +21051,7 @@
       'key': 'fivetran/linkedin_company_pages/total_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -21101,7 +21101,7 @@
       'key': 'fivetran/linkedin_company_pages/ugc_post_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -21151,7 +21151,7 @@
       'key': 'fivetran/linkedin_company_pages/ugc_post_share_statistic',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -21201,7 +21201,7 @@
       'key': 'fivetran/linkedin_company_pages/ugc_post_social_metadata_summary',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sheep_motivate',
+          url='https://fivetran.com/dashboard/connections/sheep_motivate',
         ),
         'dagster-fivetran/connector_id': 'sheep_motivate',
         'dagster-fivetran/connector_name': 'linkedin_company_pages',
@@ -21251,7 +21251,7 @@
       'key': 'fivetran/outreach/account',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21301,7 +21301,7 @@
       'key': 'fivetran/outreach/account_tag',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21351,7 +21351,7 @@
       'key': 'fivetran/outreach/active_step_mailing',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21401,7 +21401,7 @@
       'key': 'fivetran/outreach/active_step_task',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21451,7 +21451,7 @@
       'key': 'fivetran/outreach/data_connection',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21501,7 +21501,7 @@
       'key': 'fivetran/outreach/duty',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21551,7 +21551,7 @@
       'key': 'fivetran/outreach/email_address',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21601,7 +21601,7 @@
       'key': 'fivetran/outreach/mailing',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21651,7 +21651,7 @@
       'key': 'fivetran/outreach/mailing_recipient',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21701,7 +21701,7 @@
       'key': 'fivetran/outreach/mailing_reference',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21751,7 +21751,7 @@
       'key': 'fivetran/outreach/prospect',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21801,7 +21801,7 @@
       'key': 'fivetran/outreach/prospect_email',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21851,7 +21851,7 @@
       'key': 'fivetran/outreach/prospect_favorite',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21901,7 +21901,7 @@
       'key': 'fivetran/outreach/prospect_home_phone',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -21951,7 +21951,7 @@
       'key': 'fivetran/outreach/prospect_mobile_phone',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22001,7 +22001,7 @@
       'key': 'fivetran/outreach/prospect_other_phone',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22051,7 +22051,7 @@
       'key': 'fivetran/outreach/prospect_tag',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22101,7 +22101,7 @@
       'key': 'fivetran/outreach/prospect_voip_phone',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22151,7 +22151,7 @@
       'key': 'fivetran/outreach/prospect_work_phone',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22201,7 +22201,7 @@
       'key': 'fivetran/outreach/sequence',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22251,7 +22251,7 @@
       'key': 'fivetran/outreach/sequence_state',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22301,7 +22301,7 @@
       'key': 'fivetran/outreach/sequence_step',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22351,7 +22351,7 @@
       'key': 'fivetran/outreach/sequence_tag',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22401,7 +22401,7 @@
       'key': 'fivetran/outreach/sequence_template',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22451,7 +22451,7 @@
       'key': 'fivetran/outreach/user_duty',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22501,7 +22501,7 @@
       'key': 'fivetran/outreach/user_email_recipients',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22551,7 +22551,7 @@
       'key': 'fivetran/outreach/user_team',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22601,7 +22601,7 @@
       'key': 'fivetran/outreach/users',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/surfer_kangaroo',
+          url='https://fivetran.com/dashboard/connections/surfer_kangaroo',
         ),
         'dagster-fivetran/connector_id': 'surfer_kangaroo',
         'dagster-fivetran/connector_name': 'outreach',
@@ -22651,7 +22651,7 @@
       'key': 'fivetran/reddit_ads/account_conversions_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -22701,7 +22701,7 @@
       'key': 'fivetran/reddit_ads/account_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -22751,7 +22751,7 @@
       'key': 'fivetran/reddit_ads/ad',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -22801,7 +22801,7 @@
       'key': 'fivetran/reddit_ads/ad_conversions_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -22851,7 +22851,7 @@
       'key': 'fivetran/reddit_ads/ad_group',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -22901,7 +22901,7 @@
       'key': 'fivetran/reddit_ads/ad_group_conversions_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -22951,7 +22951,7 @@
       'key': 'fivetran/reddit_ads/ad_group_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -23001,7 +23001,7 @@
       'key': 'fivetran/reddit_ads/ad_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -23051,7 +23051,7 @@
       'key': 'fivetran/reddit_ads/campaign',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -23115,7 +23115,7 @@
       'key': 'fivetran/reddit_ads/click_tracker',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -23165,7 +23165,7 @@
       'key': 'fivetran/reddit_ads/pixel_partner_reference',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -23215,7 +23215,7 @@
       'key': 'fivetran/reddit_ads/schedule',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/sedimentary_unmanned',
+          url='https://fivetran.com/dashboard/connections/sedimentary_unmanned',
         ),
         'dagster-fivetran/connector_id': 'sedimentary_unmanned',
         'dagster-fivetran/connector_name': 'reddit_ads',
@@ -23265,7 +23265,7 @@
       'key': 'fivetran/salesforce/account',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23315,7 +23315,7 @@
       'key': 'fivetran/salesforce/account_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23365,7 +23365,7 @@
       'key': 'fivetran/salesforce/account_ownership_c',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23415,7 +23415,7 @@
       'key': 'fivetran/salesforce/campaign',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23465,7 +23465,7 @@
       'key': 'fivetran/salesforce/campaign_member',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23515,7 +23515,7 @@
       'key': 'fivetran/salesforce/contact',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23565,7 +23565,7 @@
       'key': 'fivetran/salesforce/contract',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23615,7 +23615,7 @@
       'key': 'fivetran/salesforce/event',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23665,7 +23665,7 @@
       'key': 'fivetran/salesforce/forecasting_quota',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23715,7 +23715,7 @@
       'key': 'fivetran/salesforce/leadfeederapp_website_visit_c',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23765,7 +23765,7 @@
       'key': 'fivetran/salesforce/opportunity',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23815,7 +23815,7 @@
       'key': 'fivetran/salesforce/opportunity_field_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23865,7 +23865,7 @@
       'key': 'fivetran/salesforce/opportunity_history',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23915,7 +23915,7 @@
       'key': 'fivetran/salesforce/opportunity_line_item',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -23965,7 +23965,7 @@
       'key': 'fivetran/salesforce/organization_c',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -24015,7 +24015,7 @@
       'key': 'fivetran/salesforce/partner',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -24065,7 +24065,7 @@
       'key': 'fivetran/salesforce/product_2',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -24115,7 +24115,7 @@
       'key': 'fivetran/salesforce/sales_cycle_c',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -24165,7 +24165,7 @@
       'key': 'fivetran/salesforce/task',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -24215,7 +24215,7 @@
       'key': 'fivetran/salesforce/user',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -24265,7 +24265,7 @@
       'key': 'fivetran/salesforce/user_role',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/unfamiliar_eye',
+          url='https://fivetran.com/dashboard/connections/unfamiliar_eye',
         ),
         'dagster-fivetran/connector_id': 'unfamiliar_eye',
         'dagster-fivetran/connector_name': 'salesforce',
@@ -24315,7 +24315,7 @@
       'key': 'fivetran/youtube_analytics/channel',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/employee_doomed',
+          url='https://fivetran.com/dashboard/connections/employee_doomed',
         ),
         'dagster-fivetran/connector_id': 'employee_doomed',
         'dagster-fivetran/connector_name': 'youtube_analytics',
@@ -24365,7 +24365,7 @@
       'key': 'fivetran/youtube_analytics/channel_basic_a_2',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/employee_doomed',
+          url='https://fivetran.com/dashboard/connections/employee_doomed',
         ),
         'dagster-fivetran/connector_id': 'employee_doomed',
         'dagster-fivetran/connector_name': 'youtube_analytics',
@@ -24852,7 +24852,7 @@
       'key': 'fivetran/youtube_analytics/channel_combined_a_2',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/employee_doomed',
+          url='https://fivetran.com/dashboard/connections/employee_doomed',
         ),
         'dagster-fivetran/connector_id': 'employee_doomed',
         'dagster-fivetran/connector_name': 'youtube_analytics',
@@ -24902,7 +24902,7 @@
       'key': 'fivetran/youtube_analytics/playlist',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/employee_doomed',
+          url='https://fivetran.com/dashboard/connections/employee_doomed',
         ),
         'dagster-fivetran/connector_id': 'employee_doomed',
         'dagster-fivetran/connector_name': 'youtube_analytics',
@@ -24952,7 +24952,7 @@
       'key': 'fivetran/youtube_analytics/playlist_combined_a_1',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/employee_doomed',
+          url='https://fivetran.com/dashboard/connections/employee_doomed',
         ),
         'dagster-fivetran/connector_id': 'employee_doomed',
         'dagster-fivetran/connector_name': 'youtube_analytics',
@@ -25002,7 +25002,7 @@
       'key': 'fivetran/youtube_analytics/video',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/employee_doomed',
+          url='https://fivetran.com/dashboard/connections/employee_doomed',
         ),
         'dagster-fivetran/connector_id': 'employee_doomed',
         'dagster-fivetran/connector_name': 'youtube_analytics',
@@ -25052,7 +25052,7 @@
       'key': 'fivetran/zoom/channel',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25102,7 +25102,7 @@
       'key': 'fivetran/zoom/meeting',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25160,7 +25160,7 @@
       'key': 'fivetran/zoom/meeting_participant',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25218,7 +25218,7 @@
       'key': 'fivetran/zoom/meeting_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25276,7 +25276,7 @@
       'key': 'fivetran/zoom/meeting_report_custom_key',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25326,7 +25326,7 @@
       'key': 'fivetran/zoom/meeting_report_tracking',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25376,7 +25376,7 @@
       'key': 'fivetran/zoom/user_custom_attribute',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25426,7 +25426,7 @@
       'key': 'fivetran/zoom/user_group',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25476,7 +25476,7 @@
       'key': 'fivetran/zoom/user_im_group',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25526,7 +25526,7 @@
       'key': 'fivetran/zoom/users',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25576,7 +25576,7 @@
       'key': 'fivetran/zoom/webinar',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25626,7 +25626,7 @@
       'key': 'fivetran/zoom/webinar_absentee',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25676,7 +25676,7 @@
       'key': 'fivetran/zoom/webinar_panelist',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25726,7 +25726,7 @@
       'key': 'fivetran/zoom/webinar_participant',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25776,7 +25776,7 @@
       'key': 'fivetran/zoom/webinar_poll',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25826,7 +25826,7 @@
       'key': 'fivetran/zoom/webinar_poll_question',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25876,7 +25876,7 @@
       'key': 'fivetran/zoom/webinar_poll_question_answer',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25926,7 +25926,7 @@
       'key': 'fivetran/zoom/webinar_poll_question_prompt',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -25976,7 +25976,7 @@
       'key': 'fivetran/zoom/webinar_question_and_answer',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26026,7 +26026,7 @@
       'key': 'fivetran/zoom/webinar_question_and_answer_question',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26076,7 +26076,7 @@
       'key': 'fivetran/zoom/webinar_question_and_answer_question_detail',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26126,7 +26126,7 @@
       'key': 'fivetran/zoom/webinar_registrant',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26176,7 +26176,7 @@
       'key': 'fivetran/zoom/webinar_registrant_custom_question',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26226,7 +26226,7 @@
       'key': 'fivetran/zoom/webinar_report',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26276,7 +26276,7 @@
       'key': 'fivetran/zoom/webinar_report_custom_key',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26326,7 +26326,7 @@
       'key': 'fivetran/zoom/webinar_report_tracking',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
@@ -26376,7 +26376,7 @@
       'key': 'fivetran/zoom/webinar_tracking_source',
       'metadata': dict({
         'connector_url': UrlMetadataValue(
-          url='https://fivetran.com/dashboard/connectors/paralleled_orchard',
+          url='https://fivetran.com/dashboard/connections/paralleled_orchard',
         ),
         'dagster-fivetran/connector_id': 'paralleled_orchard',
         'dagster-fivetran/connector_name': 'zoom',
