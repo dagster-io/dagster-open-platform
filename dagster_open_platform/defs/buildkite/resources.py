@@ -29,6 +29,7 @@ class BuildkiteResource(dg.ConfigurableResource):
         created_to: str | None = None,
         state: str | None = None,
         branch: str | None = None,
+        include_retried_jobs: bool | None = True,
         per_page: int = 100,
         max_pages: int | None = None,
     ) -> list[Build]:
@@ -60,6 +61,8 @@ class BuildkiteResource(dg.ConfigurableResource):
             params["state"] = state
         if branch:
             params["branch"] = branch
+        if include_retried_jobs:
+            params["include_retried_jobs"] = "true"
 
         if pipeline_slug is not None:
             url = f"{self._base_url}/pipelines/{pipeline_slug}/builds"

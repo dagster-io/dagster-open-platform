@@ -112,9 +112,7 @@ class BuildkiteAnalysisConfig(dg.Config):
         "dagster/kind/slack": "",
     },
     automation_condition=(
-        AutomationCondition.cron_tick_passed("0 5 * * *")
-        & AutomationCondition.all_deps_updated_since_cron("0 5 * * *")
-        & ~AutomationCondition.in_progress()
+        AutomationCondition.on_cron("0 5 * * *") & ~AutomationCondition.in_progress()
     ),
     deps=["buildkite_builds", "buildkite_jobs"],
     description="Daily analysis of Buildkite builds using Claude, posted to Slack.",
