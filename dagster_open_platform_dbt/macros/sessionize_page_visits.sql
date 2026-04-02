@@ -57,7 +57,7 @@ add_paid_flags as (
     select 
         *,
         case
-            when page_attribution_category in ('cpc', 'ppc', 'sponsorship') then true
+            when page_attribution_category in ('cpc', 'paidsocial', 'sponsorship') then true
             else false
         end as is_paid_category
     from add_session_id
