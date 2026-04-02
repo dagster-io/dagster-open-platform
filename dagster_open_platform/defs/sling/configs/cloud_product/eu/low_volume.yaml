@@ -1,0 +1,131 @@
+source: CLOUD_PRODUCTION_EU_MAIN
+target: SLING_DB_EU_MAIN
+defaults:
+  mode: incremental
+  object: '{stream_table}'
+  primary_key: [id]
+
+streams:
+
+  public.customer_info:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.customer_info
+
+  public.deployments:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.deployments
+
+  public.onboarding_checklist:
+    primary_key: [entry_key, organization_id]
+    update_key: update_timestamp
+    meta:
+        dagster:
+          asset_key: sling.cloud_product_eu.onboarding_checklist
+
+  public.permissions:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.permissions
+
+  public.serverless_agents:
+    update_key: update_timestamp
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.serverless_agents
+
+  public.session_tokens:
+    update_key: update_timestamp
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.session_tokens
+
+  public.users:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.users
+
+  public.users_organizations:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.users_organizations
+
+  public.users_permissions:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.users_permissions
+
+  public.teams:
+    update_key: update_timestamp
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.teams
+
+  public.teams_users:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.teams_users
+
+  public.teams_permissions:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.teams_permissions
+
+  public.jobs:
+    columns:
+      job_body: json
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.jobs
+
+  public.notifications:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.notifications
+
+  public.alerts:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.alerts
+
+  public.alerts_alert_policies_new:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.alerts_alert_policies_new
+
+  public.catalog_views:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.catalog_views
+
+  public.repository_locations_data:
+    sql: |
+      select
+        id,
+        organization_id,
+        deployment_id,
+        create_timestamp,
+        timestamp as update_timestamp,
+        jsonb_path_query_array(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].asset_key'
+        ) as asset_keys,
+        jsonb_path_query_array(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.repository_datas[0].external_repository_data.external_asset_graph_data[*].group_name'
+        ) as group_names,
+        jsonb_path_query(
+          replace(replace(load_repositories_response, ': Infinity', ': 0'), ': NaN', ': 0')::jsonb,
+          '$.dagster_library_versions'
+        )::jsonb as dagster_library_versions
+      from repository_locations_data
+      where timestamp > current_timestamp - interval '1 day'
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.repository_locations_data
+
+  public.enterprise_user_managed_expansions:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.enterprise_user_managed_expansions

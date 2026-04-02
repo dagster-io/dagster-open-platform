@@ -66,6 +66,29 @@ embedded_elt_resource = SlingResource(
             role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
         ),
         SlingConnectionResource(
+            name="CLOUD_PRODUCTION_EU_MAIN",
+            type="postgres",
+            host=EnvVar("CLOUD_PROD_EU_REPLICA_POSTGRES_TAILSCALE_HOST"),  # type: ignore
+            user=EnvVar("CLOUD_PROD_POSTGRES_USER"),  # type: ignore
+            database="dagster",  # type: ignore
+            password=EnvVar("CLOUD_PROD_POSTGRES_PASSWORD"),  # type: ignore
+            sslmode="require",  # type: ignore
+        ),
+        SlingConnectionResource(
+            name="SLING_DB_EU_MAIN",
+            type="snowflake",
+            host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore
+            user=EnvVar("SNOWFLAKE_SLING_USER"),  # type: ignore
+            authenticator="externalbrowser" if get_environment() == "LOCAL" else "snowflake_jwt",  # type: ignore
+            private_key=None  # type: ignore
+            if get_environment() == "LOCAL"
+            else EnvVar("SNOWFLAKE_SLING_PRIVATE_KEY"),
+            database="sandbox" if get_environment() != "PROD" else "sling",  # type: ignore
+            schema=get_schema_for_environment("CLOUD_PRODUCT_EU"),  # type: ignore
+            warehouse="purina",  # type: ignore
+            role="purina" if get_environment() != "PROD" else "sling",  # type: ignore
+        ),
+        SlingConnectionResource(
             name="PURINA_CLOUD_REPORTING",
             type="snowflake",
             host=EnvVar("SNOWFLAKE_ACCOUNT"),  # type: ignore

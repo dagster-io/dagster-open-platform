@@ -1,0 +1,19 @@
+source: CLOUD_PRODUCTION_EU_MAIN
+target: SLING_DB_EU_MAIN
+defaults:
+  mode: incremental
+  object: '{stream_table}'
+  update_key: id
+  source_options:
+    limit: 500000
+
+streams:
+  public.run_tags:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.run_tags
+
+  public.alert_policies:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_eu.alert_policies

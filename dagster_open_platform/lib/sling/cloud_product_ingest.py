@@ -84,6 +84,7 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
 
     config_dir: Annotated[Path, Resolver(_resolve_path, model_field_type=str)]
     replications: Sequence[DopReplicationSpec]
+    freshness_sensor_name: str = "freshness_checks_sensor"
 
     def get_config_path(self, config_file: str) -> Path:
         return Path(self.config_dir).joinpath(config_file)
@@ -98,7 +99,7 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
                     if shard == "main"
                     else f"cloud_product_{shard}_{replication.name}"
                 )
-                cfg_path = self.config_dir.joinpath(f"{shard}_{replication.name}.yaml")
+                cfg_path = self.config_dir.joinpath(shard, f"{replication.name}.yaml")
                 check.invariant(
                     cfg_path.exists(),
                     f"For replication named {replication.name}, expected file {cfg_path} does not exist.",
@@ -128,7 +129,9 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
             assets=assets,
             asset_checks=checks,
             sensors=[
-                build_sensor_for_freshness_checks(freshness_checks=checks),
+                build_sensor_for_freshness_checks(
+                    freshness_checks=checks, name=self.freshness_sensor_name
+                ),
             ]
             if checks
             else [],
