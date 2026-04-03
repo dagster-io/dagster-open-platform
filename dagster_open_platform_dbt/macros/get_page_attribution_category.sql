@@ -15,7 +15,10 @@ case
     when campaign_medium in ('cpc', 'ppc') then 'cpc'
 
     -- AI providers (source-based, checked before UTM medium passthrough so AI tool names
-    -- as campaign_source don't get swallowed by other-campaign)
+    -- as campaign_source don't get swallowed by other-campaign).
+    -- Guard: only trust campaign_source as an AI signal when there is no referrer or the
+    -- referrer is itself an AI domain. This prevents shared/forwarded URLs that carry an
+    -- AI utm_source from mis-attributing sessions that actually arrived via social/other.
     when campaign_source in (
         'anthropic', 'anthropic.com',
         'character.ai',
@@ -23,7 +26,7 @@ case
         'claude', 'claude.ai',
         'codeium', 'codeium.com',
         'cohere', 'cohere.ai',
-        'copilot', 'copilot.microsoft.com',
+        'copilot', 'copilot.com', 'copilot.microsoft.com',
         'cursor', 'cursor.sh',
         'deepseek', 'deepseek.com',
         'gemini', 'gemini.google.com',
@@ -39,6 +42,9 @@ case
         'replit.com',
         'together.ai',
         'you.com'
+    ) and (
+        {{ referrer_host_column }} is null
+        or referrer.medium = 'ai'
     ) then 'ai'
 
     -- UTM Params - normalize known medium values to canonical categories
