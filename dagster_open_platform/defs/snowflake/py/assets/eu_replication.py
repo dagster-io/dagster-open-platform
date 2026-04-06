@@ -44,6 +44,7 @@ _EU_TABLES = [
 
 @dg.multi_asset(
     group_name="cloud_product_eu",
+    can_subset=True,
     specs=[
         dg.AssetSpec(
             key=dg.AssetKey(["sling", "cloud_product_eu", table]),
