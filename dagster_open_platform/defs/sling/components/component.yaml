@@ -54,42 +54,6 @@ attributes:
 
 ---
 
-type: dagster_open_platform.lib.ProdDbReplicationsComponent
-
-attributes:
-  config_dir: ../configs/cloud_product
-  freshness_sensor_name: eu_freshness_checks_sensor
-  replications:
-    - name: low_volume
-      shards: [eu]
-      cron_schedule: "0 */2 * * *"
-      last_update_freshness_check:
-        days: 1
-
-    - name: full_refresh
-      shards: [eu]
-      cron_schedule: "0 */2 * * *"
-
-    - name: high_volume
-      shards: [eu]
-      cron_schedule: "0 */2 * * *"
-
-    - name: event_log
-      shards: [eu]
-      cron_schedule: "0 * * * *"
-      last_update_freshness_check:
-        minutes: 30
-
-    - name: user_event_log
-      shards: [eu]
-      cron_schedule: "@daily"
-
-    - name: runs
-      shards: [eu]
-      cron_schedule: "0 * * * *"
-
----
-
 type: dagster_sling.SlingReplicationCollectionComponent
 template_vars_module: dagster_open_platform.defs.sling.py.template_vars
 

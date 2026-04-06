@@ -84,7 +84,6 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
 
     config_dir: Annotated[Path, Resolver(_resolve_path, model_field_type=str)]
     replications: Sequence[DopReplicationSpec]
-    freshness_sensor_name: str = "freshness_checks_sensor"
 
     def get_config_path(self, config_file: str) -> Path:
         return Path(self.config_dir).joinpath(config_file)
@@ -129,9 +128,7 @@ class ProdDbReplicationsComponent(Component, Resolvable, Model):
             assets=assets,
             asset_checks=checks,
             sensors=[
-                build_sensor_for_freshness_checks(
-                    freshness_checks=checks, name=self.freshness_sensor_name
-                ),
+                build_sensor_for_freshness_checks(freshness_checks=checks),
             ]
             if checks
             else [],
