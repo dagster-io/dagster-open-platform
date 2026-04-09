@@ -3,7 +3,7 @@
 {{
     config(
       target_schema='snapshots',
-      unique_key='deployment_id',
+      unique_key='deployment_region_key',
       strategy='timestamp',
       updated_at='snapshot_date',
     )
