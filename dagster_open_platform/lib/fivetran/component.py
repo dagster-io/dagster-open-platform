@@ -60,7 +60,7 @@ class SkipOnRescheduleFivetranWorkspace(FivetranWorkspace):
         for spec in context.assets_def.specs:
             md = spec.metadata.get("dagster-fivetran/connector_id")
             if md is not None:
-                connector_id = str(md.value)  # type: ignore[union-attr]
+                connector_id = md.value if hasattr(md, "value") else str(md)  # type: ignore[union-attr]
                 break
 
         if connector_id:
