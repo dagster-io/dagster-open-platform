@@ -44,6 +44,38 @@ ResolvedTranslationFn: TypeAlias = Annotated[
 _DEFAULT_CRON = "0 0 * * *"
 
 
+_FIVETRAN_RESCHEDULED_SYNC_STATE = "rescheduled"
+
+
+class SkipOnRescheduleFivetranWorkspace(FivetranWorkspace):
+    """FivetranWorkspace that skips asset materialization when a Fivetran sync is rescheduled.
+
+    Checks the connector's sync_state before triggering a sync. If Fivetran has marked
+    the connector as 'rescheduled' (e.g. due to quota limits), the run completes
+    successfully without materializing the assets, avoiding an indefinite polling hang.
+    """
+
+    def _sync_and_poll(self, context: dg.AssetExecutionContext):
+        connector_id = None
+        for spec in context.assets_def.specs:
+            md = spec.metadata.get("dagster-fivetran/connector_id")
+            if md is not None:
+                connector_id = str(md.value)  # type: ignore[union-attr]
+                break
+
+        if connector_id:
+            connector_details = self.get_client().get_connector_details(connector_id)
+            sync_state = connector_details.get("status", {}).get("sync_state", "")
+            if sync_state == _FIVETRAN_RESCHEDULED_SYNC_STATE:
+                context.log.info(
+                    f"Connector '{connector_id}' sync_state is '{_FIVETRAN_RESCHEDULED_SYNC_STATE}'. "
+                    "Skipping materialization and completing run successfully."
+                )
+                return
+
+        yield from super()._sync_and_poll(context)
+
+
 class ProxyDagsterFivetranTranslator(DagsterFivetranTranslator):
     def __init__(self, fn: TranslationFn, connector_schedules: dict[str, str]):
         self.fn = fn
@@ -72,7 +104,7 @@ class FivetranComponent(Component, Model, Resolvable):
     workspace: Annotated[
         FivetranWorkspace,
         dg_components.Resolver(
-            lambda context, model: FivetranWorkspace(
+            lambda context, model: SkipOnRescheduleFivetranWorkspace(
                 **resolve_fields(model, FivetranWorkspaceModel, context)  # type: ignore
             )
         ),
