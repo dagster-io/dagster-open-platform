@@ -1,6 +1,7 @@
 import dagster as dg
 from dagster.components import definitions
 from dagster_snowflake import SnowflakeResource
+from snowflake.connector.errors import ProgrammingError
 
 # All tables synced by the EU sling ingestion in dagster_open_platform_eu.
 # Each entry maps to an upstream EU sling asset at eu/sling/cloud_product/<table>
@@ -61,10 +62,21 @@ def eu_cloud_product_snowflake_replication(
     """Refreshes the EU database replication and clones the EU cloud product schema
     into US Snowflake.
     """
-    with snowflake.get_connection() as conn:
-        cur = conn.cursor()
-        cur.execute("ALTER DATABASE sling_eu REFRESH")
-        cur.execute("CREATE OR REPLACE SCHEMA SLING.CLOUD_PRODUCT_EU CLONE SLING_EU.CLOUD_PRODUCT")
+    try:
+        with snowflake.get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute("ALTER DATABASE sling_eu REFRESH")
+            cur.execute(
+                "CREATE OR REPLACE SCHEMA SLING.CLOUD_PRODUCT_EU CLONE SLING_EU.CLOUD_PRODUCT"
+            )
+    except ProgrammingError as e:
+        # Error 55000: database is already being refreshed by another run — treat as success
+        if "already being refreshed" in str(e):
+            context.log.warning(
+                f"SLING_EU refresh already in progress; marking assets as successful. Error: {e}"
+            )
+        else:
+            raise
 
     for key in context.selected_asset_keys:
         yield dg.MaterializeResult(asset_key=key)
