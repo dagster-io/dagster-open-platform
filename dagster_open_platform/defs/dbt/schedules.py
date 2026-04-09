@@ -30,6 +30,7 @@ def defs():
             DbtManifestAssetSelection.build(
                 manifest=dagster_open_platform_dbt_project().manifest_path,
                 dagster_dbt_translator=CustomDagsterDbtTranslator(),
+                exclude="path:models/compass_dagster_plus_tables",
             ).required_multi_asset_neighbors()
             # snapshot models
             - dg.AssetSelection.assets(get_dbt_snapshot_models())
