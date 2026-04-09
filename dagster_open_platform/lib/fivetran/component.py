@@ -69,8 +69,17 @@ class SkipOnRescheduleFivetranWorkspace(FivetranWorkspace):
             if sync_state == _FIVETRAN_RESCHEDULED_SYNC_STATE:
                 context.log.info(
                     f"Connector '{connector_id}' sync_state is '{_FIVETRAN_RESCHEDULED_SYNC_STATE}'. "
-                    "Skipping materialization and completing run successfully."
+                    "Skipping sync and emitting materialization events to allow downstream assets to proceed."
                 )
+                for asset_key in context.selected_asset_keys:
+                    yield dg.MaterializeResult(
+                        asset_key=asset_key,
+                        metadata={
+                            "skipped_reason": dg.MetadataValue.text(
+                                f"Fivetran connector '{connector_id}' was in '{_FIVETRAN_RESCHEDULED_SYNC_STATE}' state; no sync performed."
+                            )
+                        },
+                    )
                 return
 
         yield from super()._sync_and_poll(context)
