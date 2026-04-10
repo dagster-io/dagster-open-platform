@@ -100,6 +100,18 @@ def buildkite_raw(
     )
 
 
+BUILDKITE_HEX_DASHBOARD_URL = "https://app.hex.tech/455a1b0e-b799-4046-a886-2f1798e9dbc0/app/Buildkite-4nrzydkNDokgxxxQfSOaJF/latest"
+
+buildkite_builds_hex_dashboard = dg.AssetSpec(
+    key="buildkite_hex_dashboard",
+    group_name="buildkite",
+    kinds={"hex"},
+    deps=["buildkite_builds", "buildkite_jobs"],
+    description=f"Hex dashboard visualizing Buildkite metrics: {BUILDKITE_HEX_DASHBOARD_URL}",
+    metadata={"url": dg.MetadataValue.url(BUILDKITE_HEX_DASHBOARD_URL)},
+)
+
+
 class BuildkiteAnalysisConfig(dg.Config):
     force_slack_post: bool = False
 
