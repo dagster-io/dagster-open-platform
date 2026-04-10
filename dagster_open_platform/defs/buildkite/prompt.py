@@ -7,7 +7,9 @@ Your analysis should cover:
 
 1. **Flaky Tests**: Identify jobs that intermittently pass and fail (same job name appearing \
 in both passed and failed builds). These are high-priority because they erode developer trust \
-in CI.
+in CI. For each flaky test, include links to representative builds where it failed and passed \
+(these are provided in the job-level results data as "Example failed build" and "Example passed \
+build" URLs).
 
 2. **Recurring Failures**: Jobs that consistently fail across multiple builds. Group them by \
 failure pattern when possible.

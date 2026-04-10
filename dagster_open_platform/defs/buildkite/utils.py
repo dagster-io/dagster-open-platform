@@ -423,22 +423,39 @@ def build_claude_context(
         )
 
     # Job-level pass/fail for flakiness detection
-    job_results: dict[str, dict[str, int]] = {}
+    job_pass_count: dict[str, int] = {}
+    job_fail_count: dict[str, int] = {}
+    job_failed_build_urls: dict[str, list[str]] = {}
+    job_passed_build_urls: dict[str, list[str]] = {}
     for build in builds:
         for job in build.jobs:
             if job.type != "script":
                 continue
             name = job.name or "unknown"
-            if name not in job_results:
-                job_results[name] = {"passed": 0, "failed": 0}
+            if name not in job_pass_count:
+                job_pass_count[name] = 0
+                job_fail_count[name] = 0
+                job_failed_build_urls[name] = []
+                job_passed_build_urls[name] = []
             if job.state == "passed":
-                job_results[name]["passed"] += 1
+                job_pass_count[name] += 1
+                job_passed_build_urls[name].append(build.web_url)
             elif job.state == "failed":
-                job_results[name]["failed"] += 1
+                job_fail_count[name] += 1
+                job_failed_build_urls[name].append(build.web_url)
 
     lines.append("\n## Job-Level Results")
-    for name, counts in sorted(job_results.items()):
-        lines.append(f"- **{name}**: {counts['passed']} passed, {counts['failed']} failed")
+    for name in sorted(job_pass_count):
+        passed = job_pass_count[name]
+        failed = job_fail_count[name]
+        line = f"- **{name}**: {passed} passed, {failed} failed"
+        if failed and passed:
+            # Flaky: include representative build links for both outcomes
+            line += f"\n  - Example failed build: {job_failed_build_urls[name][0]}"
+            line += f"\n  - Example passed build: {job_passed_build_urls[name][0]}"
+        elif failed:
+            line += f"\n  - Example failed build: {job_failed_build_urls[name][0]}"
+        lines.append(line)
 
     if failed_job_logs:
         lines.append("\n## Failed Job Logs (tail)\n")
