@@ -129,3 +129,13 @@ streams:
     meta:
       dagster:
         asset_key: sling.cloud_product.enterprise_user_managed_expansions
+
+  public.asset_diff_history:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.asset_diff_history
+
+  public.code_location_change_history:
+    meta:
+      dagster:
+        asset_key: sling.cloud_product.code_location_change_history
