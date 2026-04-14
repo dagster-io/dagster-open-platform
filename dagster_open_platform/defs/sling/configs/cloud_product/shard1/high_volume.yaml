@@ -17,3 +17,17 @@ streams:
     meta:
       dagster:
         asset_key: sling.cloud_product_shard1.alert_policies
+
+  public.job_ticks_ptn:
+    sql: >
+      with candidates as (
+        select *
+        from public.job_ticks_ptn
+        where id > coalesce({incremental_value}, 17004308455)
+        order by id
+        limit 500000
+      )
+      select * from candidates
+    meta:
+      dagster:
+        asset_key: sling.cloud_product_shard1.job_ticks_ptn
