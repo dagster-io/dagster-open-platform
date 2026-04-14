@@ -29,10 +29,10 @@ streams:
       dagster:
         asset_key: sling.cloud_product_shard1.asset_diff_history
 
-  public.code_location_change_history:
+  public.code_location_load_history:
     meta:
       dagster:
-        asset_key: sling.cloud_product_shard1.code_location_change_history
+        asset_key: sling.cloud_product_shard1.code_location_load_history
 
   public.repository_locations_data:
     sql: |
