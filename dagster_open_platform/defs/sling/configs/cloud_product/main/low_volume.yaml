@@ -136,6 +136,8 @@ streams:
         asset_key: sling.cloud_product.asset_diff_history
 
   public.code_location_load_history:
+    columns:
+      serialized_error_info: json
     meta:
       dagster:
         asset_key: sling.cloud_product.code_location_load_history
