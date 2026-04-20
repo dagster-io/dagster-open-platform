@@ -28,6 +28,8 @@ streams:
         limit 500000
       )
       select * from candidates
+    columns:
+      tick_body: json
     meta:
       dagster:
         asset_key: sling.cloud_product_shard1.job_ticks_ptn
