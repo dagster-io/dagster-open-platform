@@ -25,12 +25,6 @@ streams:
     primary_key: 'organization_id'
     object: 'sling.compass.organizations'
   
-  public.plan_limits:
-    mode: incremental
-    primary_key: 'id'
-    update_key: 'updated_at'
-    object: 'sling.compass.plan_limits'
-  
   public.usage_tracking:
     mode: incremental
     primary_key: 'id'
