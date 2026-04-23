@@ -77,7 +77,8 @@ streams:
         is_automated,
         response_uuid
       from public.conversation_messages
-      where timestamp > '{incremental_value}'
+      where timestamp IS NOT NULL
+        and timestamp > '{incremental_value}'
 
   public.conversation_votes:
     mode: incremental
