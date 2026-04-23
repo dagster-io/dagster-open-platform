@@ -54,3 +54,69 @@ streams:
     primary_key: 'id'
     update_key: 'updated_at'
     object: 'sling.compass.bot_instances'
+
+  public.conversations:
+    mode: incremental
+    primary_key: 'conversation_id'
+    update_key: 'created_at'
+    object: 'sling.compass.conversations'
+
+  public.conversation_messages:
+    mode: incremental
+    primary_key: ['conversation_id', 'message_sequence_id']
+    update_key: 'timestamp'
+    object: 'sling.compass.conversation_messages'
+    sql: |
+      select
+        conversation_id,
+        message_sequence_id,
+        schema_version,
+        timestamp,
+        role,
+        tool_name,
+        is_automated,
+        response_uuid
+      from public.conversation_messages
+      where timestamp > '{incremental_value}'
+
+  public.conversation_votes:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'updated_at'
+    object: 'sling.compass.conversation_votes'
+
+  public.conversation_health_scores:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'evaluated_at'
+    object: 'sling.compass.conversation_health_scores'
+
+  public.agents:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'updated_at'
+    object: 'sling.compass.agents'
+
+  public.agent_to_connections:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'updated_at'
+    object: 'sling.compass.agent_to_connections'
+
+  public.channels:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'updated_at'
+    object: 'sling.compass.channels'
+
+  public.onboarding_state:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'updated_at'
+    object: 'sling.compass.onboarding_state'
+
+  public.agent_to_mcp_servers:
+    mode: incremental
+    primary_key: 'id'
+    update_key: 'created_at'
+    object: 'sling.compass.agent_to_mcp_servers'
