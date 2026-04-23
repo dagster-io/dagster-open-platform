@@ -78,7 +78,7 @@ streams:
         response_uuid
       from public.conversation_messages
       where timestamp IS NOT NULL
-        and timestamp > '{incremental_value}'
+        and timestamp > coalesce({incremental_value}, to_timestamp('2020-01-01', 'YYYY-MM-DD'))
 
   public.conversation_votes:
     mode: incremental
