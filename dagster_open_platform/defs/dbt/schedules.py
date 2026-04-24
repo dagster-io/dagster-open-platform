@@ -17,6 +17,11 @@ from dagster_open_platform.defs.dbt.assets import (
 from dagster_open_platform.defs.dbt.partitions import insights_partition
 from dagster_open_platform.defs.dbt.resources import dagster_open_platform_dbt_project
 
+COMPASS_DAGSTER_PLUS_TABLES_SELECTOR = (
+    "dagster_open_platform.compass_dagster_plus_tables "
+    "dagster_open_platform.purina.public.dagster_plus_organization_ids_compass_context"
+)
+
 ######################################################
 ##              Main DBT Pipeline                   ##
 ######################################################
@@ -24,16 +29,23 @@ from dagster_open_platform.defs.dbt.resources import dagster_open_platform_dbt_p
 
 @definitions
 def defs():
+    dbt_manifest = dagster_open_platform_dbt_project().manifest_path
+    dagster_dbt_translator = CustomDagsterDbtTranslator()
+    compass_dagster_plus_tables_selection = DbtManifestAssetSelection.build(
+        manifest=dbt_manifest,
+        dagster_dbt_translator=dagster_dbt_translator,
+        select=COMPASS_DAGSTER_PLUS_TABLES_SELECTOR,
+    )
     dbt_analytics_core_job = dg.define_asset_job(
         name="dbt_analytics_core_job",
         selection=(
             DbtManifestAssetSelection.build(
-                manifest=dagster_open_platform_dbt_project().manifest_path,
-                dagster_dbt_translator=CustomDagsterDbtTranslator(),
-                exclude="path:models/compass_dagster_plus_tables",
+                manifest=dbt_manifest,
+                dagster_dbt_translator=dagster_dbt_translator,
             ).required_multi_asset_neighbors()
             # snapshot models
             - dg.AssetSelection.assets(get_dbt_snapshot_models())
+            - compass_dagster_plus_tables_selection
         ),
         tags={
             "team": "devrel",
