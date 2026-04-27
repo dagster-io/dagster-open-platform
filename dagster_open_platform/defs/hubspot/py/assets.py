@@ -9,6 +9,8 @@ from dagster_open_platform.utils.environment_helpers import (
     get_schema_for_environment,
 )
 from dagster_snowflake import SnowflakeResource
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 HUBSPOT_BASE_URL = "https://api.hubapi.com/crm/v3/objects/contacts"
 
@@ -19,8 +21,17 @@ def fetch_hubspot_contact_ids(access_token: str) -> list[str]:
     headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
     params = {"limit": 100, "properties": "hs_object_id", "archived": False}
 
+    session = requests.Session()
+    retry = Retry(
+        total=3,
+        backoff_factor=2,
+        status_forcelist=[502, 503, 504],
+        allowed_methods=["GET"],
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retry))
+
     while True:
-        response = requests.get(url, headers=headers, params=params)
+        response = session.get(url, headers=headers, params=params)
         response.raise_for_status()
         data = response.json()
 
