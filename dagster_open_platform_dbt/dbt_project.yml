@@ -12,6 +12,7 @@ clean-targets:
 
 models:
   +copy_grants: true
+  +pre-hook: "{{ configure_dbt_backfill_session() }}"
   +tags: ["model"]
   +meta:
     dagster:
@@ -23,7 +24,7 @@ models:
   dagster_open_platform:
     compass_dagster_plus_tables:
       +materialized: table
-      +snowflake_warehouse: product_operations_small_wh
+      +snowflake_warehouse: "{{ var('backfill_snowflake_warehouse', 'BACKFILL_WH') if var('backfill', false) else 'product_operations_small_wh' }}"
     dwh_operations:
       +materialized: table
     dwh_reporting:
@@ -49,7 +50,11 @@ models:
         +materialized: table
 
 seeds:
+  +pre-hook: "{{ configure_dbt_backfill_session() }}"
   +tags: "seed"
+
+snapshots:
+  +pre-hook: "{{ configure_dbt_backfill_session() }}"
 
 vars:
   session_threshold_seconds: 1800
