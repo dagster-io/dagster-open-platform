@@ -86,12 +86,6 @@ streams:
     update_key: 'updated_at'
     object: 'sling.compass.conversation_votes'
 
-  public.conversation_health_scores:
-    mode: incremental
-    primary_key: 'id'
-    update_key: 'evaluated_at'
-    object: 'sling.compass.conversation_health_scores'
-
   public.agents:
     mode: incremental
     primary_key: 'id'
