@@ -16,6 +16,7 @@ from dagster_dbt.asset_utils import DBT_DEFAULT_SELECT
 
 from dagster_open_platform.defs.dbt.partitions import insights_partition
 from dagster_open_platform.defs.dbt.resources import dagster_open_platform_dbt_project
+from dagster_open_platform.lib.dbt.backfill import DBT_BACKFILL_RUN_TAG, DBT_BACKFILL_RUN_TAG_VALUE
 from dagster_open_platform.lib.dbt.translator import CustomDagsterDbtTranslator
 
 INCREMENTAL_SELECTOR = "config.materialized:incremental"
@@ -32,10 +33,15 @@ class DbtConfig(dg.Config):
 
 
 def _dbt_args(
-    command: str, config: DbtConfig, dbt_vars: Mapping[str, object] | None = None
+    command: str,
+    config: DbtConfig,
+    dbt_vars: Mapping[str, object] | None = None,
+    *,
+    backfill: bool | None = None,
 ) -> list[str]:
+    backfill = config.backfill if backfill is None else backfill
     vars_arg = {**(dbt_vars or {})}
-    if config.backfill:
+    if backfill:
         vars_arg.update(
             {
                 "backfill": True,
@@ -51,6 +57,10 @@ def _dbt_args(
         args.extend(["--vars", json.dumps(vars_arg)])
 
     return args
+
+
+def _is_dbt_backfill_run(run_tags: Mapping[str, str], config: DbtConfig) -> bool:
+    return config.backfill or run_tags.get(DBT_BACKFILL_RUN_TAG) == DBT_BACKFILL_RUN_TAG_VALUE
 
 
 @cache
@@ -79,7 +89,10 @@ def get_dbt_non_partitioned_models(
     ):
         logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
         yield from (
-            dbt.cli(_dbt_args("build", config), context=context)
+            dbt.cli(
+                _dbt_args("build", config, backfill=_is_dbt_backfill_run(context.run.tags, config)),
+                context=context,
+            )
             .stream()
             # .fetch_row_counts() # removing row counts for now due to performance issues
             .fetch_column_metadata()
@@ -121,7 +134,12 @@ def get_dbt_partitioned_models(
 
         yield from (
             dbt.cli(
-                _dbt_args("build", config, None if config.full_refresh else dbt_vars),
+                _dbt_args(
+                    "build",
+                    config,
+                    None if config.full_refresh else dbt_vars,
+                    backfill=_is_dbt_backfill_run(context.run.tags, config),
+                ),
                 context=context,
             )
             .stream()
@@ -153,7 +171,16 @@ def get_dbt_snapshot_models(
     def dbt_snapshot_models(
         context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
     ):
-        yield from dbt.cli(_dbt_args("snapshot", config), context=context).stream().with_insights()
+        yield from (
+            dbt.cli(
+                _dbt_args(
+                    "snapshot", config, backfill=_is_dbt_backfill_run(context.run.tags, config)
+                ),
+                context=context,
+            )
+            .stream()
+            .with_insights()
+        )
 
     return dbt_snapshot_models
 

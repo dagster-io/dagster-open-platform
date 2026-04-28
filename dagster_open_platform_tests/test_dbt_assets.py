@@ -5,7 +5,9 @@ from dagster_open_platform.defs.dbt.assets import (
     BACKFILL_STATEMENT_TIMEOUT_SECONDS,
     DbtConfig,
     _dbt_args,
+    _is_dbt_backfill_run,
 )
+from dagster_open_platform.lib.dbt.backfill import DBT_BACKFILL_RUN_TAG, DBT_BACKFILL_RUN_TAG_VALUE
 
 
 def _dbt_vars(args: list[str]) -> dict[str, object]:
@@ -54,3 +56,23 @@ def test_dbt_args_allows_full_refresh_backfill() -> None:
         "backfill_snowflake_warehouse": BACKFILL_SNOWFLAKE_WAREHOUSE,
         "backfill_statement_timeout_seconds": BACKFILL_STATEMENT_TIMEOUT_SECONDS,
     }
+
+
+def test_dbt_args_can_force_backfill_from_automation_tag() -> None:
+    args = _dbt_args("build", DbtConfig(), backfill=True)
+
+    assert args[:2] == ["build", "--vars"]
+    assert _dbt_vars(args) == {
+        "backfill": True,
+        "backfill_snowflake_warehouse": BACKFILL_SNOWFLAKE_WAREHOUSE,
+        "backfill_statement_timeout_seconds": BACKFILL_STATEMENT_TIMEOUT_SECONDS,
+    }
+
+
+def test_is_dbt_backfill_run_uses_config_or_automation_tag() -> None:
+    assert _is_dbt_backfill_run({}, DbtConfig(backfill=True))
+    assert _is_dbt_backfill_run(
+        {DBT_BACKFILL_RUN_TAG: DBT_BACKFILL_RUN_TAG_VALUE},
+        DbtConfig(),
+    )
+    assert not _is_dbt_backfill_run({}, DbtConfig())

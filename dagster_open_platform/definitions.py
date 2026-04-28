@@ -11,6 +11,8 @@ warnings.filterwarnings("ignore", category=BetaWarning)
 
 import dagster as dg
 
+from dagster_open_platform.lib.dbt.backfill import DBT_BACKFILL_RUN_TAG, DBT_BACKFILL_RUN_TAG_VALUE
+
 global_freshness_policy = FreshnessPolicy.time_window(fail_window=timedelta(hours=36))
 
 
@@ -33,7 +35,13 @@ def defs() -> dg.Definitions:
                     name="default_automation_sensor",
                     target=AssetSelection.all()
                     - AssetSelection.key_prefixes(["fivetran"])
+                    - dg.AssetSelection.kind("dbt")
                     - dg.AssetSelection.kind("sling"),
+                ),
+                dg.AutomationConditionSensorDefinition(
+                    name="dbt_automation_sensor",
+                    target=dg.AssetSelection.kind("dbt"),
+                    run_tags={DBT_BACKFILL_RUN_TAG: DBT_BACKFILL_RUN_TAG_VALUE},
                 ),
                 dg.AutomationConditionSensorDefinition(
                     name="sling_automation_sensor",
