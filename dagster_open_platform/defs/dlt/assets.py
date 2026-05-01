@@ -10,10 +10,11 @@ from dagster import (
 )
 from dagster._annotations import public
 from dagster_dlt import DagsterDltResource, DagsterDltTranslator, dlt_assets
-from dagster_open_platform.defs.dlt.sources.github import github_reactions
-from dagster_open_platform.defs.dlt.sources.hubspot import hubspot
 from dlt import pipeline
 from dlt.extract.resource import DltResource
+
+from dagster_open_platform.defs.dlt.sources.github import github_reactions
+from dagster_open_platform.defs.dlt.sources.hubspot import hubspot
 
 
 class HubspotDagsterDltTranslator(DagsterDltTranslator):

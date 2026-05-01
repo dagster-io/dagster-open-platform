@@ -9,8 +9,9 @@ USAGE
 import os
 
 import yaml
-from dagster_open_platform.defs.dlt.sources.github import github_reactions
 from dlt import pipeline
+
+from dagster_open_platform.defs.dlt.sources.github import github_reactions
 
 if __name__ == "__main__":
     cwd = os.path.dirname(os.path.abspath(__file__))
