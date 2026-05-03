@@ -1,3 +1,5 @@
+import json
+import logging
 from datetime import datetime, timezone
 from typing import Any
 
@@ -5,6 +7,25 @@ import dagster as dg
 import requests
 
 from dagster_open_platform.defs.buildkite.models import Build, Job
+
+logger = logging.getLogger(__name__)
+
+
+def _extract_ai_assessment(meta_data: dict[str, Any]) -> dict[str, Any]:
+    """Parse the `ai_assessment` JSON blob written by the post-build assessment
+    step. Returns {} for builds without an assessment (e.g. pipelines outside
+    the assessment gate, builds that crashed before the step ran, or feature
+    branches predating the step).
+    """
+    raw = meta_data.get("ai_assessment")
+    if not raw:
+        return {}
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError:
+        logger.warning("Failed to parse ai_assessment JSON; treating as absent")
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
 
 
 class BuildkiteResource(dg.ConfigurableResource):
@@ -131,6 +152,7 @@ class BuildkiteResource(dg.ConfigurableResource):
             scheduled_at=iso_to_dt(data.get("scheduled_at")),
             started_at=iso_to_dt(data.get("started_at")),
             finished_at=iso_to_dt(data.get("finished_at")),
+            ai_assessment=_extract_ai_assessment(data.get("meta_data") or {}),
             jobs=[
                 BuildkiteResource.__api_to_job(
                     j,

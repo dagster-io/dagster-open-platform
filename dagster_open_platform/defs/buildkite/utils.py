@@ -23,9 +23,19 @@ class BuildkiteSQL:
     __database: str
 
     __BUILDS_TABLE_NAME: str = "buildkite_builds"
-    __BUILDS_ID_COLUMN_NAME: str = "build_id"
     __JOBS_TABLE_NAME: str = "buildkite_jobs"
     __JOBS_ID_COLUMN_NAME: str = "job_id"
+
+    # Single source of truth for the buildkite_builds column order. Drives the
+    # MERGE source SELECT, UPDATE SET, INSERT lists, the read-path SELECT, and
+    # the row tuple produced by __build_to_insert_row. ai_assessment is
+    # handled separately because it round-trips through PARSE_JSON / TO_JSON
+    # and has clobber-protection on UPDATE.
+    __BUILD_COLS: tuple[str, ...] = (
+        "build_id", "extracted_at", "pipeline__id", "pipeline__slug", "pipeline__name",
+        "url", "web_url", "build_number", "state", "blocked", "cancel_reason", "message",
+        "commit", "branch", "source", "created_at", "scheduled_at", "started_at", "finished_at",
+    )  # fmt: skip
 
     def __init__(self, snowflake: SnowflakeResource):
         self.__database = "BUILDKITE" if get_environment() == "PROD" else "SANDBOX"
@@ -68,7 +78,8 @@ class BuildkiteSQL:
                 created_at TIMESTAMP_TZ,
                 scheduled_at TIMESTAMP_TZ,
                 started_at TIMESTAMP_TZ,
-                finished_at TIMESTAMP_TZ
+                finished_at TIMESTAMP_TZ,
+                ai_assessment VARIANT
             )
         """
 
@@ -96,14 +107,6 @@ class BuildkiteSQL:
             )
         """
 
-    def __delete_builds_table_old_rows(self, ids: list[str]) -> tuple[str, list[str]]:
-        return (
-            f"""
-                DELETE FROM {self.__BUILDS_TABLE_NAME} WHERE {self.__BUILDS_ID_COLUMN_NAME} IN ({",".join(["%s"] * len(ids))})
-            """,
-            ids,
-        )
-
     def __delete_jobs_table_old_rows(self, ids: list[str]) -> tuple[str, list[str]]:
         return (
             f"""
@@ -112,15 +115,30 @@ class BuildkiteSQL:
             ids,
         )
 
-    def __insert_builds_table_new_rows(
-        self, rows: list[tuple[Any]]
-    ) -> tuple[str, list[tuple[Any]]]:
+    def __merge_builds_table_rows(self, rows: list[tuple[Any]]) -> tuple[str, list[tuple[Any]]]:
+        # MERGE (not DELETE+INSERT) so an out-of-band ai_assessment write — e.g.
+        # an ad-hoc backfill that UPDATEs the column directly — is preserved
+        # when the live ingestion later re-materializes the same partition with
+        # an empty ai_assessment. COALESCE(NULLIF(src, '{}'), tgt) keeps tgt
+        # only when the inbound payload is the empty object.
+        src_select = ", ".join(f"%s AS {c}" for c in self.__BUILD_COLS)
+        update_set = ",\n                    ".join(
+            f"{c} = src.{c}" for c in self.__BUILD_COLS if c != "build_id"
+        )
+        insert_cols = ", ".join((*self.__BUILD_COLS, "ai_assessment"))
+        insert_vals = ", ".join(f"src.{c}" for c in (*self.__BUILD_COLS, "ai_assessment"))
         return (
             f"""
-                INSERT INTO {self.__BUILDS_TABLE_NAME} (
-                    build_id, extracted_at, pipeline__id, pipeline__slug, pipeline__name, url, web_url, build_number, state,
-                    blocked, cancel_reason, message, commit, branch, source, created_at, scheduled_at, started_at, finished_at
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                MERGE INTO {self.__BUILDS_TABLE_NAME} tgt
+                USING (SELECT {src_select}, PARSE_JSON(%s) AS ai_assessment) src
+                ON tgt.build_id = src.build_id
+                WHEN MATCHED THEN UPDATE SET
+                    {update_set},
+                    ai_assessment = COALESCE(
+                        NULLIF(src.ai_assessment, PARSE_JSON('{{}}')),
+                        tgt.ai_assessment
+                    )
+                WHEN NOT MATCHED THEN INSERT ({insert_cols}) VALUES ({insert_vals})
             """,
             rows,
         )
@@ -136,15 +154,27 @@ class BuildkiteSQL:
             rows,
         )
 
+    def __ensure_builds_schema(self, cursor: SnowflakeCursor) -> None:
+        """Idempotent CREATE TABLE + ALTER ADD COLUMN for the builds table.
+
+        Called from both write and read paths so that a read can't 404 on
+        `ai_assessment` during the post-deploy window before the first writer
+        run has migrated the existing prod table. Both statements are no-ops
+        once satisfied.
+        """
+        cursor.execute(self.__create_builds_table())
+        cursor.execute(
+            f"ALTER TABLE {self.__BUILDS_TABLE_NAME} ADD COLUMN IF NOT EXISTS ai_assessment VARIANT"
+        )
+
     def insert_builds(self, builds: list[Build]) -> None:
         if not builds:
             return
 
         rows = [BuildkiteSQL.__build_to_insert_row(b) for b in builds]
         with self.__get_cursor() as cursor:
-            cursor.execute(self.__create_builds_table())
-            cursor.execute(*self.__delete_builds_table_old_rows([b.id for b in builds]))
-            cursor.executemany(*self.__insert_builds_table_new_rows(rows))
+            self.__ensure_builds_schema(cursor)
+            cursor.executemany(*self.__merge_builds_table_rows(rows))
 
     def insert_jobs(self, jobs: list[Job]) -> None:
         if not jobs:
@@ -183,11 +213,10 @@ class BuildkiteSQL:
         where_clause = ("WHERE " + " AND ".join(conditions)) if conditions else ""
 
         with self.__get_cursor() as cursor:
+            self.__ensure_builds_schema(cursor)
             cursor.execute(
                 f"""
-                SELECT build_id, extracted_at, pipeline__id, pipeline__slug, pipeline__name,
-                    url, web_url, build_number, state, blocked, cancel_reason, message, commit,
-                    branch, source, created_at, scheduled_at, started_at, finished_at
+                SELECT {", ".join(self.__BUILD_COLS)}, TO_JSON(ai_assessment) AS ai_assessment
                 FROM buildkite_builds
                 {where_clause}
                 """,
@@ -222,7 +251,8 @@ class BuildkiteSQL:
 
     @staticmethod
     def __build_to_insert_row(build: Build) -> tuple:
-        # Order must match INSERT INTO buildkite_builds column list
+        # Order must match __BUILD_COLS, with the JSON-encoded ai_assessment
+        # appended (consumed by PARSE_JSON in the MERGE).
         return (
             build.id,
             build.extracted_at,
@@ -243,6 +273,7 @@ class BuildkiteSQL:
             build.scheduled_at,
             build.started_at,
             build.finished_at,
+            json.dumps(build.ai_assessment),
         )
 
     @staticmethod
@@ -271,6 +302,8 @@ class BuildkiteSQL:
 
     @staticmethod
     def __build_from_row(row: dict[str, Any], jobs: list[Job]) -> Build:
+        ai_assessment_raw = row.get("ai_assessment")
+        ai_assessment = json.loads(ai_assessment_raw) if ai_assessment_raw else {}
         return Build(
             id=row["build_id"],
             extracted_at=row["extracted_at"],
@@ -291,6 +324,7 @@ class BuildkiteSQL:
             scheduled_at=row.get("scheduled_at"),
             started_at=row.get("started_at"),
             finished_at=row.get("finished_at"),
+            ai_assessment=ai_assessment,
             jobs=jobs,
         )
 

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -48,4 +49,5 @@ class Build:
     scheduled_at: datetime | None
     started_at: datetime | None
     finished_at: datetime | None
+    ai_assessment: dict[str, Any] = field(default_factory=dict)
     jobs: list[Job] = field(default_factory=list)

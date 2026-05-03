@@ -814,6 +814,7 @@ tests = [
     { name = "mock" },
     { name = "pytest" },
     { name = "responses" },
+    { name = "setuptools" },
     { name = "syrupy" },
 ]
 
@@ -864,6 +865,7 @@ requires-dist = [
     { name = "responses", marker = "extra == 'tests'" },
     { name = "scikit-learn" },
     { name = "scoutos" },
+    { name = "setuptools", marker = "extra == 'tests'", specifier = "<82" },
     { name = "shap", specifier = ">=0.47.0" },
     { name = "sling", specifier = "==1.5.1" },
     { name = "sling-linux-amd64", marker = "platform_machine == 'x86_64' and sys_platform == 'linux'" },
