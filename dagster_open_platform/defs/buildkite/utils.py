@@ -3,7 +3,7 @@ import logging
 from collections.abc import Generator
 from contextlib import contextmanager
 from datetime import datetime
-from typing import Any
+from typing import Any, ClassVar
 
 from dagster_snowflake import SnowflakeResource
 from snowflake.connector.cursor import SnowflakeCursor
@@ -22,19 +22,22 @@ class BuildkiteSQL:
     __snowflake: SnowflakeResource
     __database: str
 
-    __BUILDS_TABLE_NAME: str = "buildkite_builds"
-    __JOBS_TABLE_NAME: str = "buildkite_jobs"
-    __JOBS_ID_COLUMN_NAME: str = "job_id"
+    _BUILDS_TABLE_NAME: ClassVar[str] = "buildkite_builds"
+    _JOBS_TABLE_NAME: ClassVar[str] = "buildkite_jobs"
+    _BUILDS_ID_COLUMN_NAME: ClassVar[str] = "build_id"
+    _JOBS_ID_COLUMN_NAME: ClassVar[str] = "job_id"
 
-    # Single source of truth for the buildkite_builds column order. Drives the
-    # MERGE source SELECT, UPDATE SET, INSERT lists, the read-path SELECT, and
-    # the row tuple produced by __build_to_insert_row. ai_assessment is
-    # handled separately because it round-trips through PARSE_JSON / TO_JSON
-    # and has clobber-protection on UPDATE.
-    __BUILD_COLS: tuple[str, ...] = (
+    # deliberately excludes ai_assessment column, since this is used for in band inserts
+    # and ai_assessment is populated out of band by a separate process
+    __BUILDS_COLS: tuple[str, ...] = (
         "build_id", "extracted_at", "pipeline__id", "pipeline__slug", "pipeline__name",
         "url", "web_url", "build_number", "state", "blocked", "cancel_reason", "message",
         "commit", "branch", "source", "created_at", "scheduled_at", "started_at", "finished_at",
+    )  # fmt: skip
+    __JOBS_COLS: tuple[str, ...] = (
+       "job_id", "build_id", "extracted_at", "type", "name", "step_key", "group_key",
+       "state", "command", "soft_failed", "exit_status", "retried", "retries_count",
+       "created_at", "scheduled_at", "runnable_at", "started_at", "finished_at", "expired_at"
     )  # fmt: skip
 
     def __init__(self, snowflake: SnowflakeResource):
@@ -57,10 +60,16 @@ class BuildkiteSQL:
             finally:
                 cursor.close()
 
-    def __create_builds_table(self) -> str:
-        return f"""
-            CREATE TABLE IF NOT EXISTS {self.__BUILDS_TABLE_NAME} (
-                build_id VARCHAR(100) PRIMARY KEY,
+    def __ensure_builds_schema(self, cursor: SnowflakeCursor) -> None:
+        """Idempotent CREATE TABLE + ALTER ADD COLUMN for the builds table.
+
+        Called from both write and read paths so that a read can't 404 on new
+        columns during the post-deploy window before the first write run
+        has migrated the existing prod table.
+        """
+        cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self._BUILDS_TABLE_NAME} (
+                {self._BUILDS_ID_COLUMN_NAME} VARCHAR(100) PRIMARY KEY,
                 extracted_at TIMESTAMP_TZ,
                 pipeline__id VARCHAR(100),
                 pipeline__slug VARCHAR(200),
@@ -81,17 +90,27 @@ class BuildkiteSQL:
                 finished_at TIMESTAMP_TZ,
                 ai_assessment VARIANT
             )
-        """
+        """)
+        cursor.execute(
+            f"ALTER TABLE {self._BUILDS_TABLE_NAME} ADD COLUMN IF NOT EXISTS ai_assessment VARIANT"
+        )
 
-    def __create_jobs_table(self) -> str:
-        return f"""
-            CREATE TABLE IF NOT EXISTS {self.__JOBS_TABLE_NAME} (
-                job_id VARCHAR(100) PRIMARY KEY,
-                build_id VARCHAR(100) REFERENCES buildkite_builds(build_id),
+    def __ensure_jobs_schema(self, cursor: SnowflakeCursor) -> None:
+        """Idempotent CREATE TABLE + ALTER ADD COLUMN for the jobs table.
+
+        Called from both write and read paths so that a read can't 404 on new
+        columns during the post-deploy window before the first write run
+        has migrated the existing prod table.
+        """
+        cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {self._JOBS_TABLE_NAME} (
+                {self._JOBS_ID_COLUMN_NAME} VARCHAR(100) PRIMARY KEY,
+                {self._BUILDS_ID_COLUMN_NAME} VARCHAR(100) REFERENCES buildkite_builds({self._BUILDS_ID_COLUMN_NAME}),
                 extracted_at TIMESTAMP_TZ,
                 type VARCHAR(100),
                 name VARCHAR(1000),
                 step_key VARCHAR(500),
+                group_key VARCHAR(500),
                 state VARCHAR(50),
                 command VARCHAR(65536),
                 soft_failed BOOLEAN,
@@ -105,67 +124,52 @@ class BuildkiteSQL:
                 finished_at TIMESTAMP_TZ,
                 expired_at TIMESTAMP_TZ
             )
-        """
-
-    def __delete_jobs_table_old_rows(self, ids: list[str]) -> tuple[str, list[str]]:
-        return (
-            f"""
-                DELETE FROM {self.__JOBS_TABLE_NAME} WHERE {self.__JOBS_ID_COLUMN_NAME} IN ({",".join(["%s"] * len(ids))})
-            """,
-            ids,
-        )
-
-    def __merge_builds_table_rows(self, rows: list[tuple[Any]]) -> tuple[str, list[tuple[Any]]]:
-        # MERGE (not DELETE+INSERT) so an out-of-band ai_assessment write — e.g.
-        # an ad-hoc backfill that UPDATEs the column directly — is preserved
-        # when the live ingestion later re-materializes the same partition with
-        # an empty ai_assessment. COALESCE(NULLIF(src, '{}'), tgt) keeps tgt
-        # only when the inbound payload is the empty object.
-        src_select = ", ".join(f"%s AS {c}" for c in self.__BUILD_COLS)
-        update_set = ",\n                    ".join(
-            f"{c} = src.{c}" for c in self.__BUILD_COLS if c != "build_id"
-        )
-        insert_cols = ", ".join((*self.__BUILD_COLS, "ai_assessment"))
-        insert_vals = ", ".join(f"src.{c}" for c in (*self.__BUILD_COLS, "ai_assessment"))
-        return (
-            f"""
-                MERGE INTO {self.__BUILDS_TABLE_NAME} tgt
-                USING (SELECT {src_select}, PARSE_JSON(%s) AS ai_assessment) src
-                ON tgt.build_id = src.build_id
-                WHEN MATCHED THEN UPDATE SET
-                    {update_set},
-                    ai_assessment = COALESCE(
-                        NULLIF(src.ai_assessment, PARSE_JSON('{{}}')),
-                        tgt.ai_assessment
-                    )
-                WHEN NOT MATCHED THEN INSERT ({insert_cols}) VALUES ({insert_vals})
-            """,
-            rows,
-        )
-
-    def __insert_jobs_table_new_rows(self, rows: list[tuple[Any]]) -> tuple[str, list[tuple[Any]]]:
-        return (
-            f"""
-                INSERT INTO {self.__JOBS_TABLE_NAME} (
-                    job_id, build_id, extracted_at, type, name, step_key, state, command, soft_failed, exit_status,
-                    retried, retries_count, created_at, scheduled_at, runnable_at, started_at, finished_at, expired_at
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """,
-            rows,
-        )
-
-    def __ensure_builds_schema(self, cursor: SnowflakeCursor) -> None:
-        """Idempotent CREATE TABLE + ALTER ADD COLUMN for the builds table.
-
-        Called from both write and read paths so that a read can't 404 on
-        `ai_assessment` during the post-deploy window before the first writer
-        run has migrated the existing prod table. Both statements are no-ops
-        once satisfied.
-        """
-        cursor.execute(self.__create_builds_table())
+        """)
         cursor.execute(
-            f"ALTER TABLE {self.__BUILDS_TABLE_NAME} ADD COLUMN IF NOT EXISTS ai_assessment VARIANT"
+            f"ALTER TABLE {self._JOBS_TABLE_NAME} ADD COLUMN IF NOT EXISTS group_key VARCHAR(500)"
         )
+
+    def __upsert_builds(self, cursor: SnowflakeCursor, rows: list[tuple[Any]]) -> None:
+        TMP_BUILDS_TABLE_NAME = "tmp_builds"
+
+        cols = ", ".join(self.__BUILDS_COLS)
+        values_clause = ",\n".join(f"({', '.join(['%s'] * len(self.__BUILDS_COLS))})" for _ in rows)
+        flat_params = [val for row in rows for val in row]
+        insert_vals = ", ".join(f"src.{c}" for c in self.__BUILDS_COLS)
+
+        cursor.execute(
+            f"CREATE TEMPORARY TABLE {TMP_BUILDS_TABLE_NAME} AS SELECT * FROM {self._BUILDS_TABLE_NAME} WHERE FALSE"
+        )
+        cursor.execute(
+            f"INSERT INTO {TMP_BUILDS_TABLE_NAME} ({cols}) VALUES {values_clause}", flat_params
+        )
+        cursor.execute(f"""
+            MERGE INTO {self._BUILDS_TABLE_NAME} tgt
+            USING {TMP_BUILDS_TABLE_NAME} src ON tgt.{self._BUILDS_ID_COLUMN_NAME} = src.{self._BUILDS_ID_COLUMN_NAME}
+            WHEN NOT MATCHED THEN INSERT ({cols}) VALUES ({insert_vals})
+        """)
+        cursor.execute(f"DROP TABLE IF EXISTS {TMP_BUILDS_TABLE_NAME}")
+
+    def __upsert_jobs(self, cursor: SnowflakeCursor, rows: list[tuple[Any]]) -> None:
+        TMP_JOBS_TABLE_NAME = "tmp_jobs"
+
+        cols = ", ".join(self.__JOBS_COLS)
+        values_clause = ",\n".join(f"({', '.join(['%s'] * len(self.__JOBS_COLS))})" for _ in rows)
+        flat_params = [val for row in rows for val in row]
+        insert_vals = ", ".join(f"src.{c}" for c in self.__JOBS_COLS)
+
+        cursor.execute(
+            f"CREATE TEMPORARY TABLE {TMP_JOBS_TABLE_NAME} AS SELECT * FROM {self._JOBS_TABLE_NAME} WHERE FALSE"
+        )
+        cursor.execute(
+            f"INSERT INTO {TMP_JOBS_TABLE_NAME} ({cols}) VALUES {values_clause}", flat_params
+        )
+        cursor.execute(f"""
+            MERGE INTO {self._JOBS_TABLE_NAME} tgt
+            USING {TMP_JOBS_TABLE_NAME} src ON tgt.{self._JOBS_ID_COLUMN_NAME} = src.{self._JOBS_ID_COLUMN_NAME}
+            WHEN NOT MATCHED THEN INSERT ({cols}) VALUES ({insert_vals})
+        """)
+        cursor.execute(f"DROP TABLE IF EXISTS {TMP_JOBS_TABLE_NAME}")
 
     def insert_builds(self, builds: list[Build]) -> None:
         if not builds:
@@ -174,7 +178,7 @@ class BuildkiteSQL:
         rows = [BuildkiteSQL.__build_to_insert_row(b) for b in builds]
         with self.__get_cursor() as cursor:
             self.__ensure_builds_schema(cursor)
-            cursor.executemany(*self.__merge_builds_table_rows(rows))
+            self.__upsert_builds(cursor, rows)
 
     def insert_jobs(self, jobs: list[Job]) -> None:
         if not jobs:
@@ -182,9 +186,8 @@ class BuildkiteSQL:
 
         rows = [BuildkiteSQL.__job_to_insert_row(j) for j in jobs]
         with self.__get_cursor() as cursor:
-            cursor.execute(self.__create_jobs_table())
-            cursor.execute(*self.__delete_jobs_table_old_rows([j.id for j in jobs]))
-            cursor.executemany(*self.__insert_jobs_table_new_rows(rows))
+            self.__ensure_jobs_schema(cursor)
+            self.__upsert_jobs(cursor, rows)
 
     def get_builds(
         self,
@@ -216,8 +219,8 @@ class BuildkiteSQL:
             self.__ensure_builds_schema(cursor)
             cursor.execute(
                 f"""
-                SELECT {", ".join(self.__BUILD_COLS)}, TO_JSON(ai_assessment) AS ai_assessment
-                FROM buildkite_builds
+                SELECT {", ".join(self.__BUILDS_COLS)}, TO_JSON(ai_assessment) AS ai_assessment
+                FROM {self._BUILDS_TABLE_NAME}
                 {where_clause}
                 """,
                 build_params,
@@ -230,10 +233,9 @@ class BuildkiteSQL:
             build_ids = [r["build_id"] for r in build_rows]
             cursor.execute(
                 f"""
-                SELECT job_id, build_id, extracted_at, type, name, step_key, state, command, soft_failed, exit_status,
-                    retried, retries_count, created_at, scheduled_at, runnable_at, started_at, finished_at, expired_at
-                FROM buildkite_jobs
-                WHERE build_id IN ({",".join(["%s"] * len(build_ids))})
+                SELECT {", ".join(self.__JOBS_COLS)}
+                FROM {self._JOBS_TABLE_NAME}
+                WHERE {self._BUILDS_ID_COLUMN_NAME} IN ({", ".join(["%s"] * len(build_ids))})
                 """,
                 build_ids,
             )
@@ -251,8 +253,7 @@ class BuildkiteSQL:
 
     @staticmethod
     def __build_to_insert_row(build: Build) -> tuple:
-        # Order must match __BUILD_COLS, with the JSON-encoded ai_assessment
-        # appended (consumed by PARSE_JSON in the MERGE).
+        # Order must match __BUILDS_COLS
         return (
             build.id,
             build.extracted_at,
@@ -273,12 +274,11 @@ class BuildkiteSQL:
             build.scheduled_at,
             build.started_at,
             build.finished_at,
-            json.dumps(build.ai_assessment),
         )
 
     @staticmethod
     def __job_to_insert_row(job: Job) -> tuple:
-        # Order must match INSERT INTO buildkite_jobs column list
+        # Order must match __JOBS_COLS
         return (
             job.id,
             job.build_id,
@@ -286,6 +286,7 @@ class BuildkiteSQL:
             job.type,
             job.name,
             job.step_key,
+            job.group_key,
             job.state,
             job.command,
             job.soft_failed,
@@ -305,7 +306,7 @@ class BuildkiteSQL:
         ai_assessment_raw = row.get("ai_assessment")
         ai_assessment = json.loads(ai_assessment_raw) if ai_assessment_raw else {}
         return Build(
-            id=row["build_id"],
+            id=row[BuildkiteSQL._BUILDS_ID_COLUMN_NAME],
             extracted_at=row["extracted_at"],
             pipeline__id=row["pipeline__id"],
             pipeline__slug=row["pipeline__slug"],
@@ -331,12 +332,13 @@ class BuildkiteSQL:
     @staticmethod
     def __job_from_row(row: dict[str, Any]) -> Job:
         return Job(
-            id=row["job_id"],
-            build_id=row["build_id"],
+            id=row[BuildkiteSQL._JOBS_ID_COLUMN_NAME],
+            build_id=row[BuildkiteSQL._BUILDS_ID_COLUMN_NAME],
             extracted_at=row["extracted_at"],
             type=row["type"],
             name=row.get("name"),
             step_key=row.get("step_key"),
+            group_key=row.get("group_key"),
             state=row.get("state"),
             command=row.get("command"),
             soft_failed=row.get("soft_failed"),

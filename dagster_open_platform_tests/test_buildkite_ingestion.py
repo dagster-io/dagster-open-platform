@@ -132,39 +132,11 @@ def test_get_builds_extracts_ai_assessment_from_api_meta_data():
         assert builds[0].ai_assessment == expected
 
 
-def test_insert_builds_emits_merge_with_coalesce_and_ai_assessment_round_trips_via_snowflake():
-    """`insert_builds` issues a MERGE that PARSE_JSONs the inbound
-    ai_assessment string and protects an existing populated value from being
-    clobbered by a subsequent empty-payload write (out-of-band backfills
-    write directly to the column; live re-materializations would otherwise
-    overwrite them with `{}`). Verifies the SQL shape, the JSON tuple bind,
-    the CREATE+ALTER schema, and a SELECT round-trip.
+def test_insert_builds():
+    """`insert_builds` stages rows in a temp table then MERGEs insert-only
+    into the target. ai_assessment is NOT written by this path (populated
+    out-of-band). Verifies SQL shape and SELECT round-trip.
     """
-    assessment: dict[str, Any] = {
-        "commit_status": "broken",
-        "failure_level": "local_regression",
-        "total_failed_jobs": 1,
-        "analyzed_failed_jobs": 1,
-        "summary": "Real bug found.",
-        "genuine_job_failures": [
-            {
-                "step_key": "dagster-pytest-races",
-                "display_key": "dagster-pytest-races",
-                "job_id": "job-uuid-2",
-                "queue": "kubernetes-gke",
-                "reason": "Race condition between scheduler and runner threads",
-                "is_new": True,
-                "failure_type": "test",
-                "test_names": ["test_concurrent_runs"],
-                "dropped_test_names_count": 0,
-            },
-        ],
-        "false_job_failures": [],
-        "details": "The scheduler/runner race is reproduced by `test_concurrent_runs`.",
-        "input_tokens": 2048,
-        "output_tokens": 512,
-        "model": "anthropic.claude-opus-4-7",
-    }
     build = Build(
         id="b1",
         extracted_at=_EXTRACTED_AT,
@@ -185,7 +157,7 @@ def test_insert_builds_emits_merge_with_coalesce_and_ai_assessment_round_trips_v
         scheduled_at=_EXTRACTED_AT,
         started_at=_EXTRACTED_AT,
         finished_at=_EXTRACTED_AT,
-        ai_assessment=assessment,
+        ai_assessment={},
     )
 
     cursor = MagicMock()
@@ -195,31 +167,14 @@ def test_insert_builds_emits_merge_with_coalesce_and_ai_assessment_round_trips_v
     sql = BuildkiteSQL(snowflake)
     sql.insert_builds([build])
 
-    merge_call = next(c for c in cursor.executemany.call_args_list if "MERGE INTO" in c.args[0])
-    merge_sql, merge_rows = merge_call.args
-    assert "PARSE_JSON(%s)" in merge_sql
-    assert "WHEN MATCHED THEN UPDATE" in merge_sql
+    execute_sqls = [c.args[0] for c in cursor.execute.call_args_list]
+
+    # MERGE is insert-only
+    merge_sql = next(s for s in execute_sqls if "MERGE INTO" in s and "buildkite_builds" in s)
     assert "WHEN NOT MATCHED THEN INSERT" in merge_sql
-    # The clobber-protection clause — empty incoming payload preserves target.
-    assert "COALESCE(" in merge_sql
-    assert "NULLIF(src.ai_assessment, PARSE_JSON('{}'))" in merge_sql
+    assert "WHEN MATCHED" not in merge_sql
 
-    assert len(merge_rows) == 1
-    row = merge_rows[0]
-    # ai_assessment is the trailing element, JSON-serialized.
-    assert json.loads(row[-1]) == assessment
-
-    # Schema includes the new column + an idempotent ALTER for migration.
-    create_sql = next(
-        c.args[0] for c in cursor.execute.call_args_list if "CREATE TABLE" in c.args[0]
-    )
-    assert "ai_assessment VARIANT" in create_sql
-    assert any(
-        "ALTER TABLE" in c.args[0] and "ai_assessment VARIANT" in c.args[0]
-        for c in cursor.execute.call_args_list
-    )
-
-    # SELECT round-trip: simulate Snowflake returning the row we just wrote.
+    # SELECT round-trip: ai_assessment is read back via TO_JSON.
     cursor.description = [
         ("BUILD_ID",),
         ("EXTRACTED_AT",),
@@ -242,6 +197,7 @@ def test_insert_builds_emits_merge_with_coalesce_and_ai_assessment_round_trips_v
         ("FINISHED_AT",),
         ("AI_ASSESSMENT",),
     ]
+    ai_json = json.dumps(_ASSESSMENT_PAYLOAD)
     cursor.fetchall.side_effect = [
         [
             (
@@ -264,22 +220,21 @@ def test_insert_builds_emits_merge_with_coalesce_and_ai_assessment_round_trips_v
                 build.scheduled_at,
                 build.started_at,
                 build.finished_at,
-                row[-1],  # JSON string, mimicking TO_JSON(ai_assessment)
+                ai_json,
             )
         ],
-        [],  # No jobs.
+        [],  # no jobs
     ]
     rebuilt = sql.get_builds()
     assert len(rebuilt) == 1
-    assert rebuilt[0].ai_assessment == assessment
+    assert rebuilt[0].ai_assessment == _ASSESSMENT_PAYLOAD
 
-    # SELECT statement reads ai_assessment via TO_JSON.
     select_sql = next(
-        c.args[0]
-        for c in cursor.execute.call_args_list
-        if "SELECT" in c.args[0] and "FROM buildkite_builds" in c.args[0]
+        s
+        for s in [c.args[0] for c in cursor.execute.call_args_list]
+        if "TO_JSON(ai_assessment)" in s
     )
-    assert "TO_JSON(ai_assessment)" in select_sql
+    assert "FROM buildkite_builds" in select_sql
 
 
 def test_get_builds_handles_null_ai_assessment_in_legacy_rows():

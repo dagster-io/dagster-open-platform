@@ -12,6 +12,7 @@ class Job:
     type: str
     name: str | None
     step_key: str | None
+    group_key: str | None
     state: str | None
     command: str | None
     soft_failed: bool | None

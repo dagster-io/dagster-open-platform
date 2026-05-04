@@ -7,7 +7,7 @@ from dagster_anthropic import AnthropicResource
 from dagster_slack import SlackResource
 from dagster_snowflake import SnowflakeResource
 
-from dagster_open_platform.defs.buildkite.partitions import buildkite_hourly_partition
+from dagster_open_platform.defs.buildkite.partitions import buildkite_daily_partition
 from dagster_open_platform.defs.buildkite.prompt import BUILDKITE_ANALYSIS_SYSTEM_PROMPT
 from dagster_open_platform.defs.buildkite.resources import BuildkiteResource
 from dagster_open_platform.defs.buildkite.utils import (
@@ -23,9 +23,7 @@ PIPELINES_TO_MONITOR = ["internal"]
 
 
 _buildkite_raw_automation_condition = (
-    AutomationCondition.cron_tick_passed("0 * * * *")
-    & ~AutomationCondition.in_progress()
-    & AutomationCondition.in_latest_time_window(lookback_delta=timedelta(hours=2))
+    AutomationCondition.cron_tick_passed("0 5 * * *") & ~AutomationCondition.in_progress()
 )
 
 
@@ -46,20 +44,26 @@ _buildkite_raw_automation_condition = (
             automation_condition=_buildkite_raw_automation_condition,
         ),
     ],
-    partitions_def=buildkite_hourly_partition,
-    backfill_policy=dg.BackfillPolicy.multi_run(max_partitions_per_run=24),
+    partitions_def=buildkite_daily_partition,
 )
 def buildkite_raw(
     context: dg.AssetExecutionContext,
     buildkite: BuildkiteResource,
     snowflake: SnowflakeResource,
 ) -> Generator[dg.MaterializeResult]:
-    """Fetches all finished Buildkite builds (and their jobs) for the partition hour
-    and loads them into Snowflake. Runs every hour and re-processes the last two
-    hourly windows to capture builds that were still in-flight during the previous run.
+    """Fetches all finished Buildkite builds (and their jobs) for the partition day
+    and loads them into Snowflake. Runs daily at 5 AM UTC with a 1-hour lookback
+    buffer to capture builds still in-flight at the end of the previous day.
     """
     window = context.partition_time_window
-    created_from = window.start.isoformat()
+    # the buildkite api query only gets finished jobs, so this is to catch builds from the
+    # previous partition that were still in progress when that partition was materialized.
+    # since the asset materializes at 5am and the partition window is daily (midnight to
+    # midnight), this probably isn't very relevant right now (five hours would be a very
+    # long ci run), but if we ever rescheduled the asset materialization to midnight, or
+    # if there are timezone things we aren't handling properly, it provides insurance.
+    # the database insert is idempotent, so fetching duplicate jobs from bk is fine.
+    created_from = (window.start - timedelta(hours=1)).isoformat()
     created_to = window.end.isoformat()
 
     context.log.info(
@@ -72,14 +76,13 @@ def buildkite_raw(
         created_to=created_to,
         state="finished",
     )
-    context.log.info("Fetched %d builds", len(builds))
-
     jobs = [j for b in builds for j in b.jobs]
     context.log.info("Fetched %d builds and %d jobs", len(builds), len(jobs))
 
     buildkite_sql = BuildkiteSQL(snowflake)
 
     buildkite_sql.insert_builds(builds)
+    context.log.info("Inserted %d builds", len(builds))
     yield dg.MaterializeResult(
         asset_key="buildkite_builds",
         metadata={
@@ -90,6 +93,7 @@ def buildkite_raw(
     )
 
     buildkite_sql.insert_jobs(jobs)
+    context.log.info("Inserted %d jobs", len(jobs))
     yield dg.MaterializeResult(
         asset_key="buildkite_jobs",
         metadata={

@@ -1,5 +1,5 @@
 import datetime
 
-from dagster import HourlyPartitionsDefinition
+from dagster import DailyPartitionsDefinition
 
-buildkite_hourly_partition = HourlyPartitionsDefinition(start_date=datetime.datetime(2026, 1, 1))
+buildkite_daily_partition = DailyPartitionsDefinition(start_date=datetime.datetime(2026, 3, 1))

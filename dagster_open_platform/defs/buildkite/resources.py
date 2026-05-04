@@ -177,6 +177,7 @@ class BuildkiteResource(dg.ConfigurableResource):
             type=data["type"],
             name=data.get("name"),
             step_key=data.get("step_key"),
+            group_key=data.get("group_key"),
             state=data.get("state"),
             command=data.get("command"),
             soft_failed=data.get("soft_failed"),
