@@ -37,7 +37,7 @@ _ASSESSMENT_PAYLOAD: dict[str, Any] = {
             "step_key": "dagster-pytest",
             "display_key": "dagster-pytest",
             "job_id": "job-uuid-1",
-            "queue": "kubernetes-gke",
+            "queue": "kubernetes-eks",
             "category": "infra",
             "reason": "Network timeout to Postgres fixture container",
             "test_names": [],
