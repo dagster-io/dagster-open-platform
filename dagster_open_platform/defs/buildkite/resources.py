@@ -106,6 +106,31 @@ class BuildkiteResource(dg.ConfigurableResource):
 
         return builds
 
+    def get_build(
+        self,
+        *,
+        pipeline_slug: str,
+        build_number: str,
+        org_slug: str | None = None,
+    ) -> dict[str, Any] | None:
+        """Return the raw Buildkite build payload for a single build.
+
+        Useful when callers need fields outside the typed `Build` model (e.g.
+        `meta_data`, `author.email`). Returns None on 404 so callers can no-op
+        gracefully when a build can't be retrieved.
+        """
+        org = org_slug or self.org_slug
+        url = (
+            f"https://api.buildkite.com/v2/organizations/{org}"
+            f"/pipelines/{pipeline_slug}/builds/{build_number}"
+        )
+        response = requests.get(url, headers=self._headers, timeout=30)
+        if response.status_code == 404:
+            return None
+        response.raise_for_status()
+        payload = response.json()
+        return payload if isinstance(payload, dict) else None
+
     def get_job_log(self, pipeline_slug: str, build_number: int, job_id: str) -> str:
         """Fetch raw log text for a specific job.
 
