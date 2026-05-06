@@ -7,6 +7,19 @@ defaults:
 streams:
   purina.product.enterprise_contract_metadata:
     object: public.enterprise_contract_metadata
+    sql: |
+      SELECT
+        ORGANIZATION_ID,
+        CREDITS_DATE,
+        CUMULATIVE_CREDITS_USED,
+        ANNUAL_CLOUD_CREDITS_CONTRACT,
+        CLOUD_CREDITS_CONTRACTED_WITH_ROLLOVER,
+        CONTRACT_START_DATE,
+        CONTRACT_END_DATE,
+        LAUNCHER_SEATS,
+        PER_CREDIT_PRICE_USD,
+        PER_SEAT_PRICE_USD
+      FROM purina.product.enterprise_contract_metadata
     meta:
       dagster:
         asset_key: public.enterprise_contract_metadata
