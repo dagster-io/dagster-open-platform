@@ -74,7 +74,7 @@ tests = [
     "pytest",
     "responses",
     "syrupy",
-    "flaky",
+    "pytest-rerunfailures",
     # dlt 1.11.0 imports `pkg_resources` (from setuptools) without declaring it
     # as a dep. The constraint below pins the version because setuptools 82+
     # removed `pkg_resources`; we still need it explicitly installed in the
