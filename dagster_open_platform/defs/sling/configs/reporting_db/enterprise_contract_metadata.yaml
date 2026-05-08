@@ -18,7 +18,9 @@ streams:
         CONTRACT_END_DATE,
         LAUNCHER_SEATS,
         PER_CREDIT_PRICE_USD,
-        PER_SEAT_PRICE_USD
+        PER_SEAT_PRICE_USD,
+        ANNUAL_SERVERLESS_MINUTES_CONTRACT,
+        CUMULATIVE_SERVERLESS_MINUTES_USED
       FROM purina.product.enterprise_contract_metadata
     meta:
       dagster:
