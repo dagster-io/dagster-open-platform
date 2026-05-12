@@ -27,8 +27,10 @@ class BuildkiteSQL:
     _BUILDS_ID_COLUMN_NAME: ClassVar[str] = "build_id"
     _JOBS_ID_COLUMN_NAME: ClassVar[str] = "job_id"
 
-    # deliberately excludes ai_assessment column, since this is used for in band inserts
-    # and ai_assessment is populated out of band by a separate process
+    # Structural columns. ai_assessment is handled separately on the write
+    # path because it's a VARIANT (round-trips through PARSE_JSON / TO_JSON)
+    # and gets clobber-protection on UPDATE so out-of-band backfills survive
+    # re-materialization of the same partition.
     __BUILDS_COLS: tuple[str, ...] = (
         "build_id", "extracted_at", "pipeline__id", "pipeline__slug", "pipeline__name",
         "url", "web_url", "build_number", "state", "blocked", "cancel_reason", "message",
@@ -130,23 +132,50 @@ class BuildkiteSQL:
         )
 
     def __upsert_builds(self, cursor: SnowflakeCursor, rows: list[tuple[Any]]) -> None:
+        """Stage rows in a temp table, then MERGE into the target.
+
+        Each row is `(*structural_values, ai_assessment_json_str)` — see
+        ``__build_to_insert_row``. New builds are INSERTed with all columns
+        including ai_assessment. Existing builds have only ai_assessment
+        UPDATEd; structural columns are immutable for finished builds (the
+        ingestion filters ``state="finished"``). The UPDATE has clobber-
+        protection: if the inbound payload is empty (``{}`` — e.g. a build
+        on a branch outside the assessment gate), the existing target value
+        wins, so out-of-band backfills survive re-materialization.
+        """
         TMP_BUILDS_TABLE_NAME = "tmp_builds"
+        all_cols = (*self.__BUILDS_COLS, "ai_assessment")
+        n_cols = len(all_cols)
 
-        cols = ", ".join(self.__BUILDS_COLS)
-        values_clause = ",\n".join(f"({', '.join(['%s'] * len(self.__BUILDS_COLS))})" for _ in rows)
+        all_cols_csv = ", ".join(all_cols)
+        struct_csv = ", ".join(self.__BUILDS_COLS)
+        placeholder_row = "(" + ", ".join(["%s"] * n_cols) + ")"
+        values_clause = ", ".join(placeholder_row for _ in rows)
         flat_params = [val for row in rows for val in row]
-        insert_vals = ", ".join(f"src.{c}" for c in self.__BUILDS_COLS)
+        insert_vals = ", ".join(f"src.{c}" for c in all_cols)
 
+        # PARSE_JSON can't appear inside a parameterized VALUES list (the
+        # connector's bulk-binding rewrite strips it), so the staging INSERT
+        # wraps VALUES in a SELECT projection that calls PARSE_JSON on the
+        # ai_assessment column.
         cursor.execute(
-            f"CREATE TEMPORARY TABLE {TMP_BUILDS_TABLE_NAME} AS SELECT * FROM {self._BUILDS_TABLE_NAME} WHERE FALSE"
+            f"CREATE TEMPORARY TABLE {TMP_BUILDS_TABLE_NAME} AS "
+            f"SELECT * FROM {self._BUILDS_TABLE_NAME} WHERE FALSE"
         )
         cursor.execute(
-            f"INSERT INTO {TMP_BUILDS_TABLE_NAME} ({cols}) VALUES {values_clause}", flat_params
+            f"INSERT INTO {TMP_BUILDS_TABLE_NAME} ({all_cols_csv}) "
+            f"SELECT {struct_csv}, PARSE_JSON(ai_assessment) "
+            f"FROM (VALUES {values_clause}) AS t({struct_csv}, ai_assessment)",
+            flat_params,
         )
         cursor.execute(f"""
             MERGE INTO {self._BUILDS_TABLE_NAME} tgt
             USING {TMP_BUILDS_TABLE_NAME} src ON tgt.{self._BUILDS_ID_COLUMN_NAME} = src.{self._BUILDS_ID_COLUMN_NAME}
-            WHEN NOT MATCHED THEN INSERT ({cols}) VALUES ({insert_vals})
+            WHEN MATCHED THEN UPDATE SET ai_assessment = COALESCE(
+                NULLIF(src.ai_assessment, PARSE_JSON('{{}}')),
+                tgt.ai_assessment
+            )
+            WHEN NOT MATCHED THEN INSERT ({all_cols_csv}) VALUES ({insert_vals})
         """)
         cursor.execute(f"DROP TABLE IF EXISTS {TMP_BUILDS_TABLE_NAME}")
 
@@ -253,7 +282,9 @@ class BuildkiteSQL:
 
     @staticmethod
     def __build_to_insert_row(build: Build) -> tuple:
-        # Order must match __BUILDS_COLS
+        # Order: __BUILDS_COLS, then ai_assessment as a JSON string (PARSE_JSON
+        # is applied SQL-side; the connector can't bind a Python dict to a
+        # VARIANT column directly).
         return (
             build.id,
             build.extracted_at,
@@ -274,6 +305,7 @@ class BuildkiteSQL:
             build.scheduled_at,
             build.started_at,
             build.finished_at,
+            json.dumps(build.ai_assessment),
         )
 
     @staticmethod

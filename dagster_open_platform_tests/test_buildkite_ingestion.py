@@ -133,9 +133,13 @@ def test_get_builds_extracts_ai_assessment_from_api_meta_data():
 
 
 def test_insert_builds():
-    """`insert_builds` stages rows in a temp table then MERGEs insert-only
-    into the target. ai_assessment is NOT written by this path (populated
-    out-of-band). Verifies SQL shape and SELECT round-trip.
+    """`insert_builds` stages rows in a temp table then MERGEs into the target.
+
+    Verifies the staging INSERT wraps `ai_assessment` in PARSE_JSON, the
+    MERGE inserts new builds with all columns, the MERGE updates existing
+    builds' ai_assessment with COALESCE(NULLIF(..., '{}'), tgt) clobber
+    protection (so an inbound `{}` doesn't wipe an out-of-band backfill),
+    and that the SELECT round-trip reads ai_assessment back via TO_JSON.
     """
     build = Build(
         id="b1",
@@ -157,7 +161,7 @@ def test_insert_builds():
         scheduled_at=_EXTRACTED_AT,
         started_at=_EXTRACTED_AT,
         finished_at=_EXTRACTED_AT,
-        ai_assessment={},
+        ai_assessment=_ASSESSMENT_PAYLOAD,
     )
 
     cursor = MagicMock()
@@ -167,12 +171,27 @@ def test_insert_builds():
     sql = BuildkiteSQL(snowflake)
     sql.insert_builds([build])
 
-    execute_sqls = [c.args[0] for c in cursor.execute.call_args_list]
+    execute_calls = list(cursor.execute.call_args_list)
+    execute_sqls = [c.args[0] for c in execute_calls]
 
-    # MERGE is insert-only
+    # Staging INSERT wraps ai_assessment in PARSE_JSON.
+    staging_sql = next(s for s in execute_sqls if "INSERT INTO tmp_builds" in s)
+    assert "PARSE_JSON(ai_assessment)" in staging_sql
+    # The corresponding parameter list contains the JSON-string ai_assessment
+    # (last position per __build_to_insert_row).
+    staging_call = next(c for c in execute_calls if c.args[0] == staging_sql)
+    staging_params = staging_call.args[1]
+    assert staging_params[-1] == json.dumps(_ASSESSMENT_PAYLOAD)
+
+    # MERGE: insert all cols on NOT MATCHED; update only ai_assessment with
+    # clobber-protection on MATCHED.
     merge_sql = next(s for s in execute_sqls if "MERGE INTO" in s and "buildkite_builds" in s)
     assert "WHEN NOT MATCHED THEN INSERT" in merge_sql
-    assert "WHEN MATCHED" not in merge_sql
+    assert "ai_assessment" in merge_sql.split("WHEN NOT MATCHED THEN INSERT")[1]
+    assert "WHEN MATCHED THEN UPDATE SET ai_assessment" in merge_sql
+    assert "COALESCE(" in merge_sql
+    assert "NULLIF(src.ai_assessment, PARSE_JSON('{}'))" in merge_sql
+    assert "tgt.ai_assessment" in merge_sql
 
     # SELECT round-trip: ai_assessment is read back via TO_JSON.
     cursor.description = [
