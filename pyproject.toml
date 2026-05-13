@@ -87,6 +87,7 @@ tests = [
 # setuptools 82 removed pkg_resources, breaking third-party deps that still use it
 # at build time (flatdict via sprocketship->absql) or runtime. Pin until they migrate.
 [tool.uv]
+exclude-newer = "48h"
 constraint-dependencies = ["setuptools<82"]
 build-constraint-dependencies = ["setuptools<82"]
 # Override flatdict version to avoid build issues with 4.0.1
