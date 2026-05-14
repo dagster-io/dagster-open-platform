@@ -10,7 +10,14 @@ CREATE TABLE IF NOT EXISTS raw.anthropic_usage (
   model VARCHAR(100),
   service_tier VARCHAR(50),
   context_window VARCHAR(50),
+  account_id VARCHAR(100),
+  inference_geo VARCHAR(50),
+  service_account_id VARCHAR(100),
   starting_at TIMESTAMP_NTZ NOT NULL,
   ending_at TIMESTAMP_NTZ NOT NULL,
   extracted_at TIMESTAMP_NTZ
-)
+);
+
+ALTER TABLE IF EXISTS raw.anthropic_usage ADD COLUMN IF NOT EXISTS account_id VARCHAR(100);
+ALTER TABLE IF EXISTS raw.anthropic_usage ADD COLUMN IF NOT EXISTS inference_geo VARCHAR(50);
+ALTER TABLE IF EXISTS raw.anthropic_usage ADD COLUMN IF NOT EXISTS service_account_id VARCHAR(100);

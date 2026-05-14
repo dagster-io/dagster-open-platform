@@ -57,6 +57,41 @@ def fetch_paginated_data(
     return all_data, page_count
 
 
+def fetch_claude_code_data(
+    url: str,
+    headers: dict,
+    params: dict,
+    context: AssetExecutionContext,
+) -> tuple[list, int]:
+    """Fetch paginated data from Anthropic Claude Code Analytics API.
+
+    Unlike the usage/cost endpoints, this API returns a flat list of records
+    (one per user per day) rather than time-bucketed results.
+    """
+    all_data = []
+    page = None
+    page_count = 0
+
+    while True:
+        if page:
+            params["page"] = page
+
+        page_count += 1
+        context.log.info(f"Fetching page {page_count}")
+
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+
+        data = response.json()
+        all_data.extend(data.get("data", []))
+
+        if not data.get("has_more", False):
+            break
+        page = data.get("next_page")
+
+    return all_data, page_count
+
+
 def load_dataframe_to_snowflake(
     df: pd.DataFrame,
     snowflake: SnowflakeResource,
@@ -92,12 +127,14 @@ def load_dataframe_to_snowflake(
         cursor.execute(f"USE DATABASE {current_db}")
         cursor.execute("USE SCHEMA RAW")
 
-        # Create table if not exists
+        # Create table and run any migration statements (e.g. ADD COLUMN IF NOT EXISTS)
         fd = open(file_relative_path(__file__, create_table_sql))
         create_table_query = fd.read()
         fd.close()
 
-        cursor.execute(create_table_query)
+        for statement in create_table_query.split(";"):
+            if statement.strip():
+                cursor.execute(statement)
 
         # Get current database and schema
         current_db = cursor.execute("SELECT CURRENT_DATABASE()").fetchone()[0]  # type: ignore

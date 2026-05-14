@@ -9,6 +9,7 @@ INSERT INTO raw.anthropic_costs (
     model,
     service_tier,
     token_type,
+    inference_geo,
     starting_at,
     ending_at,
     extracted_at
@@ -23,6 +24,7 @@ SELECT
     model,
     service_tier,
     token_type,
+    inference_geo,
     starting_at,
     ending_at,
     extracted_at

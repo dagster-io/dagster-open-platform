@@ -8,7 +8,10 @@ CREATE TABLE IF NOT EXISTS raw.anthropic_costs (
   model VARCHAR(100),
   service_tier VARCHAR(50),
   token_type VARCHAR(100),
+  inference_geo VARCHAR(50),
   starting_at TIMESTAMP_NTZ NOT NULL,
   ending_at TIMESTAMP_NTZ NOT NULL,
   extracted_at TIMESTAMP_NTZ
-)
+);
+
+ALTER TABLE IF EXISTS raw.anthropic_costs ADD COLUMN IF NOT EXISTS inference_geo VARCHAR(50);

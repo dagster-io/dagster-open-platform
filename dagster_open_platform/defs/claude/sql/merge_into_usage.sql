@@ -11,6 +11,9 @@ INSERT INTO raw.anthropic_usage (
     model,
     service_tier,
     context_window,
+    account_id,
+    inference_geo,
+    service_account_id,
     starting_at,
     ending_at,
     extracted_at
@@ -27,6 +30,9 @@ SELECT
     model,
     service_tier,
     context_window,
+    account_id,
+    inference_geo,
+    service_account_id,
     starting_at,
     ending_at,
     extracted_at
