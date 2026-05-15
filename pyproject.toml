@@ -67,7 +67,6 @@ dev = [
     "sqlfluff>=3",
     "sqlfluff-templater-dbt",
     "sprocketship",
-    "pyright",
 ]
 
 tests = [
@@ -159,19 +158,3 @@ capitalisation_policy = "lower"
 
 [tool.sqlfluff.rules.capitalisation.types]
 extended_capitalisation_policy = "lower"
-
-
-# ########################
-# ##### PYRIGHT
-# ########################
-
-# separated from the repo root config since we use
-# published dagster modules in the platform
-
-[tool.pyright]
-
-include = ['.']
-exclude = []
-
-reportPrivateImportUsage = false
-useLibraryCodeForTypes = false
