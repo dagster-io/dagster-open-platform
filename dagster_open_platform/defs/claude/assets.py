@@ -48,15 +48,15 @@ def anthropic_usage_report(
         "starting_at": starting_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "ending_at": ending_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "bucket_width": "1h",
+        # API limit: max 5 group_by dimensions. Other supported values are
+        # account_id, inference_geo, service_account_id, and speed — if any
+        # of these are needed, one of the current dimensions must be swapped out.
         "group_by[]": [
             "api_key_id",
             "workspace_id",
             "model",
             "service_tier",
-            "context_window",
             "account_id",
-            "inference_geo",
-            "service_account_id",
         ],
     }
 

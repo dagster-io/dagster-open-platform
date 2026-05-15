@@ -37,6 +37,8 @@ def fetch_paginated_data(
         context.log.info(f"Fetching page {page_count}")
 
         response = requests.get(url, headers=headers, params=params)
+        if not response.ok:
+            context.log.error(f"API error {response.status_code}: {response.text}")
         response.raise_for_status()
 
         data = response.json()
@@ -80,6 +82,8 @@ def fetch_claude_code_data(
         context.log.info(f"Fetching page {page_count}")
 
         response = requests.get(url, headers=headers, params=params)
+        if not response.ok:
+            context.log.error(f"API error {response.status_code}: {response.text}")
         response.raise_for_status()
 
         data = response.json()
