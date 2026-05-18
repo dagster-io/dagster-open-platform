@@ -373,6 +373,9 @@ def anthropic_api_keys(
         context.log.warning("No API keys returned")
         return
 
+    def _epoch_to_iso(ts: int | None) -> str | None:
+        return datetime.fromtimestamp(ts, tz=timezone.utc).isoformat() if ts is not None else None
+
     extracted_at = datetime.now(timezone.utc).isoformat()
     records = []
     for record in all_data:
@@ -382,11 +385,11 @@ def anthropic_api_keys(
                 "ID": record.get("id"),
                 "NAME": record.get("name"),
                 "WORKSPACE_ID": record.get("workspace_id"),
-                "CREATED_AT": record.get("created_at"),
+                "CREATED_AT": _epoch_to_iso(record.get("created_at")),
                 "CREATED_BY_ID": created_by.get("id"),
                 "CREATED_BY_TYPE": created_by.get("type"),
                 "STATUS": record.get("status"),
-                "EXPIRES_AT": record.get("expires_at"),
+                "EXPIRES_AT": _epoch_to_iso(record.get("expires_at")),
                 "PARTIAL_KEY_HINT": record.get("partial_key_hint"),
                 "EXTRACTED_AT": extracted_at,
             }
@@ -442,6 +445,9 @@ def anthropic_users(
         context.log.warning("No users returned")
         return
 
+    def _epoch_to_iso(ts: int | None) -> str | None:
+        return datetime.fromtimestamp(ts, tz=timezone.utc).isoformat() if ts is not None else None
+
     extracted_at = datetime.now(timezone.utc).isoformat()
     records = [
         {
@@ -449,7 +455,7 @@ def anthropic_users(
             "EMAIL": record.get("email"),
             "NAME": record.get("name"),
             "ROLE": record.get("role"),
-            "ADDED_AT": record.get("added_at"),
+            "ADDED_AT": _epoch_to_iso(record.get("added_at")),
             "EXTRACTED_AT": extracted_at,
         }
         for record in all_data
