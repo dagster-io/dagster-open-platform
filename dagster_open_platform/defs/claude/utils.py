@@ -59,6 +59,59 @@ def fetch_paginated_data(
     return all_data, page_count
 
 
+def fetch_cursor_paginated_data(
+    url: str,
+    headers: dict,
+    params: dict,
+    context: AssetExecutionContext,
+) -> tuple[list, int]:
+    """Fetch paginated data from Anthropic Admin API using cursor-based pagination.
+
+    Used for list endpoints (API keys, users) that paginate via after_id/last_id
+    rather than the page token used by usage/cost endpoints.
+
+    Args:
+        url: The API endpoint URL
+        headers: Request headers including API key
+        params: Query parameters for the request
+        context: Dagster execution context for logging
+
+    Returns:
+        Tuple of (all_data, page_count) where all_data is a list of all records
+        across all pages and page_count is the number of pages fetched
+    """
+    all_data: list = []
+    after_id = None
+    page_count = 0
+
+    while True:
+        if after_id:
+            params["after_id"] = after_id
+        elif "after_id" in params:
+            del params["after_id"]
+
+        page_count += 1
+        context.log.info(f"Fetching page {page_count}")
+
+        response = requests.get(url, headers=headers, params=params)
+        if not response.ok:
+            context.log.error(f"API error {response.status_code}: {response.text}")
+        response.raise_for_status()
+
+        data = response.json()
+        all_data.extend(data.get("data", []))
+
+        if not data.get("has_more", False):
+            break
+
+        after_id = data.get("last_id")
+        if not after_id:
+            context.log.warning("has_more is True but last_id is missing, stopping pagination")
+            break
+
+    return all_data, page_count
+
+
 def fetch_claude_code_data(
     url: str,
     headers: dict,

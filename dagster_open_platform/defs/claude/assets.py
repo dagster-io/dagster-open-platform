@@ -8,6 +8,7 @@ from dagster_open_platform.defs.claude.partitions import claude_daily_partition
 from dagster_open_platform.defs.claude.resources import AnthropicAdminResource
 from dagster_open_platform.defs.claude.utils import (
     fetch_claude_code_data,
+    fetch_cursor_paginated_data,
     fetch_paginated_data,
     load_dataframe_to_snowflake,
 )
@@ -338,3 +339,133 @@ def anthropic_claude_code_report(
     context.log.info(
         f"Completed Claude Code report: {len(all_data)} user records, {rows_inserted} rows inserted"
     )
+
+
+@asset(
+    group_name="anthropic_metrics",
+    compute_kind="python",
+    description="Fetches all Anthropic organization API keys and loads into Snowflake",
+    automation_condition=daily_cron_tick_passed,
+    tags={"dagster/kind/claude": ""},
+)
+def anthropic_api_keys(
+    context: AssetExecutionContext,
+    snowflake: SnowflakeResource,
+    anthropic_admin: AnthropicAdminResource,
+) -> None:
+    """Pulls the full list of API keys from the Anthropic Admin API and loads into Snowflake.
+
+    Captures key name, workspace, status, expiry, and who created each key.
+    Performs a full replace on each run — no historical partitioning needed
+    since this is a current snapshot of the organization's key inventory.
+    """
+    url = "https://api.anthropic.com/v1/organizations/api_keys"
+    headers = {"anthropic-version": "2023-06-01", "x-api-key": anthropic_admin.admin_api_key}
+    params = {"limit": 100}
+
+    context.log.info("Fetching Anthropic API keys")
+
+    all_data, page_count = fetch_cursor_paginated_data(url, headers, params, context)
+
+    context.log.info(f"Retrieved {len(all_data)} API keys across {page_count} pages")
+
+    if not all_data:
+        context.log.warning("No API keys returned")
+        return
+
+    extracted_at = datetime.now(timezone.utc).isoformat()
+    records = []
+    for record in all_data:
+        created_by = record.get("created_by") or {}
+        records.append(
+            {
+                "ID": record.get("id"),
+                "NAME": record.get("name"),
+                "WORKSPACE_ID": record.get("workspace_id"),
+                "CREATED_AT": record.get("created_at"),
+                "CREATED_BY_ID": created_by.get("id"),
+                "CREATED_BY_TYPE": created_by.get("type"),
+                "STATUS": record.get("status"),
+                "EXPIRES_AT": record.get("expires_at"),
+                "PARTIAL_KEY_HINT": record.get("partial_key_hint"),
+                "EXTRACTED_AT": extracted_at,
+            }
+        )
+
+    df = pd.DataFrame(records)
+
+    rows_inserted = load_dataframe_to_snowflake(
+        df=df,
+        snowflake=snowflake,
+        context=context,
+        create_table_sql="sql/create_api_keys_table.sql",
+        temp_table_name="TEMP_ANTHROPIC_API_KEYS",
+        target_table_name="ANTHROPIC_API_KEYS",
+        delete_sql="sql/delete_api_keys.sql",
+        insert_sql="sql/merge_into_api_keys.sql",
+    )
+
+    context.log.info(
+        f"Completed API keys load: {len(all_data)} keys, {rows_inserted} rows inserted"
+    )
+
+
+@asset(
+    group_name="anthropic_metrics",
+    compute_kind="python",
+    description="Fetches all Anthropic organization members and loads into Snowflake",
+    automation_condition=daily_cron_tick_passed,
+    tags={"dagster/kind/claude": ""},
+)
+def anthropic_users(
+    context: AssetExecutionContext,
+    snowflake: SnowflakeResource,
+    anthropic_admin: AnthropicAdminResource,
+) -> None:
+    """Pulls the full list of organization members from the Anthropic Admin API and loads into Snowflake.
+
+    Captures user id, email, name, and role. Used as a lookup table to resolve
+    account_id and created_by references in the usage and API keys tables.
+    Performs a full replace on each run.
+    """
+    url = "https://api.anthropic.com/v1/organizations/users"
+    headers = {"anthropic-version": "2023-06-01", "x-api-key": anthropic_admin.admin_api_key}
+    params = {"limit": 100}
+
+    context.log.info("Fetching Anthropic organization users")
+
+    all_data, page_count = fetch_cursor_paginated_data(url, headers, params, context)
+
+    context.log.info(f"Retrieved {len(all_data)} users across {page_count} pages")
+
+    if not all_data:
+        context.log.warning("No users returned")
+        return
+
+    extracted_at = datetime.now(timezone.utc).isoformat()
+    records = [
+        {
+            "ID": record.get("id"),
+            "EMAIL": record.get("email"),
+            "NAME": record.get("name"),
+            "ROLE": record.get("role"),
+            "ADDED_AT": record.get("added_at"),
+            "EXTRACTED_AT": extracted_at,
+        }
+        for record in all_data
+    ]
+
+    df = pd.DataFrame(records)
+
+    rows_inserted = load_dataframe_to_snowflake(
+        df=df,
+        snowflake=snowflake,
+        context=context,
+        create_table_sql="sql/create_users_table.sql",
+        temp_table_name="TEMP_ANTHROPIC_USERS",
+        target_table_name="ANTHROPIC_USERS",
+        delete_sql="sql/delete_users.sql",
+        insert_sql="sql/merge_into_users.sql",
+    )
+
+    context.log.info(f"Completed users load: {len(all_data)} users, {rows_inserted} rows inserted")
