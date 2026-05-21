@@ -27,6 +27,32 @@ requirements:
 
 type: dagster_open_platform.lib.SnowflakeCreateOrRefreshComponent
 attributes:
+  name: stage_common_room_webhooks
+  database_name: "aws"
+  schema_name: "{{ schema_from_env() }}"
+  type: "stage"
+  role: AWS_WRITER
+  options:
+    url: "s3://{{ env('COMMON_ROOM_BUCKET') }}/webhooks"
+    storage_integration: "{{ env('COMMON_ROOM_STORAGE_INTEGRATION') }}"
+    directory:
+      enable: true
+    file_format:
+      type: JSON
+      file_extension: ".json"
+  asset_attributes:
+    description: "Snowflake stage for Common Room webhook payloads written by the ingest Lambda."
+    automation_condition: "{{ automation_condition.on_cron('0 * * * *') }}"
+    group_name: "aws_stages"
+requirements:
+  env:
+    - COMMON_ROOM_BUCKET
+    - COMMON_ROOM_STORAGE_INTEGRATION
+
+---
+
+type: dagster_open_platform.lib.SnowflakeCreateOrRefreshComponent
+attributes:
   name: stage_common_room_community_members
   database_name: "aws"
   schema_name: "{{ schema_from_env() }}"

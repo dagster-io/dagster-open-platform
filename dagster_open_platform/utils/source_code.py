@@ -1,4 +1,4 @@
-# copied from dagster-cloud/python_modules/dagster-cloud/dagster_cloud/metadata/source_code.py
+# copied from dagster-oss/python_modules/dagster-cloud/dagster_cloud/metadata/source_code.py
 # in advance of releasing this functionality
 
 from collections.abc import Sequence
