@@ -183,16 +183,26 @@ class BuildkiteSQL:
         TMP_JOBS_TABLE_NAME = "tmp_jobs"
 
         cols = ", ".join(self.__JOBS_COLS)
-        values_clause = ",\n".join(f"({', '.join(['%s'] * len(self.__JOBS_COLS))})" for _ in rows)
-        flat_params = [val for row in rows for val in row]
         insert_vals = ", ".join(f"src.{c}" for c in self.__JOBS_COLS)
 
         cursor.execute(
             f"CREATE TEMPORARY TABLE {TMP_JOBS_TABLE_NAME} AS SELECT * FROM {self._JOBS_TABLE_NAME} WHERE FALSE"
         )
-        cursor.execute(
-            f"INSERT INTO {TMP_JOBS_TABLE_NAME} ({cols}) VALUES {values_clause}", flat_params
-        )
+
+        # snowflake's connector has a hard limit on the number of expressions in a list (200_000 at time of writing)
+        # the partitions with the largest number of jobs can exceed this, so we have to chunk the inserts
+        chunk_size = 5_000
+        for i in range(0, len(rows), chunk_size):
+            row_chunk = rows[i : i + chunk_size]
+            values_clause = ",\n".join(
+                f"({', '.join(['%s'] * len(self.__JOBS_COLS))})" for _ in row_chunk
+            )
+            flat_params = [val for row in row_chunk for val in row]
+
+            cursor.execute(
+                f"INSERT INTO {TMP_JOBS_TABLE_NAME} ({cols}) VALUES {values_clause}", flat_params
+            )
+
         cursor.execute(f"""
             MERGE INTO {self._JOBS_TABLE_NAME} tgt
             USING {TMP_JOBS_TABLE_NAME} src ON tgt.{self._JOBS_ID_COLUMN_NAME} = src.{self._JOBS_ID_COLUMN_NAME}
