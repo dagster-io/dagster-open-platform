@@ -191,9 +191,8 @@ def common_room_ingest_lambda(
             FunctionName=_FUNCTION_NAME,
             Environment={"Variables": env_vars},
         )
-        # Ensure Function URL and public-invoke permission exist — they may be
-        # absent if a previous first-run failed between create_function and
-        # create_function_url_config.
+        # Ensure Function URL exists — may be absent if a previous first-run
+        # failed between create_function and create_function_url_config.
         try:
             client.get_function_url_config(FunctionName=_FUNCTION_NAME)
         except client.exceptions.ResourceNotFoundException:
@@ -203,13 +202,25 @@ def common_room_ingest_lambda(
                 AuthType="NONE",
                 Cors={"AllowOrigins": ["*"], "AllowMethods": ["POST"]},
             )
-            client.add_permission(
+
+        # Always refresh the public-invoke permission on every update so that
+        # a stale or incorrectly-created statement can't cause 403s.
+        try:
+            client.remove_permission(
                 FunctionName=_FUNCTION_NAME,
                 StatementId="FunctionURLAllowPublicAccess",
-                Action="lambda:InvokeFunctionUrl",
-                Principal="*",
-                FunctionUrlAuthType="NONE",
             )
+            context.log.info("Removed stale FunctionURLAllowPublicAccess permission")
+        except client.exceptions.ResourceNotFoundException:
+            pass  # Statement didn't exist yet — fine, we'll add it below.
+        client.add_permission(
+            FunctionName=_FUNCTION_NAME,
+            StatementId="FunctionURLAllowPublicAccess",
+            Action="lambda:InvokeFunctionUrl",
+            Principal="*",
+            FunctionUrlAuthType="NONE",
+        )
+        context.log.info("Added FunctionURLAllowPublicAccess permission")
         action = "updated"
     else:
         context.log.info(f"Creating new Lambda: {_FUNCTION_NAME}")

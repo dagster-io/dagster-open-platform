@@ -53,7 +53,7 @@ def lambda_handler(event: dict, context: object) -> dict:
     # Parse body.
     raw_body = event.get("body") or ""
     try:
-        payload = json.loads(raw_body)
+        json.loads(raw_body)  # validate JSON; raises JSONDecodeError if malformed
     except json.JSONDecodeError:
         return {"statusCode": 400, "body": json.dumps({"error": "invalid_json"})}
 
@@ -70,8 +70,4 @@ def lambda_handler(event: dict, context: object) -> dict:
         ContentType="application/json",
     )
 
-    source = (payload.get("source") or {}).get("name", "unknown")
-    return {
-        "statusCode": 200,
-        "body": json.dumps({"action": "accepted", "key": key, "source": source}),
-    }
+    return {"statusCode": 200, "body": json.dumps({"action": "accepted"})}
