@@ -16,9 +16,10 @@ Deploying the Lambda
 Run the `common_room_ingest_lambda` asset manually whenever the handler code
 changes. The function_url metadata shows the URL to configure in Common Room.
 Required env vars in Dagster Cloud:
-  COMMON_ROOM_LAMBDA_ROLE_ARN   — IAM execution role (from Terraform output)
-  COMMON_ROOM_BUCKET            — S3 bucket name
-  COMMON_ROOM_WEBHOOK_SECRET    — shared secret validated by the Lambda
+  COMMON_ROOM_LAMBDA_ROLE_ARN         — IAM execution role (from Terraform output)
+  COMMON_ROOM_LAMBDA_MANAGER_ROLE_ARN — cross-account role assumed to manage the Lambda
+  COMMON_ROOM_BUCKET                  — S3 bucket name
+  COMMON_ROOM_WEBHOOK_SECRET          — shared secret validated by the Lambda
 """
 
 import io
@@ -132,9 +133,10 @@ def common_room_ingest_lambda(
       2. Updates the environment variables.
 
     Required env vars:
-      COMMON_ROOM_LAMBDA_ROLE_ARN   — ARN of the IAM execution role (from Terraform output)
-      COMMON_ROOM_BUCKET            — destination S3 bucket name
-      COMMON_ROOM_WEBHOOK_SECRET    — shared secret validated by the Lambda handler
+      COMMON_ROOM_LAMBDA_ROLE_ARN         — ARN of the IAM execution role (from Terraform output)
+      COMMON_ROOM_LAMBDA_MANAGER_ROLE_ARN — cross-account role assumed to manage the Lambda
+      COMMON_ROOM_BUCKET                  — destination S3 bucket name
+      COMMON_ROOM_WEBHOOK_SECRET          — shared secret validated by the Lambda handler
     """
     handler_path = (
         pathlib.Path(__file__).parent.parent.parent / "lambda_functions" / "common_room_ingest.py"
@@ -148,13 +150,28 @@ def common_room_ingest_lambda(
     role_arn = os.environ["COMMON_ROOM_LAMBDA_ROLE_ARN"]
     bucket = os.environ["COMMON_ROOM_BUCKET"]
     webhook_secret = os.environ["COMMON_ROOM_WEBHOOK_SECRET"]
+    manager_role_arn = os.environ["COMMON_ROOM_LAMBDA_MANAGER_ROLE_ARN"]
 
     env_vars = {
         "COMMON_ROOM_BUCKET": bucket,
         "COMMON_ROOM_WEBHOOK_SECRET": webhook_secret,
     }
 
-    client = boto3.client("lambda", region_name=_REGION)
+    # The DOP pod runs as elementl_role in the user-cloud account (764506304434).
+    # The Lambda lives in the elementl account (968703565975). Assume the
+    # cross-account manager role so boto3 targets the correct account.
+    sts = boto3.client("sts")
+    creds = sts.assume_role(
+        RoleArn=manager_role_arn,
+        RoleSessionName="dagster-common-room-lambda-manager",
+    )["Credentials"]
+    client = boto3.client(
+        "lambda",
+        region_name=_REGION,
+        aws_access_key_id=creds["AccessKeyId"],
+        aws_secret_access_key=creds["SecretAccessKey"],
+        aws_session_token=creds["SessionToken"],
+    )
 
     try:
         client.get_function(FunctionName=_FUNCTION_NAME)
