@@ -553,7 +553,6 @@
     'org_performance_metrics',
     'pipelines_builds',
     'postgres/usage_metrics_daily_jobs_aggregated_reporting',
-    'product_operations/insights/reporting_asset_materialization_metrics',
     'public/salesforce_contract_info',
     'purina/oss_analytics/dagster_pypi_downloads',
     'purina/prod_telemetry/oss_telemetry_events_raw',
@@ -623,7 +622,6 @@
     'sandbox//current_credit_utilization',
     'sandbox//dagster_university_leads',
     'sandbox//dagster_user_roles',
-    'sandbox//deployment_insights_usage_daily',
     'sandbox//dim_accounts',
     'sandbox//dim_accounts_by_day',
     'sandbox//dim_campaigns',
@@ -681,7 +679,6 @@
     'sandbox//hubspot_organizations',
     'sandbox//hubspot_source_drill_level_2_labels',
     'sandbox//industry_standardization_mapping',
-    'sandbox//insights_asset_materialization_metrics',
     'sandbox//instance_type_priority',
     'sandbox//int_sessionized_pageviews',
     'sandbox//int_sessions_aggregated',
@@ -853,7 +850,6 @@
     'sandbox//stg_hubspot__contacts',
     'sandbox//stg_hubspot__forms',
     'sandbox//stg_hubspot__organization',
-    'sandbox//stg_insights__asset_materialization_metrics',
     'sandbox//stg_linkedin__ad_analytics_by_campaign',
     'sandbox//stg_linkedin__campaign_history',
     'sandbox//stg_linkedin__creative_history',
@@ -27562,20 +27558,6 @@
     }),
     dict({
       'deps': list([
-      ]),
-      'description': None,
-      'group_name': 'default',
-      'key': 'product_operations/insights/reporting_asset_materialization_metrics',
-      'metadata': dict({
-        'dagster/auto_created_stub_asset': True,
-      }),
-      'owners': list([
-      ]),
-      'tags': dict({
-      }),
-    }),
-    dict({
-      'deps': list([
         AssetDep(
           asset_key=AssetKey(
             parts=tuple(
@@ -36953,64 +36935,6 @@
             parts=tuple(
               'sandbox',
               '',
-              'insights_asset_materialization_metrics',
-            ),
-          ),
-          partition_mapping=None,
-        ),
-      ]),
-      'description': '''
-        Information about the types of insights metrics being used across deployments
-        
-        #### Raw SQL:
-        ```sql
-            {{ config(snowflake_warehouse="L_WAREHOUSE") }}
-            select
-                run_ended_at::date as date,
-                organization_id,
-                deployment_id,
-                case
-                    when upper(split_part(metric_name, '_', 3)) = 'DAGSTER' then 'Built-In'
-                    when upper(split_part(metric_name, '_', 3)) = 'META' then 'Custom'
-                    when upper(split_part(metric_name, '_', 3)) = 'COST' then 'Cost'
-                else upper(split_part(metric_name, '_', 3))
-                end as metric_type,
-                regexp_replace(metric_name, '__[a-z]+_') as metric_name,
-                count(distinct asset_key) as asset_count
-            from {{ ref('insights_asset_materialization_metrics') }}
-            group by all
-        ```
-      ''',
-      'group_name': 'mart_product',
-      'key': 'sandbox//deployment_insights_usage_daily',
-      'metadata': dict({
-        'dagster-dbt/materialization_type': 'table',
-        'dagster/table_name': 'sandbox.deployment_insights_usage_daily',
-        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
-          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False, enable_source_tests_as_checks=False),
-        ),
-        'dagster_dbt/unique_id': 'model.dagster_open_platform.deployment_insights_usage_daily',
-        'url': UrlMetadataValue(
-          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas//table/DEPLOYMENT_INSIGHTS_USAGE_DAILY',
-        ),
-      }),
-      'owners': list([
-        'nickroach@dagsterlabs.com',
-        'team:data',
-      ]),
-      'tags': dict({
-        'dagster/kind/dbt': '',
-        'dagster/kind/snowflake': '',
-        'model': '',
-      }),
-    }),
-    dict({
-      'deps': list([
-        AssetDep(
-          asset_key=AssetKey(
-            parts=tuple(
-              'sandbox',
-              '',
               'dim_accounts_by_day',
             ),
           ),
@@ -44938,51 +44862,6 @@
         'dagster/kind/dbt': '',
         'dagster/kind/snowflake': '',
         'seed': '',
-      }),
-    }),
-    dict({
-      'deps': list([
-        AssetDep(
-          asset_key=AssetKey(
-            parts=tuple(
-              'sandbox',
-              '',
-              'stg_insights__asset_materialization_metrics',
-            ),
-          ),
-          partition_mapping=None,
-        ),
-      ]),
-      'description': '''
-        Long table of metrics for insights asset materializations
-        
-        #### Raw SQL:
-        ```sql
-            select *
-            from {{ ref('stg_insights__asset_materialization_metrics') }}
-        ```
-      ''',
-      'group_name': 'model_insights',
-      'key': 'sandbox//insights_asset_materialization_metrics',
-      'metadata': dict({
-        'dagster-dbt/materialization_type': 'table',
-        'dagster/table_name': 'sandbox.insights_asset_materialization_metrics',
-        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
-          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False, enable_source_tests_as_checks=False),
-        ),
-        'dagster_dbt/unique_id': 'model.dagster_open_platform.insights_asset_materialization_metrics',
-        'url': UrlMetadataValue(
-          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas//table/INSIGHTS_ASSET_MATERIALIZATION_METRICS',
-        ),
-      }),
-      'owners': list([
-        'nickroach@dagsterlabs.com',
-        'team:data',
-      ]),
-      'tags': dict({
-        'dagster/kind/dbt': '',
-        'dagster/kind/snowflake': '',
-        'model': '',
       }),
     }),
     dict({
@@ -67686,66 +67565,6 @@
         'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_hubspot__organization',
         'url': UrlMetadataValue(
           url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas//table/STG_HUBSPOT__ORGANIZATION',
-        ),
-      }),
-      'owners': list([
-        'nickroach@dagsterlabs.com',
-        'team:data',
-      ]),
-      'tags': dict({
-        'dagster/kind/dbt': '',
-        'dagster/kind/snowflake': '',
-        'model': '',
-      }),
-    }),
-    dict({
-      'deps': list([
-        AssetDep(
-          asset_key=AssetKey(
-            parts=tuple(
-              'product_operations',
-              'insights',
-              'reporting_asset_materialization_metrics',
-            ),
-          ),
-          partition_mapping=None,
-        ),
-      ]),
-      'description': '''
-        dbt model stg_insights__asset_materialization_metrics
-        
-        #### Raw SQL:
-        ```sql
-            select
-        
-                unique_key as asset_materialization_metric_id,
-                organization_id,
-                deployment_id,
-                run_id,
-                step_data_id,
-                asset_key,
-                asset_group,
-                metric_name,
-                partition as partition_name,
-                metric_value,
-                last_rebuilt,
-                metric_multi_asset_divisor,
-                run_ended_at
-        
-            from {{ source('insights', 'reporting_asset_materialization_metrics') }}
-        ```
-      ''',
-      'group_name': 'staging_insights',
-      'key': 'sandbox//stg_insights__asset_materialization_metrics',
-      'metadata': dict({
-        'dagster-dbt/materialization_type': 'view',
-        'dagster/table_name': 'sandbox.stg_insights__asset_materialization_metrics',
-        'dagster_dbt/dagster_dbt_translator': CustomDagsterDbtTranslator(
-          settings=DagsterDbtTranslatorSettings(enable_asset_checks=True, enable_duplicate_source_asset_keys=False, enable_code_references=True, enable_dbt_selection_by_name=False, enable_source_tests_as_checks=False),
-        ),
-        'dagster_dbt/unique_id': 'model.dagster_open_platform.stg_insights__asset_materialization_metrics',
-        'url': UrlMetadataValue(
-          url='https://app.snowflake.com/ax61354/na94824/#/data/databases/PURINA/schemas//table/STG_INSIGHTS__ASSET_MATERIALIZATION_METRICS',
         ),
       }),
       'owners': list([
@@ -90887,7 +90706,6 @@
         'org_performance_metrics',
         'pipelines_builds',
         'postgres/usage_metrics_daily_jobs_aggregated_reporting',
-        'product_operations/insights/reporting_asset_materialization_metrics',
         'public/salesforce_contract_info',
         'purina/oss_analytics/dagster_pypi_downloads',
         'purina/prod_telemetry/oss_telemetry_events_raw',
@@ -90957,7 +90775,6 @@
         'sandbox//current_credit_utilization',
         'sandbox//dagster_university_leads',
         'sandbox//dagster_user_roles',
-        'sandbox//deployment_insights_usage_daily',
         'sandbox//dim_accounts',
         'sandbox//dim_accounts_by_day',
         'sandbox//dim_campaigns',
@@ -91015,7 +90832,6 @@
         'sandbox//hubspot_organizations',
         'sandbox//hubspot_source_drill_level_2_labels',
         'sandbox//industry_standardization_mapping',
-        'sandbox//insights_asset_materialization_metrics',
         'sandbox//instance_type_priority',
         'sandbox//int_sessionized_pageviews',
         'sandbox//int_sessions_aggregated',
@@ -91187,7 +91003,6 @@
         'sandbox//stg_hubspot__contacts',
         'sandbox//stg_hubspot__forms',
         'sandbox//stg_hubspot__organization',
-        'sandbox//stg_insights__asset_materialization_metrics',
         'sandbox//stg_linkedin__ad_analytics_by_campaign',
         'sandbox//stg_linkedin__campaign_history',
         'sandbox//stg_linkedin__creative_history',
@@ -91616,7 +91431,6 @@
         'main/public/users_organizations',
         'main/public/users_permissions',
         'pipelines_builds',
-        'product_operations/insights/reporting_asset_materialization_metrics',
         'purina/oss_analytics/dagster_pypi_downloads',
         'purina/prod_telemetry/oss_telemetry_events_raw',
         'pylon/pylon/pylon_issues',
@@ -91685,7 +91499,6 @@
         'sandbox//current_credit_utilization',
         'sandbox//dagster_university_leads',
         'sandbox//dagster_user_roles',
-        'sandbox//deployment_insights_usage_daily',
         'sandbox//dim_accounts',
         'sandbox//dim_accounts_by_day',
         'sandbox//dim_campaigns',
@@ -91743,7 +91556,6 @@
         'sandbox//hubspot_organizations',
         'sandbox//hubspot_source_drill_level_2_labels',
         'sandbox//industry_standardization_mapping',
-        'sandbox//insights_asset_materialization_metrics',
         'sandbox//instance_type_priority',
         'sandbox//int_sessionized_pageviews',
         'sandbox//int_sessions_aggregated',
@@ -91915,7 +91727,6 @@
         'sandbox//stg_hubspot__contacts',
         'sandbox//stg_hubspot__forms',
         'sandbox//stg_hubspot__organization',
-        'sandbox//stg_insights__asset_materialization_metrics',
         'sandbox//stg_linkedin__ad_analytics_by_campaign',
         'sandbox//stg_linkedin__campaign_history',
         'sandbox//stg_linkedin__creative_history',
@@ -92264,7 +92075,6 @@
         'main/public/users_organizations',
         'main/public/users_permissions',
         'pipelines_builds',
-        'product_operations/insights/reporting_asset_materialization_metrics',
         'purina/oss_analytics/dagster_pypi_downloads',
         'purina/prod_telemetry/oss_telemetry_events_raw',
         'pylon/pylon/pylon_issues',
@@ -92332,7 +92142,6 @@
         'sandbox//current_credit_utilization',
         'sandbox//dagster_university_leads',
         'sandbox//dagster_user_roles',
-        'sandbox//deployment_insights_usage_daily',
         'sandbox//dim_accounts',
         'sandbox//dim_accounts_by_day',
         'sandbox//dim_campaigns',
@@ -92390,7 +92199,6 @@
         'sandbox//hubspot_organizations',
         'sandbox//hubspot_source_drill_level_2_labels',
         'sandbox//industry_standardization_mapping',
-        'sandbox//insights_asset_materialization_metrics',
         'sandbox//instance_type_priority',
         'sandbox//int_sessionized_pageviews',
         'sandbox//int_sessions_aggregated',
@@ -92559,7 +92367,6 @@
         'sandbox//stg_hubspot__contacts',
         'sandbox//stg_hubspot__forms',
         'sandbox//stg_hubspot__organization',
-        'sandbox//stg_insights__asset_materialization_metrics',
         'sandbox//stg_linkedin__ad_analytics_by_campaign',
         'sandbox//stg_linkedin__campaign_history',
         'sandbox//stg_linkedin__creative_history',
@@ -92992,7 +92799,6 @@
         'main/public/users_organizations',
         'main/public/users_permissions',
         'pipelines_builds',
-        'product_operations/insights/reporting_asset_materialization_metrics',
         'purina/oss_analytics/dagster_pypi_downloads',
         'purina/prod_telemetry/oss_telemetry_events_raw',
         'pylon/pylon/pylon_issues',
@@ -93060,7 +92866,6 @@
         'sandbox//current_credit_utilization',
         'sandbox//dagster_university_leads',
         'sandbox//dagster_user_roles',
-        'sandbox//deployment_insights_usage_daily',
         'sandbox//dim_accounts',
         'sandbox//dim_accounts_by_day',
         'sandbox//dim_campaigns',
@@ -93118,7 +92923,6 @@
         'sandbox//hubspot_organizations',
         'sandbox//hubspot_source_drill_level_2_labels',
         'sandbox//industry_standardization_mapping',
-        'sandbox//insights_asset_materialization_metrics',
         'sandbox//instance_type_priority',
         'sandbox//int_sessionized_pageviews',
         'sandbox//int_sessions_aggregated',
@@ -93287,7 +93091,6 @@
         'sandbox//stg_hubspot__contacts',
         'sandbox//stg_hubspot__forms',
         'sandbox//stg_hubspot__organization',
-        'sandbox//stg_insights__asset_materialization_metrics',
         'sandbox//stg_linkedin__ad_analytics_by_campaign',
         'sandbox//stg_linkedin__campaign_history',
         'sandbox//stg_linkedin__creative_history',
