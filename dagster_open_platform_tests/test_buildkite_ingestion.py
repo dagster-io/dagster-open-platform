@@ -122,10 +122,14 @@ def test_get_builds_extracts_ai_assessment_from_api_meta_data():
 
     for api_value, expected in test_cases:
         api_payload = _api_build(api_value)
-        with patch("dagster_open_platform.defs.buildkite.resources.requests.get") as mock_get:
+        with patch(
+            "dagster_open_platform.defs.buildkite.resources._requests_session"
+        ) as mock_session_cm:
             mock_response = MagicMock()
             mock_response.json.side_effect = [[api_payload], []]
-            mock_get.return_value = mock_response
+            mock_session = MagicMock()
+            mock_session.get.return_value = mock_response
+            mock_session_cm.return_value.__enter__.return_value = mock_session
             builds = resource.get_builds()
 
         assert len(builds) == 1
