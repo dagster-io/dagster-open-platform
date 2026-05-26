@@ -1,31 +1,37 @@
 import json
 import logging
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from typing import Any
 
 import dagster as dg
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from dagster_open_platform.defs.buildkite.models import Build, Job
 
 logger = logging.getLogger(__name__)
 
+_REQUEST_TIMEOUT: tuple[int, int] = (10, 60)
 
-def _extract_ai_assessment(meta_data: dict[str, Any]) -> dict[str, Any]:
-    """Parse the `ai_assessment` JSON blob written by the post-build assessment
-    step. Returns {} for builds without an assessment (e.g. pipelines outside
-    the assessment gate, builds that crashed before the step ran, or feature
-    branches predating the step).
-    """
-    raw = meta_data.get("ai_assessment")
-    if not raw:
-        return {}
-    try:
-        parsed = json.loads(raw)
-    except json.JSONDecodeError:
-        logger.warning("Failed to parse ai_assessment JSON; treating as absent")
-        return {}
-    return parsed if isinstance(parsed, dict) else {}
+
+@contextmanager
+def _requests_session() -> Iterator[requests.Session]:
+    retry = Retry(
+        total=5,
+        backoff_factor=1.0,
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods=("GET",),
+        respect_retry_after_header=True,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+
+    with requests.Session() as session:
+        session.mount("https://", adapter)
+        session.mount("http://", adapter)
+        yield session
 
 
 class BuildkiteResource(dg.ConfigurableResource):
@@ -90,19 +96,25 @@ class BuildkiteResource(dg.ConfigurableResource):
         else:
             url = f"{self._base_url}/builds"
 
-        page = 1
-        while max_pages is None or page <= max_pages:
-            params["page"] = str(page)
-            extracted_at = datetime.now(tz=timezone.utc)
-            response = requests.get(url, headers=self._headers, params=params, timeout=30)
-            response.raise_for_status()
-            page_data = response.json()
-            if not page_data:
-                break
-            builds.extend(
-                [BuildkiteResource.__api_to_build(b, extracted_at=extracted_at) for b in page_data]
-            )
-            page += 1
+        with _requests_session() as session:
+            page = 1
+            while max_pages is None or page <= max_pages:
+                params["page"] = str(page)
+                extracted_at = datetime.now(tz=timezone.utc)
+                response = session.get(
+                    url, headers=self._headers, params=params, timeout=_REQUEST_TIMEOUT
+                )
+                response.raise_for_status()
+                page_data = response.json()
+                if not page_data:
+                    break
+                builds.extend(
+                    [
+                        BuildkiteResource.__api_to_build(b, extracted_at=extracted_at)
+                        for b in page_data
+                    ]
+                )
+                page += 1
 
         return builds
 
@@ -124,7 +136,8 @@ class BuildkiteResource(dg.ConfigurableResource):
             f"https://api.buildkite.com/v2/organizations/{org}"
             f"/pipelines/{pipeline_slug}/builds/{build_number}"
         )
-        response = requests.get(url, headers=self._headers, timeout=30)
+        with _requests_session() as session:
+            response = session.get(url, headers=self._headers, timeout=_REQUEST_TIMEOUT)
         if response.status_code == 404:
             return None
         response.raise_for_status()
@@ -143,7 +156,8 @@ class BuildkiteResource(dg.ConfigurableResource):
             Raw log text for the job.
         """
         url = f"{self._base_url}/pipelines/{pipeline_slug}/builds/{build_number}/jobs/{job_id}/log"
-        response = requests.get(url, headers=self._headers, timeout=30)
+        with _requests_session() as session:
+            response = session.get(url, headers=self._headers, timeout=_REQUEST_TIMEOUT)
         response.raise_for_status()
         data = response.json()
         return data.get("content", "")
@@ -173,10 +187,10 @@ class BuildkiteResource(dg.ConfigurableResource):
             commit=data["commit"],
             branch=data["branch"],
             source=data["source"],
-            created_at=iso_to_dt(data.get("created_at")),
-            scheduled_at=iso_to_dt(data.get("scheduled_at")),
-            started_at=iso_to_dt(data.get("started_at")),
-            finished_at=iso_to_dt(data.get("finished_at")),
+            created_at=_iso_to_dt(data.get("created_at")),
+            scheduled_at=_iso_to_dt(data.get("scheduled_at")),
+            started_at=_iso_to_dt(data.get("started_at")),
+            finished_at=_iso_to_dt(data.get("finished_at")),
             ai_assessment=_extract_ai_assessment(data.get("meta_data") or {}),
             jobs=[
                 BuildkiteResource.__api_to_job(
@@ -209,14 +223,31 @@ class BuildkiteResource(dg.ConfigurableResource):
             exit_status=data.get("exit_status"),
             retried=data.get("retried"),
             retries_count=data.get("retried_count"),
-            created_at=iso_to_dt(data.get("created_at")),
-            scheduled_at=iso_to_dt(data.get("scheduled_at")),
-            runnable_at=iso_to_dt(data.get("runnable_at")),
-            started_at=iso_to_dt(data.get("started_at")),
-            finished_at=iso_to_dt(data.get("finished_at")),
-            expired_at=iso_to_dt(data.get("expired_at")),
+            created_at=_iso_to_dt(data.get("created_at")),
+            scheduled_at=_iso_to_dt(data.get("scheduled_at")),
+            runnable_at=_iso_to_dt(data.get("runnable_at")),
+            started_at=_iso_to_dt(data.get("started_at")),
+            finished_at=_iso_to_dt(data.get("finished_at")),
+            expired_at=_iso_to_dt(data.get("expired_at")),
         )
 
 
-def iso_to_dt(value: str | None) -> datetime | None:
+def _iso_to_dt(value: str | None) -> datetime | None:
     return datetime.fromisoformat(value) if value else None
+
+
+def _extract_ai_assessment(meta_data: dict[str, Any]) -> dict[str, Any]:
+    """Parse the `ai_assessment` JSON blob written by the post-build assessment
+    step. Returns {} for builds without an assessment (e.g. pipelines outside
+    the assessment gate, builds that crashed before the step ran, or feature
+    branches predating the step).
+    """
+    raw = meta_data.get("ai_assessment")
+    if not raw:
+        return {}
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError:
+        logger.warning("Failed to parse ai_assessment JSON; treating as absent")
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
