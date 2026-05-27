@@ -2,7 +2,6 @@
 
 Architecture:
   Common Room webhook
-    → Lambda Function URL  (managed by common_room_ingest_lambda Dagster asset)
     → S3  s3://BUCKET/webhooks/YYYY/MM/DD/<ts>-<id>.json
     → Snowflake stage  aws.<schema>.stage_common_room_webhooks  (refreshed hourly)
     → common_room_signals  COPY INTO aws.<schema>.COMMON_ROOM_SIGNALS  (runs at :15)
@@ -10,25 +9,10 @@ Architecture:
 Snowflake tracks loaded files natively (COPY INTO without FORCE), so each
 webhook JSON file is ingested exactly once regardless of how many times the
 asset runs.
-
-Deploying the Lambda
---------------------
-Run the `common_room_ingest_lambda` asset manually whenever the handler code
-changes. The function_url metadata shows the URL to configure in Common Room.
-Required env vars in Dagster Cloud:
-  COMMON_ROOM_LAMBDA_ROLE_ARN         — IAM execution role (from Terraform output)
-  COMMON_ROOM_LAMBDA_MANAGER_ROLE_ARN — cross-account role assumed to manage the Lambda
-  COMMON_ROOM_BUCKET                  — S3 bucket name
-  COMMON_ROOM_WEBHOOK_SECRET          — shared secret validated by the Lambda
 """
 
-import io
-import os
-import pathlib
 import textwrap
-import zipfile
 
-import boto3
 import dagster as dg
 from dagster_open_platform.utils.environment_helpers import get_schema_for_environment
 from dagster_snowflake import SnowflakeResource
@@ -40,11 +24,6 @@ from dagster_snowflake import SnowflakeResource
 _AWS_DB = "aws"
 _DEST_TABLE = "COMMON_ROOM_SIGNALS"
 
-# Lambda deployment constants
-_FUNCTION_NAME = "elementl_common_room_ingest"
-_RUNTIME = "python3.12"
-_REGION = "us-west-2"
-_TIMEOUT = 30
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -98,169 +77,6 @@ _WORKFLOW_TO_DEF_KEY: dict[str, str] = {
     "acquisition": "common_room.acquisition",
     "job_posting_dagster": "common_room.job_posting_dagster",
 }
-
-
-# ---------------------------------------------------------------------------
-# Asset: deploy / update the ingest Lambda
-# ---------------------------------------------------------------------------
-
-
-@dg.asset(
-    key=["common_room", "ingest_lambda"],
-    group_name="common_room",
-    description=(
-        "Deploys or updates the Common Room webhook ingest Lambda in AWS. "
-        "Creates the function on first run; updates code + config on subsequent runs. "
-        "The function_url metadata shows the URL to configure in Common Room's webhook settings. "
-        "Run this asset manually whenever lambda_functions/common_room_ingest.py changes."
-    ),
-    kinds={"aws"},
-    owners=["team:gtm"],
-    # Infrastructure asset — trigger manually, not on a schedule.
-)
-def common_room_ingest_lambda(
-    context: dg.AssetExecutionContext,
-) -> dg.MaterializeResult:
-    """Create or update the Common Room ingest Lambda.
-
-    On first run:
-      1. Creates the Lambda function with the handler code zip.
-      2. Attaches a public Function URL (no auth — secret validated in handler).
-      3. Grants lambda:InvokeFunctionUrl to * so Common Room can call it.
-
-    On subsequent runs:
-      1. Updates the function code zip.
-      2. Updates the environment variables.
-
-    Required env vars:
-      COMMON_ROOM_LAMBDA_ROLE_ARN         — ARN of the IAM execution role (from Terraform output)
-      COMMON_ROOM_LAMBDA_MANAGER_ROLE_ARN — cross-account role assumed to manage the Lambda
-      COMMON_ROOM_BUCKET                  — destination S3 bucket name
-      COMMON_ROOM_WEBHOOK_SECRET          — shared secret validated by the Lambda handler
-    """
-    handler_path = (
-        pathlib.Path(__file__).parent.parent.parent / "lambda_functions" / "common_room_ingest.py"
-    )
-
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        zf.write(handler_path, arcname="lambda_function.py")
-    zip_bytes = buf.getvalue()
-
-    role_arn = os.environ["COMMON_ROOM_LAMBDA_ROLE_ARN"]
-    bucket = os.environ["COMMON_ROOM_BUCKET"]
-    webhook_secret = os.environ["COMMON_ROOM_WEBHOOK_SECRET"]
-    manager_role_arn = os.environ["COMMON_ROOM_LAMBDA_MANAGER_ROLE_ARN"]
-
-    env_vars = {
-        "COMMON_ROOM_BUCKET": bucket,
-        "COMMON_ROOM_WEBHOOK_SECRET": webhook_secret,
-    }
-
-    # The DOP pod runs as elementl_role in the user-cloud account (764506304434).
-    # The Lambda lives in the elementl account (968703565975). Assume the
-    # cross-account manager role so boto3 targets the correct account.
-    sts = boto3.client("sts")
-    creds = sts.assume_role(
-        RoleArn=manager_role_arn,
-        RoleSessionName="dagster-common-room-lambda-manager",
-    )["Credentials"]
-    client = boto3.client(
-        "lambda",
-        region_name=_REGION,
-        aws_access_key_id=creds["AccessKeyId"],
-        aws_secret_access_key=creds["SecretAccessKey"],
-        aws_session_token=creds["SessionToken"],
-    )
-
-    try:
-        client.get_function(FunctionName=_FUNCTION_NAME)
-        exists = True
-    except client.exceptions.ResourceNotFoundException:
-        exists = False
-
-    if exists:
-        context.log.info(f"Updating existing Lambda: {_FUNCTION_NAME}")
-        client.update_function_code(
-            FunctionName=_FUNCTION_NAME,
-            ZipFile=zip_bytes,
-        )
-        # Wait for code update before touching config.
-        client.get_waiter("function_updated").wait(FunctionName=_FUNCTION_NAME)
-        client.update_function_configuration(
-            FunctionName=_FUNCTION_NAME,
-            Environment={"Variables": env_vars},
-        )
-        # Ensure Function URL exists — may be absent if a previous first-run
-        # failed between create_function and create_function_url_config.
-        try:
-            client.get_function_url_config(FunctionName=_FUNCTION_NAME)
-        except client.exceptions.ResourceNotFoundException:
-            context.log.info("Function URL missing — creating it now")
-            client.create_function_url_config(
-                FunctionName=_FUNCTION_NAME,
-                AuthType="NONE",
-                Cors={"AllowOrigins": ["*"], "AllowMethods": ["POST"]},
-            )
-
-        # Always refresh the public-invoke permission on every update so that
-        # a stale or incorrectly-created statement can't cause 403s.
-        try:
-            client.remove_permission(
-                FunctionName=_FUNCTION_NAME,
-                StatementId="FunctionURLAllowPublicAccess",
-            )
-            context.log.info("Removed stale FunctionURLAllowPublicAccess permission")
-        except client.exceptions.ResourceNotFoundException:
-            pass  # Statement didn't exist yet — fine, we'll add it below.
-        client.add_permission(
-            FunctionName=_FUNCTION_NAME,
-            StatementId="FunctionURLAllowPublicAccess",
-            Action="lambda:InvokeFunctionUrl",
-            Principal="*",
-            FunctionUrlAuthType="NONE",
-        )
-        context.log.info("Added FunctionURLAllowPublicAccess permission")
-        action = "updated"
-    else:
-        context.log.info(f"Creating new Lambda: {_FUNCTION_NAME}")
-        client.create_function(
-            FunctionName=_FUNCTION_NAME,
-            Runtime=_RUNTIME,
-            Role=role_arn,
-            Handler="lambda_function.lambda_handler",
-            Code={"ZipFile": zip_bytes},
-            Timeout=_TIMEOUT,
-            Environment={"Variables": env_vars},
-        )
-        client.get_waiter("function_active").wait(FunctionName=_FUNCTION_NAME)
-        client.create_function_url_config(
-            FunctionName=_FUNCTION_NAME,
-            AuthType="NONE",
-            Cors={"AllowOrigins": ["*"], "AllowMethods": ["POST"]},
-        )
-        client.add_permission(
-            FunctionName=_FUNCTION_NAME,
-            StatementId="FunctionURLAllowPublicAccess",
-            Action="lambda:InvokeFunctionUrl",
-            Principal="*",
-            FunctionUrlAuthType="NONE",
-        )
-        action = "created"
-
-    url_config = client.get_function_url_config(FunctionName=_FUNCTION_NAME)
-    function_url = url_config["FunctionUrl"]
-    function_arn = client.get_function(FunctionName=_FUNCTION_NAME)["Configuration"]["FunctionArn"]
-
-    context.log.info(f"Lambda {action}: {function_url}")
-
-    return dg.MaterializeResult(
-        metadata={
-            "function_url": dg.MetadataValue.url(function_url),
-            "function_arn": dg.MetadataValue.text(function_arn),
-            "action": dg.MetadataValue.text(action),
-        }
-    )
 
 
 # ---------------------------------------------------------------------------
