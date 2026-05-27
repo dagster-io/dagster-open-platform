@@ -373,8 +373,10 @@ def anthropic_api_keys(
         context.log.warning("No API keys returned")
         return
 
-    def _epoch_to_iso(ts: int | None) -> str | None:
-        return datetime.fromtimestamp(ts, tz=timezone.utc).isoformat() if ts is not None else None
+    def _epoch_to_iso(ts: int | str | None) -> str | None:
+        return (
+            datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat() if ts is not None else None
+        )
 
     extracted_at = datetime.now(timezone.utc).isoformat()
     records = []
@@ -445,8 +447,10 @@ def anthropic_users(
         context.log.warning("No users returned")
         return
 
-    def _epoch_to_iso(ts: int | None) -> str | None:
-        return datetime.fromtimestamp(ts, tz=timezone.utc).isoformat() if ts is not None else None
+    def _epoch_to_iso(ts: int | str | None) -> str | None:
+        return (
+            datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat() if ts is not None else None
+        )
 
     extracted_at = datetime.now(timezone.utc).isoformat()
     records = [
