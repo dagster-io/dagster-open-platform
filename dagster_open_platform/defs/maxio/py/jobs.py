@@ -28,7 +28,7 @@ SLACK_CHANNEL = "C03EPUD3T7Y"
 def correct_maxio_arr_amounts(
     config: ArrCorrectionConfig,
     maxio: ResourceParam[MaxioResource],
-    slack: ResourceParam[SlackResource],
+    slack_notifications: ResourceParam[SlackResource],
 ) -> None:
     if config.dry_run:
         log.info("*** DRY RUN MODE -- no changes will be written to Maxio ***")
@@ -86,7 +86,7 @@ def correct_maxio_arr_amounts(
     log.info("Done. corrected=%d  skipped=%d  failed=%d", corrected, skipped, failed)
 
     if corrected > 0 and not config.dry_run:
-        slack.get_client().chat_postMessage(
+        slack_notifications.get_client().chat_postMessage(
             channel=SLACK_CHANNEL,
             text=f":white_check_mark: *Maxio ARR correction*: corrected {corrected} transaction(s) "
             f"(skipped {skipped}, failed {failed}).",
