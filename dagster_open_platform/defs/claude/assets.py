@@ -20,6 +20,14 @@ daily_cron_tick_passed = (
 )
 
 
+def _epoch_to_iso(ts: int | str | None) -> str | None:
+    if ts is None:
+        return None
+    if isinstance(ts, int) or str(ts).isdigit():
+        return datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat()
+    return datetime.fromisoformat(str(ts).replace("Z", "+00:00")).isoformat()
+
+
 @asset(
     group_name="anthropic_metrics",
     compute_kind="python",
@@ -373,11 +381,6 @@ def anthropic_api_keys(
         context.log.warning("No API keys returned")
         return
 
-    def _epoch_to_iso(ts: int | str | None) -> str | None:
-        return (
-            datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat() if ts is not None else None
-        )
-
     extracted_at = datetime.now(timezone.utc).isoformat()
     records = []
     for record in all_data:
@@ -446,11 +449,6 @@ def anthropic_users(
     if not all_data:
         context.log.warning("No users returned")
         return
-
-    def _epoch_to_iso(ts: int | str | None) -> str | None:
-        return (
-            datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat() if ts is not None else None
-        )
 
     extracted_at = datetime.now(timezone.utc).isoformat()
     records = [
