@@ -51,8 +51,7 @@ class GithubResource(ConfigurableResource):
             result = client.execute(query)
             search = result["search"]
             edges = search["edges"]
-            for node in edges:
-                results.append(node["node"])
+            results.extend(node["node"] for node in edges)
             log.info(f"Total results: {len(results)}")
             if not search["pageInfo"]["hasNextPage"]:
                 break

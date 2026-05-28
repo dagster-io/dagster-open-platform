@@ -183,25 +183,24 @@ def anthropic_cost_report(
     context.log.info(f"Total cost over period: ${total_cost_usd:.2f}")
 
     # Convert to DataFrame
-    records = []
-    for record in all_data:
-        records.append(
-            {
-                "CURRENCY": record.get("currency"),
-                "AMOUNT": float(record.get("amount", 0)),
-                "WORKSPACE_ID": record.get("workspace_id"),
-                "DESCRIPTION": record.get("description"),
-                "COST_TYPE": record.get("cost_type"),
-                "CONTEXT_WINDOW": record.get("context_window"),
-                "MODEL": record.get("model"),
-                "SERVICE_TIER": record.get("service_tier"),
-                "TOKEN_TYPE": record.get("token_type"),
-                "INFERENCE_GEO": record.get("inference_geo"),
-                "STARTING_AT": record.get("starting_at"),
-                "ENDING_AT": record.get("ending_at"),
-                "EXTRACTED_AT": datetime.now(timezone.utc).isoformat(),
-            }
-        )
+    records = [
+        {
+            "CURRENCY": record.get("currency"),
+            "AMOUNT": float(record.get("amount", 0)),
+            "WORKSPACE_ID": record.get("workspace_id"),
+            "DESCRIPTION": record.get("description"),
+            "COST_TYPE": record.get("cost_type"),
+            "CONTEXT_WINDOW": record.get("context_window"),
+            "MODEL": record.get("model"),
+            "SERVICE_TIER": record.get("service_tier"),
+            "TOKEN_TYPE": record.get("token_type"),
+            "INFERENCE_GEO": record.get("inference_geo"),
+            "STARTING_AT": record.get("starting_at"),
+            "ENDING_AT": record.get("ending_at"),
+            "EXTRACTED_AT": datetime.now(timezone.utc).isoformat(),
+        }
+        for record in all_data
+    ]
 
     df = pd.DataFrame(records)
 

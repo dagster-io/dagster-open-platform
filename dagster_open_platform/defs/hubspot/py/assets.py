@@ -35,8 +35,7 @@ def fetch_hubspot_contact_ids(access_token: str) -> list[str]:
         response.raise_for_status()
         data = response.json()
 
-        for contact in data.get("results", []):
-            contact_ids.append(contact["id"])
+        contact_ids.extend(contact["id"] for contact in data.get("results", []))
 
         paging = data.get("paging")
         if paging and "next" in paging:

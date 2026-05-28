@@ -162,8 +162,7 @@ class AthenaAccessChecker:
 
         try:
             for page in paginator.paginate(DatabaseName=database):
-                for table in page["TableList"]:
-                    tables.append(table["Name"])
+                tables.extend(table["Name"] for table in page["TableList"])
         except Exception as e:
             print(f"Error listing tables in {database}: {e}", file=sys.stderr)
             return []

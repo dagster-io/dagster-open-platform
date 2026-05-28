@@ -11,8 +11,9 @@ class SegmentComponent(dg.components.Component, dg.components.Model, dg.componen
         asset_keys = []
         for source in self.keys:
             for category in self.keys[source]:
-                for event_type in self.keys[source][category]:
-                    asset_keys.append([source, category, event_type])
+                asset_keys.extend(
+                    [source, category, event_type] for event_type in self.keys[source][category]
+                )
 
         return dg.Definitions(
             assets=[
