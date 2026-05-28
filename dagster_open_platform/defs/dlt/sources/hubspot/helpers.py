@@ -166,9 +166,6 @@ def fetch_data(
 def _get_property_names(api_key: str, object_type: str) -> list[str]:
     """Retrieve property names for a given entity from the HubSpot API.
 
-    Args:
-        entity: The entity name for which to retrieve property names.
-
     Returns:
         A list of property names.
 

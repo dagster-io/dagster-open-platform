@@ -250,9 +250,6 @@ def hubspot_events_for_objects(
     ) -> Iterator[list[dict[str, Any]]]:
         """A helper function that retrieves web analytics events for a given object type from the HubSpot API.
 
-        Args:
-            object_type (str): The type of object for which to retrieve web analytics events.
-
         Yields:
             dict: A dictionary representing a web analytics event.
         """

@@ -30,7 +30,6 @@ def github_reactions(
         access_token (str): The classic access token. Will be injected from secrets if not provided.
         items_per_page (int, optional): How many issues/pull requests to get in single page. Defaults to 100.
         max_items (int, optional): How many issues/pull requests to get in total. None means All.
-        max_item_age_seconds (float, optional): Do not get items older than this. Defaults to None. NOT IMPLEMENTED
 
     Returns:
         Sequence[DltResource]: Two DltResources: `issues` with issues and `pull_requests` with pull requests
