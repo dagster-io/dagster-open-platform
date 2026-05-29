@@ -22,9 +22,7 @@ from dagster_open_platform.utils.environment_helpers import get_environment
 PIPELINES_TO_MONITOR = ["internal"]
 
 
-_buildkite_raw_automation_condition = (
-    AutomationCondition.cron_tick_passed("0 5 * * *") & ~AutomationCondition.in_progress()
-)
+_buildkite_raw_automation_condition = AutomationCondition.on_cron("0 23 * * *")
 
 
 @dg.multi_asset(
@@ -52,18 +50,14 @@ def buildkite_raw(
     snowflake: SnowflakeResource,
 ) -> Generator[dg.MaterializeResult]:
     """Fetches all finished Buildkite builds (and their jobs) for the partition day
-    and loads them into Snowflake. Runs daily at 5 AM UTC with a 1-hour lookback
-    buffer to capture builds still in-flight at the end of the previous day.
+    and loads them into Snowflake. Runs daily with a 3-hour lookback buffer to capture
+    builds from the previous partition that were still in-flight during the last run.
     """
     window = context.partition_time_window
     # the buildkite api query only gets finished jobs, so this is to catch builds from the
     # previous partition that were still in progress when that partition was materialized.
-    # since the asset materializes at 5am and the partition window is daily (midnight to
-    # midnight), this probably isn't very relevant right now (five hours would be a very
-    # long ci run), but if we ever rescheduled the asset materialization to midnight, or
-    # if there are timezone things we aren't handling properly, it provides insurance.
-    # the database insert is idempotent, so fetching duplicate jobs from bk is fine.
-    created_from = (window.start - timedelta(hours=1)).isoformat()
+    # the database insert should be idempotent, so fetching duplicate jobs from bk should be fine.
+    created_from = (window.start - timedelta(hours=3)).isoformat()
     created_to = window.end.isoformat()
 
     context.log.info(
