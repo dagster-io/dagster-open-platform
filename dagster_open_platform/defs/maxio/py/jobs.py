@@ -12,12 +12,14 @@ from dagster_slack import SlackResource
 log = get_dagster_logger()
 
 DEFAULT_CONTRACTED_VALUE_ITEM_IDS = [9428, 9431]
+DEFAULT_EXCLUDED_TRANSACTION_IDS = [61482, 61483]
 
 
 class ArrCorrectionConfig(Config):
     lookback_days: int = 180
     dry_run: bool = False
     contracted_value_item_ids: list[int] = DEFAULT_CONTRACTED_VALUE_ITEM_IDS
+    excluded_transaction_ids: list[int] = DEFAULT_EXCLUDED_TRANSACTION_IDS
     test_transaction_id: int | None = None
 
 
@@ -48,10 +50,16 @@ def correct_maxio_arr_amounts(
     transactions = maxio.list_transactions(session, created_gte=created_gte)
     log.info("Found %d transactions to evaluate.", len(transactions))
 
+    excluded_ids = set(config.excluded_transaction_ids)
     corrected = skipped = failed = 0
 
     for txn in transactions:
         txn_id = txn["id"]
+
+        if txn_id in excluded_ids:
+            log.info("Skipping excluded transaction %d.", txn_id)
+            skipped += 1
+            continue
 
         if config.test_transaction_id is not None and txn_id != config.test_transaction_id:
             skipped += 1
