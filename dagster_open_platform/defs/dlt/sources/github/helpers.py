@@ -1,4 +1,5 @@
 from collections.abc import Iterator, Mapping, Sequence
+from typing import cast
 
 from dlt.common.typing import DictStrAny, StrAny
 from dlt.common.utils import chunks
@@ -22,12 +23,11 @@ session = Client(
 ).session
 
 
-def _get_auth_header(access_token: str | None) -> StrAny:
+def _get_auth_header(access_token: str | None) -> dict[str, str | bytes]:
     if access_token:
         return {"Authorization": f"Bearer {access_token}"}
-    else:
-        # REST API works without access token (with high rate limits)
-        return {}
+    # REST API works without access token (with high rate limits)
+    return {}
 
 
 def get_rest_pages(access_token: str | None, query: str) -> Iterator[list[StrAny]]:
@@ -148,8 +148,11 @@ def _extract_top_connection(data: StrAny, node_type: str) -> StrAny:
     assert isinstance(data, dict) and len(data) == 1, (
         f"The data with list of {node_type} must be a dictionary and contain only one element"
     )
-    data = next(iter(data.values()))
-    return data[node_type]
+    connection_data = next(iter(data.values()))
+    assert isinstance(connection_data, dict), (
+        f"The top-level connection for {node_type} must be a dictionary"
+    )
+    return cast("StrAny", cast("DictStrAny", connection_data)[node_type])
 
 
 def _extract_nested_nodes(item: DictStrAny) -> DictStrAny:
@@ -170,10 +173,6 @@ def _run_graphql_query(
     access_token: str, query: str, variables: DictStrAny
 ) -> tuple[StrAny, StrAny]:
     def _request() -> requests.Response:
-        # TODO -
-        # In processing pipe pull_requests: extraction of resource pull_requests in generator
-        # get_reactions_data caused an exception: 403 Client Error: Forbidden for url:
-        # https://api.github.com/graphql
         r = session.post(
             GRAPHQL_API_BASE_URL,
             json={"query": query, "variables": variables},
@@ -181,9 +180,16 @@ def _run_graphql_query(
         )
         return r
 
-    data = _request().json()
+    response = _request()
+    data = response.json()
     if "errors" in data:
-        raise ValueError(data)
+        raise ValueError(
+            f"GitHub GraphQL API returned errors (status {response.status_code}): {data}"
+        )
+    if "data" not in data:
+        raise ValueError(
+            f"GitHub GraphQL API response missing 'data' (status {response.status_code}): {data}"
+        )
     data = data["data"]
     # pop rate limits
     rate_limit = data.pop("rateLimit", {"cost": 0, "remaining": 0})
