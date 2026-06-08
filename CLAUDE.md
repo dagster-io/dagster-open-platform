@@ -236,7 +236,7 @@ def my_asset(context: dg.AssetExecutionContext):
    ```
 3. **Add checks:** Define `check_specs` for data quality
 4. **Test locally:** Use `dagster dev` or `just user-cloud`
-5. **Format & check:** Run `just ruff` and `just pyright`
+5. **Format & check:** Run `just ruff` and `just ty`
 
 ### Creating a New Component
 
@@ -377,7 +377,7 @@ just sync
 just ruff
 
 # Type check
-just pyright
+just ty
 
 # Run all checks
 just check
@@ -401,7 +401,7 @@ cd python_modules/dagster-open-platform && pytest dagster_open_platform_tests/
 - Ensure variables are set in your shell or `.env` file
 
 ### Type Errors
-- Run `just pyright` to catch type issues
+- Run `just ty` to catch type issues
 - Ensure proper type annotations for resources and context
 
 ### Asset Not Loading
@@ -420,7 +420,7 @@ cd python_modules/dagster-open-platform && pytest dagster_open_platform_tests/
 
 When working with this codebase:
 1. **Follow existing patterns** - Look at similar assets/components for reference
-2. **Use type hints** - All code should be properly typed for pyright
+2. **Use type hints** - All code should be properly typed for ty
 3. **Add metadata** - Include rich metadata in MaterializeResult for observability
 4. **Document assets** - Write clear docstrings explaining business purpose
 5. **Test thoroughly** - Add tests for new components and complex assets

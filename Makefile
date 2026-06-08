@@ -40,6 +40,3 @@ install_ruff:
 
 ruff:
 	$(MAKE) -C ../.. ruff
-
-pyright:
-	uv run --extra dev pyright

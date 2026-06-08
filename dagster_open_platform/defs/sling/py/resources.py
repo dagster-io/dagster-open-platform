@@ -8,7 +8,8 @@ from dagster_open_platform.utils.environment_helpers import (
 from dagster_sling import SlingConnectionResource, SlingResource
 
 embedded_elt_resource = SlingResource(
-    # Ignores are necessary due to known issue with pyright + permissiveconfigs
+    # type: ignore on EnvVar args: SlingConnectionResource uses PermissiveConfig
+    # so static types narrow to `str`, but EnvVar is resolved at runtime.
     connections=[
         SlingConnectionResource(
             name="CLOUD_PRODUCTION_MAIN",
