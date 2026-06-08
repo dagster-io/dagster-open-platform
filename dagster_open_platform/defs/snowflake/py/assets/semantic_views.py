@@ -47,7 +47,7 @@ def _get_target_database() -> str:
 def _osi_yaml_to_asset_spec(osi_path: Path) -> dg.AssetSpec:
     """Build an AssetSpec from an OSI YAML file without executing any DDL."""
     try:
-        raw = yaml.safe_load(osi_path.read_text())
+        raw = yaml.safe_load(osi_path.read_text(encoding="utf-8"))
         models = raw.get("semantic_model", [])
         if not models:
             raise ValueError(f"No semantic_model entries in {osi_path.name}")

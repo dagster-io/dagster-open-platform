@@ -54,7 +54,7 @@ def osi_yaml_to_snowflake_semantic_view_ddl(
     Returns:
         A complete CREATE OR REPLACE SEMANTIC VIEW DDL string.
     """
-    raw = yaml.safe_load(osi_yaml_path.read_text())
+    raw = yaml.safe_load(osi_yaml_path.read_text(encoding="utf-8"))
 
     models: list[dict[str, Any]] = raw.get("semantic_model", [])
     if not models:

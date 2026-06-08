@@ -223,7 +223,7 @@ def _write_batch_to_jsonl(batch_data: list[dict], temp_dir: str, batch_num: int)
     """Helper function to write a batch of data to a JSONL file."""
     jsonl_file = str(Path(temp_dir) / f"batch_{batch_num:04d}.jsonl")
 
-    with open(jsonl_file, "w") as f:
+    with open(jsonl_file, "w", encoding="utf-8") as f:
         for obj in batch_data:
             f.write(json.dumps(obj) + "\n")
 

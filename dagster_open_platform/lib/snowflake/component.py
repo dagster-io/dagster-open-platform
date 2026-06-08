@@ -208,7 +208,7 @@ class SnowflakeCreateOrRefreshComponent(
         query_text = (
             statement_text
             if statement_text is not None
-            else Path(statement_file).read_text()
+            else Path(statement_file).read_text(encoding="utf-8")
             if statement_file is not None
             else ""
         )

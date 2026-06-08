@@ -16,7 +16,7 @@ from dagster_open_platform.defs.dlt.sources.github import github_reactions
 if __name__ == "__main__":
     cwd = os.path.dirname(os.path.abspath(__file__))
     dlt_configuration_path = os.path.join(cwd, "configuration.yaml")
-    dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
+    dlt_configuration = yaml.safe_load(open(dlt_configuration_path, encoding="utf-8"))
 
     # Backfill of `1000` items for all resources
     dlt_source = github_reactions(

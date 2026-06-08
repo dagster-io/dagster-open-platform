@@ -161,7 +161,7 @@ excluded_columns = [
 def fetch_data(conn):
     """Fetch and prepare the initial dataset."""
     conn.cursor().execute(f"USE SCHEMA {_model_data_schema_from_env()}")
-    with open(os.path.join(script_dir, "sql/all_data.sql")) as query_file:
+    with open(os.path.join(script_dir, "sql/all_data.sql"), encoding="utf-8") as query_file:
         df = pd.read_sql(query_file.read(), conn)
     df.columns = [col.lower() for col in df.columns]
     return df

@@ -185,7 +185,7 @@ def load_dataframe_to_snowflake(
         cursor.execute("USE SCHEMA RAW")
 
         # Create table and run any migration statements (e.g. ADD COLUMN IF NOT EXISTS)
-        fd = open(file_relative_path(__file__, create_table_sql))
+        fd = open(file_relative_path(__file__, create_table_sql), encoding="utf-8")
         create_table_query = fd.read()
         fd.close()
 
@@ -214,7 +214,7 @@ def load_dataframe_to_snowflake(
         context.log.info(f"Wrote {nrows} rows to temp table")
 
         # Delete existing partition data
-        fd = open(file_relative_path(__file__, delete_sql))
+        fd = open(file_relative_path(__file__, delete_sql), encoding="utf-8")
         delete_query = fd.read()
         fd.close()
 
@@ -223,7 +223,7 @@ def load_dataframe_to_snowflake(
         context.log.info(f"Deleted {rows_deleted} rows from {target_table_name}")
 
         # Insert new data
-        fd = open(file_relative_path(__file__, insert_sql))
+        fd = open(file_relative_path(__file__, insert_sql), encoding="utf-8")
         insert_query = fd.read()
         fd.close()
 

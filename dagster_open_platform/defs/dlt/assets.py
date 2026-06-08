@@ -50,7 +50,7 @@ hubspot_source_assets = [
 ]
 
 dlt_configuration_path = file_relative_path(__file__, "./sources/configuration.yaml")
-dlt_configuration = yaml.safe_load(open(dlt_configuration_path))
+dlt_configuration = yaml.safe_load(open(dlt_configuration_path, encoding="utf-8"))
 
 
 class GithubDagsterDltTranslator(DagsterDltTranslator):
