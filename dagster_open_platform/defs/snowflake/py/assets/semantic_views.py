@@ -47,7 +47,7 @@ def _get_target_database() -> str:
 def _osi_yaml_to_asset_spec(osi_path: Path) -> dg.AssetSpec:
     """Build an AssetSpec from an OSI YAML file without executing any DDL."""
     try:
-        raw = yaml.safe_load(osi_path.read_text(encoding="utf-8"))
+        raw = yaml.safe_load(osi_path.read_text(encoding="utf-8"))  # noqa: TID251 — dagster-open-platform type-checks against published dagster-shared, which doesn't yet export safe_load_yaml.
         models = raw.get("semantic_model", [])
         if not models:
             raise ValueError(f"No semantic_model entries in {osi_path.name}")
