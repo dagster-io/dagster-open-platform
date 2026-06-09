@@ -29,6 +29,9 @@ models:
       +materialized: table
     dwh_reporting:
       +materialized: table
+      business:
+        +contract:
+          enforced: true
     purina:
       staging:
         +materialized: view
