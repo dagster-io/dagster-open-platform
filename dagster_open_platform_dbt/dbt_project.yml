@@ -32,6 +32,9 @@ models:
       business:
         +contract:
           enforced: true
+      business_by_day:
+        +contract:
+          enforced: true
     purina:
       staging:
         +materialized: view
