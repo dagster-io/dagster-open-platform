@@ -35,6 +35,9 @@ models:
       business_by_day:
         +contract:
           enforced: true
+      business_activity_logs:
+        +contract:
+          enforced: true
     purina:
       staging:
         +materialized: view
