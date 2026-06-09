@@ -47,6 +47,9 @@ models:
       product_activity_logs:
         +contract:
           enforced: true
+      pii:
+        +contract:
+          enforced: true
     purina:
       staging:
         +materialized: view
