@@ -110,7 +110,7 @@ def postgres_snowflake_comparison(
     if not pg_rows:
         raise ValueError("No asset materializations found in Postgres for the last 7 days")
 
-    pg_df = pd.DataFrame(pg_rows, columns=pg_columns)
+    pg_df = pd.DataFrame(pg_rows, columns=pd.Index(pg_columns))
     pg_df["materialization_date"] = pd.to_datetime(pg_df["materialization_date"]).dt.date
     # Aggregate counts by date (in case there are duplicate dates from both databases)
     pg_df = pg_df.groupby("materialization_date")["postgres_count"].sum().reset_index()

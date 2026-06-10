@@ -122,7 +122,7 @@ class ExecutableComponent(Component, Resolvable, Model):
         check.invariant(len(self.assets or []) > 0, "assets is required for now")
 
         @dg.multi_asset(
-            name=self.name or self.execute_fn.__name__,
+            name=self.name or getattr(self.execute_fn, "__name__"),
             specs=self.assets,
             partitions_def=self.partitions_def,
             required_resource_keys=required_resource_keys,

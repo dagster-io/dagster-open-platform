@@ -111,7 +111,7 @@ def dagster_pypi_downloads(
 
     return dg.MaterializeResult(
         metadata={
-            "top_downloads": dg.MetadataValue.md(top_downloads.to_markdown()),
+            "top_downloads": dg.MetadataValue.md(top_downloads.to_markdown() or ""),
             "dagster_download_count": dg.MetadataValue.int(dagster_download_count),
         },
         check_results=[non_empty_check_result, same_rows_check_results],

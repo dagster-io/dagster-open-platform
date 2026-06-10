@@ -187,9 +187,13 @@ def buildkite_daily_analysis(
                 max_tokens=4096,
                 thinking={"type": "enabled", "budget_tokens": 2048},
             )
-            analysis_text = response.content[-1].text
         except Exception as e:
             raise dg.Failure(f"Claude analysis failed: {e!s}") from e
+
+    final_block = response.content[-1]
+    if final_block.type != "text":
+        raise dg.Failure(f"Expected final Claude content block to be text, got {final_block.type}")
+    analysis_text = final_block.text
 
     context.log.info("Claude analysis preview: %s", analysis_text[:500])
 

@@ -208,7 +208,9 @@ def prepare_features(df, excluded_columns=None):
     if features["numeric"]:
         X_numeric = df[features["numeric"]].replace([np.inf, -np.inf], np.nan)
         scaler = StandardScaler()
-        X_numeric = pd.DataFrame(scaler.fit_transform(X_numeric), columns=features["numeric"])
+        X_numeric = pd.DataFrame(
+            scaler.fit_transform(X_numeric), columns=pd.Index(features["numeric"])
+        )
         feature_dfs.append(X_numeric)
 
     # Process binary features

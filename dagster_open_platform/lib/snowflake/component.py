@@ -201,7 +201,7 @@ class SnowflakeCreateOrRefreshComponent(
     def _populate_statement(
         self,
         context: ComponentLoadContext,
-        template_variables: dict[str, str],
+        template_variables: dict[str, Any],
         statement_text: str | None = None,
         statement_file: str | None = None,
     ) -> str:
