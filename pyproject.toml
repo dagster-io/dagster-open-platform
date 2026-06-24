@@ -86,9 +86,15 @@ tests = [
 
 # setuptools 82 removed pkg_resources, breaking third-party deps that still use it
 # at build time (flatdict via sprocketship->absql) or runtime. Pin until they migrate.
+# numpy<2.5: numba has no numpy 2.5-compatible release yet (every numba release
+# through 0.66.0rc1 caps numpy at <2.5 per
+# https://numba.readthedocs.io/en/latest/user/installing.html), so once numpy 2.5.0
+# shipped (2026-06-21, https://github.com/numpy/numpy/releases/tag/v2.5.0) an
+# unpinned resolve backtracks numba/llvmlite (via shap) to ancient versions that
+# fail to build on Python 3.12. Drop once numba supports numpy 2.5.
 [tool.uv]
 exclude-newer = "48h"
-constraint-dependencies = ["setuptools<82"]
+constraint-dependencies = ["setuptools<82", "numpy<2.5"]
 build-constraint-dependencies = ["setuptools<82"]
 # Override flatdict version to avoid build issues with 4.0.1
 # flatdict 4.0.1 has a broken build system that doesn't declare setuptools as a build dependency

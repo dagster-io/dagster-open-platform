@@ -11,7 +11,10 @@ exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for 
 exclude-newer-span = "PT48H"
 
 [manifest]
-constraints = [{ name = "setuptools", specifier = "<82" }]
+constraints = [
+    { name = "numpy", specifier = "<2.5" },
+    { name = "setuptools", specifier = "<82" },
+]
 overrides = [{ name = "flatdict", specifier = "==4.0.0" }]
 build-constraints = [{ name = "setuptools", specifier = "<82" }]
 
