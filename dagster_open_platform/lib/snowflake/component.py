@@ -38,6 +38,23 @@ def _role_from_env():
         return "AWS_WRITER"
 
 
+def _dms_storage_from_env():
+    # The DMS S3 bucket and its Snowflake storage integration share the same name
+    # (see infra/terragrunt .../dms/terragrunt.hcl). Use cloud-prod resources only in
+    # the prod deployment; every other environment reads from the dogfood resources.
+    if get_environment() == "PROD":
+        return "dagster-dms-cloud-prod"
+    else:
+        return "dagster-dms-dogfood"
+
+
+def _dms_schema_from_env():
+    if get_environment() == "PROD":
+        return "cloud_prod"
+    else:
+        return "dev"
+
+
 class StatementFile(dg_components.Model):
     file: str
 
@@ -122,6 +139,8 @@ class SnowflakeCreateOrRefreshComponent(
             "schema_from_env": _schema_from_env,
             "database_from_env": _database_from_env,
             "role_from_env": _role_from_env,
+            "dms_storage_from_env": _dms_storage_from_env,
+            "dms_schema_from_env": _dms_schema_from_env,
         }
 
     def _op_name(self, context: ComponentLoadContext) -> str:

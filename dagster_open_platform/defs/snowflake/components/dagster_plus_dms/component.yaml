@@ -1,0 +1,18 @@
+type: dagster_open_platform.lib.SnowflakeCreateOrRefreshComponent
+attributes:
+  name: dagster_plus_dms_stage
+  database_name: "aws"
+  schema_name: "{{ dms_schema_from_env() }}"
+  type: "stage"
+  role: AWS_WRITER
+  options:
+    url: "s3://{{ dms_storage_from_env() }}"
+    storage_integration: "{{ dms_storage_from_env() }}"
+    directory:
+      enable: true
+    file_format:
+      type: PARQUET
+  asset_attributes:
+    description: "Snowflake stage for Dagster Plus DMS replication data (cloud-prod in prod, dogfood elsewhere)."
+    automation_condition: "{{ automation_condition.on_cron('0 3 * * *') }}"
+    group_name: "aws_stages"
