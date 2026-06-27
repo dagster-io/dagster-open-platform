@@ -101,6 +101,7 @@ def _build_copy_into_asset(
     stage_subpath: str,
     dest_table: str,
     description_source: str,
+    warehouse: str | None = None,
 ) -> dg.AssetsDefinition:
     schema = _dms_schema_from_env()
     qualified_table = f"{_AWS_DB}.{schema}.{dest_table}"
@@ -128,6 +129,9 @@ def _build_copy_into_asset(
 
             # The AWS database requires the AWS_WRITER role for DDL and COPY INTO.
             cursor.execute(f"USE ROLE {_ROLE};")
+            # jobs/job_ticks are large; COPY INTO them on a bigger warehouse.
+            if warehouse:
+                cursor.execute(f"USE WAREHOUSE {warehouse};")
             cursor.execute(f"USE DATABASE {_AWS_DB.upper()};")
             cursor.execute(f"USE SCHEMA {_AWS_DB.upper()}.{schema.upper()};")
 
@@ -211,6 +215,7 @@ dagster_plus_dms_table_assets += [
         stage_subpath=f"{prefix}/{table}",
         dest_table=f"{_TABLE_PREFIX}{table}__{shard}",
         description_source=f"{prefix}.{table}",
+        warehouse="L_WAREHOUSE" if table == "jobs" else None,
     )
     for shard, prefix in _SHARD_PREFIXES.items()
     for table in (*_SHARDED_TABLES, *_SHARDED_CDC_ONLY_TABLES)
@@ -223,6 +228,7 @@ dagster_plus_dms_table_assets += [
         stage_subpath=prefix,
         dest_table=f"{_TABLE_PREFIX}job_ticks__{shard}",
         description_source=f"{prefix}.job_ticks_ptn_*",
+        warehouse="L_WAREHOUSE",
     )
     for shard, prefix in _JOB_TICKS_PREFIXES.items()
 ]

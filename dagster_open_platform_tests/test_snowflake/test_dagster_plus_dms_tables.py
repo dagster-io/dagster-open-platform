@@ -4,7 +4,9 @@ These tests exercise asset-key and stage-path construction only; they do not
 touch Snowflake.
 """
 
-from dagster import AssetKey
+from contextlib import contextmanager
+
+from dagster import AssetKey, materialize_to_memory
 from dagster._core.test_utils import environ
 from dagster_open_platform.defs.snowflake.py.assets import dagster_plus_dms_tables as mod
 
@@ -49,3 +51,52 @@ def test_build_copy_into_asset_uses_prod_schema_and_stage_path() -> None:
     assert next(iter(asset.keys)) == AssetKey(["aws", "cloud_prod", "dagster_plus__jobs__shard0"])
     spec = next(iter(asset.specs))
     assert "public_shard0.jobs" in (spec.description or "")
+
+
+class _FakeCursor:
+    def __init__(self) -> None:
+        self.sql: list[str] = []
+
+    def execute(self, sql: str) -> None:
+        self.sql.append(sql)
+
+    def fetchall(self):
+        return [("exists",)]  # non-empty: skip CREATE TABLE; COPY yields no rows_loaded
+
+
+class _FakeConn:
+    def __init__(self, cursor: _FakeCursor) -> None:
+        self._cursor = cursor
+
+    def cursor(self) -> _FakeCursor:
+        return self._cursor
+
+
+class _FakeSnowflake:
+    def __init__(self, cursor: _FakeCursor) -> None:
+        self._conn = _FakeConn(cursor)
+
+    @contextmanager
+    def get_connection(self):
+        yield self._conn
+
+
+def _run(warehouse) -> list[str]:
+    cursor = _FakeCursor()
+    asset = mod._build_copy_into_asset(  # noqa: SLF001
+        stage_subpath="public_shard0/jobs",
+        dest_table="dagster_plus__jobs__shard0",
+        description_source="public_shard0.jobs",
+        warehouse=warehouse,
+    )
+    materialize_to_memory([asset], resources={"snowflake": _FakeSnowflake(cursor)})
+    return cursor.sql
+
+
+def test_warehouse_override_emits_use_warehouse() -> None:
+    sql = _run("L_WAREHOUSE")
+    assert "USE WAREHOUSE L_WAREHOUSE;" in sql
+
+
+def test_no_warehouse_skips_use_warehouse() -> None:
+    assert not any(s.startswith("USE WAREHOUSE") for s in _run(None))
