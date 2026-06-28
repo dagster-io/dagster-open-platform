@@ -55,6 +55,13 @@ from dagster_snowflake import SnowflakeResource
 # to keep asset keys and SQL aligned with the stage asset.
 _AWS_DB = "aws"
 _ROLE = "AWS_WRITER"
+# Dynamic-table refreshes execute as the table's OWNER role with no secondary
+# roles, so the owner alone must hold warehouse USAGE. AWS_WRITER owns the AWS DB
+# objects but has no warehouse grant, so an AWS_WRITER-owned dynamic table can
+# never refresh. PURINA is granted AWS_WRITER (so it can read/own the AWS tables)
+# and also holds USAGE on PURINA/L_WAREHOUSE, so we own + refresh the dynamic
+# tables as PURINA instead.
+_DYNAMIC_TABLE_ROLE = "PURINA"
 _STAGE_NAME = "dagster_plus_dms_stage"
 # DMS writes unsharded files under a prefix named after the source schema.
 _STAGE_PREFIX = "public"
@@ -267,8 +274,9 @@ def _build_dynamic_table_asset(
         with snowflake.get_connection() as conn:
             cursor = conn.cursor()
 
-            # The AWS database requires the AWS_WRITER role for DDL and refreshes.
-            cursor.execute(f"USE ROLE {_ROLE};")
+            # Own + refresh the dynamic table as PURINA: the refresh runs as the
+            # owner role, which must hold warehouse USAGE (AWS_WRITER does not).
+            cursor.execute(f"USE ROLE {_DYNAMIC_TABLE_ROLE};")
             if warehouse:
                 cursor.execute(f"USE WAREHOUSE {warehouse};")
             cursor.execute(f"USE DATABASE {_AWS_DB.upper()};")
