@@ -34,6 +34,16 @@ changes since the DMS task started - they have no full-load baseline, so their
 destination tables are a delta log rather than a full snapshot. Until DMS emits
 its first file for such a table the asset is a no-op (see the empty-location
 guard below); downstream models are responsible for any historical backfill.
+
+Downstream, this module also defines one Snowflake Dynamic Table per COPY INTO
+table (suffixed ``__current``, in the ``dagster_plus_dms_current`` group) that
+deduplicates the append-only change log to current state: it keeps the latest row
+per primary key (ordered by the DMS commit ``timestamp``) and drops rows whose
+latest change is a delete. These are created with ``SCHEDULER = DISABLE`` so
+Dagster controls refresh (``ALTER DYNAMIC TABLE ... REFRESH``) rather than a
+target lag, and ``REFRESH_MODE = INCREMENTAL`` so each refresh processes only the
+newly replicated rows. Shards are kept separate here (same rationale as above); a
+cross-shard union, if needed, belongs in a downstream layer.
 """
 
 import dagster as dg
@@ -94,6 +104,15 @@ _SHARDED_CDC_ONLY_TABLES = [
 # its own subfolder of these (per-shard) prefixes. We recurse the whole prefix and
 # union the child partitions into one destination table per shard.
 _JOB_TICKS_PREFIXES = {"shard0": "partitions", "shard1": "partitions_shard1"}
+
+# Deduplication grain for each replicated table: the source primary key we
+# PARTITION BY when collapsing the DMS change log to current state. Every table is
+# keyed on `id` except `onboarding_checklist`, which has no surrogate id (its grain
+# is organization_id + entry_key). Column names are quoted lower-case in the SQL
+# because the COPY INTO tables were created from the parquet schema via
+# INFER_SCHEMA, which preserves case.
+_DEDUP_KEYS: dict[str, list[str]] = {"onboarding_checklist": ["organization_id", "entry_key"]}
+_DEFAULT_DEDUP_KEY = ["id"]
 
 
 def _build_copy_into_asset(
@@ -199,6 +218,136 @@ def _build_copy_into_asset(
     return _copy_into_dms_table
 
 
+def _build_dynamic_table_asset(
+    *,
+    base_dest_table: str,
+    partition_by: list[str],
+    description_source: str,
+    warehouse: str | None = None,
+) -> dg.AssetsDefinition:
+    schema = _dms_schema_from_env()
+    current_table = f"{base_dest_table}__current"
+    qualified_current = f"{_AWS_DB}.{schema}.{current_table}"
+    qualified_base = f"{_AWS_DB}.{schema}.{base_dest_table}"
+    partition_cols = ", ".join(f'"{col}"' for col in partition_by)
+
+    # Collapse the append-only DMS change log to one row per primary key (the
+    # latest by DMS commit `timestamp`) and drop rows whose latest change is a
+    # delete. QUALIFY ROW_NUMBER() = 1 is a Snowflake-supported incremental-refresh
+    # pattern, so each refresh reprocesses only the partitions touched by newly
+    # COPY INTO-ed rows instead of scanning the whole base table. The raw CDC
+    # metadata columns (`Op`, `timestamp`) are excluded from the result.
+    select_sql = f"""
+        SELECT * EXCLUDE ("Op", "timestamp")
+        FROM {qualified_base}
+        QUALIFY ROW_NUMBER() OVER (
+            PARTITION BY {partition_cols}
+            ORDER BY "timestamp"::TIMESTAMP_NTZ DESC
+        ) = 1 AND "Op" <> 'D'
+    """
+
+    @dg.asset(
+        key=dg.AssetKey([_AWS_DB, schema, current_table]),
+        deps=[dg.AssetKey([_AWS_DB, schema, base_dest_table])],
+        group_name="dagster_plus_dms_current",
+        automation_condition=dg.AutomationCondition.eager(),
+        description=(
+            f"Deduplicated current-state view of `{description_source}` as a Snowflake "
+            f"Dynamic Table ({qualified_current}). Keeps the latest row per "
+            f"{', '.join(partition_by)} (by DMS commit timestamp) and drops deletes. "
+            "Created with SCHEDULER = DISABLE so Dagster controls refresh via "
+            "ALTER DYNAMIC TABLE ... REFRESH instead of a target lag; REFRESH_MODE = "
+            "INCREMENTAL so only newly replicated rows are processed each refresh."
+        ),
+    )
+    def _refresh_dynamic_table(
+        context: dg.AssetExecutionContext,
+        snowflake: SnowflakeResource,
+    ) -> dg.MaterializeResult:
+        with snowflake.get_connection() as conn:
+            cursor = conn.cursor()
+
+            # The AWS database requires the AWS_WRITER role for DDL and refreshes.
+            cursor.execute(f"USE ROLE {_ROLE};")
+            if warehouse:
+                cursor.execute(f"USE WAREHOUSE {warehouse};")
+            cursor.execute(f"USE DATABASE {_AWS_DB.upper()};")
+            cursor.execute(f"USE SCHEMA {_AWS_DB.upper()}.{schema.upper()};")
+
+            # cdc-only base tables (runs, run_tags, job_ticks) are not created until
+            # DMS lands their first file. Skip until the base table exists.
+            cursor.execute(f"SHOW TABLES LIKE '{base_dest_table}' IN SCHEMA {_AWS_DB}.{schema};")
+            if not cursor.fetchall():
+                context.log.info(
+                    f"Base table {qualified_base} does not exist yet; skipping "
+                    f"dynamic table create + refresh for {qualified_current}."
+                )
+                return dg.MaterializeResult(
+                    metadata={
+                        "row_count": dg.MetadataValue.int(0),
+                        "refresh_state": dg.MetadataValue.text("SKIPPED_NO_BASE"),
+                    }
+                )
+
+            # Bake a concrete refresh warehouse into the dynamic table definition.
+            # Large tables get L_WAREHOUSE; everything else uses the session
+            # (resource-configured) warehouse.
+            cursor.execute("SELECT CURRENT_WAREHOUSE();")
+            current_wh = cursor.fetchone()
+            refresh_warehouse = warehouse or (current_wh[0] if current_wh else "PURINA")
+
+            # Create the dynamic table if it doesn't exist yet. INITIALIZE =
+            # ON_SCHEDULE keeps CREATE cheap (no synchronous full build); the manual
+            # REFRESH below performs the initial load and all subsequent ones.
+            cursor.execute(f"""
+                CREATE DYNAMIC TABLE IF NOT EXISTS {qualified_current}
+                    WAREHOUSE = {refresh_warehouse}
+                    REFRESH_MODE = INCREMENTAL
+                    INITIALIZE = ON_SCHEDULE
+                    SCHEDULER = DISABLE
+                    AS {select_sql}
+            """)
+
+            # Dagster drives the refresh (SCHEDULER = DISABLE means Snowflake never
+            # refreshes on its own). A manual refresh does not cascade, so each
+            # current table is refreshed exactly when its asset materializes.
+            cursor.execute(f"ALTER DYNAMIC TABLE {qualified_current} REFRESH;")
+
+            cursor.execute(f"SELECT COUNT(*) FROM {qualified_current};")
+            count_row = cursor.fetchone()
+            row_count = count_row[0] if count_row else 0
+
+            # Surface the most recent refresh so we can confirm it stayed incremental.
+            cursor.execute(f"""
+                SELECT refresh_action, state
+                FROM TABLE(
+                    {_AWS_DB}.INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(
+                        NAME => '{qualified_current}'
+                    )
+                )
+                ORDER BY data_timestamp DESC
+                LIMIT 1;
+            """)
+            last_refresh = cursor.fetchone()
+            refresh_action = last_refresh[0] if last_refresh else "UNKNOWN"
+            refresh_state = last_refresh[1] if last_refresh else "UNKNOWN"
+
+        context.log.info(
+            f"Refreshed {qualified_current}: {row_count} rows, "
+            f"action={refresh_action}, state={refresh_state}"
+        )
+        return dg.MaterializeResult(
+            metadata={
+                "row_count": dg.MetadataValue.int(row_count),
+                "refresh_action": dg.MetadataValue.text(refresh_action),
+                "refresh_state": dg.MetadataValue.text(refresh_state),
+                "refresh_warehouse": dg.MetadataValue.text(refresh_warehouse),
+            }
+        )
+
+    return _refresh_dynamic_table
+
+
 # Unsharded tables: public/<table>/ -> dagster_plus__<table>
 dagster_plus_dms_table_assets = [
     _build_copy_into_asset(
@@ -227,6 +376,41 @@ dagster_plus_dms_table_assets += [
     _build_copy_into_asset(
         stage_subpath=prefix,
         dest_table=f"{_TABLE_PREFIX}job_ticks__{shard}",
+        description_source=f"{prefix}.job_ticks_ptn_*",
+        warehouse="L_WAREHOUSE",
+    )
+    for shard, prefix in _JOB_TICKS_PREFIXES.items()
+]
+
+# Deduplicated "current" dynamic tables, one per COPY INTO table above. Each keeps
+# the latest row per primary key and drops deletes; Dagster controls the refresh.
+# Unsharded: dagster_plus__<table> -> dagster_plus__<table>__current
+dagster_plus_dms_table_assets += [
+    _build_dynamic_table_asset(
+        base_dest_table=f"{_TABLE_PREFIX}{table}",
+        partition_by=_DEDUP_KEYS.get(table, _DEFAULT_DEDUP_KEY),
+        description_source=f"{_STAGE_PREFIX}.{table}",
+    )
+    for table in _DMS_TABLES
+]
+
+# Sharded: dagster_plus__<table>__shard{N} -> dagster_plus__<table>__shard{N}__current
+dagster_plus_dms_table_assets += [
+    _build_dynamic_table_asset(
+        base_dest_table=f"{_TABLE_PREFIX}{table}__{shard}",
+        partition_by=_DEDUP_KEYS.get(table, _DEFAULT_DEDUP_KEY),
+        description_source=f"{prefix}.{table}",
+        warehouse="L_WAREHOUSE" if table == "jobs" else None,
+    )
+    for shard, prefix in _SHARD_PREFIXES.items()
+    for table in (*_SHARDED_TABLES, *_SHARDED_CDC_ONLY_TABLES)
+]
+
+# job_ticks: dagster_plus__job_ticks__shard{N} -> dagster_plus__job_ticks__shard{N}__current
+dagster_plus_dms_table_assets += [
+    _build_dynamic_table_asset(
+        base_dest_table=f"{_TABLE_PREFIX}job_ticks__{shard}",
+        partition_by=_DEFAULT_DEDUP_KEY,
         description_source=f"{prefix}.job_ticks_ptn_*",
         warehouse="L_WAREHOUSE",
     )

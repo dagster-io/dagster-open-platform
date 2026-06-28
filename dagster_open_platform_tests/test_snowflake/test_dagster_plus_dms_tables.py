@@ -18,7 +18,8 @@ def _expected_dest_tables() -> set[str]:
             dest.add(f"{mod._TABLE_PREFIX}{table}__{shard}")  # noqa: SLF001
     for shard in mod._JOB_TICKS_PREFIXES:  # noqa: SLF001
         dest.add(f"{mod._TABLE_PREFIX}job_ticks__{shard}")  # noqa: SLF001
-    return dest
+    # One deduplicated "current" dynamic table per COPY INTO table above.
+    return dest | {f"{d}__current" for d in dest}
 
 
 def test_asset_keys_cover_unsharded_and_per_shard_tables() -> None:
