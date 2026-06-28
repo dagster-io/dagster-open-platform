@@ -264,7 +264,10 @@ def _build_dynamic_table_asset(
             f"{', '.join(partition_by)} (by DMS commit timestamp) and drops deletes. "
             "Created with SCHEDULER = DISABLE so Dagster controls refresh via "
             "ALTER DYNAMIC TABLE ... REFRESH instead of a target lag; REFRESH_MODE = "
-            "INCREMENTAL so only newly replicated rows are processed each refresh."
+            "INCREMENTAL so only newly replicated rows are processed each refresh. "
+            "The first (full) refresh runs on L_WAREHOUSE for extra compute; later "
+            "refreshes use the session warehouse unless the table is pinned to a "
+            "larger warehouse."
         ),
     )
     def _refresh_dynamic_table(
@@ -297,12 +300,33 @@ def _build_dynamic_table_asset(
                     }
                 )
 
-            # Bake a concrete refresh warehouse into the dynamic table definition.
-            # Large tables get L_WAREHOUSE; everything else uses the session
-            # (resource-configured) warehouse.
+            # Decide the warehouse for this refresh. The first refresh reprocesses
+            # the entire base table (a full build), so it gets L_WAREHOUSE for extra
+            # compute; subsequent incremental refreshes fall back to the lighter
+            # session warehouse. Tables configured with an explicit `warehouse` (the
+            # large ones) always use it. "First refresh" means the dynamic table
+            # doesn't exist yet, or it exists but is still empty.
+            cursor.execute(
+                f"SHOW DYNAMIC TABLES LIKE '{current_table}' IN SCHEMA {_AWS_DB}.{schema};"
+            )
+            dynamic_table_exists = bool(cursor.fetchall())
+
+            existing_row_count = 0
+            if dynamic_table_exists:
+                cursor.execute(f"SELECT COUNT(*) FROM {qualified_current};")
+                existing_count_row = cursor.fetchone()
+                existing_row_count = existing_count_row[0] if existing_count_row else 0
+            is_first_refresh = existing_row_count == 0
+
             cursor.execute("SELECT CURRENT_WAREHOUSE();")
             current_wh = cursor.fetchone()
-            refresh_warehouse = warehouse or (current_wh[0] if current_wh else "PURINA")
+            session_warehouse = current_wh[0] if current_wh else "PURINA"
+            if warehouse:
+                refresh_warehouse = warehouse
+            elif is_first_refresh:
+                refresh_warehouse = "L_WAREHOUSE"
+            else:
+                refresh_warehouse = session_warehouse
 
             # Create the dynamic table if it doesn't exist yet. INITIALIZE =
             # ON_SCHEDULE keeps CREATE cheap (no synchronous full build); the manual
@@ -315,6 +339,16 @@ def _build_dynamic_table_asset(
                     SCHEDULER = DISABLE
                     AS {select_sql}
             """)
+
+            # The warehouse is baked into the dynamic table definition, so an
+            # already-existing table would otherwise refresh on whatever warehouse it
+            # was created with. Re-point an existing table at the resolved warehouse
+            # before refreshing so an empty table still gets L_WAREHOUSE for its first
+            # real load and later refreshes drop back to the session warehouse.
+            if dynamic_table_exists:
+                cursor.execute(
+                    f"ALTER DYNAMIC TABLE {qualified_current} SET WAREHOUSE = {refresh_warehouse};"
+                )
 
             # Dagster drives the refresh (SCHEDULER = DISABLE means Snowflake never
             # refreshes on its own). A manual refresh does not cascade, so each
@@ -350,6 +384,7 @@ def _build_dynamic_table_asset(
                 "refresh_action": dg.MetadataValue.text(refresh_action),
                 "refresh_state": dg.MetadataValue.text(refresh_state),
                 "refresh_warehouse": dg.MetadataValue.text(refresh_warehouse),
+                "first_refresh": dg.MetadataValue.bool(is_first_refresh),
             }
         )
 
