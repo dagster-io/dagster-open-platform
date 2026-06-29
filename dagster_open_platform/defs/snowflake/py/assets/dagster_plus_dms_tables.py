@@ -231,6 +231,7 @@ def _build_dynamic_table_asset(
     partition_by: list[str],
     description_source: str,
     warehouse: str | None = None,
+    narrow_dedup: bool = False,
 ) -> dg.AssetsDefinition:
     schema = _dms_schema_from_env()
     current_table = f"{base_dest_table}__current"
@@ -244,14 +245,45 @@ def _build_dynamic_table_asset(
     # pattern, so each refresh reprocesses only the partitions touched by newly
     # COPY INTO-ed rows instead of scanning the whole base table. The raw CDC
     # metadata columns (`Op`, `timestamp`) are excluded from the result.
-    select_sql = f"""
-        SELECT * EXCLUDE ("Op", "timestamp")
-        FROM {qualified_base}
-        QUALIFY ROW_NUMBER() OVER (
-            PARTITION BY {partition_cols}
-            ORDER BY "timestamp"::TIMESTAMP_NTZ DESC
-        ) = 1 AND "Op" <> 'D'
-    """
+    if narrow_dedup:
+        # Two-phase dedup for wide tables (jobs). The single-pass form above sorts
+        # the entire wide row as the ROW_NUMBER() payload, which on the jobs tables
+        # spilled ~8.86TB during the first (full) refresh. Instead, first compute
+        # the surviving (key, timestamp) pairs over just those narrow columns, then
+        # join the wide row back in by key+timestamp. WHERE drops deletes so a
+        # delete row tied at the max timestamp can't surface; the final QUALIFY
+        # then breaks any remaining ties in case (key, timestamp) isn't unique.
+        join_cond = " AND ".join(f't."{col}" = k."{col}"' for col in partition_by)
+        t_partition_cols = ", ".join(f't."{col}"' for col in partition_by)
+        select_sql = f"""
+            WITH latest AS (
+                SELECT {partition_cols}, "timestamp"
+                FROM {qualified_base}
+                QUALIFY ROW_NUMBER() OVER (
+                    PARTITION BY {partition_cols}
+                    ORDER BY "timestamp"::TIMESTAMP_NTZ DESC
+                ) = 1 AND "Op" <> 'D'
+            )
+            SELECT t.* EXCLUDE ("Op", "timestamp")
+            FROM {qualified_base} t
+            JOIN latest k
+                ON {join_cond}
+                AND t."timestamp" = k."timestamp"
+            WHERE t."Op" <> 'D'
+            QUALIFY ROW_NUMBER() OVER (
+                PARTITION BY {t_partition_cols}
+                ORDER BY t."timestamp"::TIMESTAMP_NTZ DESC
+            ) = 1
+        """
+    else:
+        select_sql = f"""
+            SELECT * EXCLUDE ("Op", "timestamp")
+            FROM {qualified_base}
+            QUALIFY ROW_NUMBER() OVER (
+                PARTITION BY {partition_cols}
+                ORDER BY "timestamp"::TIMESTAMP_NTZ DESC
+            ) = 1 AND "Op" <> 'D'
+        """
 
     @dg.asset(
         key=dg.AssetKey([_AWS_DB, schema, current_table]),
@@ -444,6 +476,7 @@ dagster_plus_dms_table_assets += [
         partition_by=_DEDUP_KEYS.get(table, _DEFAULT_DEDUP_KEY),
         description_source=f"{prefix}.{table}",
         warehouse="L_WAREHOUSE" if table == "jobs" else None,
+        narrow_dedup=table == "jobs",
     )
     for shard, prefix in _SHARD_PREFIXES.items()
     for table in (*_SHARDED_TABLES, *_SHARDED_CDC_ONLY_TABLES)

@@ -139,13 +139,14 @@ class _DynCursor:
         return ("REFRESH", "SUCCEEDED")
 
 
-def _run_dynamic(*, dynamic_exists: bool, counts, warehouse=None) -> list[str]:
+def _run_dynamic(*, dynamic_exists: bool, counts, warehouse=None, narrow_dedup=False) -> list[str]:
     cursor = _DynCursor(dynamic_exists=dynamic_exists, counts=counts)
     asset = mod._build_dynamic_table_asset(  # noqa: SLF001
         base_dest_table="dagster_plus__jobs__shard0",
         partition_by=["id"],
         description_source="public_shard0.jobs",
         warehouse=warehouse,
+        narrow_dedup=narrow_dedup,
     )
     materialize_to_memory([asset], resources={"snowflake": _FakeSnowflake(cursor)})
     return cursor.sql
@@ -179,3 +180,28 @@ def test_dynamic_table_configured_warehouse_always_used() -> None:
     # Pinned tables keep L_WAREHOUSE even once populated.
     sql = _run_dynamic(dynamic_exists=True, counts=[5, 5], warehouse="L_WAREHOUSE")
     assert f"ALTER DYNAMIC TABLE {_CURRENT} SET WAREHOUSE = L_WAREHOUSE;" in sql
+
+
+def _create_sql(sql: list[str]) -> str:
+    return next(s for s in sql if "CREATE DYNAMIC TABLE IF NOT EXISTS" in s)
+
+
+def test_dynamic_table_default_uses_single_pass_dedup() -> None:
+    # Without narrow_dedup the CREATE selects the whole row in one QUALIFY pass.
+    create = _create_sql(_run_dynamic(dynamic_exists=False, counts=[10]))
+    assert "WITH latest AS" not in create
+    assert 'SELECT * EXCLUDE ("Op", "timestamp")' in create
+
+
+def test_dynamic_table_narrow_dedup_uses_two_phase_join() -> None:
+    # narrow_dedup (jobs) first dedups the narrow (id, timestamp) pairs, then
+    # joins the wide row back in by key + timestamp with a tie-breaking QUALIFY.
+    create = _create_sql(_run_dynamic(dynamic_exists=False, counts=[10], narrow_dedup=True))
+    assert "WITH latest AS" in create
+    assert 'SELECT "id", "timestamp"' in create
+    assert 't."id" = k."id"' in create
+    assert 'AND t."timestamp" = k."timestamp"' in create
+    assert 'SELECT t.* EXCLUDE ("Op", "timestamp")' in create
+    # Deletes are filtered before the final dedup so a delete tied at the max
+    # timestamp can't surface in the current-state result.
+    assert "WHERE t.\"Op\" <> 'D'" in create
