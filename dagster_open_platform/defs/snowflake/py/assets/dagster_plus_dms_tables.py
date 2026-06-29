@@ -489,6 +489,7 @@ dagster_plus_dms_table_assets += [
         partition_by=_DEFAULT_DEDUP_KEY,
         description_source=f"{prefix}.job_ticks_ptn_*",
         warehouse="L_WAREHOUSE",
+        narrow_dedup=True,
     )
     for shard, prefix in _JOB_TICKS_PREFIXES.items()
 ]
