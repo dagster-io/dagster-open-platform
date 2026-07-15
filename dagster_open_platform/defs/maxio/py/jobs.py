@@ -21,6 +21,7 @@ class ArrCorrectionConfig(Config):
     contracted_value_item_ids: list[int] = DEFAULT_CONTRACTED_VALUE_ITEM_IDS
     excluded_transaction_ids: list[int] = DEFAULT_EXCLUDED_TRANSACTION_IDS
     test_transaction_id: int | None = None
+    max_term_months: int = 12
 
 
 SLACK_CHANNEL = "C03EPUD3T7Y"
@@ -65,7 +66,7 @@ def correct_maxio_arr_amounts(
             skipped += 1
             continue
 
-        if not needs_correction(txn, contracted_ids):
+        if not needs_correction(txn, contracted_ids, config.max_term_months):
             skipped += 1
             continue
 
@@ -105,6 +106,7 @@ def correct_maxio_arr_amounts(
     description=(
         "Correct local_arr_amount and local_normalized_amount (MRR) for contracted-value"
         " item types in Maxio. ARR = local_amount, MRR = local_amount / 12."
+        " Transactions with a term longer than max_term_months are skipped."
     )
 )
 def maxio_arr_correction() -> None:

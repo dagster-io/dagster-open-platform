@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 
 import requests
@@ -81,7 +82,24 @@ class MaxioResource(ConfigurableResource):
         return False
 
 
-def needs_correction(transaction: dict, contracted_ids: set[int]) -> bool:
+def term_months(start_date: str, end_date: str) -> int:
+    """Calendar-month length of a transaction's term.
+
+    Maxio represents a N-year term as end_date = start_date + N years - 1 day
+    (e.g. a 12-month term runs 2026-01-23 to 2027-01-22), so we add a day back
+    to end_date before diffing to get exact calendar months.
+    """
+    start = datetime.strptime(start_date, "%Y-%m-%d")
+    end_exclusive = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1)
+    months = (end_exclusive.year - start.year) * 12 + (end_exclusive.month - start.month)
+    if end_exclusive.day < start.day:
+        months -= 1
+    return months
+
+
+def needs_correction(
+    transaction: dict, contracted_ids: set[int], max_term_months: int = 12
+) -> bool:
     item_id = transaction.get("item")
     if item_id not in contracted_ids:
         return False
@@ -89,6 +107,24 @@ def needs_correction(transaction: dict, contracted_ids: set[int]) -> bool:
     local_amount = transaction.get("local_amount")
     if local_amount is None:
         log.warning("Transaction %d has null local_amount -- skipping.", transaction["id"])
+        return False
+
+    start_date = transaction.get("start_date")
+    end_date = transaction.get("end_date")
+    if not start_date or not end_date:
+        log.warning("Transaction %d is missing start/end date -- skipping.", transaction["id"])
+        return False
+
+    months = term_months(start_date, end_date)
+    if months > max_term_months:
+        log.info(
+            "Transaction %d has a %d-month term (%s to %s) -- exceeds %d months, skipping.",
+            transaction["id"],
+            months,
+            start_date,
+            end_date,
+            max_term_months,
+        )
         return False
 
     try:
