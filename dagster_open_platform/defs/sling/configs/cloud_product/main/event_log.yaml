@@ -13,7 +13,7 @@ streams:
         from public.event_logs_partitioned 
         where id > coalesce({incremental_value}, 0) and dagster_event_type is not null
         order by id
-        limit 500000
+        limit 2000000
       )
       select * from candidates
     columns:
