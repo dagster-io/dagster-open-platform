@@ -8,6 +8,9 @@ DATABASE = "AWS"
 STAGE_NAME = "streamline_events_stage"
 TABLE_NAME = "streamline_events"
 S3_PREFIX = "streamline-events"
+# The streamline event stream lands a large volume of parquet files each hour;
+# run the COPY INTO on the bigger warehouse (same as the large DMS tables).
+WAREHOUSE = "L_WAREHOUSE"
 
 
 def _bucket_and_schema() -> tuple[str, str]:
@@ -93,6 +96,7 @@ def streamline_events_table(
     with snowflake.get_connection() as conn:
         cur = conn.cursor()
         cur.execute("USE ROLE AWS_WRITER;")
+        cur.execute(f"USE WAREHOUSE {WAREHOUSE};")
         cur.execute(f"USE SCHEMA {DATABASE}.{schema};")
         cur.execute(create_table_query)
         cur.execute(copy_query)
