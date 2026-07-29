@@ -1,7 +1,7 @@
--- us_only: refs models (dim_accounts, fct_organization_contracts,
--- fct_contract_organization_credits) that are not built in the EU deployment;
--- the EU dbt invocations exclude tag:us_only so eager indirect selection
--- doesn't pull this test in via the eu-tagged dim_contracts.
+-- us_only: refs dim_accounts, which is not built in the EU deployment; the EU
+-- dbt invocations exclude tag:us_only so eager indirect selection doesn't pull
+-- this test in via its eu-tagged parents (dim_contracts,
+-- fct_organization_contracts, fct_contract_organization_credits).
 {{ config(tags=["us_only"]) }}
 
 -- Fails if a contract on an account with a primary org (dim_accounts.organization_id),

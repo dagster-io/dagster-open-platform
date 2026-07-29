@@ -1,6 +1,8 @@
--- us_only: refs models (fct_organization_contracts) that are not built in the EU
--- deployment; the EU dbt invocations exclude tag:us_only so eager indirect
--- selection doesn't pull this test in via the eu-tagged dim_contracts.
+-- us_only: both parents (fct_organization_contracts, dim_contracts) are also
+-- built in the EU deployment, but they read the same global Salesforce/Maxio
+-- sources there, so asserting this twice adds no signal -- only a duplicate
+-- eu-prefixed asset check. The EU dbt invocations exclude tag:us_only so eager
+-- indirect selection doesn't pull this test in via those parents.
 {{ config(tags=["us_only"]) }}
 
 -- Fails if an org in fct_organization_contracts is attributed to a contract whose
