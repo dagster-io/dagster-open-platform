@@ -58,7 +58,8 @@ def streamline_events_aws_stage(
     ),
     key=["aws", "cloud_prod", TABLE_NAME],
     deps=[streamline_events_aws_stage],
-    automation_condition=dg.AutomationCondition.on_cron("0 * * * *"),
+    automation_condition=dg.AutomationCondition.on_cron("0 * * * *")
+    & ~dg.AutomationCondition.in_progress(),
 )
 def streamline_events_table(
     context: dg.AssetExecutionContext, snowflake: SnowflakeResource
