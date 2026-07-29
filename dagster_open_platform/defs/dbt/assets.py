@@ -38,6 +38,7 @@ def _dbt_args(
     dbt_vars: Mapping[str, object] | None = None,
     *,
     backfill: bool | None = None,
+    exclude: str | None = None,
 ) -> list[str]:
     backfill = config.backfill if backfill is None else backfill
     vars_arg = {**(dbt_vars or {})}
@@ -55,6 +56,12 @@ def _dbt_args(
         args.append("--full-refresh")
     if vars_arg:
         args.extend(["--vars", json.dumps(vars_arg)])
+    if exclude:
+        # Passed through to the dbt CLI as a runtime `--exclude`. dagster-dbt folds
+        # runtime excludes into whichever selection it builds for the invocation, and
+        # dbt exclusion takes precedence over (eager) indirect test selection -- this
+        # is how region deployments skip tests whose refs aren't built there.
+        args.extend(["--exclude", exclude])
 
     return args
 
@@ -67,6 +74,7 @@ def _is_dbt_backfill_run(run_tags: Mapping[str, str], config: DbtConfig) -> bool
 def get_dbt_non_partitioned_models(
     custom_translator: DagsterDbtTranslator | None = None,
     additional_selectors: Sequence[str] | None = None,
+    dbt_exclude: str | None = None,
 ):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
@@ -90,7 +98,12 @@ def get_dbt_non_partitioned_models(
         logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
         yield from (
             dbt.cli(
-                _dbt_args("build", config, backfill=_is_dbt_backfill_run(context.run.tags, config)),
+                _dbt_args(
+                    "build",
+                    config,
+                    backfill=_is_dbt_backfill_run(context.run.tags, config),
+                    exclude=dbt_exclude,
+                ),
                 context=context,
             )
             .stream()
@@ -106,6 +119,7 @@ def get_dbt_non_partitioned_models(
 def get_dbt_partitioned_models(
     custom_translator: DagsterDbtTranslator | None = None,
     additional_selectors: Sequence[str] | None = None,
+    dbt_exclude: str | None = None,
 ):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
@@ -139,6 +153,7 @@ def get_dbt_partitioned_models(
                     config,
                     None if config.full_refresh else dbt_vars,
                     backfill=_is_dbt_backfill_run(context.run.tags, config),
+                    exclude=dbt_exclude,
                 ),
                 context=context,
             )

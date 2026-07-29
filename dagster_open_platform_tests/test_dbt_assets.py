@@ -69,6 +69,34 @@ def test_dbt_args_can_force_backfill_from_automation_tag() -> None:
     }
 
 
+def test_dbt_args_appends_exclude() -> None:
+    assert _dbt_args("build", DbtConfig(), exclude="tag:us_only") == [
+        "build",
+        "--exclude",
+        "tag:us_only",
+    ]
+
+
+def test_dbt_args_appends_exclude_after_vars() -> None:
+    args = _dbt_args(
+        "build",
+        DbtConfig(),
+        {
+            "min_date": "2026-01-01T00:00:00",
+            "max_date": "2026-01-02T00:00:00",
+        },
+        exclude="tag:us_only",
+    )
+
+    assert args[:2] == ["build", "--vars"]
+    assert args[-2:] == ["--exclude", "tag:us_only"]
+    assert args.index("--exclude") > args.index("--vars")
+    assert _dbt_vars(args) == {
+        "min_date": "2026-01-01T00:00:00",
+        "max_date": "2026-01-02T00:00:00",
+    }
+
+
 def test_is_dbt_backfill_run_uses_config_or_automation_tag() -> None:
     assert _is_dbt_backfill_run({}, DbtConfig(backfill=True))
     assert _is_dbt_backfill_run(

@@ -1,3 +1,9 @@
+-- us_only: refs models (dim_accounts, fct_organization_contracts,
+-- fct_contract_organization_credits) that are not built in the EU deployment;
+-- the EU dbt invocations exclude tag:us_only so eager indirect selection
+-- doesn't pull this test in via the eu-tagged dim_contracts.
+{{ config(tags=["us_only"]) }}
+
 -- Fails if a contract on an account with a primary org (dim_accounts.organization_id),
 -- and with no transaction- or contract-level org signal of its own, has no row in
 -- fct_organization_contracts -- i.e. tier 3 (the primary-org fallback) should have

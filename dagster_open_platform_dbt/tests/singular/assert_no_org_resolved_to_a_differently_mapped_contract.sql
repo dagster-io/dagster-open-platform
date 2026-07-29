@@ -1,3 +1,8 @@
+-- us_only: refs models (fct_organization_contracts) that are not built in the EU
+-- deployment; the EU dbt invocations exclude tag:us_only so eager indirect
+-- selection doesn't pull this test in via the eu-tagged dim_contracts.
+{{ config(tags=["us_only"]) }}
+
 -- Fails if an org in fct_organization_contracts is attributed to a contract whose
 -- dim_contracts.maxio_contract_organization_id is explicitly set to a *different*
 -- org. This is the exact shape of the original multi-org bug: legora-analytics was
