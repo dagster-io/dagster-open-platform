@@ -85,6 +85,35 @@ vars:
   # These variables are used for incremental models
   min_date: "2000-01-01"
   max_date: "9999-12-31"
+  # Date (UTC) on which US event log sourcing switches from the sling per-shard
+  # `cloud_product`/`cloud_product_shard1` mirrors to the unified
+  # `aws.cloud_prod.streamline_events` firehose. Rows with created_at < this date
+  # come from sling; rows >= it come from streamline.
+  #
+  # Valid range: streamline begins 2026-06-03 17:15 UTC, so 2026-06-04 is the
+  # earliest value. 2026-07-28 is chosen as the latest value that loses nothing:
+  # sling shard0 replication stalled mid-day 2026-07-28 (shard1 stayed healthy),
+  # making 2026-07-27 the last fully-replicated sling day. Cutting over here also
+  # backfills the shard0 gap, and keeps the one-time post-deploy cleanup of
+  # superseded shard 0/1 rows at ~79M instead of ~1.7B for a 2026-07-01 cutoff.
+  #
+  # Moving this date is not symmetric:
+  #   * LATER  - self-heals. The sling branches backfill the newly-included
+  #     window on the next run, but the superseded shard 0/1 rows at or after
+  #     the new date must be deleted by hand: they are keyed on
+  #     [shard_id, event_log_id] and never merge against their shard 3
+  #     replacements, so they double-count until removed.
+  #   * EARLIER - requires --full-refresh. The shard 3 watermark is already past
+  #     the new date, so the streamline branch will not backfill behind itself.
+  streamline_events_cutoff_date: "2026-07-28"
+  # Lookback window re-read from streamline_events on every incremental run, to
+  # pick up rows that land well after their created_at. Since the model runs
+  # daily the base read is already ~24h, so 48h roughly doubles the scan.
+  # Measured landing lag since 2026-07-01 over 1.76B rows:
+  #   <6h 1,761,517,216 | 6-12h 6 | 12-24h 1,149 | 24-48h 92 | 2-7d 61 | >7d 1
+  # 48h therefore captures all but ~62 rows/month (0.0000035%). Must stay under
+  # the 7 day incremental_predicates window or re-read rows insert as duplicates.
+  streamline_events_lookback_hours: 48
   stripe_source:
     stripe_database: FIVETRAN
     stripe_schema: STRIPE_PROD
