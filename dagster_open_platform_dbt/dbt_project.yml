@@ -97,14 +97,18 @@ vars:
   # backfills the shard0 gap, and keeps the one-time post-deploy cleanup of
   # superseded shard 0/1 rows at ~79M instead of ~1.7B for a 2026-07-01 cutoff.
   #
-  # Moving this date is not symmetric:
-  #   * LATER  - self-heals. The sling branches backfill the newly-included
-  #     window on the next run, but the superseded shard 0/1 rows at or after
-  #     the new date must be deleted by hand: they are keyed on
+  # Moving this date is not symmetric, and neither direction self-heals any more:
+  # the sling branches are commented out in stg_cloud_product__event_logs, so
+  # step one either way is to uncomment them.
+  #   * LATER  - once the sling branches are back, they backfill the newly
+  #     included window on the next run, but the superseded shard 0/1 rows at or
+  #     after the new date must be deleted by hand: they are keyed on
   #     [shard_id, event_log_id] and never merge against their shard 3
   #     replacements, so they double-count until removed.
   #   * EARLIER - requires --full-refresh. The shard 3 watermark is already past
   #     the new date, so the streamline branch will not backfill behind itself.
+  #     The model raises a compiler error on --full-refresh while the sling
+  #     branches are commented out, precisely so this cannot happen by accident.
   streamline_events_cutoff_date: "2026-07-28"
   # Lookback window re-read from streamline_events on every incremental run, to
   # pick up rows that land well after their created_at. Since the model runs

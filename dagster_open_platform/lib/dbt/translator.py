@@ -25,6 +25,19 @@ asset_is_new_or_updated_or_deps_updated = ~dg.AutomationCondition.in_progress() 
 )
 
 
+# Event log models are ignored by the automation conditions above.
+# `stg_cloud_product__event_logs` is a ~35B row incremental table on L_WAREHOUSE, and
+# `cloud_product_event_logs` is the view layered on top of it, so a `code_version_changed()`
+# rerun the moment a code location reloads is far too expensive. They carry no automation
+# condition at all and are materialized by `dbt_analytics_core_schedule` instead.
+EVENT_LOG_MODELS = frozenset(
+    {
+        "stg_cloud_product__event_logs",
+        "cloud_product_event_logs",
+    }
+)
+
+
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     def _get_group_name_for_resource(self, dbt_props: Mapping[str, Any]) -> str:
         """Calculate the group name based on dbt resource properties.
@@ -83,12 +96,15 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
     def _get_automation_condition_for_resource(
         self, dbt_props: Mapping[str, Any]
-    ) -> dg.AutomationCondition:
+    ) -> dg.AutomationCondition | None:
         """Calculate automation condition based on database.
 
+        Event log models are excluded entirely - see EVENT_LOG_MODELS.
         dwh_reporting uses stricter condition (includes dependency updates).
         Other databases use standard condition (code changes or missing only).
         """
+        if dbt_props["name"] in EVENT_LOG_MODELS:
+            return None
         database = dbt_props["database"]
         if database.lower() == "dwh_reporting":
             return asset_is_new_or_updated_or_deps_updated
