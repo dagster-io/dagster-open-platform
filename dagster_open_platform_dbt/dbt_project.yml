@@ -85,6 +85,12 @@ vars:
   # These variables are used for incremental models
   min_date: "2000-01-01"
   max_date: "9999-12-31"
+  # Which regional deployment is running this invocation. 'us' (the default) is
+  # the US Snowflake account; the EU code location passes 'eu' at runtime (see
+  # dagster_open_platform_eu/defs/dbt/assets.py). Models whose sources only
+  # exist in one account branch on this - the two accounts do not hold the same
+  # relations, so a model cannot always be written to compile in both.
+  region: "us"
   # Date (UTC) on which US event log sourcing switches from the sling per-shard
   # `cloud_product`/`cloud_product_shard1` mirrors to the unified
   # `aws.cloud_prod.streamline_events` firehose. Rows with created_at < this date

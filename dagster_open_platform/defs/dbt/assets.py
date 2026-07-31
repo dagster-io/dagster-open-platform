@@ -70,11 +70,41 @@ def _is_dbt_backfill_run(run_tags: Mapping[str, str], config: DbtConfig) -> bool
     return config.backfill or run_tags.get(DBT_BACKFILL_RUN_TAG) == DBT_BACKFILL_RUN_TAG_VALUE
 
 
+def _region_vars(dbt_region: str | None) -> dict[str, object]:
+    """Build the dbt vars pinning the region a deployment builds for.
+
+    Omitted for the US deployment, which takes the `region` default in
+    dbt_project.yml. The EU deployment passes it explicitly because some models
+    can only compile against the sources that exist in their own Snowflake
+    account -- see stg_cloud_product__event_logs.
+    """
+    return {"region": dbt_region} if dbt_region else {}
+
+
+def _partitioned_dbt_vars(
+    dbt_region: str | None, config: DbtConfig, partition_time_window: dg.TimeWindow
+) -> dict[str, object]:
+    """Build the dbt vars for a partitioned invocation.
+
+    The region var is not a partition var: it selects which sources a model compiles
+    against, so it has to survive a full refresh, which drops the date window on
+    purpose (the whole point of the refresh is to rebuild every partition).
+    """
+    if config.full_refresh:
+        return _region_vars(dbt_region)
+    return {
+        **_region_vars(dbt_region),
+        "min_date": (partition_time_window.start - timedelta(hours=3)).isoformat(),
+        "max_date": (partition_time_window.end + timedelta(days=1)).isoformat(),
+    }
+
+
 @cache
 def get_dbt_non_partitioned_models(
     custom_translator: DagsterDbtTranslator | None = None,
     additional_selectors: Sequence[str] | None = None,
     dbt_exclude: str | None = None,
+    dbt_region: str | None = None,
 ):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
@@ -101,6 +131,7 @@ def get_dbt_non_partitioned_models(
                 _dbt_args(
                     "build",
                     config,
+                    _region_vars(dbt_region),
                     backfill=_is_dbt_backfill_run(context.run.tags, config),
                     exclude=dbt_exclude,
                 ),
@@ -120,6 +151,7 @@ def get_dbt_partitioned_models(
     custom_translator: DagsterDbtTranslator | None = None,
     additional_selectors: Sequence[str] | None = None,
     dbt_exclude: str | None = None,
+    dbt_region: str | None = None,
 ):
     dbt_project = dagster_open_platform_dbt_project()
     assert dbt_project
@@ -141,17 +173,14 @@ def get_dbt_partitioned_models(
         context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
     ):
         logger.info(f"dbt_project.project_dir: {dbt_project.project_dir}")
-        dbt_vars = {
-            "min_date": (context.partition_time_window.start - timedelta(hours=3)).isoformat(),
-            "max_date": (context.partition_time_window.end + timedelta(days=1)).isoformat(),
-        }
+        dbt_vars = _partitioned_dbt_vars(dbt_region, config, context.partition_time_window)
 
         yield from (
             dbt.cli(
                 _dbt_args(
                     "build",
                     config,
-                    None if config.full_refresh else dbt_vars,
+                    dbt_vars,
                     backfill=_is_dbt_backfill_run(context.run.tags, config),
                     exclude=dbt_exclude,
                 ),
