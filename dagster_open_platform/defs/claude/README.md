@@ -5,12 +5,14 @@ This module contains Dagster assets for ingesting Anthropic usage and cost data 
 ## Assets
 
 ### `anthropic_usage_report`
-Fetches hourly token usage from the Anthropic Admin API, grouped by all available dimensions.
+Fetches hourly token usage from the Anthropic Admin API, grouped by API key, workspace, model, service tier, and account.
 
 - **Endpoint**: `GET /v1/organizations/usage_report/messages`
 - **Table**: `ANTHROPIC.RAW.ANTHROPIC_USAGE`
-- **Granularity**: Hourly buckets, one row per unique combination of api_key × workspace × model × service_tier × context_window × account × inference_geo × service_account
+- **Granularity**: Hourly buckets, one row per unique combination of api_key × workspace × model × service_tier × account
 - **Schedule**: Daily (automation condition: cron tick at midnight UTC)
+
+The request uses five grouping dimensions. `context_window`, `inference_geo`, and `service_account_id` are not requested as grouping dimensions; their table columns do not provide those breakdowns.
 
 ### `anthropic_cost_report`
 Fetches daily dollar costs from the Anthropic Admin API grouped by workspace and description.
