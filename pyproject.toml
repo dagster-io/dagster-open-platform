@@ -45,7 +45,7 @@ dependencies = [
     "psycopg2-binary",
     "scoutos",
     "psutil>=7.0.0",
-    "certifi==2025.1.31",
+    "certifi==2026.10.19",
     "scikit-learn",
     "shap>=0.47.0",
     "xgboost",
@@ -94,12 +94,21 @@ tests = [
 # fail to build on Python 3.12. Drop once numba supports numpy 2.5.
 [tool.uv]
 exclude-newer = "48h"
+# TEMPORARY: let certifi 2026.10.19 (eMudhra compromised-root removal, published
+# 2026-10-20) through the 48h cooldown. Remove this line after 2026-10-22.
+exclude-newer-package = { certifi = "2026-10-21T00:00:00Z" }
 constraint-dependencies = ["setuptools<82", "numpy<2.5"]
 build-constraint-dependencies = ["setuptools<82"]
 # Override flatdict version to avoid build issues with 4.0.1
 # flatdict 4.0.1 has a broken build system that doesn't declare setuptools as a build dependency
 # Pin to 4.0.0 which might have proper build system
-override-dependencies = ["flatdict==4.0.0"]
+override-dependencies = [
+    "flatdict==4.0.0",
+    # dbt-snowflake caps certifi<2025.4.26 as a stale workaround for a Snowflake connector bug
+    # fixed in snowflake-connector-python 3.15.0 (status.snowflake.com/incidents/txclg2cyzq32).
+    # Lift the cap so certifi can drop the eMudhra-compromised roots. dbt-labs/dbt-adapters#2230
+    "certifi>=2026.10.19",
+]
 
 # ########################
 # ##### DAGSTER
