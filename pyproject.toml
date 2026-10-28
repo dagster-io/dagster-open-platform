@@ -94,9 +94,6 @@ tests = [
 # fail to build on Python 3.12. Drop once numba supports numpy 2.5.
 [tool.uv]
 exclude-newer = "48h"
-# TEMPORARY: let certifi 2026.10.19 (eMudhra compromised-root removal, published
-# 2026-10-20) through the 48h cooldown. Remove this line after 2026-10-22.
-exclude-newer-package = { certifi = "2026-10-21T00:00:00Z" }
 constraint-dependencies = ["setuptools<82", "numpy<2.5"]
 build-constraint-dependencies = ["setuptools<82"]
 # Override flatdict version to avoid build issues with 4.0.1
