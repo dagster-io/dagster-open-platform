@@ -19,6 +19,9 @@ attributes:
     unfamiliar_eye: "0 * * * *"  # salesforce
     museum_odious: "0 * * * *"  # hubspot
     crushed_subsector: "0 * * * *"  # google drive
+    inquirer_cathedral: "0 */6 * * *"  # nebula
+    anointer_express: "0 */2 * * *"  # orion
+    thirst_truck: "0 */2 * * *"  # orion flow run
 requirements:
   env:
     - FIVETRAN_ACCOUNT_ID
