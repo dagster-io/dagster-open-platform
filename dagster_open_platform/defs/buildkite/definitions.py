@@ -1,25 +1,20 @@
 import dagster as dg
 from dagster.components import definitions
-from dagster_slack import SlackResource
 
 from dagster_open_platform.defs.buildkite.assets import (
     buildkite_builds_hex_dashboard,
-    buildkite_daily_analysis,
     buildkite_raw,
 )
 from dagster_open_platform.defs.buildkite.resources import BuildkiteResource
-from dagster_open_platform.defs.claude.resources import claude_resource
 
 
 @definitions
 def defs() -> dg.Definitions:
     return dg.Definitions(
-        assets=[buildkite_raw, buildkite_daily_analysis, buildkite_builds_hex_dashboard],
+        assets=[buildkite_raw, buildkite_builds_hex_dashboard],
         resources={
             "buildkite": BuildkiteResource(
                 api_token=dg.EnvVar("SOURCES__BUILDKITE__BUILDKITE_API_TOKEN"), org_slug="dagster"
             ),
-            "claude": claude_resource,
-            "slack_buildkite": SlackResource(token=dg.EnvVar("SLACK_ELEMENTL_ETL_BOT_TOKEN")),
         },
     )

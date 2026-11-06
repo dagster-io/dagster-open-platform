@@ -144,24 +144,6 @@ class BuildkiteResource(dg.ConfigurableResource):
         payload = response.json()
         return payload if isinstance(payload, dict) else None
 
-    def get_job_log(self, pipeline_slug: str, build_number: int, job_id: str) -> str:
-        """Fetch raw log text for a specific job.
-
-        Args:
-            pipeline_slug: The pipeline slug.
-            build_number: The build number.
-            job_id: The job UUID.
-
-        Returns:
-            Raw log text for the job.
-        """
-        url = f"{self._base_url}/pipelines/{pipeline_slug}/builds/{build_number}/jobs/{job_id}/log"
-        with _requests_session() as session:
-            response = session.get(url, headers=self._headers, timeout=_REQUEST_TIMEOUT)
-        response.raise_for_status()
-        data = response.json()
-        return data.get("content", "")
-
     @staticmethod
     def __api_to_build(
         data: dict[str, Any],
