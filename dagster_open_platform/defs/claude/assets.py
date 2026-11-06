@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pandas as pd
 from dagster import AssetExecutionContext, AutomationCondition, BackfillPolicy, asset
@@ -24,7 +24,7 @@ def _epoch_to_iso(ts: int | str | None) -> str | None:
     if ts is None:
         return None
     if isinstance(ts, int) or str(ts).isdigit():
-        return datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat()
+        return datetime.fromtimestamp(int(ts), tz=UTC).isoformat()
     return datetime.fromisoformat(str(ts).replace("Z", "+00:00")).isoformat()
 
 
@@ -112,7 +112,7 @@ def anthropic_usage_report(
                 "SERVICE_ACCOUNT_ID": record.get("service_account_id"),
                 "STARTING_AT": record.get("starting_at"),
                 "ENDING_AT": record.get("ending_at"),
-                "EXTRACTED_AT": datetime.now(timezone.utc).isoformat(),
+                "EXTRACTED_AT": datetime.now(UTC).isoformat(),
             }
         )
 
@@ -197,7 +197,7 @@ def anthropic_cost_report(
             "INFERENCE_GEO": record.get("inference_geo"),
             "STARTING_AT": record.get("starting_at"),
             "ENDING_AT": record.get("ending_at"),
-            "EXTRACTED_AT": datetime.now(timezone.utc).isoformat(),
+            "EXTRACTED_AT": datetime.now(UTC).isoformat(),
         }
         for record in all_data
     ]
@@ -263,7 +263,7 @@ def anthropic_claude_code_report(
         context.log.warning("No Claude Code analytics data returned")
         return
 
-    extracted_at = datetime.now(timezone.utc).isoformat()
+    extracted_at = datetime.now(UTC).isoformat()
     records = []
     for record in all_data:
         actor = record.get("actor", {})
@@ -380,7 +380,7 @@ def anthropic_api_keys(
         context.log.warning("No API keys returned")
         return
 
-    extracted_at = datetime.now(timezone.utc).isoformat()
+    extracted_at = datetime.now(UTC).isoformat()
     records = []
     for record in all_data:
         created_by = record.get("created_by") or {}
@@ -449,7 +449,7 @@ def anthropic_users(
         context.log.warning("No users returned")
         return
 
-    extracted_at = datetime.now(timezone.utc).isoformat()
+    extracted_at = datetime.now(UTC).isoformat()
     records = [
         {
             "ID": record.get("id"),

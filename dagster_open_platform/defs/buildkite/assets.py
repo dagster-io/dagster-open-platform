@@ -1,5 +1,5 @@
 from collections.abc import Generator
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import dagster as dg
 from dagster import AutomationCondition
@@ -136,7 +136,7 @@ def buildkite_daily_analysis(
     slack_buildkite: SlackResource,
 ) -> dg.MaterializeResult:
     # Compute analysis time window
-    window_end = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
+    window_end = datetime.now(UTC).replace(minute=0, second=0, microsecond=0)
     window_start = window_end - timedelta(hours=24)
     window_metadata = {
         "window_start": window_start.isoformat(),

@@ -2,7 +2,7 @@
 
 import datetime
 
-STARTDATE = datetime.datetime(year=2000, month=1, day=1, tzinfo=datetime.timezone.utc)
+STARTDATE = datetime.datetime(year=2000, month=1, day=1, tzinfo=datetime.UTC)
 
 CRM_CONTACTS_ENDPOINT = "/crm/v3/objects/contacts?associations=deals,products,tickets,quotes"
 CRM_COMPANIES_ENDPOINT = (

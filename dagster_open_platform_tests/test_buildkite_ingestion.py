@@ -11,7 +11,7 @@ HTTP and Snowflake cursor.
 """
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -23,7 +23,7 @@ from dagster_open_platform.defs.buildkite.utils import BuildkiteSQL
 # ##### FIXTURES
 # ########################
 
-_EXTRACTED_AT = datetime(2026, 4, 29, 12, 0, 0, tzinfo=timezone.utc)
+_EXTRACTED_AT = datetime(2026, 4, 29, 12, 0, 0, tzinfo=UTC)
 
 _ASSESSMENT_PAYLOAD: dict[str, Any] = {
     "commit_status": "clean",

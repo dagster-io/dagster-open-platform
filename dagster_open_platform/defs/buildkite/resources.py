@@ -2,7 +2,7 @@ import json
 import logging
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import dagster as dg
@@ -100,7 +100,7 @@ class BuildkiteResource(dg.ConfigurableResource):
             page = 1
             while max_pages is None or page <= max_pages:
                 params["page"] = str(page)
-                extracted_at = datetime.now(tz=timezone.utc)
+                extracted_at = datetime.now(tz=UTC)
                 response = session.get(
                     url, headers=self._headers, params=params, timeout=_REQUEST_TIMEOUT
                 )

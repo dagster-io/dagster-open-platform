@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
 from dagster import Config, ResourceParam, get_dagster_logger, job, op
@@ -43,7 +43,7 @@ def correct_maxio_arr_amounts(
 
     log.info("Contracted-value item IDs: %s", contracted_ids)
 
-    since = datetime.now(timezone.utc) - timedelta(days=config.lookback_days)
+    since = datetime.now(UTC) - timedelta(days=config.lookback_days)
     created_gte = since.strftime("%Y-%m-%dT%H:%M:%S.000000")
     log.info("Looking back %d days to %s", config.lookback_days, created_gte)
 

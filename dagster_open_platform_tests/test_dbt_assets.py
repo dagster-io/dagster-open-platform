@@ -15,8 +15,8 @@ from dagster_open_platform.lib.dbt.backfill import DBT_BACKFILL_RUN_TAG, DBT_BAC
 from dagster_open_platform_eu.defs.dbt.assets import REGION as EU_REGION
 
 PARTITION_WINDOW = dg.TimeWindow(
-    start=datetime.datetime(2026, 1, 2, tzinfo=datetime.timezone.utc),
-    end=datetime.datetime(2026, 1, 3, tzinfo=datetime.timezone.utc),
+    start=datetime.datetime(2026, 1, 2, tzinfo=datetime.UTC),
+    end=datetime.datetime(2026, 1, 3, tzinfo=datetime.UTC),
 )
 
 
