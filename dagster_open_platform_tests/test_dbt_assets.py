@@ -10,13 +10,9 @@ from dagster_open_platform.defs.dbt.assets import (
     _is_dbt_backfill_run,
     _partitioned_dbt_vars,
     _region_vars,
-    _with_unsynced_exclude,
 )
 from dagster_open_platform.lib.dbt.backfill import DBT_BACKFILL_RUN_TAG, DBT_BACKFILL_RUN_TAG_VALUE
-from dagster_open_platform_eu.defs.dbt.assets import (
-    REGION as EU_REGION,
-    REGION_EXCLUDE as EU_REGION_EXCLUDE,
-)
+from dagster_open_platform_eu.defs.dbt.assets import REGION as EU_REGION
 
 PARTITION_WINDOW = dg.TimeWindow(
     start=datetime.datetime(2026, 1, 2, tzinfo=datetime.UTC),
@@ -109,14 +105,6 @@ def test_dbt_args_appends_exclude_after_vars() -> None:
         "min_date": "2026-01-01T00:00:00",
         "max_date": "2026-01-02T00:00:00",
     }
-
-
-def test_unsynced_exclude_skips_models_downstream_of_unsynced_sources() -> None:
-    assert _with_unsynced_exclude(None) == "tag:fivetran_unsynced+"
-
-
-def test_unsynced_exclude_keeps_the_region_exclude() -> None:
-    assert _with_unsynced_exclude(EU_REGION_EXCLUDE) == "tag:fivetran_unsynced+ tag:us_only"
 
 
 def test_is_dbt_backfill_run_uses_config_or_automation_tag() -> None:

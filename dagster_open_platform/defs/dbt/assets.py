@@ -22,8 +22,6 @@ INCREMENTAL_SELECTOR = "config.materialized:incremental"
 SNAPSHOT_SELECTOR = "resource_type:snapshot"
 BACKFILL_SNOWFLAKE_WAREHOUSE = "BACKFILL_WH"
 BACKFILL_STATEMENT_TIMEOUT_SECONDS = 24 * 60 * 60
-# models downstream of salesforce tables the new fivetran connector doesn't sync yet
-FIVETRAN_UNSYNCED_EXCLUDE = "tag:fivetran_unsynced+"
 
 logger = dg.get_dagster_logger()
 
@@ -65,10 +63,6 @@ def _dbt_args(
         args.extend(["--exclude", exclude])
 
     return args
-
-
-def _with_unsynced_exclude(exclude: str | None) -> str:
-    return " ".join(filter(None, [FIVETRAN_UNSYNCED_EXCLUDE, exclude]))
 
 
 def _is_dbt_backfill_run(run_tags: Mapping[str, str], config: DbtConfig) -> bool:
@@ -138,7 +132,7 @@ def get_dbt_non_partitioned_models(
                     config,
                     _region_vars(dbt_region),
                     backfill=_is_dbt_backfill_run(context.run.tags, config),
-                    exclude=_with_unsynced_exclude(dbt_exclude),
+                    exclude=dbt_exclude,
                 ),
                 context=context,
             )
@@ -187,7 +181,7 @@ def get_dbt_partitioned_models(
                     config,
                     dbt_vars,
                     backfill=_is_dbt_backfill_run(context.run.tags, config),
-                    exclude=_with_unsynced_exclude(dbt_exclude),
+                    exclude=dbt_exclude,
                 ),
                 context=context,
             )
@@ -223,10 +217,7 @@ def get_dbt_snapshot_models(
         yield from (
             dbt.cli(
                 _dbt_args(
-                    "snapshot",
-                    config,
-                    backfill=_is_dbt_backfill_run(context.run.tags, config),
-                    exclude=_with_unsynced_exclude(None),
+                    "snapshot", config, backfill=_is_dbt_backfill_run(context.run.tags, config)
                 ),
                 context=context,
             )
