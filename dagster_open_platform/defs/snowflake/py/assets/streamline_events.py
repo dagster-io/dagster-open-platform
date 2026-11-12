@@ -1,3 +1,5 @@
+from datetime import UTC, date, datetime, timedelta
+
 import dagster as dg
 from dagster_open_platform.utils.environment_helpers import get_environment
 from dagster_snowflake import SnowflakeResource
@@ -11,6 +13,9 @@ S3_PREFIX = "streamline-events"
 # The streamline event stream lands a large volume of parquet files each hour;
 # run the COPY INTO on the bigger warehouse (same as the large DMS tables).
 WAREHOUSE = "L_WAREHOUSE"
+# Listing every file under the prefix exceeds Snowflake's 1 GB stage-listing limit,
+# so each COPY INTO only lists files landed in the last N UTC days.
+LOAD_LOOKBACK_DAYS = 10
 
 
 def _bucket_and_schema() -> tuple[str, str]:
@@ -22,6 +27,15 @@ def _bucket_and_schema() -> tuple[str, str]:
     if get_environment() == "PROD":
         return "cloud-prod-streamline-event-stream", "CLOUD_PROD"
     return "dogfood-streamline-event-stream", "DEV"
+
+
+def _recent_files_pattern(today: date, days: int = LOAD_LOOKBACK_DAYS) -> str:
+    """Regex for parquet files landed in the last ``days`` UTC days.
+
+    Keys are ``{org_id}/{deployment_id}/YYYY/MM/DD/HH/{position}.parquet``.
+    """
+    dates = "|".join((today - timedelta(days=n)).strftime("%Y/%m/%d") for n in range(days))
+    return f".*/({dates})/.*[.]parquet"
 
 
 @dg.asset(
@@ -86,11 +100,12 @@ def streamline_events_table(
     """
 
     # COPY INTO skips files already recorded in the table's load metadata,
-    # so hourly runs only load newly landed parquet files.
+    # so overlapping days across hourly runs don't load twice.
+    pattern = _recent_files_pattern(datetime.now(UTC).date())
     copy_query = f"""
         COPY INTO {TABLE_NAME}
         FROM @{STAGE_NAME}
-        PATTERN = '.*[.]parquet'
+        PATTERN = '{pattern}'
         MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
     """
 
@@ -122,5 +137,6 @@ def streamline_events_table(
             "files_loaded": files_loaded,
             "rows_loaded": rows_loaded,
             "total_rows": total_rows,
+            "copy_pattern": pattern,
         }
     )
