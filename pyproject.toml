@@ -45,7 +45,7 @@ dependencies = [
     "psycopg2-binary",
     "scoutos",
     "psutil>=7.0.0",
-    "certifi==2026.10.19",
+    "certifi>=2026.10.19",
     "scikit-learn",
     "shap>=0.47.0",
     "xgboost",

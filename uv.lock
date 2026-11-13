@@ -863,7 +863,7 @@ tests = [
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.13.3" },
     { name = "boto3" },
-    { name = "certifi", specifier = "==2026.10.19" },
+    { name = "certifi", specifier = ">=2026.10.19" },
     { name = "click", marker = "extra == 'dev'" },
     { name = "dagster", specifier = ">=1.12.17" },
     { name = "dagster-anthropic" },
