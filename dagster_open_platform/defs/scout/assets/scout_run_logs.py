@@ -204,7 +204,7 @@ def scoutos_app_runs(
                         f"DROP STAGE IF EXISTS {database_name}.{schema_name}.{stage_name}"
                     )
                     cursor.execute(drop_stage_sql)
-            except:
+            except:  # noqa: S110
                 pass
             raise e
 

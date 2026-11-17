@@ -118,7 +118,7 @@ def fetch_asset_health_data(client: DagsterGraphQLClient) -> dict[str, Any]:
         result = client._execute(ASSET_HEALTH_QUERY)  # noqa: SLF001
         return result
     except DagsterGraphQLClientError as e:
-        raise Exception(f"Failed to fetch asset health data: {e}")
+        raise Exception(f"Failed to fetch asset health data: {e}") from e
 
 
 def analyze_asset_health(data: dict[str, Any], code_location: str | None = None) -> dict[str, Any]:
@@ -301,7 +301,7 @@ def send_to_slack(webhook_url: str, message: dict[str, Any]) -> bool:
         response.raise_for_status()
         return True
     except requests.exceptions.RequestException as e:
-        raise Exception(f"Failed to send to Slack: {e}")
+        raise Exception(f"Failed to send to Slack: {e}") from e
 
 
 @asset(

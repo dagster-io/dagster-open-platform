@@ -55,7 +55,7 @@ def get_reactions_data(
     items_per_page: int,
     max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
-    for owner, repo_list in repos.items():
+    for owner, repo_list in repos.items():  # noqa: PLR1702
         for name in repo_list:
             variables = {
                 "owner": owner,

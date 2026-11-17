@@ -143,7 +143,7 @@ class DagsterAPIClient:
             start_idx = all_partitions.index(start_partition)
             end_idx = all_partitions.index(end_partition)
         except ValueError as e:
-            raise Exception(f"Partition not found: {e}")
+            raise Exception(f"Partition not found: {e}") from e
 
         if start_idx > end_idx:
             raise Exception("Start partition must come before end partition")
@@ -224,8 +224,8 @@ def parse_asset_key(asset_key_str: str) -> list[str]:
             if not isinstance(key, list):
                 raise ValueError("Asset key JSON must be an array")
             return key
-        except json.JSONDecodeError:
-            raise ValueError(f"Invalid JSON asset key: {asset_key_str}")
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON asset key: {asset_key_str}") from e
 
     # Otherwise split by dots
     return asset_key_str.split(".")
