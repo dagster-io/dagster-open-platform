@@ -44,7 +44,7 @@ from .settings import (
 THubspotObjectType = Literal["company", "contact", "deal", "ticket", "product", "quote"]
 
 
-def crm_objects(
+def crm_objects(  # noqa: PLR0917
     object_type: str,
     api_key: str = dlt.secrets.value,
     include_history: bool = False,

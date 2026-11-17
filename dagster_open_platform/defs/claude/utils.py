@@ -151,7 +151,7 @@ def fetch_claude_code_data(
     return all_data, page_count
 
 
-def load_dataframe_to_snowflake(
+def load_dataframe_to_snowflake(  # noqa: PLR0917
     df: pd.DataFrame,
     snowflake: SnowflakeResource,
     context: AssetExecutionContext,

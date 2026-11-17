@@ -9,7 +9,7 @@ from dagster_dbt import get_asset_key_for_model
 from dagster_sling import DagsterSlingTranslator, SlingResource, sling_assets
 
 
-def build_sling_assets(
+def build_sling_assets(  # noqa: PLR0917
     name: str,
     config_path: Path,
     build_deps: bool = True,

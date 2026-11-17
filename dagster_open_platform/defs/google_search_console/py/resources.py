@@ -24,7 +24,7 @@ class GoogleSearchConsoleResource(ConfigurableResource):
         service = build("webmasters", "v3", credentials=credentials)
         return service
 
-    def search_analytics_query(
+    def search_analytics_query(  # noqa: PLR0917
         self,
         dimensions: list,
         start_date: str,
@@ -61,7 +61,7 @@ class GoogleSearchConsoleResource(ConfigurableResource):
 
         return response.get("rows", [])
 
-    def search_analytics_query_with_pagination(
+    def search_analytics_query_with_pagination(  # noqa: PLR0917
         self,
         dimensions: list,
         start_date: str,

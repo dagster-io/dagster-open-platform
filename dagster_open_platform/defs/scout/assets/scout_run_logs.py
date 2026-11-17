@@ -230,7 +230,7 @@ def _write_batch_to_jsonl(batch_data: list[dict], temp_dir: str, batch_num: int)
     return jsonl_file
 
 
-def _process_and_upload_batch(
+def _process_and_upload_batch(  # noqa: PLR0917
     batch_data: list[dict],
     temp_dir: str,
     batch_num: int,

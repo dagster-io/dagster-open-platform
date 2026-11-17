@@ -48,7 +48,7 @@ def get_rest_pages(access_token: str | None, query: str) -> Iterator[list[StrAny
         next_page_url = r.links["next"]["url"]
 
 
-def get_reactions_data(
+def get_reactions_data(  # noqa: PLR0917
     node_type: str,
     repos: Mapping[str, Sequence[str]],
     access_token: str,
@@ -196,7 +196,7 @@ def _run_graphql_query(
     return data, rate_limit
 
 
-def _get_graphql_pages(
+def _get_graphql_pages(  # noqa: PLR0917
     access_token: str,
     query: str,
     variables: DictStrAny,

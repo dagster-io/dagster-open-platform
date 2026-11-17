@@ -57,7 +57,7 @@ class S3Mailman:
             Body=body if encode is None else body.encode(encode),
         )
 
-    def send_all(
+    def send_all(  # noqa: PLR0917
         self,
         objects: list,
         base_path: str,
