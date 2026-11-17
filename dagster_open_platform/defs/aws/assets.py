@@ -153,7 +153,7 @@ def workspace_data_json(
                     f"Unknown structure in workspace replication bucket, top level keys {list(obj_dict.keys())}"
                 )
 
-            metadata_output_key = os.path.join("metadata", output_key_ending)
+            metadata_output_key = os.path.join("metadata", output_key_ending)  # noqa: PTH118
             s3_mailman.send(
                 json.dumps(obj_dict), metadata_output_key, encode="utf-8", extension=".json"
             )
@@ -163,7 +163,7 @@ def workspace_data_json(
                 external_repository_data = repository_data.pop("external_repository_data")
 
                 repo_name = repository_data.get("repo_name", f"__UNKNOWN_{_index}__")
-                repo_metadata_output_key = os.path.join(
+                repo_metadata_output_key = os.path.join(  # noqa: PTH118
                     "repo_metadata", output_key_ending, repo_name
                 )
                 s3_mailman.send(
@@ -183,7 +183,7 @@ def workspace_data_json(
                     else:
                         object_count[dagster_object_name] += len(dagster_object)
 
-                    dagster_object_output_base_path = os.path.join(
+                    dagster_object_output_base_path = os.path.join(  # noqa: PTH118
                         dagster_object_name, output_key_ending, repo_name
                     )
                     s3_mailman.send_all(
@@ -195,7 +195,7 @@ def workspace_data_json(
                         extension=".json",
                     )
 
-                external_repo_metadata_output_key = os.path.join(
+                external_repo_metadata_output_key = os.path.join(  # noqa: PTH118
                     "external_repo_metadata", output_key_ending, repo_name
                 )
                 s3_mailman.send(

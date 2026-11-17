@@ -36,6 +36,7 @@ Example usage:
 import argparse
 import io
 import os
+import pathlib
 import sys
 from datetime import datetime
 
@@ -94,7 +95,7 @@ class SnowflakeToDriveExporter:
                 if self.snowflake_private_key_passphrase
                 else None
             )
-            with open(self.snowflake_private_key_path, "rb") as f:
+            with pathlib.Path(self.snowflake_private_key_path).open("rb") as f:
                 private_key = load_pem_private_key(
                     f.read(), password=passphrase, backend=default_backend()
                 )

@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 import yaml
 from dagster import (
@@ -50,7 +51,7 @@ hubspot_source_assets = [
 ]
 
 dlt_configuration_path = file_relative_path(__file__, "./sources/configuration.yaml")
-dlt_configuration = yaml.safe_load(open(dlt_configuration_path, encoding="utf-8"))  # noqa: TID251 — dagster-open-platform type-checks against published dagster-shared, which doesn't yet export safe_load_yaml.
+dlt_configuration = yaml.safe_load(pathlib.Path(dlt_configuration_path).open(encoding="utf-8"))  # noqa: TID251 — dagster-open-platform type-checks against published dagster-shared, which doesn't yet export safe_load_yaml.
 
 
 class GithubDagsterDltTranslator(DagsterDltTranslator):

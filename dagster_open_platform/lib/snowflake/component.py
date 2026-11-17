@@ -14,7 +14,7 @@ from pydantic import Field
 log = dg.get_dagster_logger()
 
 # Paths to SQL templates (relative to the YAML location)
-OBJECT_CREATE_SQL = os.path.join(os.path.dirname(__file__), "sql", "create_object.sql")
+OBJECT_CREATE_SQL = os.path.join(os.path.dirname(__file__), "sql", "create_object.sql")  # noqa: PTH118, PTH120
 
 
 def _database_from_env():

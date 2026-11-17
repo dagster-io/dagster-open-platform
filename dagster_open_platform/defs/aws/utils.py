@@ -53,7 +53,7 @@ class S3Mailman:
     def send(self, body: Any, key, encode: str | None = None, extension: str = "") -> None:
         self.s3_client.put_object(
             Bucket=self.bucket_name,
-            Key=os.path.join(self.output_prefix, key + extension),
+            Key=os.path.join(self.output_prefix, key + extension),  # noqa: PTH118
             Body=body if encode is None else body.encode(encode),
         )
 
@@ -71,13 +71,17 @@ class S3Mailman:
             for j, chunk in enumerate(chunks):
                 chunk_processed = chunk if preprocess is None else preprocess(chunk)
                 self.send(
-                    chunk_processed, os.path.join(base_path, str(j + 1) + extension), encode=encode
+                    chunk_processed,
+                    os.path.join(base_path, str(j + 1) + extension),  # noqa: PTH118
+                    encode=encode,
                 )
         else:
             for k, body in enumerate(objects):
                 body_processed = body if preprocess is None else preprocess(body)
                 self.send(
-                    body_processed, os.path.join(base_path, str(k + 1) + extension), encode=encode
+                    body_processed,
+                    os.path.join(base_path, str(k + 1) + extension),  # noqa: PTH118
+                    encode=encode,
                 )
 
     def get(self, key: str) -> dict:

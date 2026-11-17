@@ -1,5 +1,6 @@
 import glob
 import os
+import pathlib
 import pickle
 from datetime import UTC, datetime
 
@@ -75,7 +76,7 @@ def connect_to_snowflake(database, schema):
         )
 
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
+script_dir = os.path.dirname(os.path.abspath(__file__))  # noqa: PTH100, PTH120
 
 # Define features to use
 features = {
@@ -161,7 +162,9 @@ excluded_columns = [
 def fetch_data(conn):
     """Fetch and prepare the initial dataset."""
     conn.cursor().execute(f"USE SCHEMA {_model_data_schema_from_env()}")
-    with open(os.path.join(script_dir, "sql/all_data.sql"), encoding="utf-8") as query_file:
+    with pathlib.Path(os.path.join(script_dir, "sql/all_data.sql")).open(  # noqa: PTH118
+        encoding="utf-8"
+    ) as query_file:
         df = pd.read_sql(query_file.read(), conn)
     df.columns = [col.lower() for col in df.columns]
     return df
@@ -394,11 +397,11 @@ def train_and_save_production_model(X, y, output_file=None):
 
     # Save model to pickle file
     if output_file is None:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        output_file = os.path.join(
+        current_dir = os.path.dirname(os.path.abspath(__file__))  # noqa: PTH100, PTH120
+        output_file = os.path.join(  # noqa: PTH118
             current_dir, f"production_xgb_model_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.pkl"
         )
-    with open(output_file, "wb") as f:
+    with pathlib.Path(output_file).open("wb") as f:
         pickle.dump(model, f)
     print(f"[Production] Model saved to: {output_file}")
     return output_file
@@ -429,9 +432,9 @@ def predict_and_write_to_snowflake(output_table="model_opportunity_win_probabili
             return
 
         # Find the latest production model pickle file
-        current_dir = os.path.dirname(os.path.abspath(__file__))
+        current_dir = os.path.dirname(os.path.abspath(__file__))  # noqa: PTH100, PTH120
         model_files = sorted(
-            glob.glob(os.path.join(current_dir, "production_models", "production_xgb_model_*.pkl")),
+            glob.glob(os.path.join(current_dir, "production_models", "production_xgb_model_*.pkl")),  # noqa: PTH118, PTH207
             reverse=True,
         )
         if not model_files:
@@ -439,7 +442,7 @@ def predict_and_write_to_snowflake(output_table="model_opportunity_win_probabili
             return
         model_path = model_files[0]
         print(f"Loading model from: {model_path}")
-        with open(model_path, "rb") as f:
+        with pathlib.Path(model_path).open("rb") as f:
             model = pickle.load(f)
 
         # Align X to exactly the features the model was trained on
@@ -585,8 +588,8 @@ def main():
         )
 
         # Save predictions to CSV
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        output_file = os.path.join(
+        current_dir = os.path.dirname(os.path.abspath(__file__))  # noqa: PTH100, PTH120
+        output_file = os.path.join(  # noqa: PTH118
             current_dir, f"prediction_results_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv"
         )
         predictions.to_csv(output_file, index=False)

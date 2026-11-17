@@ -7,6 +7,7 @@ USAGE
 """
 
 import os
+import pathlib
 
 import yaml
 from dlt import pipeline
@@ -14,9 +15,9 @@ from dlt import pipeline
 from dagster_open_platform.defs.dlt.sources.github import github_reactions
 
 if __name__ == "__main__":
-    cwd = os.path.dirname(os.path.abspath(__file__))
-    dlt_configuration_path = os.path.join(cwd, "configuration.yaml")
-    dlt_configuration = yaml.safe_load(open(dlt_configuration_path, encoding="utf-8"))  # noqa: TID251 — dagster-open-platform type-checks against published dagster-shared, which doesn't yet export safe_load_yaml.
+    cwd = os.path.dirname(os.path.abspath(__file__))  # noqa: PTH100, PTH120
+    dlt_configuration_path = os.path.join(cwd, "configuration.yaml")  # noqa: PTH118
+    dlt_configuration = yaml.safe_load(pathlib.Path(dlt_configuration_path).open(encoding="utf-8"))  # noqa: TID251 — dagster-open-platform type-checks against published dagster-shared, which doesn't yet export safe_load_yaml.
 
     # Backfill of `1000` items for all resources
     dlt_source = github_reactions(
