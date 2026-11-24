@@ -15,6 +15,7 @@ attributes:
     - "supplement_crystallization"
     - "sergeant_washbasin"
     - "assertion_overstay"  # greenhouse
+    - "riot_native"  # google analytics 4
   connector_schedules:
     unfamiliar_eye: "0 * * * *"  # salesforce
     museum_odious: "0 * * * *"  # hubspot
