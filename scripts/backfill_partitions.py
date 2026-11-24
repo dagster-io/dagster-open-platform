@@ -7,14 +7,14 @@ with each run materializing a specified number of partitions (chunk size).
 Example usage:
     # Basic usage with local Dagster instance
     python backfill_partitions.py \
-        --asset-key "purina.oss_analytics.dagster_pypi_downloads" \
+        --asset-key "bigquery.pypi.daily_file_downloads" \
         --start-partition "2024-01-01-00:00" \
         --end-partition "2024-01-31-00:00" \
         --chunk-size 7
 
     # With Dagster Cloud authentication
     python backfill_partitions.py \
-        --asset-key "purina.oss_analytics.dagster_pypi_downloads" \
+        --asset-key "bigquery.pypi.daily_file_downloads" \
         --start-partition "2024-01-01-00:00" \
         --end-partition "2024-01-31-00:00" \
         --chunk-size 7 \
@@ -27,7 +27,7 @@ Example usage:
     export DAGSTER_HOST="https://myorg.dagster.cloud/prod"
     export DAGSTER_PORT="443"
     python backfill_partitions.py \
-        --asset-key "purina.oss_analytics.dagster_pypi_downloads" \
+        --asset-key "bigquery.pypi.daily_file_downloads" \
         --start-partition "2024-01-01-00:00" \
         --end-partition "2024-01-31-00:00" \
         --chunk-size 7

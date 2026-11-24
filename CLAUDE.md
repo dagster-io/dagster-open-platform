@@ -94,7 +94,7 @@ Assets can be defined in two ways:
 ```python
 @dg.asset(
     tags={"dagster/kind/snowflake": ""},
-    key=["purina", "oss_analytics", "dagster_pypi_downloads"],
+    key=["bigquery", "pypi", "daily_file_downloads"],
     group_name="oss_analytics",
     partitions_def=oss_analytics_daily_partition,
     automation_condition=dg.AutomationCondition.eager(),

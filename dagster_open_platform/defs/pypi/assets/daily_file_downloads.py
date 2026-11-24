@@ -12,27 +12,27 @@ from snowflake.connector.pandas_tools import write_pandas
 NON_EMPTY_CHECK_NAME = "non_empty_etl"
 SAME_ROWS_CHECK_NAME = "same_rows_across_bq_and_sf"
 
-dagster_pypi_downloads_asset_key = ["bigquery", "pypi", "daily_file_downloads"]
+daily_file_downloads_asset_key = ["bigquery", "pypi", "daily_file_downloads"]
 
 
 @dg.asset(
     tags={"dagster/kind/snowflake": ""},
-    key=dagster_pypi_downloads_asset_key,
+    key=daily_file_downloads_asset_key,
     group_name="oss_analytics",
     partitions_def=oss_analytics_daily_partition,
     automation_condition=dg.AutomationCondition.eager(),
     check_specs=[
-        dg.AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
-        dg.AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset=dagster_pypi_downloads_asset_key),
+        dg.AssetCheckSpec(NON_EMPTY_CHECK_NAME, asset=daily_file_downloads_asset_key),
+        dg.AssetCheckSpec(SAME_ROWS_CHECK_NAME, asset=daily_file_downloads_asset_key),
     ],
     backfill_policy=dg.BackfillPolicy.single_run(),
 )
-def dagster_pypi_downloads(
+def daily_file_downloads(
     context: dg.AssetExecutionContext,
     bigquery: InsightsBigQueryResource,
     snowflake: SnowflakeResource,
 ) -> dg.MaterializeResult:
-    """A table containing the number of PyPi downloads for each package in the Dagster ecosystem, aggregated at the weekly grain. This data is fetched from the public BigQuery dataset `bigquery-public-data.pypi.file_downloads`."""
+    """Daily PyPI downloads of Dagster packages by version, installer, and Python version, from `bigquery-public-data.pypi.file_downloads`."""
     start_day = str(context.partition_time_window.start.date())
     end_day = str(context.partition_time_window.end.date())
 
@@ -150,4 +150,4 @@ def defs():
         description="OSS Telemetry events ingested from S3. The actual asset for this is currently in Purina until we can refactor the logic for it.",
         group_name="telemetry",
     )
-    return dg.Definitions(assets=[oss_telemetry_events_raw, dagster_pypi_downloads])
+    return dg.Definitions(assets=[oss_telemetry_events_raw, daily_file_downloads])
