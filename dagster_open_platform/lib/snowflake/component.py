@@ -110,6 +110,10 @@ class SnowflakeCreateOrRefreshComponent(
         ResolvedAssetAttributes | None,
         Field(default=None, description="Asset attributes to apply to the created assets"),
     ]
+    refresh: Annotated[
+        bool,
+        Field(default=True, description="Run ALTER ... REFRESH when the object already exists"),
+    ]
     options: Annotated[
         SnowflakeObjectOptions | None,
         Field(
@@ -207,6 +211,9 @@ class SnowflakeCreateOrRefreshComponent(
                 log.info(create_query)
                 cur.execute(create_query)
                 log.info(f"Created {self.name}")
+            if not self.refresh:
+                log.info(f"Skipping refresh of {self.name}")
+                return
             refresh_query = self._populate_statement(
                 load_context,
                 statement_text=self._refresh_query,

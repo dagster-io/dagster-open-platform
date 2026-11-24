@@ -4,7 +4,9 @@ These tests exercise asset-key and stage-path construction only; they do not
 touch Snowflake.
 """
 
+import re
 from contextlib import contextmanager
+from datetime import date
 
 from dagster import AssetKey, materialize_to_memory
 from dagster._core.test_utils import environ
@@ -103,6 +105,37 @@ def test_warehouse_override_emits_use_warehouse() -> None:
 
 def test_no_warehouse_skips_use_warehouse() -> None:
     assert not any(s.startswith("USE WAREHOUSE") for s in _run(None))
+
+
+def test_copy_into_is_scoped_to_recent_files() -> None:
+    copy = next(s for s in _run(None) if "COPY INTO" in s)
+    assert "PATTERN = '" in copy
+
+
+def test_recent_files_pattern_matches_lookback_window() -> None:
+    pattern = mod._recent_files_pattern(date(2026, 11, 16), days=3)  # noqa: SLF001
+
+    for path in [
+        "public_shard0/jobs/2026/11/16/20261116-032111939.parquet",
+        "public_shard0/jobs/2026/11/14/20261114-000000000.parquet",
+        "partitions/job_ticks_ptn_21550000000_to_21600000000/2026/11/15/20261115-031811211.parquet",
+        "public/users/2026/11/16/20261116-010203004.parquet",
+    ]:
+        assert re.fullmatch(pattern, path), path
+
+    for path in [
+        "public_shard0/jobs/2026/11/13/20261113-032111939.parquet",
+        "public_shard0/jobs/2026/08/12/20260812-032111939.parquet",
+        "public_shard0/jobs/2026/11/16/20261116-032111939.csv",
+    ]:
+        assert not re.fullmatch(pattern, path), path
+
+
+def test_recent_files_pattern_keeps_full_load_files() -> None:
+    # A full reload writes LOAD<hex>.parquet directly under the table prefix.
+    pattern = mod._recent_files_pattern(date(2026, 11, 16))  # noqa: SLF001
+    assert re.fullmatch(pattern, "public_shard0/alerts/LOAD0000000A.parquet")
+    assert re.fullmatch(pattern, "partitions/job_ticks_ptn_1_to_2/LOAD00000001.parquet")
 
 
 class _DynCursor:

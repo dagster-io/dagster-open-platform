@@ -46,6 +46,8 @@ newly replicated rows. Shards are kept separate here (same rationale as above); 
 cross-shard union, if needed, belongs in a downstream layer.
 """
 
+from datetime import UTC, date, datetime, timedelta
+
 import dagster as dg
 from dagster.components import definitions
 from dagster_open_platform.lib.snowflake.component import _dms_schema_from_env
@@ -120,6 +122,21 @@ _JOB_TICKS_PREFIXES = {"shard0": "partitions", "shard1": "partitions_shard1"}
 # INFER_SCHEMA, which preserves case.
 _DEDUP_KEYS: dict[str, list[str]] = {"onboarding_checklist": ["organization_id", "entry_key"]}
 _DEFAULT_DEDUP_KEY = ["id"]
+
+# The largest prefixes (jobs, job_ticks) hold millions of files, so listing a whole
+# prefix eventually exceeds Snowflake's 1 GB stage-listing limit. Each COPY INTO
+# only lists CDC files from the last N UTC days.
+LOAD_LOOKBACK_DAYS = 7
+
+
+def _recent_files_pattern(today: date, days: int = LOAD_LOOKBACK_DAYS) -> str:
+    """Regex for CDC files from the last ``days`` UTC days, plus full-load files.
+
+    CDC files land under ``YYYY/MM/DD/``; full-load files (``LOAD<hex>.parquet``)
+    sit directly under the table prefix.
+    """
+    dates = "|".join((today - timedelta(days=n)).strftime("%Y/%m/%d") for n in range(days))
+    return f"(.*/)?(({dates})/[^/]+|LOAD[0-9A-F]+)[.]parquet"
 
 
 def _build_copy_into_asset(
@@ -205,10 +222,13 @@ def _build_copy_into_asset(
 
             # COPY INTO with column-name matching so the parquet columns map onto
             # the inferred table columns regardless of order. Already-loaded files
-            # are skipped automatically (FORCE = FALSE is the default).
+            # are skipped automatically (FORCE = FALSE is the default), so the
+            # overlapping lookback window doesn't load files twice.
+            pattern = _recent_files_pattern(datetime.now(UTC).date())
             cursor.execute(f"""
                 COPY INTO {qualified_table}
                     FROM '{stage_path}'
+                    PATTERN = '{pattern}'
                     FILE_FORMAT = (TYPE = PARQUET)
                     MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
             """)

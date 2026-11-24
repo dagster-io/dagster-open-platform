@@ -5,11 +5,12 @@ attributes:
   schema_name: "{{ dms_schema_from_env() }}"
   type: "stage"
   role: AWS_WRITER
+  # The bucket holds millions of files, more than Snowflake can list for a directory
+  # refresh. COPY INTO reads each table's prefix directly, so no directory table is needed.
+  refresh: false
   options:
     url: "s3://{{ dms_storage_from_env() }}"
     storage_integration: "{{ dms_storage_from_env() }}"
-    directory:
-      enable: true
     file_format:
       type: PARQUET
   asset_attributes:

@@ -119,3 +119,37 @@ def test_run_common_room_activities(environment: str, does_entity_exist: bool) -
                 )
                 for query in executed_queries
             ), "CREATE STAGE query should be in executed_queries"
+
+
+@pytest.mark.parametrize("does_entity_exist", [True, False])
+def test_run_dagster_plus_dms_stage_skips_refresh(does_entity_exist: bool) -> None:
+    executed_queries = []
+
+    class MockCursor:
+        def execute(self, query: str):
+            executed_queries.append(query)
+
+        def fetchall(self):
+            return ["value"] if does_entity_exist else []
+
+    class MockSnowflake:
+        @contextlib.contextmanager
+        def get_connection(self):
+            yield self
+
+        def cursor(self):
+            return MockCursor()
+
+    _component, defs = get_component_defs_within_project(
+        project_root=Path(__file__).parent.parent.parent,
+        component_path="snowflake/components/dagster_plus_dms",
+    )
+    assets_def = next(iter(defs.assets or []))
+    assert isinstance(assets_def, AssetsDefinition)
+
+    assets_def(context=build_asset_context(), snowflake=MockSnowflake())  # type: ignore
+
+    assert not any("REFRESH" in query for query in executed_queries), executed_queries
+    created = [q for q in executed_queries if q.startswith("CREATE OR REPLACE stage")]
+    assert len(created) == (0 if does_entity_exist else 1)
+    assert not any("directory" in q.lower() for q in created), created
